@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "top": "sweetmagic:block/woodbox_top_air",
+      "bottom": "#top",
+      "side": "sweetmagic:block/woodbox",
+      "all": "#side"
+    }
+  },
+  "variants": {
+    "inventory": [{"model": "half_slab"}],
+    "half=bottom": { "model": "half_slab" },
+    "half=top": { "model": "upper_slab" },
+    "half=full": { "model": "minecraft:cube_all" }
+  }
+}

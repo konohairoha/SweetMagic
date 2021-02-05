@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:baseblock",
+    "textures": {
+      "particle": "sweetmagic:block/stove_side1_of",
+      "top": "sweetmagic:block/stove_top_on",
+      "bottom": "sweetmagic:block/hukusanbutu",
+      "north": "sweetmagic:block/stove_side1_on",
+      "south": "sweetmagic:block/stove_side2",
+      "east": "sweetmagic:block/stove_side2",
+      "west": "sweetmagic:block/stove_side2"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west": { "y": 270 },
+      "east": { "y": 90 }
+    },
+    "inventory": [{}]
+  }
+}

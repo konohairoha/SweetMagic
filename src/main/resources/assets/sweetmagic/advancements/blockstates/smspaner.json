@@ -1,0 +1,13 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "blocks/mob_spawner"
+        },
+        "model": "cube_all"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

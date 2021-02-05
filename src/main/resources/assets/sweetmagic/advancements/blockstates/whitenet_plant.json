@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/whitenet_stage3"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/whitenet_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/whitenet_stage1" }},
+      "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/whitenet_stage2" }},
+      "3": { "model": "cross", "textures": { "cross": "sweetmagic:block/whitenet_stage3" }}
+    },
+     "inventory": [{}]
+  }
+}

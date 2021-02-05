@@ -1,0 +1,16 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/alstroemeria_stage1"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/alstroemeria_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/alstroemeria_stage1" }}
+    },
+     "inventory": [{}]
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+  	"textures": {
+    	"all": "sweetmagic:block/empty",
+        "layer0": "sweetmagic:items/sturdust_crystal"
+	},
+    "model": "cube_all",
+    "transform": "forge:default-item"
+  },
+  "variants": {
+     "normal": [{}],
+     "inventory": [{ "model": "builtin/generated" }]
+  }
+}
