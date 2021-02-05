@@ -1,0 +1,39 @@
+package sweetmagic.worldgen.biome;
+
+import java.util.Random;
+
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.gen.feature.WorldGenAbstractTree;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import sweetmagic.init.BlockInit;
+import sweetmagic.worldgen.gen.WorldGenPrsmTree;
+
+public class BiomePrismBerg extends Biome {
+
+	public static final WorldGenerator PRISM = new WorldGenPrsmTree(BlockInit.prism_log, BlockInit.prism_leaves, false);
+
+    public BiomePrismBerg() {
+        super(new BiomeProperties("PrismBerg").setTemperature(-1F).setBaseHeight(0.2F).setHeightVariation(0.1F).setRainfall(0.6F));
+        this.decorator.treesPerChunk = 1;
+        this.decorator.grassPerChunk = 2;
+        this.setRegistryName("PrismBerg");
+    }
+
+    // チャンス
+	@Override
+	public float getSpawningChance() {
+		return 0.005F;
+	}
+
+	// 木の生成
+	public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
+		return (WorldGenAbstractTree) PRISM;
+	}
+
+//	// 草の色
+//	@Override
+//	@SideOnly(Side.CLIENT)
+//	public int getGrassColorAtPos(BlockPos pos) {
+//		return 0xafd8f7;
+//    }
+}
