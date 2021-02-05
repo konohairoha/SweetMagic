@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/chestnut_stage2"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/chestnut_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/chestnut_stage1" }},
+      "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/chestnut_stage2" }}
+    },
+     "inventory": [{}]
+  }
+}

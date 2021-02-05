@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:blueberry_stage2",
+    "textures": {
+    	"3": "sweetmagic:block/blueberry_leaves3"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/blueberry_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/blueberry_stage1" }},
+      "2": { "model": "sweetmagic:blueberry_stage2", "textures": { "3": "sweetmagic:block/blueberry_leaves1" }},
+      "3": { "model": "sweetmagic:blueberry_stage2", "textures": { "3": "sweetmagic:block/blueberry_leaves2" }},
+      "4": { "model": "sweetmagic:blueberry_stage2" }
+    },
+     "inventory": [{}]
+  }
+}

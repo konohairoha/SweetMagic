@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:cabbage_stage3"
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "sweetmagic:cabbage_stage0" },
+      "1": { "model": "sweetmagic:cabbage_stage1" },
+      "2": { "model": "sweetmagic:cabbage_stage2" },
+      "3": { "model": "sweetmagic:cabbage_stage3" }
+    },
+     "inventory": [{}]
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:baseblock",
+    "textures": {
+      "particle": "sweetmagic:block/fridge_low",
+      "top": "sweetmagic:block/fridge_td",
+      "bottom": "sweetmagic:block/fridge_td",
+      "north": "sweetmagic:block/fridge_low_1",
+      "south": "sweetmagic:block/fridge_low",
+      "east": "sweetmagic:block/fridge_low",
+      "west": "sweetmagic:block/fridge_low"
+    },
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west": { "y": 270 },
+      "east": { "y": 90 }
+    },
+     "inventory": [{
+     "model": "builtin/generated",
+        "textures": {
+          "layer0": "sweetmagic:items/freezer"
+        }
+     }]
+  }
+}

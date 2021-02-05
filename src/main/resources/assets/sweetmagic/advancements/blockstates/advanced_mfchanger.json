@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:mfchanger_0",
+    "textures": {
+      "0": "sweetmagic:block/smstone_top_0",
+      "1": "sweetmagic:block/smstone_side_tear"
+    }
+  },
+  "variants": {
+    "level": {
+      "0": {"textures": {"0": "sweetmagic:block/smstone_top_0"}},
+      "1": {"textures": {"0": "sweetmagic:block/smstone_top_1"}},
+      "2": {"textures": {"0": "sweetmagic:block/smstone_top_2"}},
+      "3": {"textures": {"0": "sweetmagic:block/smstone_top_3"}}
+    },
+    "inventory": [{}]
+  }
+}

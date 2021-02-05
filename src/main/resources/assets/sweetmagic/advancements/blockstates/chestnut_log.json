@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:basewood",
+    "textures": {
+      "particle": "sweetmagic:block/chestnut_side",
+      "top": "sweetmagic:block/chestnut_top",
+      "side": "sweetmagic:block/chestnut_side"
+    }
+  },
+  "variants": {
+    "axis": {
+      "y": {},
+      "z": { "x": 90 },
+      "x": { "x": 90, "y": 90 },
+      "none": { "model": "cube_all", "textures": { "all": "#side" } }
+    },
+        "inventory": [{}]
+  }
+}

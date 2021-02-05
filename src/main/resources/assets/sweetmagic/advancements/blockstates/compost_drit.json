@@ -1,0 +1,30 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "textures": {
+            "all": "sweetmagic:block/compost"
+        },
+        "model": "cube_all"
+    },
+"variants": {
+    "back=false,forward=true,left=false,right=true": { "model": "cube_all" },
+    "back=false,forward=true,left=true,right=false": { "model": "cube_all" },
+    "back=true,forward=false,left=false,right=true": { "model": "cube_all" },
+    "back=true,forward=false,left=true,right=false": { "model": "cube_all" },
+    "back=false,forward=true,left=false,right=false": { "model": "cube_all" },
+    "back=false,forward=false,left=false,right=true": { "model": "cube_all" },
+    "back=false,forward=false,left=true,right=false": { "model": "cube_all" },
+    "back=true,forward=false,left=false,right=false": { "model": "cube_all" },
+    "back=false,forward=false,left=false,right=false": { "model": "cube_all" },
+    "back=true,forward=true,left=false,right=false": { "model": "cube_all" },
+    "back=false,forward=false,left=true,right=true": { "model": "cube_all" },
+
+    "back=false,forward=true,left=true,right=true": { "model": "cube_all" },
+    "back=true,forward=false,left=true,right=true": { "model": "cube_all" },
+    "back=true,forward=true,left=false,right=true": { "model": "cube_all" },
+    "back=true,forward=true,left=true,right=false": { "model": "cube_all" },
+    "back=true,forward=true,left=true,right=true": { "model": "cube_all" },
+
+    "inventory": [{}]
+    }
+}
