@@ -1,0 +1,40 @@
+{
+	"textures": {
+		"2": "sweetmagic:block/blueberry_stage2",
+		"3": "#3",
+		"particle": "#3"
+	},
+	"elements": [
+		{
+			"from": [0.45, 0, 0.6],
+			"to": [0.5, 16, 21.6],
+			"rotation": {"angle": 45, "axis": "y", "origin": [0.5, 8, 0.5]},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#2"}
+			}
+		},
+		{
+			"from": [10.95, 0, -10],
+			"to": [11, 16, 11],
+			"rotation": {"angle": -45, "axis": "y", "origin": [0.5, 8, 0.5]},
+			"faces": {
+				"east": {"uv": [0, 0, 16, 16], "texture": "#2"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#2"}
+			}
+		},
+		{
+			"name": "leave",
+			"from": [0, 0, 0],
+			"to": [16, 16, 16],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"east": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"south": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"west": {"uv": [0, 0, 16, 16], "texture": "#3"},
+				"up": {"uv": [0, 0, 16, 13], "rotation": 180, "texture": "#3"},
+				"down": {"uv": [0, 0, 0, 0], "texture": "#3"}
+			}
+		}
+	]
+}

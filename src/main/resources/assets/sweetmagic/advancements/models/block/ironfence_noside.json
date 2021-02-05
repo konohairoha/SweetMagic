@@ -1,0 +1,33 @@
+{
+	"ambientocclusion": false,
+	"textures": {
+		"particle": "#pane",
+		"pane": "sweetmagic:pane"
+	},
+	"elements": [
+		{
+			"from": [7, 0, 8],
+			"to": [9, 16, 8],
+			"faces": {
+				"north": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"east": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"south": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"west": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"up": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"down": {"uv": [7, 0, 9, 16], "texture": "#pane"}
+			}
+		},
+		{
+			"from": [8, 0, 7],
+			"to": [8, 16, 9],
+			"faces": {
+				"north": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"east": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"south": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"west": {"uv": [7, 0, 9, 16], "texture": "#pane"},
+				"up": {"uv": [7, 0, 9, 16], "rotation": 270, "texture": "#pane"},
+				"down": {"uv": [7, 0, 9, 16], "rotation": 90, "texture": "#pane"}
+			}
+		}
+	]
+}
