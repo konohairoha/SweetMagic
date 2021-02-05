@@ -1,0 +1,10 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:pedestal_creat"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

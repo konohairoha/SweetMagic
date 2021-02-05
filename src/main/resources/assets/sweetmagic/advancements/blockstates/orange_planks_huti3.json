@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+    	"model": "sweetmagic:basewood",
+    	"textures": {
+    	"particle": "sweetmagic:block/orange_planks",
+      	"top": "sweetmagic:block/orange_planks",
+      	"side": "sweetmagic:block/orange_planks_huti3"
+    }
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

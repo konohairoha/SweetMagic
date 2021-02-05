@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/lier_rose_re"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/lier_rose" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/lier_rose" }},
+      "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/lier_rose_re" }}
+    },
+     "inventory": [{}]
+  }
+}

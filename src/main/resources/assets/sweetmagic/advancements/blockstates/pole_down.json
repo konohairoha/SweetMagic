@@ -1,0 +1,16 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:pole_down",
+    "transform": "forge:default-item"
+    },
+    "variants": {
+        "normal": [{}],
+     "inventory": [{
+     "model": "builtin/generated",
+        "textures": {
+          "layer0": "sweetmagic:items/street_lamp"
+        }
+     }]
+  }
+}

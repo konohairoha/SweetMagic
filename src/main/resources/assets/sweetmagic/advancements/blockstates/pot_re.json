@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:pot_off",
+    "textures": {
+      "3": "minecraft:blocks/water_still"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": { "y": 90 },
+      "south": { "y": 270 },
+      "west": { },
+      "east": { "y": 180 }
+    },
+    "inventory": [{}]
+  }
+}

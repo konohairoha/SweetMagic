@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:basewood",
+    "textures": {
+      "particle": "sweetmagic:block/mffisher_side",
+      "top": "sweetmagic:block/mffisher_top",
+      "side": "sweetmagic:block/mffisher_side"
+    }
+  },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

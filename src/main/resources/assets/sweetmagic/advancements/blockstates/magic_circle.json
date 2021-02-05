@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+        "model": "sweetmagic:kogen",
+        "textures": {
+            "0": "sweetmagic:block/hexagram_pastelcolor"
+        }
+  },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}
