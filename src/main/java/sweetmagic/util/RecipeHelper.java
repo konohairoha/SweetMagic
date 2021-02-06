@@ -51,58 +51,44 @@ public class RecipeHelper {
 		 *
 		 */
 
-		SweetMagicAPI.alsRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.alsRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if (itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if (itemInfos.size() == recipe.getInputList().size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-							break;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -118,58 +104,44 @@ public class RecipeHelper {
 		//レシピ情報
 		PedalRecipeInfo recipeInfo = new PedalRecipeInfo();
 
-		SweetMagicAPI.pedalRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.pedalRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if (itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if (itemInfos.size() == recipe.getInputList().size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-							break;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -201,66 +173,44 @@ public class RecipeHelper {
 		//レシピ情報
 		OvenRecipeInfo recipeInfo = new OvenRecipeInfo();
 
-		SweetMagicAPI.ovenRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.ovenRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						System.out.println("==========" + itemInfo);
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
-
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -275,64 +225,44 @@ public class RecipeHelper {
 		//レシピ情報
 		FermenterRecipeInfo recipeInfo = new FermenterRecipeInfo();
 
-		SweetMagicAPI.fermenterRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.fermenterRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -347,64 +277,44 @@ public class RecipeHelper {
 		//レシピ情報
 		JuiceMakerRecipeInfo recipeInfo = new JuiceMakerRecipeInfo();
 
-		SweetMagicAPI.juiceRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.juiceRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
+					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
+					// レシピチェック成功
+					successFlg = true;
 
-					// アイテム情報をインベントリから取り出す
-					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) 1);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
-
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
-
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -419,76 +329,50 @@ public class RecipeHelper {
 		//レシピ情報
 		FreezerRecipeInfo recipeInfo = new FreezerRecipeInfo();
 
-		SweetMagicAPI.freezRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		// 大分類
+		SweetMagicAPI.freezRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
+					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
+					// レシピチェック成功
+					successFlg = true;
 
-					// アイテム情報をインベントリから取り出す
-					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) 1);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
-
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
-
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
 		// アイテムリストが残ってたらアイテムリストを返す　なかったらcanComplete = Falseで返す
 		return !itemInfos.isEmpty() ? recipeInfo : new FreezerRecipeInfo();
 	}
-
-	// 冷蔵庫レシピを返す
-	public static FreezerRecipeInfo returnFreezerInfo (FreezerRecipeInfo info, List<Object[]> listInfo) {
-		return !listInfo.isEmpty() ? info : new FreezerRecipeInfo();
-	}
-
 
 	public static PotRecipeInfo getPotRecipeInfo(ItemStack hand, NonNullList<ItemStack> inv) {
 
@@ -497,64 +381,43 @@ public class RecipeHelper {
 		//レシピ情報
 		PotRecipeInfo recipeInfo = new PotRecipeInfo();
 
-		SweetMagicAPI.potRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		SweetMagicAPI.potRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -569,64 +432,43 @@ public class RecipeHelper {
 		//レシピ情報
 		PanRecipeInfo recipeInfo = new PanRecipeInfo();
 
-		SweetMagicAPI.panRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		SweetMagicAPI.panRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
@@ -642,67 +484,45 @@ public class RecipeHelper {
 		ObMagiaRecipeInfo recipeInfo = new ObMagiaRecipeInfo();
 
 
-		SweetMagicAPI.magiaRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		SweetMagicAPI.magiaRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.inputList.size()) {
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-					}
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
-
 
 		// アイテムリストが残ってたらアイテムリストを返す　なかったらcanComplete = Falseで返す
 		return !itemInfos.isEmpty() ? recipeInfo : new ObMagiaRecipeInfo();
@@ -715,70 +535,43 @@ public class RecipeHelper {
 		//レシピ情報
 		MFTableRecipeInfo recipeInfo = new MFTableRecipeInfo();
 
-		SweetMagicAPI.mfTableRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe ->
-		{
+		SweetMagicAPI.mfTableRecipe.stream().filter(recipe -> canCraft(recipe.getHandList(), hand)).forEach(recipe -> {
 
-			// レシピチェック失敗フラグ
-			boolean nextRecipeFlg = false;
-			// レシピチェック成功フラグ
-			boolean successFlg = false;
+			// レシピ検索が終わってたら終了
+			if (recipeInfo.canComplete) { return; }
 
-			// List<List<ItemStack>> から取り出す
+			// List<List<ItemStack>> から取り出す（中分類）
 			for (List<ItemStack> oreList : recipe.getInputList()) {
 
-				// 鉱石辞書にある分取り出す
+				// 中分類を回すたびにレシピチェック成功フラグの初期化
+				boolean successFlg = false;
+
+				// 鉱石辞書にある分取り出す（小分類）
 				for (ItemStack stack : oreList) {
 
-					// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-					if(nextRecipeFlg) {
-						nextRecipeFlg = false;
-						itemInfos.clear();
-						break;
-					}
-
-					// レシピチェック成功フラグが立っていたらチェック終了
-					if(successFlg) { break; }
-
-					// アイテム情報をインベントリから取り出す
+					// アイテム情報をインベントリから取り出せなかったら次の小分類へ
 					Object[] itemInfo = SMUtil.getStackInv(inv, stack, (byte) stack.getCount());
+					if (itemInfo == null) { continue; }
 
-					// 取り出したかどうか
-					if(itemInfo != null) {
+					// レシピチェック成功
+					successFlg = true;
 
-						// アイテム情報をリストに追加する
-						itemInfos.add(itemInfo);
+					// レシピアイテムと保存できたアイテム情報の数が一致しなければ次の中分類へ
+					itemInfos.add(itemInfo);
+					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
-						// レシピアイテムと保存できたアイテム情報の数が一致したら
-						if(itemInfos.size() == recipe.getInputList().size()) {
-//							System.out.println("=======" + recipe.getOutputItemStack());
-							recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
-							recipeInfo.canComplete = true;
-							successFlg = true;
-						}
+					// 数が揃ったら中分類から抜け出す
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.canComplete = true;
+					return;
 
-						// 次の要求アイテムへ
-						break;
-
-						// レシピチェック失敗にする
-					} /*else {
-						nextRecipeFlg = true;
-						break;
-					}*/
 				}
 
-				if (itemInfos.isEmpty()) {
-					nextRecipeFlg = true;
-				}
-
-				// レシピチェックではじかれたら初期化しながら次のレシピチェック処理に移行
-				if(nextRecipeFlg) {
-					nextRecipeFlg = false;
+				// レシピチェックではじかれたら初期化しながら次のレシピチェック（大分類）処理に移行
+				if(itemInfos.isEmpty() || !successFlg) {
 					itemInfos.clear();
-					break;
+					return;
 				}
-
-				// レシピチェック成功フラグが立っていたらチェック終了
-				if(successFlg) { break; }
 			}
 		});
 
