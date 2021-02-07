@@ -59,7 +59,7 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 
 		// きのこソテー
 		recipe.addRecipe(new PanRecipes(
-				new OreItems("listAllmushroom", 2),
+			new OreItems("listAllmushroom", 2),
 			new Object[] { "foodButter", "cropLemon", "cropCabbage" },
 			new ItemStack[] { new ItemStack(ItemInit.sauteed_mushrooms, 4)}
 		));
@@ -80,8 +80,8 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 
 		// クレープ
 		recipe.addRecipe(new PanRecipes(
-			new ItemStack (ItemInit.banana, 2),
-			new Object[] { new OreItems("listAllfruit", 2), new OreItems("egg", 2), "bucketMilk", "foodCream", "bucketWater", "foodButter", "dustSugar" },
+			new OreItems("dustFlour"),
+			new Object[] { new OreItems("listAllfruit", 3), new OreItems("egg", 2), "bucketMilk", "foodCream", "bucketWater", "foodButter", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.fruit_crepe, 8)}
 		));
 

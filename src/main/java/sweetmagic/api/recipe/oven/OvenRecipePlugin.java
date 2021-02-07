@@ -38,7 +38,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		//チョコマフィン
 		recipe.addRecipe(new OvenRecipes(
-			new ItemStack(Items.DYE, 4, 3),
+			new ItemStack(ItemInit.cocoapowder, 4),
 			new Object[] {new OreItems("dustFlour", 2), new OreItems("egg", 2), new OreItems("dustSugar", 2), "bucketMilk", "foodButter" },
 			new ItemStack[] { new ItemStack(ItemInit.chocolate_muffin, 4)}
 		));
@@ -59,8 +59,8 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		// スポンジ
 		recipe.addRecipe(new OvenRecipes(
-			"bucketMilk",
-			new Object[] { new OreItems("egg", 2), "dustFlour", "foodButter", "dustSugar" },
+			"dustFlour",
+			new Object[] { new OreItems("egg", 2), "bucketMilk", "foodButter", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.cake_dough, 4)}
 		));
 
@@ -78,25 +78,25 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.strawberry_tart, 6)}
 		));
 
-		// スコーン
-		recipe.addRecipe(new OvenRecipes(
-			new OreItems("dustSugar", 2),
-			new Object[] { "foodButter", "bucketMilk", new OreItems("dustFlour", 2) },
-			new ItemStack[] { new ItemStack(ItemInit.scone, 2)}
-		));
-
-		// モンブラン
-		recipe.addRecipe(new OvenRecipes(
-				new OreItems("cropChestnut", 3),
-			new Object[] { new OreItems("dustSugar", 2), new OreItems("foodCream", 3), "foodDough" },
-			new ItemStack[] { new ItemStack(ItemInit.mont_blanc, 3)}
-		));
-
 		// トースト
 		recipe.addRecipe(new OvenRecipes(
 			new OreItems("dustFlour", 3),
 			new Object[] { "foodButter", "bucketMilk", new OreItems("bucketWater", 2), "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.toast, 8)}
+		));
+
+		// スコーン
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("dustFlour", 2),
+			new Object[] { "foodButter", "bucketMilk", new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.scone, 2)}
+		));
+
+		// モンブラン
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("cropChestnut", 3),
+			new Object[] { new OreItems("dustSugar", 2), new OreItems("foodCream", 3), "foodDough" },
+			new ItemStack[] { new ItemStack(ItemInit.mont_blanc, 3)}
 		));
 
 		// 小倉トースト
@@ -108,15 +108,15 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		// バタートースト
 		recipe.addRecipe(new OvenRecipes(
-			new OreItems("foodButter", 2),
-			new Object[] { new OreItems("bread", 2)},
-			new ItemStack[] { new ItemStack(ItemInit.butter_toast, 4)}
+			new OreItems("bread", 2),
+			new Object[] { new OreItems("foodButter", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.butter_toast, 2) }
 		));
 
 		// ジャムトースト
 		recipe.addRecipe(new OvenRecipes(
-				new OreItems("dustSalt", 2),
-			new Object[] { new OreItems("cropStrawberry", 4), new OreItems("bread", 2) },
+			new OreItems("bread", 2),
+			new Object[] { new OreItems("cropStrawberry", 4), new OreItems("dustSalt", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.jam_toast, 4)}
 		));
 
@@ -127,7 +127,6 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.cream_puff, 6) }
 		));
 
-
 		// チョコレートケーキ
 		recipe.addRecipe(new OvenRecipes(
 			"foodDough",
@@ -137,7 +136,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		// チーズケーキ
 		recipe.addRecipe(new OvenRecipes(
-			new ItemStack(ItemInit.cheese, 3),
+			new OreItems("foodCheese", 3),
 			new Object[] { "cropLemon", "foodButter", new OreItems("egg", 2), new OreItems("dustFlour", 2), "foodCream", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.cheese_cake, 5) }
 		));
@@ -153,13 +152,13 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 		recipe.addRecipe(new OvenRecipes(
 			new ItemStack(ItemInit.sweetpotato, 4),
 			new Object[] { "foodButter", "bucketMilk", "egg", "dustSalt", "dustSugar" },
-			new ItemStack[] { new ItemStack(ItemInit.sweet_potato, 12) }
+			new ItemStack[] { new ItemStack(ItemInit.sweet_potato, 6) }
 		));
 
 		// ピザ
 		recipe.addRecipe(new OvenRecipes(
 			new OreItems("cropTomato", 4),
-			new Object[] { new OreItems("cropOnion", 2), "listAllmeatraw", "foodCheese", new OreItems("dustFlour", 4), "dustSalt", "dustSugar", "bucketWater", new OreItems("foodOil", 2) },
+			new Object[] { new OreItems("cropOnion", 2), new OreItems("listAllmeatraw", 2), new OreItems("foodCheese", 4), new OreItems("dustFlour", 4), "dustSalt", "dustSugar", "bucketWater", new OreItems("foodOil", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.pizza, 8) }
 		));
 

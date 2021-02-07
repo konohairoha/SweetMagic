@@ -24,12 +24,12 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magicmeal, 2) }
 		));
 
-		// ライアーローズ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-				new ItemStack(ItemInit.sticky_stuff_petal),
-			new Object[] { SMUtil.getStack(ItemInit.clero_petal), SMUtil.getStack(Items.POISONOUS_POTATO), new ItemStack(ItemInit.moonblossom_petal, 4), new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.DYE, 2, 9)  },
-			new ItemStack[] { new ItemStack(SMUtil.getItemBlock(BlockInit.lier_rose)) }
-		));
+//		// ライアーローズ
+//		recipe.addRecipe(new AlstroemeriaRecipes(
+//			new ItemStack(ItemInit.sticky_stuff_petal),
+//			new Object[] { SMUtil.getStack(ItemInit.clero_petal), SMUtil.getStack(Items.POISONOUS_POTATO), new ItemStack(ItemInit.moonblossom_petal, 4), new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.DYE, 2, 9)  },
+//			new ItemStack[] { new ItemStack(SMUtil.getItemBlock(BlockInit.lier_rose)) }
+//		));
 
 		// ガラスの瓶→空っぽの魔法流の瓶変換
 		recipe.addRecipe(new AlstroemeriaRecipes(
@@ -248,7 +248,7 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// 堆肥土
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new OreItems("listAllseed", 8),
-			new Object[] { new ItemStack(Items.DYE, 8 , 15), new OreItems("dirt", 8) },
+			new Object[] { new ItemStack(ItemInit.magicmeal, 8), new OreItems("dirt", 8) },
 			new ItemStack[] { new ItemStack(BlockInit.compost_drit, 8) }
 		));
 	}

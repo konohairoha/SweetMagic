@@ -42,7 +42,7 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.kakigori_strawberry, 2)}
 		));
 
-		// ミルクかき氷
+		// 練乳かき氷
 		recipe.addRecipe(new FreezerRecipes(
 			"bucketMilk",
 			new Object[] { new ItemStack(Blocks.ICE), "dustSugar", "bucketWater"},
@@ -80,8 +80,8 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 		// エクレア
 		recipe.addRecipe(new FreezerRecipes(
 			"foodCustard",
-			new Object[] { "foodButter", "dustSalt", "egg", "bucketWater", "dustSugar" },
-			new ItemStack[] { new ItemStack(ItemInit.eclair, 4)}
+			new Object[] { new ItemStack(ItemInit.chocolate), "foodButter", "dustSalt", "egg", "bucketWater", "dustSugar" },
+			new ItemStack[] { new ItemStack(ItemInit.eclair, 6)}
 		));
 
 		// マシュマロ
@@ -101,7 +101,7 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 		// プリン
 		recipe.addRecipe(new FreezerRecipes(
 			new ItemStack(ItemInit.vannila_essence),
-			new Object[] { "egg", "bucketMilk", "dustSugar", "dustSugar" },
+			new Object[] { "egg", "bucketMilk", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.pudding, 3)}
 		));
 

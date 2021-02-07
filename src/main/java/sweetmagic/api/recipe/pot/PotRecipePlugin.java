@@ -46,15 +46,15 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 
 		// ロールキャベツ
 		recipe.addRecipe(new PotRecipes(
-			"listAllporkraw",
-			new Object[] { "listAllbeefraw", "cropOnion", new OreItems("cropCabbage", 4), "bucketMilk", new OreItems("bucketWater", 2), "dustSalt" },
+				new OreItems("cropCabbage", 4),
+			new Object[] { "listAllbeefraw", "cropOnion", "listAllporkraw", "bucketMilk", new OreItems("bucketWater", 2), "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.roll_cabbage, 4)}
 		));
 
 		// ビーフシチュー
 		recipe.addRecipe(new PotRecipes(
-			new OreItems("cropOnion", 2),
-			new Object[] { "listAllbeefraw" , new OreItems("cropTomato", 4), "cropCarrot",
+				"listAllbeefraw",
+			new Object[] {  new OreItems("cropOnion", 2), new OreItems("cropTomato", 4), "cropCarrot",
 							"foodOil", "dustFlour", "foodButter", new OreItems("bucketWater", 2), "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.beefstew, 6)}
 		));
@@ -89,8 +89,8 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 
 		// コロッケ
 		recipe.addRecipe(new PotRecipes(
-			"dustBread",
-			new Object[] { "listAllmeatraw", "cropOnion", "foodButter", "egg", "dustFlour", new OreItems("cropPotato", 4), new OreItems("foodOil", 2) },
+				new OreItems("cropPotato", 4),
+			new Object[] { "listAllmeatraw", "cropOnion", "foodButter", "egg", "dustFlour", "dustBread", new OreItems("foodOil", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.croquette, 12)}
 		));
 
