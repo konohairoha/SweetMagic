@@ -592,6 +592,11 @@ public class RecipeHelper {
 		List<ItemStack> results = new ArrayList<ItemStack>();
 		ItemStack copy = hand.copy();
 
+		// バケツチェック
+		if (isBucket(copy.getItem())) {
+			results.add(new ItemStack(Items.BUCKET, copy.getCount()));
+		}
+
 		// レシピに登録されてるメインアイテムの要求数
 		int reHandAmount = recipeInfo.getHandList().get(0).getCount();
 
@@ -636,7 +641,7 @@ public class RecipeHelper {
 
 			// 数が0になるまで繰り返し
 			while (amount > 0) {
-				int input = amount >= 64 ? 64 : amount;
+				int input = Math.min(amount, 64);
 				amount -= input;
 				ItemStack resultItems = send.copy();
 				resultItems.setCount(input);
@@ -668,6 +673,11 @@ public class RecipeHelper {
 		List<ItemStack> inputs = new ArrayList<ItemStack>();
 		List<ItemStack> results = new ArrayList<ItemStack>();
 
+		// バケツチェック
+		if (isBucket(handitem.getItem())) {
+			results.add(new ItemStack(Items.BUCKET, handitem.getCount()));
+		}
+
 		// 手に持っているアイテムを処理する
 		hand.shrink(handitem.getCount());
 
@@ -694,7 +704,7 @@ public class RecipeHelper {
 
 			// 数が0になるまで繰り返し
 			while (amount > 0) {
-				int input = amount >= 64 ? 64 : amount;
+				int input = Math.min(amount, 64);
 				amount -= input;
 				ItemStack resultItems = send.copy();
 				resultItems.setCount(input);
