@@ -3,17 +3,13 @@
   "defaults": {
     "model": "minecraft:cross",
         "textures": {
-          "cross": "sweetmagic:block/lily_valley"
+          "cross": "sweetmagic:block/lily_valley",
+          "layer0": "sweetmagic:block/lily_valley"
         },
     "transform": "forge:default-item"
   },
   "variants": {
     "normal": [{}],
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:block/lily_valley"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

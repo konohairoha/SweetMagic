@@ -3,17 +3,13 @@
   "defaults": {
     "model": "minecraft:cross",
         "textures": {
-          "cross": "sweetmagic:block/glow_lamp"
+          "cross": "sweetmagic:block/glow_lamp",
+          "layer0": "sweetmagic:block/glow_lamp"
         },
     "transform": "forge:default-item"
   },
   "variants": {
     "normal": [{}],
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:block/glow_lamp"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

@@ -3,17 +3,13 @@
   "defaults": {
     "model": "minecraft:cross",
         "textures": {
-          "cross": "sweetmagic:block/twilightalstroemeria_pot"
+          "cross": "sweetmagic:block/twilightalstroemeria_pot",
+          "layer0": "sweetmagic:block/twilightalstroemeria_pot"
         },
     "transform": "forge:default-item"
   },
   "variants": {
     "normal": [{}],
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:block/twilightalstroemeria_pot"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

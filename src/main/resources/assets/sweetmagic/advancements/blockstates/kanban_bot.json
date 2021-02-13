@@ -3,8 +3,10 @@
   "defaults": {
     "model": "sweetmagic:kanban",
     "textures": {
-      "0": "sweetmagic:block/kanban_down"
-    }
+      "0": "sweetmagic:block/kanban_down",
+      "layer0": "sweetmagic:block/kanban"
+    },
+    "transform": "forge:default-item"
   },
   "variants": {
     "facing": {
@@ -13,11 +15,6 @@
       "west": { "y": 270 },
       "east": { "y": 90 }
     },
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:block/kanban"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

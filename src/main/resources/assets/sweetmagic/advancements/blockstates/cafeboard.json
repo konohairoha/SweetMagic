@@ -1,7 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:cafeboard"
+    "model": "sweetmagic:cafeboard",
+    "textures": {
+		"layer0": "sweetmagic:items/cafeboard"
+    }
   },
   "variants": {
     "facing": {
@@ -10,11 +13,6 @@
       "west": { "y": 270 },
       "east": { "y": 90 }
     },
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:items/cafeboard"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

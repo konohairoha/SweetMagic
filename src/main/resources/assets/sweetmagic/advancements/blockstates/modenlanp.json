@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cross",
+    	"textures": {
+      		"cross": "sweetmagic:block/modernlamp_normal",
+          "layer0": "sweetmagic:block/modernlamp_normal"
+    	},
+    "transform": "forge:default-item"
+    },
+"variants": {
+	"bot=false,top=false": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_normal" } },
+	"bot=true,top=false": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_down" } },
+	"bot=true,top=true": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_middle" } },
+	"bot=false,top=true": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_top" } },
+
+     "inventory": [{ "model": "builtin/generated" }]
+    }
+}

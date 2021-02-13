@@ -3,14 +3,16 @@
   "defaults": {
     "model": "cross",
     "textures": {
-      "cross": "sweetmagic:block/alstroemeria_stage1"
-    }
+      "cross": "sweetmagic:block/alstroemeria_stage1",
+      "layer0": "sweetmagic:block/alstroemeria_stage1"
+    },
+    "transform": "forge:default-item"
   },
   "variants": {
     "stage": {
       "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/alstroemeria_stage0" }},
       "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/alstroemeria_stage1" }}
     },
-     "inventory": [{}]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

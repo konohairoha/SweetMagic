@@ -3,17 +3,13 @@
   "defaults": {
     "model": "minecraft:cross",
         "textures": {
-          "cross": "sweetmagic:block/banana_sapring"
+          "cross": "sweetmagic:block/banana_sapring",
+          "layer0": "sweetmagic:block/banana_sapring"
         },
     "transform": "forge:default-item"
   },
   "variants": {
     "normal": [{}],
-     "inventory": [{
-     "model": "builtin/generated",
-        "textures": {
-          "layer0": "sweetmagic:block/banana_sapring"
-        }
-     }]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }
