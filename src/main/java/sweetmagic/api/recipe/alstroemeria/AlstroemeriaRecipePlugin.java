@@ -180,6 +180,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.banana_sapling) }
 		));
 
+		// エストールの苗木
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			"dyeRed",
+			new Object[] { "treeSapling" },
+			new ItemStack[] { new ItemStack(BlockInit.estor_sapling) }
+		));
+
 		// 創世の台座
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new OreItems("stone", 4),
@@ -250,6 +257,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new OreItems("listAllseed", 8),
 			new Object[] { new ItemStack(ItemInit.magicmeal, 8), new OreItems("dirt", 8) },
 			new ItemStack[] { new ItemStack(BlockInit.compost_drit, 8) }
+		));
+
+		// 赤砂
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(Blocks.SAND, 16),
+			new Object[] { new OreItems("dyeRed") },
+			new ItemStack[] { new ItemStack(Blocks.SAND, 16, 1) }
 		));
 	}
 }
