@@ -41,6 +41,11 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("slabWood", BlockInit.prism_slab);
         OreDictionary.registerOre("treeLeaves",BlockInit.banana_leaves);
         OreDictionary.registerOre("treeSapling",BlockInit.banana_sapling);
+		OreDictionary.registerOre("plankWood", BlockInit.estor_planks);
+		OreDictionary.registerOre("slabWood", BlockInit.estor_slab);
+		OreDictionary.registerOre("logWood", BlockInit.estor_log);
+        OreDictionary.registerOre("treeLeaves",BlockInit.estor_leaves);
+        OreDictionary.registerOre("treeSapling",BlockInit.estor_sapling);
         OreDictionary.registerOre("doorWood",ItemInit.black_moderndoor);
         OreDictionary.registerOre("doorWood",ItemInit.brown_2paneldoor);
         OreDictionary.registerOre("doorWood",ItemInit.brown_5paneldoor);
@@ -67,9 +72,6 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_0);
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_1);
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_2);
-
-
-
 
 		OreDictionary.registerOre("orange_planks", BlockInit.orange_planks);
 		OreDictionary.registerOre("slabWood", BlockInit.orange_slab);
@@ -143,6 +145,8 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("glowstone", BlockInit.glow_light);
 		OreDictionary.registerOre("bucketWater", ItemInit.watercup);
 		OreDictionary.registerOre("cropStrawberry", ItemInit.strawberry);
+		OreDictionary.registerOre("cropAplle", Items.APPLE);
+		OreDictionary.registerOre("cropAplle", ItemInit.estor_apple);
 		OreDictionary.registerOre("dustWood", ItemInit.plant_chips);
 		OreDictionary.registerOre("dustFlour", ItemInit.flourpowder);
 		OreDictionary.registerOre("foodFlour", ItemInit.flourpowder);

@@ -70,14 +70,13 @@ import sweetmagic.worldgen.gen.CFlowerGen;
 import sweetmagic.worldgen.gen.CemeteryGen;
 import sweetmagic.worldgen.gen.CledonGen;
 import sweetmagic.worldgen.gen.FluitForestFlowerGen;
+import sweetmagic.worldgen.gen.MoatGen;
 import sweetmagic.worldgen.gen.MoonGen;
 import sweetmagic.worldgen.gen.NetGen;
-import sweetmagic.worldgen.gen.RaspGen;
 import sweetmagic.worldgen.gen.SMOreGen;
 import sweetmagic.worldgen.gen.SMSkyIslandGen;
 import sweetmagic.worldgen.gen.StickyGen;
 import sweetmagic.worldgen.gen.SugarGen;
-import sweetmagic.worldgen.gen.SunGen;
 import sweetmagic.worldgen.gen.TentoGen;
 import sweetmagic.worldgen.gen.WellGen;
 import sweetmagic.worldgen.gen.WitchHouseGen;
@@ -96,18 +95,18 @@ public class RegistryHandler {
 		PotionInit.setList();
 
 		//お飾りお花
-		GameRegistry.registerWorldGenerator(new SugarGen(BlockInit.sugarbell_plant), 0);
+		GameRegistry.registerWorldGenerator(new SugarGen(BlockInit.sugarbell_plant, 58), 0);
 		GameRegistry.registerWorldGenerator(new CledonGen(BlockInit.clerodendrum), 0);
-		GameRegistry.registerWorldGenerator(new StickyGen(BlockInit.sticky_stuff_plant), 0);
-		GameRegistry.registerWorldGenerator(new NetGen(BlockInit.whitenet_plant), 0);
-		GameRegistry.registerWorldGenerator(new MoonGen(BlockInit.moonblossom_plant), 0);
-		GameRegistry.registerWorldGenerator(new MoonGen(BlockInit.dm_plant), 0);
-		GameRegistry.registerWorldGenerator(new SunGen(BlockInit.sannyflower_plant), 0);
-		GameRegistry.registerWorldGenerator(new SunGen(BlockInit.glowflower_plant), 0);
-		GameRegistry.registerWorldGenerator(new RaspGen(BlockInit.raspberry_plant), 0);
+		GameRegistry.registerWorldGenerator(new StickyGen(BlockInit.sticky_stuff_plant, 128), 0);
+		GameRegistry.registerWorldGenerator(new NetGen(BlockInit.whitenet_plant, 11), 0);
+		GameRegistry.registerWorldGenerator(new MoonGen(BlockInit.moonblossom_plant, 62), 0);
+		GameRegistry.registerWorldGenerator(new MoonGen(BlockInit.dm_plant, 17), 0);
+		GameRegistry.registerWorldGenerator(new SugarGen(BlockInit.sannyflower_plant, 21), 0);
+		GameRegistry.registerWorldGenerator(new SugarGen(BlockInit.glowflower_plant, 33), 0);
+		GameRegistry.registerWorldGenerator(new SugarGen(BlockInit.raspberry_plant, 61, 16), 0);
 		GameRegistry.registerWorldGenerator(new FluitForestFlowerGen(), 0);
-		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.cornflower), 0);
-		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.lily_valley), 0);
+		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.cornflower, 3), 0);
+		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.lily_valley, 23), 0);
 
 		GameRegistry.registerWorldGenerator(new CemeteryGen(), 1);	// 墓地生成
 		CemeteryGen.initLootTable();									// ルートテーブルInit
@@ -118,6 +117,9 @@ public class RegistryHandler {
 		GameRegistry.registerWorldGenerator(new WorldVillageGen(), 1);	// 村家生成
 		GameRegistry.registerWorldGenerator(new TentoGen(), 1);	// テント生成
 
+		GameRegistry.registerWorldGenerator(new MoatGen(), 0);	// 小山生成
+		MoatGen.setLootChestA();
+
 		GameRegistry.registerWorldGenerator(new SMSkyIslandGen(), 0);	// 浮島生成
 		SMSkyIslandGen.setLootChestA();									// ルートテーブルInit
 
@@ -126,7 +128,6 @@ public class RegistryHandler {
 
 //		GameRegistry.registerWorldGenerator(new GeddanGen(), 1);	// ゲッダン生成
 //		GeddanGen.setLootChestA();									// ルートテーブルInit
-
 
 		// 鉱石生成
 		GameRegistry.registerWorldGenerator(new SMOreGen(), 0);
