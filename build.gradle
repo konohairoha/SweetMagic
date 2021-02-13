@@ -14,7 +14,7 @@ apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
-version = '1.1.4-beta4'
+version = '1.1.5-beta1'
 group = 'sweetmagic' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'SweetMagic'
 
