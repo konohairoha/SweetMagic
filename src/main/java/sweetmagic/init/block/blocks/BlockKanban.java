@@ -21,9 +21,9 @@ import net.minecraft.world.World;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
 
-public class BlockKandan extends BaseFaceBlock {
+public class BlockKanban extends BaseFaceBlock {
 
-	public BlockKandan(String name, List<Block> list) {
+	public BlockKanban(String name, List<Block> list) {
 		super(Material.WOOD, name);
         setHardness(0.65F);
         setResistance(64F);
