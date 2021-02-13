@@ -95,13 +95,13 @@ public class CommonProxy {
 
 	//スポーンエッグを出す
 	public static void eggEntity(Class<? extends Entity> css, String name) {
-		EntityRegistry.registerModEntity(new ResourceLocation(SweetMagicCore.MODID, name), css, name, count, SweetMagicCore.INSTANCE, 128, 5, true, 1000, 255);
+		EntityRegistry.registerModEntity(new ResourceLocation(SweetMagicCore.MODID, name), css, name, count, SweetMagicCore.INSTANCE, 128, 1, true, 1000, 255);
 		count++;
 	}
 
 	//スポーンエッグを出さない
 	public static void arrowEntity(Class<? extends Entity> css, String name) {
-		EntityRegistry.registerModEntity(new ResourceLocation(SweetMagicCore.MODID, name), css, name, count, SweetMagicCore.INSTANCE, 128, 5, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(SweetMagicCore.MODID, name), css, name, count, SweetMagicCore.INSTANCE, 128, 1, true);
 		count++;
 	}
 
