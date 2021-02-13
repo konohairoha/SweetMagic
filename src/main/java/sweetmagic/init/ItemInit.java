@@ -143,7 +143,7 @@ public class ItemInit {
 	public static Item short_cake, cheese_cake, chocolate_cake;
 	public static Item croquette, choco_pie, fruit_crepe, sweet_potato, french_toast;
 	public static Item banana, yaki_banana, banana_smoothy, mixed_juice, soy_soup, pork_soup;
-	public static Item saba_miso, fluit_mix, pizza, gratin;
+	public static Item saba_miso, fluit_mix, pizza, gratin, estor_apple, applepie;
 
 	// 飲み物
 	public static Item corn_soup, berryorange_juice, strawberrymilk, coconut_juice, milk_pack;
@@ -350,6 +350,7 @@ public class ItemInit {
 		// 食べ物 アイテム名　=new (満腹度回復、隠し満腹度(乗算)、"アイテム名", ポーション効果の整数)
 		lemon = new SMFood(3, 0.3F, "lemon", 0);
 		orange = new SMFood(3, 0.3F, "orange", 0);
+		estor_apple = new SMFood(3, 0.5F, "estor_apple", 0);
 		chestnut = new SMFood(4, 0.8F, "chestnut", 0);
 		coconut = new SMFood(3, 1F, "coconut", 0);
 		cheese = new SMFood(4, 0.3F, "cheese",0);
@@ -425,6 +426,7 @@ public class ItemInit {
 		fluit_mix = new SMFood(12, 0.1F, "fluit_mix", 0);
 		pizza = new SMFood(10, 0.7F, "pizza", 0);
 		gratin = new SMFood(8, 0.6F, "gratin", 0);
+		applepie = new SMFood(7, 0.65F, "applepie", 0);
 
 		// 飲み物
 		corn_soup = new SMDrink(7, 0.5F, "corn_soup", 0);

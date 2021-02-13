@@ -25,10 +25,11 @@ import sweetmagic.init.block.blocks.BlockFlourMill;
 import sweetmagic.init.block.blocks.BlockFreezer;
 import sweetmagic.init.block.blocks.BlockFryPan;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
-import sweetmagic.init.block.blocks.BlockKandan;
+import sweetmagic.init.block.blocks.BlockKanban;
 import sweetmagic.init.block.blocks.BlockLanp;
 import sweetmagic.init.block.blocks.BlockLantern;
 import sweetmagic.init.block.blocks.BlockLight;
+import sweetmagic.init.block.blocks.BlockModenLanp;
 import sweetmagic.init.block.blocks.BlockModenRack;
 import sweetmagic.init.block.blocks.BlockModenStair;
 import sweetmagic.init.block.blocks.BlockOven;
@@ -105,11 +106,16 @@ public class BlockInit {
 	public static Block coconut_log, coconut_sapling, coconut_leaves;
 	public static Block coconut_planks, coconut_slab, coconut_stairs, coconut_trapdoor, coconut_plate, coconut_plant;
 
-	// プリズミ原木
+	// プリズム原木
 	public static Block prism_log, prism_leaves, prism_sapling;
 	public static Block prism_planks, prism_slab, prism_stairs, prism_plate;
 
+	// バナナ原木
 	public static Block banana_leaves, banana_sapling;
+
+	// エストール原木
+	public static Block estor_log, estor_leaves, estor_sapling;
+	public static Block estor_planks, estor_slab, estor_stairs, estor_plate;
 
 	// ガラス
 	public static Block sugarglass, shading_sugarglass, frosted_glass_line, frosted_glass, prismglass;
@@ -146,6 +152,7 @@ public class BlockInit {
 
 	// 光源
 	public static Block magiclight, glow_light, antique_candle, gorgeous_lamp, glow_lamp, magic_circle, twilightlight;
+	public static Block modenlanp;
 
 	// レンガ
 	public static Block antique_brick_0, antique_brick_1, antique_brick_2;
@@ -193,8 +200,8 @@ public class BlockInit {
 	public static Block moden_rack, moden_rack_brown, moden_wallrack;
 	public static Block moden_stair, plate, magicbook;
 
-	public static Block white_ironfence;
-	public static Block antique_brick_pot_r, orange_planks_pot, orange_planks_pot_w, compost_drit;
+	public static Block white_ironfence, black_ironfence;
+	public static Block antique_brick_pot_r, orange_planks_pot, orange_planks_pot_w, estor_planks_pot, compost_drit;
 
 	public static Block woodbox;
 
@@ -277,6 +284,14 @@ public class BlockInit {
 		banana_leaves = new SMLeaves("banana_leaves", 3);
 		banana_sapling = new SMSapling("banana_sapling", 5);
 
+		estor_log = new SMLog("estor_log");
+		estor_leaves = new FruitLeaves("estor_leaves", 2);
+		estor_sapling = new SMSapling("estor_sapling", 6);
+		estor_planks = new ChestnutPlank("estor_planks");
+		estor_slab = new ChestnutSlab("estor_slab");
+		estor_stairs = new ChestnutStairs("estor_stairs", estor_planks.getDefaultState());
+		estor_plate = new SMPlate("estor_plate");
+
 		// ガラス
 		sugarglass = new SMGlass("sugarglass", 0);
 		shading_sugarglass = new SMGlass("shading_sugarglass", 1);
@@ -352,6 +367,7 @@ public class BlockInit {
 		magic_circle = new BlockLanp("magic_circle", 0, 32F, 0, 1, 0.5F, SoundType.GLASS, noTabList);
 		glow_light = new BlockLight("glow_light");
 		gorgeous_lamp = new BlockLight("gorgeous_lamp");
+		modenlanp = new BlockModenLanp("modenlanp");
 
 		// レンガ
 		antique_brick_0 = new AntiqueBrick("antique_brick_0", 1.25F, 1024F, 0, 0);
@@ -413,7 +429,6 @@ public class BlockInit {
 		woodgold_3 = new SMDoor("woodgold_3", 6, Material.WOOD, SoundType.WOOD);
 		whitewoodgold_3 = new SMDoor("whitewoodgold_3", 7, Material.WOOD, SoundType.WOOD);
 
-
 		// 作物
 		sannyflower_plant = new MagiaFlower("sannyflower_plant", 0);
 		moonblossom_plant = new MagiaFlower("moonblossom_plant", 1);
@@ -458,8 +473,8 @@ public class BlockInit {
 		lantern_side2 = new BlockLantern("lantern_side2", 1, noTabList);
 
 		cafeboard = new BlockCafeBoard("cafeboard");
-		kanban_top = new BlockKandan("kanban_top", noTabList);
-		kanban_bot = new BlockKandan("kanban_bot", blockList);
+		kanban_top = new BlockKanban("kanban_top", noTabList);
+		kanban_bot = new BlockKanban("kanban_bot", blockList);
 		smchair = new SMChair("smchair", 0);
 		antique_back_chair = new SMChair("antique_back_chair", 1);
 		woodbox = new ChestnutSlab("woodbox");
@@ -473,12 +488,14 @@ public class BlockInit {
 		moden_stair = new BlockModenStair("moden_stair");
 		magicbook = new MagicBook("magicbook");
 
-		antique_brick_pot_r = new PlantPot("antique_brick_pot_r", SoundType.STONE, 0);
-		orange_planks_pot = new PlantPot("orange_planks_pot", SoundType.WOOD, 1);
-		orange_planks_pot_w = new PlantPot("orange_planks_pot_w", SoundType.WOOD, 2);
 		compost_drit = new PlantPot("compost_drit", SoundType.GROUND, 3);
+		antique_brick_pot_r = new PlantPot("antique_brick_pot_r", SoundType.GROUND, 0);
+		orange_planks_pot = new PlantPot("orange_planks_pot", SoundType.GROUND, 1);
+		orange_planks_pot_w = new PlantPot("orange_planks_pot_w", SoundType.GROUND, 2);
+		estor_planks_pot = new PlantPot("estor_planks_pot", SoundType.GROUND, 3);
 
 		white_ironfence = new IronFence("white_ironfence");
+		black_ironfence = new IronFence("black_ironfence");
 
 		// 裏データ
 		sample = new MagicDirt("sample");
