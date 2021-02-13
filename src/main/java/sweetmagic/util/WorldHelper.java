@@ -24,7 +24,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
+import net.minecraft.world.biome.Biome;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.DimensionInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.ISMMob;
@@ -214,5 +216,20 @@ public class WorldHelper {
 	// スパーフラットかどうか
 	public static boolean isFlat (World world) {
 		return world.getWorldInfo().getTerrainType() == WorldType.FLAT;
+	}
+
+	// ディメンションID取得
+	public static int getDimId (World world) {
+		return world.provider.getDimension();
+	}
+
+	// スイートマジックのディメンションか
+	public static boolean isSMDim (World world) {
+		return getDimId(world) == DimensionInit.dimID;
+	}
+
+	// バイオーム取得
+	public static Biome getBiome (World world, BlockPos pos) {
+		return world.getBiomeForCoordsBody(pos);
 	}
 }

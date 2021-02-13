@@ -1,12 +1,20 @@
 package sweetmagic.util;
 
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import sweetmagic.init.base.BaseFaceBlock;
 
 public class RenderUtils {
@@ -50,4 +58,53 @@ public class RenderUtils {
         GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
+
+	// レンダー
+	public static void drawCube(List<AxisAlignedBB> renderList) {
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableCull();
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
+		GlStateManager.color(1F, 1F, 0F, 1F);
+		Tessellator tess = Tessellator.getInstance();
+		BufferBuilder wr = tess.getBuffer();
+        GL11.glLineWidth(5.0F);
+		wr.begin(2, DefaultVertexFormats.POSITION);
+
+		for (AxisAlignedBB b : renderList) {
+
+	        wr.pos(b.minX, b.minY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.minY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.minY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.minY, b.minZ).endVertex();
+
+
+	        wr.pos(b.minX, b.maxY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.maxY, b.minZ).endVertex();
+
+	        wr.pos(b.minX, b.minY, b.minZ).endVertex();
+	        wr.pos(b.minX, b.maxY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.minY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+	        wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
+	        wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.minY, b.maxZ).endVertex();
+	        wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+		}
+
+		tess.draw();
+		GlStateManager.depthMask(true);
+		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableDepth();
+		GlStateManager.disableBlend();
+	}
 }
