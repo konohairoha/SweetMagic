@@ -30,15 +30,14 @@ public class BaseWorldGen implements IWorldGenerator {
 	public int maxChance;
 	public int minY;
 	public int maxY;
-	public int range;
 	public int seedRand = 10;
+	public String name;
 
     public BaseWorldGen() {
 		this.minChance = 2;
 		this.maxChance = 200;
 		this.minY = 63;
 		this.maxY = 73;
-		this.range = 4;
     }
 
     @Override
@@ -79,21 +78,16 @@ public class BaseWorldGen implements IWorldGenerator {
     	// チャンス少ないなら終了
 		if (this.rand.nextInt(this.maxChance) > this.minChance) { return false; }
 
-		// x軸、y軸選定
-		int posX = chunkX << this.range;
-		int posZ = chunkZ << this.range;
-		posX += this.rand.nextInt(this.range) + this.rand.nextInt(this.range);
-		posZ += this.rand.nextInt(this.range) + this.rand.nextInt(this.range);
+		// x軸、z軸選定
+		int posX = (chunkX << 4) + this.rand.nextInt(8) - this.rand.nextInt(8);
+		int posZ = (chunkZ << 4) + this.rand.nextInt(8) - this.rand.nextInt(8);
 
 		// バイオーム判定
 		BlockPos pos = new BlockPos(posX, 60, posZ);
 		Biome biome = world.getBiomeForCoordsBody(pos);
 
-		// 砂漠以外なら終了
-		if (this.checkBiome(world, pos, biome)) { return false; }
-
-		// 村の近くなら終了
-		if (world.villageCollection.getNearestVillage(pos, 6) != null) { return false; }
+		// 砂漠以外ならか村の近くなら終了
+		if (this.checkBiome(world, pos, biome) || this.checkVillage(world, pos)) { return false; }
 
 		// 高さ判定
 		for (int y = this.minY; y < this.maxY; y++) {
