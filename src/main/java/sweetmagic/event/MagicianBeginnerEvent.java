@@ -3,24 +3,21 @@ package sweetmagic.event;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.Mirror;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -32,6 +29,7 @@ import sweetmagic.init.item.sm.magic.MagicianBeginnerBook;
 import sweetmagic.packet.LeftClickPKT;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.ItemHelper;
+import sweetmagic.util.RenderUtils;
 import sweetmagic.util.SoundHelper;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = SweetMagicCore.MODID)
@@ -155,7 +153,7 @@ public class MagicianBeginnerEvent {
 		// 座標がnull以外なら生成範囲をレンダー
 		if (pos != null) {
 			addHeldToRenderList(world, stack, pos, stack.getItem());
-			drawAll();
+			RenderUtils.drawCube(renderList);
 		}
 
 		// AABBリストの初期化
@@ -195,64 +193,17 @@ public class MagicianBeginnerEvent {
 		renderList.add(box);
 	}
 
-	// レンダー
-	public static void drawAll() {
+    public static PlacementSettings getPlacement(ItemStack capsule) {
 
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.disableTexture2D();
-		GlStateManager.disableCull();
-		GlStateManager.disableLighting();
-		GlStateManager.depthMask(false);
-		GlStateManager.color(1f, 1F, 0F, 1F);
-		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder wr = tess.getBuffer();
-		wr.begin(2, DefaultVertexFormats.POSITION);
+//		NBTTagCompound tags = ItemHelper.getNBT(capsule);
 
-		for (AxisAlignedBB b : renderList) {
-
-			//Top
-			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
-			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
-
-			//Bottom
-			wr.pos(b.minX, b.minY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
-			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
-
-			//Front
-			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
-			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
-			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
-			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
-
-			//Back
-			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
-			wr.pos(b.minX, b.minY, b.minZ).endVertex();
-			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
-
-			//Left
-			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
-			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
-			wr.pos(b.minX, b.minY, b.minZ).endVertex();
-			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
-
-			//Right
-			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
-			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
-			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
-		}
-
-		tess.draw();
-		GlStateManager.depthMask(true);
-		GlStateManager.enableCull();
-		GlStateManager.enableLighting();
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableBlend();
-	}
+        PlacementSettings placementSettings = new PlacementSettings()
+                .setMirror(Mirror.valueOf("house"))
+                .setRotation(Rotation.NONE)
+                .setIgnoreEntities(false)
+                .setChunk(null)
+                .setReplacedBlock(null)
+                .setIgnoreStructureBlock(false);
+        return placementSettings;
+    }
 }
