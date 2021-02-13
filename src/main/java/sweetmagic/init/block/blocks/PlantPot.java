@@ -62,6 +62,7 @@ public class PlantPot extends BaseModelBlock {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
+		if (rand.nextInt(10) < 3) { return; }
 		if (this.data == 3 && rand.nextBoolean()) { return; }
 
 		IBlockState target = world.getBlockState(pos.up());
@@ -71,7 +72,7 @@ public class PlantPot extends BaseModelBlock {
 		if (block instanceof MagiaFlower && ((MagiaFlower) block).canGrow(world, pos.up(), target, false)) {
 
 			MagiaFlower flower = (MagiaFlower) block;
-			if (!flower.isFlower()) { return; }
+			if (!flower.isFlower() || rand.nextBoolean()) { return; }
 
 			// 現在の成長段階を取って成長させる
 			int meta = flower.getNowStateMeta(target);
@@ -138,6 +139,11 @@ public class PlantPot extends BaseModelBlock {
 		} else {
 			return !isExceptBlockForAttachWithPiston(block) && flag;
 		}
+	}
+
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		return true;
 	}
 
 	@Override
