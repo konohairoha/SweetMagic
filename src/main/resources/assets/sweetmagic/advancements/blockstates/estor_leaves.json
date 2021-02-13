@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cube_all",
+    "textures": {
+      "all": "sweetmagic:block/estor_leaves_stage2"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cube_all", "textures": { "all": "sweetmagic:block/estor_leaves_stage0" }},
+      "1": { "model": "cube_all", "textures": { "all": "sweetmagic:block/estor_leaves_stage1" }},
+      "2": { "model": "cube_all", "textures": { "all": "sweetmagic:block/estor_leaves_stage2" }}
+    },
+     "inventory": [{}]
+  }
+}
