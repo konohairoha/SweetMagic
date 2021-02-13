@@ -194,6 +194,8 @@ public class EntityShadowGolem extends EntityIronGolem {
 			this.isJump();
 		}
 
+		if (!this.world.isRemote) { return; }
+
 		this.tickTime++;
 		if (this.tickTime % 16 != 0) { return; }
 
@@ -250,7 +252,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 	public void isJump () {
 
 		if (this.onGround && SweetMagicCore.proxy.isJumpPressed()) {
-			this.motionY += 0.35D;
+			this.motionY += 0.45D;
 			this.motionX *= 1.05D;
 			this.motionZ *= 1.05D;
 		}
@@ -265,7 +267,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 	}
 
 	protected float getMaxSpeed() {
-		return 0.4F;
+		return 0.5F;
 	}
 
 	// ガクガク対策
@@ -284,15 +286,14 @@ public class EntityShadowGolem extends EntityIronGolem {
 
 //	@Override
 //	@SideOnly(Side.CLIENT)
-//	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch,
-//			int posRotationIncrements, boolean teleport) {
+//	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int roat, boolean teleport) {
 //		this.lastX = x;
 //		this.lastY = y;
 //		this.lastZ = z;
 //		this.lastYaw = yaw;
 //		this.lastRot = pitch;
 //		this.lerpSteps = 5;
-//		super.setPositionAndRotationDirect(x, y, z, yaw, pitch, posRotationIncrements, teleport);
+//		super.setPositionAndRotationDirect(x, y, z, yaw, pitch, roat, teleport);
 //
 //	}
 
