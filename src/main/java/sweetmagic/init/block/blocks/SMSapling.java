@@ -17,6 +17,7 @@ import net.minecraftforge.common.EnumPlantType;
 import sweetmagic.api.iblock.ISmeltItemBlock;
 import sweetmagic.init.BlockInit;
 import sweetmagic.worldgen.gen.WorldGenCoconutTree;
+import sweetmagic.worldgen.gen.WorldGenEstor;
 import sweetmagic.worldgen.gen.WorldGenFruitTree;
 import sweetmagic.worldgen.gen.WorldGenPrsmTree;
 
@@ -45,6 +46,8 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 	 * 2 = 栗
 	 * 3 = ヤシ
 	 * 4 = プリズム
+	 * 5 = バナナ
+	 * 6 = エストール
 	 */
 
 	@Override
@@ -78,8 +81,15 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 		case 4:
 			gen = new WorldGenPrsmTree(BlockInit.prism_log, BlockInit.prism_leaves, false);
 			break;
+
+		// バナナ
 		case 5:
 			gen = new WorldGenCoconutTree(true, Blocks.LOG, BlockInit.banana_leaves, BlockInit.banana_plant, 1);
+			break;
+
+		// エストール
+		case 6:
+			gen = new WorldGenEstor(true, BlockInit.estor_log, BlockInit.estor_leaves);
 			break;
 		}
 

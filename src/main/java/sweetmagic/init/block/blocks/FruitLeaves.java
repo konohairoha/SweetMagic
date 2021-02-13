@@ -70,7 +70,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		this.disableStats();
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
-		setCreativeTab((CreativeTabs)null);
+		setCreativeTab((CreativeTabs) null);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SweetState.STAGE3, 0));
 		BlockInit.blockList.add(this);
 		this.data = data;
@@ -79,6 +79,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	/**
 	 * 0 = レモン
 	 * 1 = みかん
+	 * 2 = エストール
 	 */
 
 	@Override
@@ -166,8 +167,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	@Override
 	public IBlockState getPlant(IBlockAccess world, BlockPos pos) {
 		IBlockState state = world.getBlockState(pos);
-		if (state.getBlock() != this) { return getDefaultState(); }
-		return state;
+		return state.getBlock() != this ? this.getDefaultState() : state;
 	}
 
 	public void setGrowValue(float value) {
@@ -191,8 +191,8 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	}
 
 	//Crop系必須メソッド
-	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-		this.grow(worldIn, pos, state);
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
+		this.grow(world, pos, state);
 	}
 
 	//上のメソッドで使用するためのもの
@@ -221,6 +221,9 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		case 1:
 			block = BlockInit.orange_sapling;
 			break;
+		case 2:
+			block = BlockInit.estor_sapling;
+		break;
 		}
 
 		return SMUtil.getItemBlock(block);
@@ -233,6 +236,8 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 			return ItemInit.lemon;
 		case 1:
 			return ItemInit.orange;
+		case 2:
+			return ItemInit.estor_apple;
 		}
 		return null;
 	}
@@ -249,7 +254,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		}
 
 	    float fl = this.srand.nextFloat();
-	    if(fl < 0.10f) { drops.add(new ItemStack(this.getSeed(), 1)); }
+	    if(fl < 0.1F) { drops.add(new ItemStack(this.getSeed(), 1)); }
 	}
 
 	//右クリックの処理
@@ -284,12 +289,13 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		return this.canPlaceBlockAt(world, pos);
 	}
 
-	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		return true;
 	}
 
 	//骨粉が使用できるかどうか
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		return true;
 	}
 
