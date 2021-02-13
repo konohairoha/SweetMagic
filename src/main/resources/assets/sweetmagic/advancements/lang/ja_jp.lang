@@ -244,6 +244,8 @@ item.alt_sickle.name=オルタナティブ・サイス
 item.gratin.name=グラタン
 item.pizza.name=ピザ
 item.magic_shadowgolem.name=サモン・ゴーレム
+item.estor_apple.name=エストール・アップル
+item.applepie.name=アップルパイ
 
 
 #-- Tile --
@@ -478,6 +480,17 @@ tile.antique_brick_pot_r.name=アンティークレンガの植木鉢
 tile.orange_planks_pot.name=みかん木材の植木鉢
 tile.orange_planks_pot_w.name=みかん白木材の植木鉢
 tile.compost_drit.name=堆肥土
+tile.white_woodtrapdoor.name=みかん白木材のトラップドア
+tile.black_ironfence.name=黒いガーデンフェンス
+tile.modenlanp.name=モダンランプ
+tile.estor_log.name=エストールウッド
+tile.estor_leaves.name=エストールウッドの葉
+tile.estor_sapling.name=エストールウッドの苗木
+tile.estor_planks.name=エストールウッドの木材
+tile.estor_slab.name=エストールウッド木材の半ブロック
+tile.estor_stairs.name=エストールウッド木の階段
+tile.estor_plate.name=エストールウッド木材の感圧版
+tile.estor_planks_pot.name=エストールウッドの植木鉢
 
 
 # -- gui --
@@ -630,6 +643,7 @@ tip.aether_furnace.name=MFを消費してエーテルクリスタルを生産
 tip.advanced_aether_furnace.name=MFを消費してディバインクリスタルを生産
 tip.alt_sickle.name=右クリックまたは破壊することで半径2ブロックの作物を一括回収
 tip.magic_shadowgolem.name=乗ると自由に操作できるゴーレムを召喚
+tip.registerblock.name=登録したブロック
 
 
 #-- Potion --
@@ -706,9 +720,8 @@ smguid.entry.mfstuff=MF関連ブロックのリンク
 smguid.entry.fire_nasturtium=炎の花
 smguid.entry.drizzly_mysotis=雨に咲く花
 
-smguid.entry.door=追加ドア
-smguid.entry.magic_add=追加魔法
-smguid.entry.bugs=バグ修正
+smguid.entry.plant=作物成長促進ブロック
+smguid.entry.recipe=特殊クラフトバグ修正
 
 
 # -- GUID Text --
@@ -728,9 +741,8 @@ smguid.text.mfstuff=MF関連のブロック同士をリンクさせるための�
 smguid.text.fire_nasturtium=ファイアナスタチウムは、スイートマジックのバイオームにしか生成しないため、基本的にはファイアナスタチウムの種を作成して育てることを推奨します。<br>骨粉では成長せず、火打石を持って右クリックで成長させることができます。<br>ファイアナスタチウムの花弁は燃料の素材となったり、魔法の素材としても使います。
 smguid.text.drizzly_mysotis=ドリズリィミオソチスは、森林に咲く花。<br>雨の時だけに成長し花を回収することができます。<br>インベントリにドリズリィミオソチスの花をインベントリに入れてアルストロメリアに右クリックで雨を降らすことができます。<br>水属性の魔法の素材として要求されるため必要な場合は生産作ってください。
 
-smguid.text.door=今回新しく、３ブロックの高さのドアを追加しました。<br>レシピはドア2つに金塊or鉄塊
-smguid.text.magic_add=グラビティ・ブレイクの追加(tier3重力)とtier3風魔法の性能を変更しました。
-smguid.text.bugs=オーバーワールド以外で天候が変えれなかった問題を修正。<br>グロース・オーラ等の作物成長魔法の使用時に作物が成長したように見えて実際には成長してない問題を修正。<br><br>Ticとの連携は次回やります。
+smguid.text.plant=堆肥土、植木鉢系のブロックの上には作物の種を植えることができます。もちろん、耕地に植えれる種だけでなく、土の上に植えれる種も同様です。<br>植えた作物は通常より早く育ちます。（サニーフラワーなども含む）<br>ただし、堆肥土は植木鉢より成長速度が遅いです。
+smguid.text.recipe=アルストロメリアなどの特殊クラフト系のクラフト処理のバグを直し、正常に動作するようにしました。<br>これで別modからレシピ追加しても問題ないはず・・・
 
 
 # -- ADVENT --

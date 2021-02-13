@@ -242,6 +242,8 @@ item.alt_sickle.name=alt_sickle
 item.gratin.name=gratin
 item.pizza.name=pizza
 item.magic_shadowgolem.name=magic_shadowgolem
+item.estor_apple.name=estor_apple
+item.applepie.name=applepie
 
 
 #-- Tile --
@@ -476,6 +478,17 @@ tile.antique_brick_pot_r.name=antique_brick_pot_r
 tile.orange_planks_pot.name=orange_planks_pot
 tile.orange_planks_pot_w.name=orange_planks_pot_w
 tile.compost_drit.name=compost_drit
+tile.white_woodtrapdoor.name=white_woodtrapdoor
+tile.black_ironfence.name=black_ironfence
+tile.modenlanp.name=modenlanp
+tile.estor_log.name=estor_log
+tile.estor_leaves.name=estor_leaves
+tile.estor_sapling.name=estor_sapling
+tile.estor_planks.name=estor_planks
+tile.estor_slab.name=estor_slab
+tile.estor_stairs.name=estor_stairs
+tile.estor_plate.name=estor_plate
+tile.estor_planks_pot.name=estor_planks_pot
 
 
 # -- gui --
@@ -630,6 +643,7 @@ tip.aether_furnace.name=Consume MF to produce aether_crystals
 tip.advanced_aether_furnace.name=Consume MF to produce divine_crystals
 tip.alt_sickle.name=Collect crops in a radius of two blocks by right-clicking or destroying them
 tip.magic_shadowgolem.name=Summons a golem that can be controlled freely when ridden
+tip.registerblock.name=Registered block
 
 
 #-- Potion --
@@ -705,9 +719,8 @@ smguid.entry.mfstuff=Links to MF-related blocks
 smguid.entry.fire_nasturtium=Flower of Flame
 smguid.entry.drizzly_mysotis=Flowers in the Rain
 
-smguid.entry.door=Additional door
-smguid.entry.magic_add=additional magic
-smguid.entry.bugs=Bug fixes
+smguid.entry.plant=Crop growth promoting blocks
+smguid.entry.recipe=Special craft bug fixed
 
 
 # -- GUID Text --
@@ -727,9 +740,8 @@ smguid.text.mfstuff=This item is used to link MF-related blocks together. <br>Re
 smguid.text.fire_nasturtium=Since Fire Nasturtium only produces in the Sweet Magic biome, it is basically recommended that you create and grow Fire Nasturtium seeds. <br>They do not grow with bone dust, but can be grown by holding a flint and right-clicking on it. <br>Phianastatium petals are used for fuel and also as a magic material.
 smguid.text.drizzly_mysotis=Drizzly Myosotis is a flower that grows in forests. <br>It grows only when it rains and the flowers can be collected. <br>You can put the Drizzly Myosotis flower in your inventory and right click on the Alstroemeria to make it rain. <BR>They are required as ingredients for water magic, so if you need them, produce them.
 
-smguid.text.door=New this time, we added a 3 block high door. <br>The recipe is two doors and a gold or iron nugget.
-smguid.text.magic_add=Added Gravity Break (tier 3 gravity) and changed the performance of tier 3 wind magic.
-smguid.text.bugs=Fixed an issue where the weather could not be changed outside of the overworld. <BR>Fixed an issue where crops would appear to grow but not actually grow when using crop growth spells such as Growth Aura. <br><br>I'll work on the Tic integration next time.
+smguid.text.plant=You can plant crop seeds on top of the compost soil and planting block system. <br>The planted crops will grow faster than usual. <br>However, compost soil grows at a slower rate than flowerpots.
+smguid.text.recipe=Fixed a bug in the crafting process for Alstroemeria and other special crafting systems, so that they now work properly. <br>Now adding recipes from other mods should be no problem...
 
 
 # -- ADVENT --
