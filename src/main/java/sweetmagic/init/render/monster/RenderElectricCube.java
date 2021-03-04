@@ -2,7 +2,6 @@ package sweetmagic.init.render.monster;
 
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.entity.RenderSlime;
-import net.minecraft.entity.monster.EntitySlime;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderElectricCube extends RenderSlime {
@@ -13,7 +12,7 @@ public class RenderElectricCube extends RenderSlime {
         super(rendermanagerIn);
 	}
 
-	protected ResourceLocation getEntityTexture(EntitySlime entity) {
-		return TEX;
-	}
+//	protected ResourceLocation getEntityTexture(EntitySlime entity) {
+//		return TEX;
+//	}
 }
