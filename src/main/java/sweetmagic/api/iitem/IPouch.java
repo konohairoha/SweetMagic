@@ -9,7 +9,8 @@ public interface IPouch extends ISMArmor {
 	// GUIを開く
 	void openGUI (World world, EntityPlayer player, ItemStack stack);
 
+	// スロット数
 	default int getSlotSize () {
-		return 18;
+		return 8;
 	}
 }

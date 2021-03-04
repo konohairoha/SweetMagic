@@ -6,6 +6,7 @@ import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,10 +16,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.EnchantInit;
+import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.sm.eitem.SMType;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.init.tile.inventory.InventorySMWand;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.packet.PlayerSoundPKT;
@@ -258,7 +263,6 @@ public interface IWand {
 
 		if (!world.isRemote) {
 			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.SMWAND_GUI, world, 0, -1, -1);
-
 			// クライアント（プレイヤー）へ送りつける
 			PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_PAGE, 1F, 0.33F), (EntityPlayerMP) player);
 		}
@@ -338,7 +342,7 @@ public interface IWand {
 
 		// レベルの取得
 		int level = this.getLevel(stack);
-		int enchaLevel = this.getEnchantLevel(EnchantInit.wandAddPower, stack);
+		int enchaLevel = this.addWandLevel(world, player, stack, smItem, EnchantInit.wandAddPower);
 
 		tags.setInteger(LEVEL, (level + enchaLevel));
 		flag = smItem.onItemAction(world, player, stack, item);
@@ -363,16 +367,16 @@ public interface IWand {
 	 */
 
 	// 魔法アクション後の処理
-	default void magicActionAfter (World world, EntityPlayer player,ItemStack stack, Item item, ISMItem smItem, NBTTagCompound tags, boolean actionFlag) {
+	default void magicActionAfter (World world, EntityPlayer player, ItemStack stack, Item item, ISMItem smItem, NBTTagCompound tags, boolean actionFlag) {
 
 		// クリエワンド以外なら
 		if (!this.isCreativeWand()) {
 
 			// クールタイム
-			player.getCooldownTracker().setCooldown(item, this.getCoolTime(stack, smItem.getCoolTime()));
+			player.getCooldownTracker().setCooldown(item, this.getCoolTime(player, stack, smItem.getCoolTime()));
 
 			// 使用した魔法分だけ消費
-			this.setMF(stack, this.setMF(stack, smItem));
+			this.setMF(stack, this.setMF(player, stack, smItem));
 
 			// アイテムを消費するかどうか
 			if (smItem.isShirink()) {
@@ -392,13 +396,13 @@ public interface IWand {
 	}
 
 	// MFを設定
-	default int setMF (ItemStack stack, ISMItem smItem) {
-		int mf = this.getMF(stack) - this.getCostMF(stack, smItem.getUseMF());
+	default int setMF (EntityPlayer player, ItemStack stack, ISMItem smItem) {
+		int mf = this.getMF(stack) - this.getCostMF(player, stack, smItem.getUseMF());
 		return mf;
 	}
 
 	// 消費MF量取得
-	default int getCostMF (ItemStack stack, int useMF) {
+	default int getCostMF (EntityPlayer player, ItemStack stack, int useMF) {
 
 		int costDown = this.getEnchantLevel(EnchantInit.mfCostDown, stack) * 7;
 
@@ -406,14 +410,14 @@ public interface IWand {
 			useMF *= (100 - costDown) / 100F;
 		}
 
-		// クール時間の減少
-		useMF *= this.addCoolTimeDown();
+		// MF消費量の減少
+		useMF *= this.addCostDown(player, stack);
 
 		return useMF;
 	}
 
 	// クールタイムの取得
-	default int getCoolTime (ItemStack stack, int coolTime) {
+	default int getCoolTime (EntityPlayer player, ItemStack stack, int coolTime) {
 
 		int coolDown = this.getEnchantLevel(EnchantInit.mfCoolTimeDown, stack) * 7;
 
@@ -423,20 +427,59 @@ public interface IWand {
 		}
 
 		// クール時間の減少
-		coolTime *= this.addCoolTimeDown();
+		coolTime *= this.addCoolTimeDown(player, stack);
 
 		return coolTime;
 	}
 
+	// エンチャレベル取得
 	default int getEnchantLevel (Enchantment enchant, ItemStack stack) {
 		return Math.min(EnchantmentHelper.getEnchantmentLevel(enchant, stack), 10);
 	}
 
-	// downTimeの大きさでクールタイムを減らす
-	default float addCoolTimeDown () {
+	// 追加杖レベル
+	default int addWandLevel (World world, EntityPlayer player, ItemStack stack, ISMItem smItem, Enchantment enchant) {
 
+		// 射撃魔法以外ならエンチャレベルだけを返す
+		int enchaLevel = Math.min(EnchantmentHelper.getEnchantmentLevel(enchant, stack), 10);
+		if (smItem.getType() != SMType.SHOTTER) { return enchaLevel; }
+
+		int addPower = 0;
+		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return enchaLevel; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			// アクセサリの効果が使えるか
+			Item item = st.getItem();
+			IAcce acce = (IAcce) item;
+			if (!acce.canUseEffect(world, player, st)) { continue; }
+
+			// ウィッチスクロールなら10%を返す
+			if (item == ItemInit.blood_sucking_ring) {
+				addPower++;
+				((IAcce) item).acceeffect(world, player, st);
+			}
+		}
+
+		return addPower + enchaLevel;
+	}
+
+	// downTimeの大きさでクールタイムを減らす
+	default float addCoolTimeDown (EntityPlayer player, ItemStack stack) {
+
+		// 杖自体のクールタイム取得と装飾品のクールタイム取得
 		float coolTimeDown = 1F;
-		int downTime = this.getCoolTimeDown();
+		int downTime = this.getCoolTimeDown() + this.acceCoolTime(player);
 
 		if (downTime > 0) {
 			coolTimeDown = (100 - downTime) / 100F;
@@ -445,9 +488,50 @@ public interface IWand {
 		return coolTimeDown;
 	}
 
+	// downTimeの大きさでMF消費量を減らす
+	default float addCostDown (EntityPlayer player, ItemStack stack) {
+
+		// 杖自体のクールタイム取得と装飾品のクールタイム取得
+		float costDown = 1F;
+		int downTime = this.getCoolTimeDown();
+
+		if (downTime > 0) {
+			costDown = (100 - downTime) / 100F;
+		}
+
+		return costDown;
+	}
+
 	// クールタイム減少時間の値
 	default int getCoolTimeDown () {
 		return 0;
+	}
+
+	// 装備品のクールタイム取得
+	default int acceCoolTime (EntityPlayer player) {
+
+		int coolTime = 0;
+		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return coolTime; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			// ウィッチスクロールなら10%を返す
+			if (st.getItem() == ItemInit.witch_scroll) {
+				return 10;
+			}
+		}
+
+		return coolTime;
 	}
 
 	// レベルアップできるかどうか
@@ -485,8 +569,7 @@ public interface IWand {
 
 	// 最大レベルの取得
 	default int getMaxLevel () {
-		int maxLevel = 25;
-		return maxLevel;
+		return 40;
 	}
 
 	// 必要経験値を取得
@@ -730,7 +813,7 @@ public interface IWand {
 
 	// クリエパワーを取得
 	default float getCreativePower () {
-		return 25F;
+		return 40F;
 	}
 
 	//右クリックでチャージした量で射程を伸ばす
