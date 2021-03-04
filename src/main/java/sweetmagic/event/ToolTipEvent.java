@@ -16,7 +16,9 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IElementItem;
+import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
@@ -164,6 +166,40 @@ public class ToolTipEvent {
 			String cut = ( 1 - robe.getMagicDamageCut() ) * 100 + "";
 			tooltip.add(I18n.format(TextFormatting.GREEN + dame + " ： " + cut) + "%");
 
+		}
+
+		else if (itemStack instanceof IPouch) {
+
+			// キー操作
+			String open = getTip("tip.open.name");
+			String amor = getTip("tip.robe_armor.name");
+			tooltip.add(I18n.format(amor + TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.POUCH) + open));
+		}
+
+		else if (itemStack instanceof IAcce) {
+
+			IAcce acce = (IAcce) itemStack;
+
+			// Stringのリストを作成
+			List<String> list = new ArrayList<>();
+			tooltip.add(I18n.format(TextFormatting.RED + new TextComponentTranslation("tip.smacc.name", new Object[0]).getFormattedText()));
+
+			String tipEle = getTip(enumString(acce.getAcceType().name()));
+			String texEle = getTip(getTipName("smacce")) + " ： " + tipEle;
+
+			tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
+			tooltip.add(I18n.format(TextFormatting.GREEN + getTip(getTipName("isduplication")) + " ： " + acce.isDuplication()));
+
+			List<String> toolTip = acce.magicToolTip(list);
+			if (toolTip.isEmpty()) { return; }
+
+			String effect = getTip("tip.effect.name");
+
+			// リストの分だけ回す
+			for (String name : toolTip) {
+				String listTip = new TextComponentTranslation(name, new Object[0]).getFormattedText();
+				tooltip.add(I18n.format(TextFormatting.GREEN + effect + " " + TextFormatting.GOLD + listTip));
+			}
 		}
 
 		// MFアイテムなら

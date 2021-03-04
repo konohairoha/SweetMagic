@@ -10,14 +10,11 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
-import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -192,18 +189,4 @@ public class MagicianBeginnerEvent {
 
 		renderList.add(box);
 	}
-
-    public static PlacementSettings getPlacement(ItemStack capsule) {
-
-//		NBTTagCompound tags = ItemHelper.getNBT(capsule);
-
-        PlacementSettings placementSettings = new PlacementSettings()
-                .setMirror(Mirror.valueOf("house"))
-                .setRotation(Rotation.NONE)
-                .setIgnoreEntities(false)
-                .setChunk(null)
-                .setReplacedBlock(null)
-                .setIgnoreStructureBlock(false);
-        return placementSettings;
-    }
 }

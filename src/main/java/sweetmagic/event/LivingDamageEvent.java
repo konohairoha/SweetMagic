@@ -7,8 +7,10 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityWitch;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -19,14 +21,22 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.config.SMConfig;
+import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.ISMMob;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
+import sweetmagic.init.tile.inventory.InventoryPouch;
+import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.EventUtil;
+import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.SoundHelper;
 
 public class LivingDamageEvent {
 
@@ -84,6 +94,10 @@ public class LivingDamageEvent {
 			}
 		}
 
+		// エメラルドピアスの効果
+		if (target instanceof EntityPlayer) {
+			newDam = this.emelaldPiasEffect((EntityPlayer) target, newDam);
+		}
 
 		// エーテルバリアーを張っていれば
 		if (target.isPotionActive(PotionInit.aether_barrier)) {
@@ -174,11 +188,61 @@ public class LivingDamageEvent {
 		return dame;
 	}
 
+	// エメラルドピアス
+	public float emelaldPiasEffect (EntityPlayer player, float dame) {
+
+		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return dame; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			Item item = st.getItem();
+			IAcce acce = (IAcce) item;
+
+			// エメラルドピアスを持ってるならダメージ増加
+			if (item == ItemInit.emelald_pias) {
+				dame++;
+
+				// 重複不可なら終了
+				if (!acce.isDuplication()) { return dame; }
+			}
+		}
+
+		return dame;
+	}
+
 	// エーテルバリア
 	public float barrierCut(EntityLivingBase liv, float dame) {
 		PotionEffect effect = liv.getActivePotionEffect(PotionInit.aether_barrier);
 		int level = effect.getAmplifier() + 1;
+		int time = effect.getDuration() - (int) (dame * 20);
 		dame = dame / level;
+
+		liv.removePotionEffect(PotionInit.aether_barrier);
+
+		// 時間が切れたら
+		if (time <= 0) {
+
+			// クライアント（プレイヤー）へ送りつける
+			if (liv instanceof EntityPlayerMP) {
+				PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_BREAK, 1F, 1F), (EntityPlayerMP) liv);
+			}
+		}
+
+		// 時間が残ってるなら
+		else {
+			PlayerHelper.addPotion(liv, PotionInit.aether_barrier, time, level, false);
+		}
+
 		return dame;
 	}
 
@@ -242,6 +306,7 @@ public class LivingDamageEvent {
 		double x = living.posX;
 		double y = living.posY;
 		double z = living.posZ;
+		EntityPlayer player = (EntityPlayer) entity;
 
 		if(SMConfig.mobdrop_crystal && rand.nextInt(8) == 0) {
 
@@ -270,6 +335,38 @@ public class LivingDamageEvent {
 		else if (living instanceof EntityChicken) {
 			if (this.attackDeath(dam, living)) {
 				this.spawnItem(world, x, y, z, Items.FEATHER, rand.nextInt(2) + 1);
+			}
+		}
+
+		// 攻撃して死亡してないなら終了
+		if (living instanceof IMob|| !this.attackDeath(dam, living)) { return; }
+
+		// レギンスの取得
+		ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+
+		// ポーチを装備してるなら
+		if (legs.getItem() instanceof IPouch) {
+
+			// インベントリを取得
+			InventoryPouch neo = new InventoryPouch(player);
+			IItemHandlerModifiable inv = neo.inventory;
+
+			// インベントリの分だけ回す
+			for (int i = 0; i < inv.getSlots(); i++) {
+
+				// アイテムを取得し空かアクセサリー以外なら次へ
+				ItemStack st = inv.getStackInSlot(i);
+				if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+				// アクセサリーの取得
+				Item item = st.getItem();
+				IAcce acce = (IAcce) item;
+
+				// 戦士の腕輪なら
+				if (item == ItemInit.warrior_bracelet) {
+					acce.acceeffect(world, player, st);
+					return;
+				}
 			}
 		}
 	}
