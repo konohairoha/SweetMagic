@@ -41,6 +41,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_mining_magia) }
 		));
 
+		// 5範囲dig魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_mining_magia),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 48)},
+			new ItemStack[] { new ItemStack(ItemInit.magic_earth_destruction) }
+		));
+
 		// 回復魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magicmeal, 2),
@@ -304,7 +311,7 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_lightningbolt),
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.electronic_orb, 16), new ItemStack(ItemInit.sugarbell, 32),
-			new ItemStack(ItemInit.moonblossom_petal, 32), new ItemStack(ItemInit.mysterious_page, 8), new ItemStack(ItemInit.blank_page, 4)},
+			new ItemStack(ItemInit.moonblossom_petal, 32), new ItemStack(ItemInit.mysterious_page, 8), new ItemStack(ItemInit.blank_page, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_thunder) }
 		));
 
@@ -316,12 +323,26 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_barrier) }
 		));
 
-		// 毒射撃魔法
+		// バリア + 持続回復魔法
 		recipe.addRecipe(new ObMagiaRecipes(
-			new ItemStack(ItemInit.poison_bottle, 3),
-			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 4), new ItemStack(ItemInit.sugarbell, 4), new ItemStack(ItemInit.moonblossom_petal, 4),
+			new ItemStack(ItemInit.magic_barrier),
+			new ItemStack[] { new ItemStack(ItemInit.magic_heal), new ItemStack(ItemInit.dm_flower, 16), new ItemStack(ItemInit.prizmium, 16) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_regene_shield) }
+		));
+
+		// 泡射撃魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.dm_flower, 8),
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 4), new ItemStack(ItemInit.magicmeal, 16), new ItemStack(ItemInit.mystical_page),
 					new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
-			new ItemStack[] { new ItemStack(ItemInit.magic_rangepoison) }
+			new ItemStack[] { new ItemStack(ItemInit.magic_bubleprison) }
+		));
+
+		// 泡窒息射撃魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_bubleprison),
+			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.dm_flower, 24), new ItemStack(ItemInit.mystical_page, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_scumefang) }
 		));
 
 		// 毒魔法
@@ -330,6 +351,22 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.poison_bottle, 8), new ItemStack(ItemInit.sugarbell, 16),
 					new ItemStack(ItemInit.moonblossom_petal, 16) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_poison) }
+		));
+
+		// 毒射撃魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.poison_bottle, 3),
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 4), new ItemStack(ItemInit.sugarbell, 4), new ItemStack(ItemInit.moonblossom_petal, 4),
+					new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_rangepoison) }
+		));
+
+		// 範囲猛毒魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_poison),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.poison_bottle, 32), new ItemStack(ItemInit.sugarbell, 24),
+					new ItemStack(ItemInit.mystical_page, 3), new ItemStack(ItemInit.blank_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_deadly_poison) }
 		));
 
 		// デバフ解除魔法
@@ -357,7 +394,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 作物育成魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_growth_effect),
-			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.sugarbell, 16) , new ItemStack(ItemInit.sannyflower_petal, 16)},
+			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.sugarbell, 16) , new ItemStack(ItemInit.sannyflower_petal, 16)
+					 , new ItemStack(ItemInit.mystical_page, 1)},
 			new ItemStack[] { new ItemStack(ItemInit.magic_growth_aura) }
 		));
 

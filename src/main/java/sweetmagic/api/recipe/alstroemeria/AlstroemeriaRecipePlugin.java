@@ -1,11 +1,15 @@
 package sweetmagic.api.recipe.alstroemeria;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.recipe.RecipeRegisterHelper;
 import sweetmagic.util.OreItems;
 import sweetmagic.util.SMUtil;
 
@@ -115,6 +119,14 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new Object[] { new ItemStack(ItemInit.mf_bottle, 6), new ItemStack(ItemInit.sannyflower_petal, 32), new ItemStack(ItemInit.moonblossom_petal, 32)
 					, new ItemStack(ItemInit.witch_tears, 4)},
 			new ItemStack[] { new ItemStack(ItemInit.deus_crystal) }
+		));
+
+		// コズミッククリスタル
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.deus_crystal, 1),
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new ItemStack(ItemInit.mf_bottle, 10), new ItemStack(ItemInit.sannyflower_petal, 64)
+					, new ItemStack(ItemInit.moonblossom_petal, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal) }
 		));
 
 		// コーラスフルーツ
@@ -245,11 +257,46 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.twilightlight) }
 		));
 
-		// 黄昏の明かり
+		// アンティークレンガ
 		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(Blocks.BRICK_BLOCK, 1),
-			new Object[] { new OreItems("stone", 8) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0, 9) }
+			new ItemStack(Blocks.BRICK_BLOCK, 4),
+			new Object[] { new OreItems("stone", 32) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0, 64) }
+		));
+
+		// 赤色のアンティークレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("antique_brick_all", 48),
+			new Object[] { new OreItems("dyeRed", 1) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0, 64) }
+		));
+
+		// 白色のアンティークレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("antique_brick_all", 48),
+			new Object[] { new OreItems("dyeWhite", 1) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0w, 64) }
+		));
+
+		// 黒色のアンティークレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("antique_brick_all", 48),
+			new Object[] { new OreItems("dyeBlack", 1) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_b, 64) }
+		));
+
+		// 茶色のアンティークレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("antique_brick_all", 48),
+			new Object[] { new OreItems("dyeBrown", 1) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0l, 64) }
+		));
+
+		// 緑色のアンティークレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("antique_brick_all", 48),
+			new Object[] { new OreItems("dyeGreen", 1) },
+			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0g, 64) }
 		));
 
 		// 堆肥土
@@ -265,5 +312,64 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new Object[] { new OreItems("dyeRed") },
 			new ItemStack[] { new ItemStack(Blocks.SAND, 16, 1) }
 		));
+
+		// 赤ネザーレンガ
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.antique_brick_0, 16),
+			new Object[] { new OreItems("dyeRed") },
+			new ItemStack[] { new ItemStack(Blocks.RED_NETHER_BRICK, 16) }
+		));
+
+		// プリズムウッドチェスト
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.prism_log, 4),
+			new Object[] { new OreItems("chestWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.prism_woodchest) }
+		));
+
+		// エストールウッドチェスト
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.estor_log, 4),
+			new Object[] { new OreItems("chestWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.estor_woodchest) }
+		));
+
+		// 黄色のラックチェスト
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.ine, 8),
+			new Object[] { "dyeYellow", new OreItems("logWood", 2), new OreItems("chestWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.rattan_chest_y) }
+		));
+
+		// 茶色のラックチェスト
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.ine, 8),
+			new Object[] { "dyeBrown", new OreItems("logWood", 2), new OreItems("chestWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.rattan_chest_b) }
+		));
+
+
+		// ブロック、ハーフ、階段をリストに突っ込む
+		List<RecipeRegisterHelper> recipeList = new ArrayList<>();
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick, "dyeBrown", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_o, "dyeOrange", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_b, "dyeBlue", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_g, "dyeGreen", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_y, "dyeYellow", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_r, "dyeRed", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_l, "dyeBlack", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_p, "dyePurple", false));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.longtile_brick_w, "dyeWhite", false));
+
+		// リストの分だけ回す
+		for (RecipeRegisterHelper re : recipeList ) {
+
+			// アンティーク→ロングタイルレンガ
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				new OreItems("antique_brick_all", 16),
+				new Object[] { new OreItems("stone", 12), new OreItems(re.getDye()) },
+				new ItemStack[] { new ItemStack(re.getPlanks(), 32) }
+			));
+		}
 	}
 }

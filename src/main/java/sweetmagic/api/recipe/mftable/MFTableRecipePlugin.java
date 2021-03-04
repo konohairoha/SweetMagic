@@ -37,5 +37,13 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.deuscrystal_wand) },
 			1
 		));
+
+		// コズミッククリスタルワンド
+		recipe.addRecipe(new MFTableRecipes(
+			SMUtil.getStack(ItemInit.deuscrystal_wand),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal), new ItemStack(Items.DIAMOND, 16), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmiccrystal_wand) },
+			1
+		));
 	}
 }

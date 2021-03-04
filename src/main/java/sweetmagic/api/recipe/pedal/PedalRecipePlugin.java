@@ -73,5 +73,12 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 					 new ItemStack(ItemInit.unmeltable_ice, 4), new ItemStack(ItemInit.electronic_orb, 4), new ItemStack(ItemInit.mystical_page, 6) },
 			new ItemStack[] { new ItemStack(ItemInit.veil_darkness) }
 		));
+
+		// ポーチ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(Items.LEATHER, 16),
+			new Object[] { new OreItems("chestWood"), new ItemStack(ItemInit.aether_crystal, 4), new OreItems("string", 8), new ItemStack(Items.IRON_NUGGET), new ItemStack(Blocks.WOODEN_BUTTON) },
+			new ItemStack[] { new ItemStack(ItemInit.magicians_pouch) }
+		));
 	}
 }

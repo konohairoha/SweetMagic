@@ -103,7 +103,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 		recipe.addRecipe(new OvenRecipes(
 			new OreItems("bread", 2),
 			new Object[] { new ItemStack(ItemInit.azuki_seed, 4), new OreItems("foodButter", 4) },
-			new ItemStack[] { new ItemStack(ItemInit.ogura_toast, 4)}
+			new ItemStack[] { new ItemStack(ItemInit.ogura_toast, 4) }
 		));
 
 		// バタートースト
@@ -123,7 +123,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 		// シュークリーム
 		recipe.addRecipe(new OvenRecipes(
 			new OreItems("foodCustard", 2),
-			new Object[] { "egg", "foodButter", new OreItems("dustFlour", 4), "dustSalt", "dustSugar"},
+			new Object[] { "egg", "foodButter", new OreItems("dustFlour", 4), "dustSalt", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.cream_puff, 6) }
 		));
 
@@ -167,6 +167,34 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new OreItems("listAllchikenraw", 2),
 			new Object[] { new OreItems("foodCheese", 3), new OreItems("cropOnion", 2),  new OreItems("dustFlour", 3),  new OreItems("foodButter", 2), "dustSalt", "bucketMilk", "foodOil" },
 			new ItemStack[] { new ItemStack(ItemInit.gratin, 12) }
+		));
+
+		// アップルパイ
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("cropAplle", 3),
+			new Object[] { new OreItems("foodCustard", 2), "egg", "dustSugar",  new OreItems("dustFlour", 3), "bucketWater", "foodButter" },
+			new ItemStack[] { new ItemStack(ItemInit.applepie, 6) }
+		));
+
+		// クリームパン
+		recipe.addRecipe(new OvenRecipes(
+				new OreItems("foodCustard", 4),
+			new Object[] { new OreItems("bread", 2), "egg" },
+			new ItemStack[] { new ItemStack(ItemInit.cream_filled_roll, 4) }
+		));
+
+		// チョココロネ
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("bread", 3),
+			new Object[] { new ItemStack(ItemInit.chocolate, 4), new OreItems("dustSugar", 2), "bucketMilk", "foodButter","egg" },
+			new ItemStack[] { new ItemStack(ItemInit.choko_cornet, 10) }
+		));
+
+		// クレームブリュレ
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("foodCustard", 3),
+			new Object[] { new ItemStack(ItemInit.vannila_essence, 2), new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cream_brulee, 6) }
 		));
 	}
 }
