@@ -2,10 +2,10 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "base": "blocks/stone",
-            "ore": "sweetmagic:block/ac_ore"
+            "2": "sweetmagic:block/table_dot_top",
+            "3": "sweetmagic:block/table_dot_side1"
         },
-        "model": "sweetmagic:ore"
+        "model": "sweetmagic:smtable_lace_2"
     },
     "variants": {
         "normal": [{}],

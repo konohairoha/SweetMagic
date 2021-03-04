@@ -1,0 +1,24 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:baseblock",
+    "textures": {
+      "particle": "sweetmagic:block/trbox_top",
+      "top": "sweetmagic:block/trbox_top",
+      "bottom": "sweetmagic:block/trbox_down",
+      "north": "sweetmagic:block/trbox_side1",
+      "south": "sweetmagic:block/trbox_side2",
+      "east": "sweetmagic:block/trbox_side2",
+      "west": "sweetmagic:block/trbox_side2"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west": { "y": 270 },
+      "east": { "y": 90 }
+    },
+    "inventory": [{}]
+  }
+}

@@ -3,7 +3,7 @@
     "defaults": {
         "textures": {
             "base": "blocks/stone",
-            "ore": "sweetmagic:block/ac_ore"
+            "ore": "sweetmagic:block/cosmic_crystal_ore"
         },
         "model": "sweetmagic:ore"
     },

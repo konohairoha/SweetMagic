@@ -2,7 +2,7 @@
     "forge_marker": 1,
     "defaults": {
         "textures": {
-            "all": "sweetmagic:block/antique_brick_1"
+            "all": "sweetmagic:block/antique_brick_2"
         },
         "model": "cube_all"
     },
