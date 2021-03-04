@@ -1,0 +1,60 @@
+{
+  "pools": [
+    {
+        "name": "smbounus",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:aether_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:divine_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:cosmic_crystal_shard",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:sannyflower_petal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:moonblossom_petal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:mystical_page",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:mf_sbottle",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 12 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:mf_bottle",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:alternative_ingot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:mfpot",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,80 @@
+{
+  "pools": [
+    {
+        "name": "foode",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:strawberry_tart",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:cream_puff",
+          "functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:cocoa",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:choko_cornet",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 9 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:chocolate_muffin",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:blueberry_muffin",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:fruit_crepe",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:mont_blanc",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:banana_smoothy",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:mixed_juice",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 5 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:eclair",
+          "functions": [ { "function": "set_count", "count": { "min": 3, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:cream_filled_roll",
+          "functions": [ { "function": "set_count", "count": { "min": 2, "max": 10 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:scone",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:strawberrymilk",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        }
+      ]
+    }
+  ]
+}
