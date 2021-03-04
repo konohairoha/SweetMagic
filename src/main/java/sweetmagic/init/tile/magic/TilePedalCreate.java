@@ -1,9 +1,11 @@
 package sweetmagic.init.tile.magic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -13,6 +15,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import sweetmagic.client.particle.ParticleLay;
 import sweetmagic.client.particle.ParticleTwilightlight;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.util.ParticleHelper;
@@ -124,7 +127,47 @@ public class TilePedalCreate extends TileMFBase {
 			float f3 = (float) posZ - 0.5F + rand.nextFloat();
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(
 					new ParticleTwilightlight.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
+
+			float f4 = (float) posX - 0.5F + rand.nextFloat();
+			float f5 = (float) (posY + 0.35F + rand.nextFloat() * 0.75F) + this.nowTick * 0.0075F;
+			float f6 = (float) posZ - 0.5F + rand.nextFloat();
+			List<Integer> color = this.getRGB(rand);
+			Particle particle = new ParticleLay.Factory().createParticle(0, this.world, f4, f5, f6, f4, f5, f6, color.get(0), color.get(1), color.get(2));
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 		}
+	}
+
+	public List<Integer> getRGB (Random rand) {
+
+		RGB color = null;
+
+		switch (rand.nextInt(7)) {
+		case 0:
+			color = RGB.RED;
+			break;
+		case 1:
+			color = RGB.B;
+			break;
+		case 2:
+			color = RGB.C;
+			break;
+		case 3:
+			color = RGB.D;
+			break;
+		case 4:
+			color = RGB.E;
+			break;
+		case 5:
+			color = RGB.F;
+			break;
+		case 6:
+			color = RGB.G;
+			break;
+
+		}
+
+		return Arrays.asList(color.r, color.g, color.b);
+
 	}
 
 	@Override
@@ -207,5 +250,26 @@ public class TilePedalCreate extends TileMFBase {
 		}
 
 		return stackList;
+	}
+
+	public enum RGB {
+
+		RED(255, 138, 147),
+		B(255, 196, 138),
+		C(255, 255, 138),
+		D(147, 255, 138),
+		E(138, 255, 234),
+		F(138, 183, 255),
+		G(255, 138, 238);
+
+		public int r;
+		public int g;
+		public int b;
+
+		RGB (int r, int g, int b) {
+			this.r = r;
+			this.g = g;
+			this.b = b;
+		}
 	}
 }
