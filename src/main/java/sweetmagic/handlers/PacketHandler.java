@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.packet.EntityRemovePKT;
 import sweetmagic.packet.KeyPressPKT;
 import sweetmagic.packet.LeftClickPKT;
 import sweetmagic.packet.MouseSclorPKT;
@@ -33,6 +34,7 @@ public class PacketHandler {
 		HANDLER.registerMessage(LeftClickPKT.Handler.class, LeftClickPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(WandLeftClickPKT.Handler.class, WandLeftClickPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(TileMFBlockPKT.Handler.class, TileMFBlockPKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(EntityRemovePKT.Handler.class, EntityRemovePKT.class, disc++, Side.CLIENT);
 	}
 
 	public static void sendToServer(IMessage msg) {

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEnd;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -14,6 +15,7 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.config.SMConfig;
+import sweetmagic.event.BlockBreakEvent;
 import sweetmagic.event.HasItemEvent;
 import sweetmagic.event.LivingDamageEvent;
 import sweetmagic.event.LivingDethEvent;
@@ -29,17 +31,21 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.layer.LayerBarrier;
 import sweetmagic.init.entity.layer.LayerEffectBase;
 import sweetmagic.init.entity.layer.LayerRefresh;
+import sweetmagic.init.entity.layer.LayerRegen;
 import sweetmagic.init.entity.layer.LayerRenderWand;
 import sweetmagic.init.entity.monster.EntityArchSpider;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
 import sweetmagic.init.entity.monster.EntityCreeperCal;
 import sweetmagic.init.entity.monster.EntityElectricCube;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
-import sweetmagic.init.entity.monster.EntityPhantomZombie;
+import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
+import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.chest.TileModenWallRack;
+import sweetmagic.init.tile.chest.TileRattanBasket;
+import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.init.tile.cook.TileFermenter;
 import sweetmagic.init.tile.cook.TileFlourMill;
 import sweetmagic.init.tile.cook.TileFreezer;
@@ -58,6 +64,7 @@ import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.magic.TileMFTankAdvanced;
+import sweetmagic.init.tile.magic.TileMagicBarrier;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
 import sweetmagic.init.tile.magic.TilePedalCreate;
 import sweetmagic.init.tile.magic.TileSMSpaner;
@@ -66,10 +73,19 @@ import sweetmagic.init.tile.magic.TileStardustCrystal;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
 import sweetmagic.init.tile.plant.TileCleroLanp;
 import sweetmagic.init.tile.plant.TileParticleF;
+import sweetmagic.worldgen.dungen.map.MapGenDekaijyu;
+import sweetmagic.worldgen.dungen.map.MapGenKutiMura;
+import sweetmagic.worldgen.dungen.map.MapGenPyramid;
+import sweetmagic.worldgen.dungen.map.MapGenTogijyo;
+import sweetmagic.worldgen.dungen.piece.DekaijyuPiece;
+import sweetmagic.worldgen.dungen.piece.KutiMuraPiece;
+import sweetmagic.worldgen.dungen.piece.PyramidPiece;
+import sweetmagic.worldgen.dungen.piece.TogijyoPiece;
 import sweetmagic.worldgen.gen.CFlowerGen;
 import sweetmagic.worldgen.gen.CemeteryGen;
 import sweetmagic.worldgen.gen.CledonGen;
 import sweetmagic.worldgen.gen.FluitForestFlowerGen;
+import sweetmagic.worldgen.gen.GeddanGen;
 import sweetmagic.worldgen.gen.MoatGen;
 import sweetmagic.worldgen.gen.MoonGen;
 import sweetmagic.worldgen.gen.NetGen;
@@ -107,6 +123,8 @@ public class RegistryHandler {
 		GameRegistry.registerWorldGenerator(new FluitForestFlowerGen(), 0);
 		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.cornflower, 3), 0);
 		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.lily_valley, 23), 0);
+		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.blackrose, 40), 0);
+		GameRegistry.registerWorldGenerator(new CFlowerGen(BlockInit.cosmos, 62), 0);
 
 		GameRegistry.registerWorldGenerator(new CemeteryGen(), 1);	// 墓地生成
 		CemeteryGen.initLootTable();									// ルートテーブルInit
@@ -121,16 +139,28 @@ public class RegistryHandler {
 		MoatGen.setLootChestA();
 
 		GameRegistry.registerWorldGenerator(new SMSkyIslandGen(), 0);	// 浮島生成
-		SMSkyIslandGen.setLootChestA();									// ルートテーブルInit
 
 		GameRegistry.registerWorldGenerator(new WellGen(), 0);	// 井戸生成
 		WellGen.initLootTable();									// ルートテーブルInit
 
-//		GameRegistry.registerWorldGenerator(new GeddanGen(), 1);	// ゲッダン生成
-//		GeddanGen.setLootChestA();									// ルートテーブルInit
+		GameRegistry.registerWorldGenerator(new GeddanGen(), 1);	// ゲッダン生成
+		GeddanGen.setLootChestA();									// ルートテーブルInit
 
 		// 鉱石生成
 		GameRegistry.registerWorldGenerator(new SMOreGen(), 0);
+
+		// SMディメンション生成
+		MapGenStructureIO.registerStructure(MapGenPyramid.Start.class, "pyramid_top");
+		PyramidPiece.registerIdoPiece();
+
+		MapGenStructureIO.registerStructure(MapGenDekaijyu.Start.class, "dekaijyu");
+		DekaijyuPiece.registerIdoPiece();
+
+		MapGenStructureIO.registerStructure(MapGenTogijyo.Start.class, "burassamu");
+		TogijyoPiece.registerIdoPiece();
+
+		MapGenStructureIO.registerStructure(MapGenKutiMura.Start.class, "kuchihatetamura");
+		KutiMuraPiece.registerIdoPiece();
 
 	}
 
@@ -164,6 +194,9 @@ public class RegistryHandler {
 		GameRegistry.registerTileEntity(TileFlyishForer.class, new ResourceLocation(MODID, "FlyishForer"));
 		GameRegistry.registerTileEntity(TileStardustCrystal.class, new ResourceLocation(MODID, "StardustCrystal"));
 		GameRegistry.registerTileEntity(TileSMSpaner.class, new ResourceLocation(MODID, "SMSpaner"));
+		GameRegistry.registerTileEntity(TileRattanBasket.class, new ResourceLocation(MODID, "RattanBasket"));
+		GameRegistry.registerTileEntity(TileWoodChest.class, new ResourceLocation(MODID, "WoodChest"));
+		GameRegistry.registerTileEntity(TileMagicBarrier.class, new ResourceLocation(MODID, "Magicbarrier"));
 	}
 
 	// 草から種の追加
@@ -191,6 +224,7 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new HasItemEvent());
 		MinecraftForge.EVENT_BUS.register(new LivingDethEvent());
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
+		MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
 	}
 
 	// レイヤー登録
@@ -199,6 +233,8 @@ public class RegistryHandler {
 			LayerEffectBase.initialiseLayers(LayerBarrier::new);
 			LayerEffectBase.initialiseLayers(LayerRefresh::new);
 			LayerEffectBase.initialiseLayers(LayerRenderWand::new);
+//			LayerEffectBase.initialiseLayers(LayerBabule::new);
+			LayerEffectBase.initialiseLayers(LayerRegen::new);
 		}
 	}
 
@@ -231,7 +267,8 @@ public class RegistryHandler {
 				EntityRegistry.addSpawn(EntityBlazeTempest.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityArchSpider.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityWitchMadameVerre.class, 15, 1, 1, EnumCreatureType.MONSTER, bio);
-				EntityRegistry.addSpawn(EntityPhantomZombie.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
+				EntityRegistry.addSpawn(EntityWindineVerre.class, 5, 1, 1, EnumCreatureType.MONSTER, bio);
+				EntityRegistry.addSpawn(EntityIfritVerre.class, 5, 1, 1, EnumCreatureType.MONSTER, bio);
 			}
 		}
 	}

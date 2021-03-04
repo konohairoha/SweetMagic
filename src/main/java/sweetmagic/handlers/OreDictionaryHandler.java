@@ -59,9 +59,12 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("smLog", BlockInit.lemon_log);
 		OreDictionary.registerOre("smLog", BlockInit.orange_log);
 		OreDictionary.registerOre("smLog", BlockInit.prism_log);
+		OreDictionary.registerOre("smLog", BlockInit.estor_log);
 
 		OreDictionary.registerOre("dyeBlue", BlockInit.cornflower);
 		OreDictionary.registerOre("dyeWhite", BlockInit.lily_valley);
+		OreDictionary.registerOre("dyeBlack", BlockInit.blackrose);
+		OreDictionary.registerOre("dyePink", BlockInit.cosmos);
 		OreDictionary.registerOre("dyeRed", ItemInit.strawberry);
 		OreDictionary.registerOre("dyeBrown", ItemInit.chestnut);
 		OreDictionary.registerOre("dyeYellow", ItemInit.lemon);
@@ -72,6 +75,31 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_0);
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_1);
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_2);
+
+		OreDictionary.registerOre("antique_brick_white", BlockInit.antique_brick_0w);
+		OreDictionary.registerOre("antique_brick_white", BlockInit.antique_brick_1w);
+		OreDictionary.registerOre("antique_brick_white", BlockInit.antique_brick_2w);
+
+		OreDictionary.registerOre("antique_brick_black", BlockInit.antique_brick_b);
+
+		OreDictionary.registerOre("antique_brick_brown", BlockInit.antique_brick_0l);
+		OreDictionary.registerOre("antique_brick_brown", BlockInit.antique_brick_1l);
+		OreDictionary.registerOre("antique_brick_brown", BlockInit.antique_brick_2l);
+
+		OreDictionary.registerOre("antique_brick_green", BlockInit.antique_brick_0g);
+		OreDictionary.registerOre("antique_brick_green", BlockInit.antique_brick_1g);
+		OreDictionary.registerOre("antique_brick_green", BlockInit.antique_brick_2g);
+
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_0);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_1);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_2);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_0w);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_1w);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_2w);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_0l);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_1l);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_2l);
+		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_b);
 
 		OreDictionary.registerOre("orange_planks", BlockInit.orange_planks);
 		OreDictionary.registerOre("slabWood", BlockInit.orange_slab);
@@ -195,11 +223,14 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("listAllmeatraw", Items.PORKCHOP);
 		OreDictionary.registerOre("listAllporkraw", Items.PORKCHOP);
 		OreDictionary.registerOre("listAllfruit", ItemInit.banana);
+		OreDictionary.registerOre("listAllfruit", ItemInit.raspberry);
 		OreDictionary.registerOre("listAllfruit", ItemInit.strawberry);
 		OreDictionary.registerOre("listAllfruit", ItemInit.blueberry);
 		OreDictionary.registerOre("listAllfruit", ItemInit.chestnut);
 		OreDictionary.registerOre("listAllfruit", ItemInit.lemon);
 		OreDictionary.registerOre("listAllfruit", ItemInit.orange);
+		OreDictionary.registerOre("listAllfruit", ItemInit.estor_apple);
+		OreDictionary.registerOre("listAllfruit", ItemInit.coconut);
 		OreDictionary.registerOre("listAllveggie", ItemInit.onion);
 		OreDictionary.registerOre("listAllveggie", ItemInit.corn);
 		OreDictionary.registerOre("listAllveggie", ItemInit.tomato);
@@ -207,6 +238,7 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("listAllveggie", ItemInit.eggplant);
 		OreDictionary.registerOre("listAllveggie", ItemInit.cabbage);
 		OreDictionary.registerOre("listAllveggie", ItemInit.lettuce);
+		OreDictionary.registerOre("listAllveggie", ItemInit.sweetpotato);
 		OreDictionary.registerOre("listAllseed", ItemInit.sannyflower_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.moonblossom_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.dm_seed);

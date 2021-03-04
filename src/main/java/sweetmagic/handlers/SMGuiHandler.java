@@ -7,6 +7,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 import sweetmagic.init.tile.chest.TileModenRack;
+import sweetmagic.init.tile.chest.TileRattanBasket;
+import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.init.tile.container.BookContainer;
 import sweetmagic.init.tile.container.ContainerAetherFurnace;
 import sweetmagic.init.tile.container.ContainerFreezer;
@@ -21,9 +23,11 @@ import sweetmagic.init.tile.container.ContainerMFTank;
 import sweetmagic.init.tile.container.ContainerModenRack;
 import sweetmagic.init.tile.container.ContainerParallelInterfere;
 import sweetmagic.init.tile.container.ContainerPouch;
+import sweetmagic.init.tile.container.ContainerRattanBasket;
 import sweetmagic.init.tile.container.ContainerRobe;
 import sweetmagic.init.tile.container.ContainerSMWand;
 import sweetmagic.init.tile.container.ContainerStove;
+import sweetmagic.init.tile.container.ContainerWoodChest;
 import sweetmagic.init.tile.cook.TileFreezer;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 import sweetmagic.init.tile.cook.TileStove;
@@ -43,9 +47,11 @@ import sweetmagic.init.tile.gui.GuiMFTank;
 import sweetmagic.init.tile.gui.GuiModenRack;
 import sweetmagic.init.tile.gui.GuiParallelInterfere;
 import sweetmagic.init.tile.gui.GuiPouch;
+import sweetmagic.init.tile.gui.GuiRattanBasket;
 import sweetmagic.init.tile.gui.GuiRobe;
 import sweetmagic.init.tile.gui.GuiSMWand;
 import sweetmagic.init.tile.gui.GuiStove;
+import sweetmagic.init.tile.gui.GuiWoodChest;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.init.tile.inventory.InventoryRobe;
 import sweetmagic.init.tile.inventory.InventorySMWand;
@@ -78,6 +84,8 @@ public class SMGuiHandler implements IGuiHandler {
 	public static final int MODENRACK_GUI = 16;
 	public static final int MFPOUCH_GUI = 17;
 	public static final int GUIDBOOK = 18;
+	public static final int RATTAMBASKET = 19;
+	public static final int WOODCHEST = 20;
 
 	///サーバ側の処理
 	@Override
@@ -121,6 +129,10 @@ public class SMGuiHandler implements IGuiHandler {
 			return new ContainerMFChangerAdvanced(player.inventory, (TileMFChangerAdvanced) tile);
 		} else if(ID == SMGuiHandler.MODENRACK_GUI) {
 			return new ContainerModenRack(player.inventory, (TileModenRack) tile);
+		} else if(ID == SMGuiHandler.RATTAMBASKET) {
+			return new ContainerRattanBasket(player.inventory, (TileRattanBasket) tile);
+		} else if(ID == SMGuiHandler.WOODCHEST) {
+			return new ContainerWoodChest(player.inventory, (TileWoodChest) tile);
 		}
 		return null;
 	}
@@ -171,6 +183,10 @@ public class SMGuiHandler implements IGuiHandler {
 			return new GuiModenRack(player.inventory, (TileModenRack) tile);
 		} else if (ID == SMGuiHandler.GUIDBOOK) {
 			return new GuiGuidBook();
+		} else if(ID == SMGuiHandler.RATTAMBASKET) {
+			return new GuiRattanBasket(player.inventory, (TileRattanBasket) tile);
+		} else if(ID == SMGuiHandler.WOODCHEST) {
+			return new GuiWoodChest(player.inventory, (TileWoodChest) tile);
 		}
 		return null;
 	}
