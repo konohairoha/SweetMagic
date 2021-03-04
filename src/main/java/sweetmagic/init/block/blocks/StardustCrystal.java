@@ -108,14 +108,14 @@ public class StardustCrystal extends BaseModelBlock {
 		// まだ一度もクリックしてないなら
 		if (!tile.isNew) {
 
-			tile.pX = pos.getX();
-			tile.pY = tile.nowY = pos.getY();
-			tile.pZ = pos.getZ();
+//			tile.pX = pos.getX();
+			tile.nowY = pos.getY();
+//			tile.pZ = pos.getZ();
 
 			// Y座標が低いなら上に上げる
 			if (pos.getY() <= 40) {
-				pos = new BlockPos(pos.getX(), 63, pos.getZ());
-				tile.pY = 63;
+				pos = new BlockPos(pos.getX(), 64, pos.getZ());
+				tile.pY = 64;
 			}
 		}
 
@@ -127,49 +127,54 @@ public class StardustCrystal extends BaseModelBlock {
 		// オーバーワールドに戻る
 		if (DimensionInit.dimID == player.dimension) {
 			TeleportUtil.teleportToDimension(player, 0, pos);
-			this.checkBlock(world, player, 0, tile, false);
+			this.checkBlock(world, player, pos, 0, tile, false);
 		}
 
 		// スイートマジックワールドに移動
 		else {
 			TeleportUtil.teleportToDimension(player, DimensionInit.dimID, pos);
-			this.checkBlock(world, player, DimensionInit.dimID, tile, !tile.isNew);
+			this.checkBlock(world, player, pos, DimensionInit.dimID, tile, !tile.isNew);
 		}
 
 		return true;
 	}
 
 	// 周りのブロックを確認
-	public void checkBlock (World world, EntityPlayer player, int dimId, TileStardustCrystal tile, boolean setCystal) {
+	public void checkBlock (World world, EntityPlayer player, BlockPos move, int dimId, TileStardustCrystal tile, boolean setCystal) {
 
 		// 移動先の座標を取得
 		World seWorld = player.getEntityWorld();
         WorldServer sever = seWorld.getMinecraftServer().getWorld(dimId);
-		BlockPos pPos = player.getPosition();
-		BlockPos pos = new BlockPos(pPos.getX(), pPos.getY(), pPos.getZ()).north();
 
 		// まだ一度もクリックしてないなら
 		if (!tile.isNew) {
 
 			tile.isNew = true;
+			move = sever.getTopSolidOrLiquidBlock(new BlockPos(move.getX(), 0, move.getZ()));
+			if (move.getY() < 64) { move = new BlockPos(move.getX(), 65, move.getZ()); }
+			tile.pX = move.getX();
+			tile.pY = move.getY();
+			tile.pZ = move.getZ();
+			TeleportUtil.teleportToDimension(player, dimId, move);
 
-			for (BlockPos p : BlockPos.getAllInBox(pos.add(-2, 0, -2), pos.add(2, 4, 2))) {
+			for (BlockPos p : BlockPos.getAllInBox(move.add(-2, 0, -2), move.add(2, 4, 2))) {
 				if (!sever.isAirBlock(p)) {
 					sever.setBlockState(p, Blocks.AIR.getDefaultState(), 3);
 				}
 			}
 
-			for (BlockPos p : BlockPos.getAllInBox(pos.add(-2, -1, -2), pos.add(2, -1, 2))) {
-				if (sever.isAirBlock(p)) {
+			for (BlockPos p : BlockPos.getAllInBox(move.add(-2, -1, -2), move.add(2, -1, 2))) {
+				IBlockState state = sever.getBlockState(p);
+				if (!state.getBlock().isFullBlock(state)) {
 					sever.setBlockState(p, Blocks.GRASS.getDefaultState(), 3);
 				}
 			}
 
 			// クリスタルを生成するなら
 			if (setCystal) {
-				sever.setBlockState(pos, BlockInit.sturdust_crystal_bot.getDefaultState(), 3);
-				sever.setBlockState(pos.up(), BlockInit.sturdust_crystal_top.getDefaultState(), 3);
-				TileStardustCrystal crystal = (TileStardustCrystal) sever.getTileEntity(pos);
+				sever.setBlockState(move, BlockInit.sturdust_crystal_bot.getDefaultState(), 3);
+				sever.setBlockState(move.up(), BlockInit.sturdust_crystal_top.getDefaultState(), 3);
+				TileStardustCrystal crystal = (TileStardustCrystal) sever.getTileEntity(move);
 				crystal.isNew = true;
 				crystal.pX = tile.pX;
 				crystal.pY = tile.nowY;

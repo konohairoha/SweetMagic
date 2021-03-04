@@ -43,7 +43,16 @@ public class SMChair extends BaseFaceBlock {
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 		if (!world.isRemote) {
 
-			double y = this.data == 0 ? -0.15D : -0.075D;
+			double y = 0;
+
+			switch (this.data) {
+			case 0:
+				y = -0.15D;
+			case 1:
+				y = -0.075D;
+			case 2:
+				y = -0.25D;
+			}
 
 			if (SittableUtil.sitOnBlock(world, pos.getX(), pos.getY() + y, pos.getZ(), player, 6 * 0.0625)) {
 				world.updateComparatorOutputLevel(pos, this);

@@ -1,10 +1,13 @@
 package sweetmagic.init.block.blocks;
 
+import java.util.List;
+
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,6 +27,7 @@ public class BlockCandle extends BaseModelBlock {
 		super(Material.WOOD, name);
 		setHardness(1.0F);
         setResistance(1024F);
+        setLightLevel(1F);
 		setSoundType(SoundType.WOOD);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
 		BlockInit.blockList.add(this);
@@ -31,6 +35,10 @@ public class BlockCandle extends BaseModelBlock {
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return CANDLE_AABB;
+	}
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) {
 	}
 
     @Override

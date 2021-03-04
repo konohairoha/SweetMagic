@@ -41,6 +41,13 @@ public class SMLeaves extends BlockLeaves {
 		BlockInit.blockList.add(this);
 	}
 
+	/**
+	 * 0 = 栗
+	 * 1 = ココナッツ
+	 * 2 = プリズミウム
+	 * 3 = バナナ
+	 */
+
 	@Override
 	public BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, CHECK_DECAY, DECAYABLE);
@@ -86,7 +93,7 @@ public class SMLeaves extends BlockLeaves {
 	}
 
 	@Override
-	protected void dropApple(World world, BlockPos pos, IBlockState state, int chance) {}
+	protected void dropApple(World world, BlockPos pos, IBlockState state, int chance) { }
 
 	@Override
 	public ItemStack getSilkTouchDrop(IBlockState state) {

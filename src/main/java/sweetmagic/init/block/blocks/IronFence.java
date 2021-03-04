@@ -21,7 +21,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseModelBlock;
-import vazkii.quark.automation.block.BlockIronRod;
 
 public class IronFence extends BaseModelBlock {
 
@@ -37,16 +36,12 @@ public class IronFence extends BaseModelBlock {
         setHardness(0.2F);
 		setResistance(1024F);
 		setSoundType(SoundType.METAL);
-//		this.data = data;
-		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
-//		this.setLightOpacity(this.data == 1 ? 255 : 0);
 		setDefaultState(this.blockState.getBaseState()
 				.withProperty(BACK, false)
 				.withProperty(FORWARD, false)
 				.withProperty(LEFT, false)
 				.withProperty(RIGHT, false));
 		BlockInit.blockList.add(this);
-//		list.add(this);
 	}
 
 	@Override
@@ -108,14 +103,13 @@ public class IronFence extends BaseModelBlock {
 
 	public boolean canPaneConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		IBlockState state = world.getBlockState(pos.offset(face));
-		return state.getBlock().canBeConnectedTo(world, pos.offset(face), face.getOpposite())
+		return  (state.getBlock().canBeConnectedTo(world, pos.offset(face), face.getOpposite())
 				|| this.canPaneConnectToBlock(state.getBlock())
-				|| state.isSideSolid(world, pos.offset(face), face.getOpposite());
+				|| state.isSideSolid(world, pos.offset(face), face.getOpposite()));
 	}
 
 	public boolean canPaneConnectToBlock(Block block) {
-		return block.getDefaultState().isFullCube() || block instanceof IronFence
-				|| block instanceof BlockIronRod;
+		return block.getDefaultState().isFullCube() || block instanceof IronFence;
 	}
 
 	@Override

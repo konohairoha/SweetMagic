@@ -19,7 +19,6 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseModelBlock;
 import sweetmagic.init.tile.magic.TileSMSpaner;
 import sweetmagic.init.tile.magic.TileSpawnStone;
-import sweetmagic.util.PlayerHelper;
 
 public class SpawnStone extends BaseModelBlock {
 
@@ -44,18 +43,15 @@ public class SpawnStone extends BaseModelBlock {
 	// 右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
-		if (this.data == 0 || !PlayerHelper.isCleative(player)) { return false; }
+		if (this.data == 1 && player.isCreative()) {
 
-		TileSMSpaner tile = (TileSMSpaner) world.getTileEntity(pos);
-		int data = tile.data + 1;
-
-		if (data > 4) {
-			data = 0;
+			TileSMSpaner tile = (TileSMSpaner) world.getTileEntity(pos);
+			int data = tile.data + 1;
+			tile.data = data > 6 ? 0 : data;
+			return true;
 		}
 
-		tile.data = data;
-
-		return true;
+		return false;
 	}
 
     @Override

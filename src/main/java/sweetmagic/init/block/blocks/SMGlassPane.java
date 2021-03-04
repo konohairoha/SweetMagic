@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlass;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPane;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -108,9 +109,10 @@ public class SMGlassPane extends BaseModelBlock {
 
 	public boolean canPaneConnectTo(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		IBlockState state = world.getBlockState(pos.offset(face));
-		return state.getBlock().canBeConnectedTo(world, pos.offset(face), face.getOpposite())
+		return !(state.getBlock() instanceof BlockLeaves) &&
+				(state.getBlock().canBeConnectedTo(world, pos.offset(face), face.getOpposite())
 				|| this.canPaneConnectToBlock(state.getBlock())
-				|| state.isSideSolid(world, pos.offset(face), face.getOpposite());
+				|| state.isSideSolid(world, pos.offset(face), face.getOpposite()));
 	}
 
 	public boolean canPaneConnectToBlock(Block block) {

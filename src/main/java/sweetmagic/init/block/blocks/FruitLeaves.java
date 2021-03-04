@@ -19,6 +19,7 @@ import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -32,6 +33,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IShearable;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
@@ -53,12 +56,6 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	*/
 
 	//=====================記述変更開始==============================
-
-	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D),
-		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D),
-		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D)
-	};
 
 	public final int data;
 
@@ -108,7 +105,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
     }
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return CROPS_AABB[((Integer) SweetState.getInt(this.getGrownState(), this.getSweetState()))];
+		return FULL_BLOCK_AABB;
 	}
 
 	@Override
@@ -123,6 +120,12 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	//最大成長段階の取得（int用）上書き忘れ注意
 	public int getMaxBlockState() {
 		return 2;
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public BlockRenderLayer getBlockLayer() {
+		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 
 	//=====================記述変更終わり==============================

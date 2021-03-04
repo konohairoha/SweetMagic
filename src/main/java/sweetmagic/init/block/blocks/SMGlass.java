@@ -22,9 +22,10 @@ import sweetmagic.init.BlockInit;
 
 public class SMGlass extends BlockGlass {
 
-	private final int data;
+	public final int data;
+	public boolean isPass;
 
-	public SMGlass(String name, int data) {
+	public SMGlass(String name, int data, boolean shading, boolean isPass) {
 		super(Material.GLASS, false);
 		setUnlocalizedName(name);
         setRegistryName(name);
@@ -33,7 +34,8 @@ public class SMGlass extends BlockGlass {
 		setResistance(256.0F);
 		this.data = data;
 		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
-		this.setLightOpacity(this.data == 1 ? 255 : 0);
+		this.setLightOpacity(shading ? 255 : 0);
+		this.isPass = isPass;
 		BlockInit.blockList.add(this);
     }
 
@@ -54,7 +56,7 @@ public class SMGlass extends BlockGlass {
 
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) {
-		if (!(entity instanceof EntityPlayer) || this.data != 2) {
+		if (!(entity instanceof EntityPlayer) || !this.isPass) {
 			super.addCollisionBoxToList(state, world, pos, aabb, aabbList, entity, flag);
 		}
 	}

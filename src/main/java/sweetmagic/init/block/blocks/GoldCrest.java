@@ -1,5 +1,6 @@
 package sweetmagic.init.block.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -9,10 +10,11 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -22,44 +24,67 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseModelBlock;
 
-public class BlockModenLanp extends BaseModelBlock {
+public class GoldCrest extends BaseModelBlock {
 
 	public static final PropertyBool TOP = PropertyBool.create("top");
 	public static final PropertyBool BOT = PropertyBool.create("bot");
 
-	public BlockModenLanp(String name) {
-		super(Material.GLASS, name);
-		setSoundType(SoundType.GLASS);
-		setHardness(0.5F);
+	public GoldCrest(String name) {
+		super(Material.PLANTS, name);
+		setSoundType(SoundType.PLANT);
+		setHardness(0.01F);
         setResistance(1024F);
-		setDefaultState(this.blockState.getBaseState()
-				.withProperty(TOP, false)
-				.withProperty(BOT, false));
-		setLightLevel(1F);
+		setDefaultState(this.blockState.getBaseState().withProperty(TOP, false).withProperty(BOT, false));
 		BlockInit.blockList.add(this);
 	}
 
+	//土、草、耕地に置いても壊れないようにする
+	@Override
+	public boolean canPlaceBlockAt(World world, BlockPos pos) {
+		Block block = world.getBlockState(pos.down()).getBlock();
+		return block != Blocks.AIR;
+	}
+
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.7D, 1D, 0.7D, 0.3D, 0D, 0.3D);
+		return new AxisAlignedBB(0.2D, 1D, 0.2D, 0.8D, 0D, 0.8D);
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
-		return side == EnumFacing.UP;
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) {
+
 	}
+
+	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
+
+	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	}
+
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+
+		if (world.isRemote) { return; }
+
+		Block block = world.getBlockState(pos.down()).getBlock();
+		if (block != Blocks.AIR) { return; }
+
+		this.breakBlock(pos, world, true);
+	}
+
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
+		Block top = world.getBlockState(pos.up()).getBlock();
+		if(top == this) {
+			this.breakBlock(pos.up(), world, true);
+		}
+    }
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		Block block = world.getBlockState(pos.down()).getBlock();
-		boolean bot = block == this || block == BlockInit.glow_lamp;
+		boolean bot = world.getBlockState(pos.down()).getBlock() == this ;
 		boolean top = world.getBlockState(pos.up()).getBlock() == this;
 		return state.withProperty(TOP, bot).withProperty(BOT, top);
-	}
-
-	// 一番下か
-	public boolean isBot (IBlockState state) {
-		return state == state.withProperty(TOP, false).withProperty(BOT, true) ||
-				state == state.withProperty(TOP, false).withProperty(BOT, false);
 	}
 
 	@Override
@@ -91,4 +116,5 @@ public class BlockModenLanp extends BaseModelBlock {
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
         return new ItemStack(this);
     }
+
 }
