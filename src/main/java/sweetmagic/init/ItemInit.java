@@ -12,8 +12,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.init.item.sm.accessorie.SMAcce;
 import sweetmagic.init.item.sm.armor.MagiciansPouch;
 import sweetmagic.init.item.sm.armor.MagiciansRobe;
+import sweetmagic.init.item.sm.eitem.SMAcceType;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.magic.AirMagic;
 import sweetmagic.init.item.sm.magic.CardHeal;
@@ -66,7 +68,8 @@ public class ItemInit {
 	public static Item dm_seed, dm_flower;
 
     // 鉱石、クリスタル
-	public static Item alternative_ingot, aether_crystal_shard, aether_crystal, divine_crystal, pure_crystal, deus_crystal;
+	public static Item alternative_ingot, aether_crystal_shard, cosmic_crystal_shard;
+	public static Item aether_crystal, divine_crystal, pure_crystal, deus_crystal, cosmic_crystal;
 
 	// エーテルツール
 	public static Item alt_axe, alt_pick, alt_shovel, alt_hoe, alt_shears, alt_sword, alt_sickle;
@@ -89,7 +92,10 @@ public class ItemInit {
 	public static Item unmeltable_ice, grav_powder, tiny_feather, blank_page, blank_magic, cotton_cloth, mystical_page;
 
 	// 杖
-	public static Item mf_stuff, aether_wand, divine_wand, purecrystal_wand, deuscrystal_wand, creative_wand;
+	public static Item mf_stuff, aether_wand, divine_wand, purecrystal_wand, deuscrystal_wand, cosmiccrystal_wand, creative_wand;
+
+	// 装備品
+	public static Item warrior_bracelet, witch_scroll, scorching_jewel, mermaid_veil, blood_sucking_ring, emelald_pias, fortune_ring;
 
 	// ドア
 	public static Item black_moderndoor, brown_2paneldoor, brown_5paneldoor, brown_elegantdoor, brown_arch_door, brown_arch_plantdoor;
@@ -97,7 +103,7 @@ public class ItemInit {
 
 	// 料理素材
 	public static Item sugarbell, vannila_beans, vannila_essence, olive_oil, whipping_cream;
-	public static Item  butter, salt, watercup, breadcrumbs, flourpowder, ine, kinako, gelatin;
+	public static Item butter, salt, watercup, breadcrumbs, flourpowder, ine, kinako, gelatin;
 
 	// 魔法
 	public static Item magic_dig, magic_fire, magic_frost, magic_light, magic_blast;
@@ -111,6 +117,8 @@ public class ItemInit {
 	public static Item magic_burst, magic_vector_boost, magic_vector_halten, magic_magia_destroy;
 	public static Item magic_slowtime, magic_deusora, magic_futurevision, magic_frostrain;
 	public static Item magic_tempest_gin, magic_gravity_break, magic_shadowgolem;
+	public static Item magic_bubleprison, magic_scumefang, magic_regene_shield;
+	public static Item magic_deadly_poison, magic_earth_destruction;
 
     // 簡易魔法
 	public static Item card_normal, card_heal;
@@ -143,7 +151,8 @@ public class ItemInit {
 	public static Item short_cake, cheese_cake, chocolate_cake;
 	public static Item croquette, choco_pie, fruit_crepe, sweet_potato, french_toast;
 	public static Item banana, yaki_banana, banana_smoothy, mixed_juice, soy_soup, pork_soup;
-	public static Item saba_miso, fluit_mix, pizza, gratin, estor_apple, applepie;
+	public static Item saba_miso, fluit_mix, pizza, gratin, estor_apple, applepie, yaki_apple;
+	public static Item choko_cornet, cream_filled_roll, cream_brulee;
 
 	// 飲み物
 	public static Item corn_soup, berryorange_juice, strawberrymilk, coconut_juice, milk_pack;
@@ -153,6 +162,9 @@ public class ItemInit {
 
 	// 防具
 	public static Item magicians_robe, wizard_robe, magicians_pouch;
+
+	// ダンジョン用
+	public static Item magickey;
 
     public static List<Item> itemList = new ArrayList();
     public static List<Item> foodList = new ArrayList();
@@ -178,10 +190,12 @@ public class ItemInit {
         // 鉱石、クリスタル
 		alternative_ingot = new SMItem("alternative_ingot");
 		aether_crystal_shard = new MFItem("aether_crystal_shard", 50);
+		cosmic_crystal_shard = new MFItem("cosmic_crystal_shard", 500);
 		aether_crystal = new MFItem("aether_crystal", 600);
 		divine_crystal = new MFItem("divine_crystal", 8000);
 		pure_crystal = new MFItem("pure_crystal", 90000);
 		deus_crystal = new MFItem("deus_crystal", 450000);
+		cosmic_crystal = new MFItem("cosmic_crystal", 600000);
 
 		// エーテルツール
 		//斧　　：アイテム名　=new アイテムアックス("アイテム名"、採掘レベル、耐久値、効率、攻撃力、エンチャントレベル)、攻撃力、攻撃速度
@@ -240,17 +254,28 @@ public class ItemInit {
 		cotton_cloth = new SMItem("cotton_cloth");
 		veil_darkness = new SMSummon("veil_darkness");
 
-		magicians_robe = new MagiciansRobe("magicians_robe", ArmorInit.magicians_robe, 1, EntityEquipmentSlot.CHEST, 1);
-		wizard_robe = new MagiciansRobe("wizard_robe", ArmorInit.wizard_robe, 1, EntityEquipmentSlot.CHEST, 1);
-		magicians_pouch = new MagiciansPouch("magicians_pouch", ArmorInit.magicians_pouch, 1, EntityEquipmentSlot.LEGS, 1);
-
 		// 杖
 		mf_stuff = new MFStuff("magiaflux_stuff");
 		aether_wand = new SMWand("aether_wand", 1, 3000, 3);
 		divine_wand = new SMWand("divine_wand", 2, 15000, 6);
 		purecrystal_wand = new CosmicWand("purecrystal_wand", 3, 40000, 9);
 		deuscrystal_wand = new CosmicWand("deuscrystal_wand", 4, 80000, 12);
-		creative_wand = new SMWand("creative_wand", 7, 1, 16);
+		cosmiccrystal_wand = new CosmicWand("cosmiccrystal_wand", 5, 160000, 16);
+		creative_wand = new SMWand("creative_wand", 7, 1, 25);
+
+		// 防具
+		magicians_robe = new MagiciansRobe("magicians_robe", ArmorInit.magicians_robe, 1, EntityEquipmentSlot.CHEST, 1);
+		wizard_robe = new MagiciansRobe("wizard_robe", ArmorInit.wizard_robe, 1, EntityEquipmentSlot.CHEST, 1);
+		magicians_pouch = new MagiciansPouch("magicians_pouch", ArmorInit.magicians_pouch, 1, EntityEquipmentSlot.LEGS, 2);
+
+		// 装備品
+		warrior_bracelet = new SMAcce("warrior_bracelet", SMAcceType.TERMS, false, 0);
+		witch_scroll = new SMAcce("witch_scroll", SMAcceType.TERMS, false, 1);
+		scorching_jewel = new SMAcce("scorching_jewel", SMAcceType.UPDATE, true, 2);
+		mermaid_veil = new SMAcce("mermaid_veil", SMAcceType.UPDATE, true, 3);
+		blood_sucking_ring = new SMAcce("blood_sucking_ring", SMAcceType.TERMS, true, 4);
+		emelald_pias = new SMAcce("emelald_pias", SMAcceType.TERMS, true, 5);
+		fortune_ring = new SMAcce("fortune_ring", SMAcceType.UPDATE, false, 6);
 
 		// ドア
 		black_moderndoor = new SMIDoor("black_moderndoor_i", BlockInit.black_moderndoor);
@@ -300,6 +325,9 @@ public class ItemInit {
         magic_heal = new AirMagic("magic_heal", 0, SMElement.WATER, 2, 800, 200);
         magic_healingwish  = new AirMagic("magic_healingwish", 8, SMElement.WATER, 3, 1600, 400, "magic_heal");
 
+        magic_bubleprison = new ShotMagic("magic_bubleprison", 20, SMElement.WATER, 1, 200, 80);
+        magic_scumefang = new ShotMagic("magic_scumefang", 21, SMElement.WATER, 2, 280, 150, "magic_bubleprison");
+
         magic_elecarmor = new AirMagic("magic_elecarmor", 6, SMElement.LIGHTNING, 1, 1400, 100, "magic_thunder");
         magic_lightningbolt = new ChargeMagic("magic_lightningbolt", 3, SMElement.LIGHTNING, 2, 300, 200, "magic_thunder");
         magic_thunder = new ChargeMagic("magic_thunder", 2, SMElement.LIGHTNING, 3, 200, 300);
@@ -310,6 +338,7 @@ public class ItemInit {
 
         magic_rangepoison = new ShotMagic("magic_rangepoison", 11, SMElement.TOXIC, 1, 400, 50, "magic_poison");
         magic_poison = new AirMagic("magic_poison", 4, SMElement.TOXIC, 2, 1300, 200);
+        magic_deadly_poison = new ShotMagic("magic_deadly_poison", 22, SMElement.TOXIC, 3, 100, 200, "magic_poison");
 
         magic_ballast = new ShotMagic("magic_ballast", 6, SMElement.GRAVITY, 1, 60, 20, "magic_gravity");
         magic_gravitywave = new ShotMagic("magic_gravitywave", 13, SMElement.GRAVITY, 2, 120, 140, "magic_gravity");
@@ -319,6 +348,7 @@ public class ItemInit {
         magic_vector_halten = new AirMagic("magic_gravity", 12, SMElement.GRAVITY, 2, 1400, 200, "magic_vector_boost");
 
         magic_barrier = new AirMagic("magic_barrier", 3, SMElement.SHINE, 1, 1200, 200);
+        magic_regene_shield = new AirMagic("magic_regene_shield", 15, SMElement.WATER, 2, 3600, 300, "magic_barrier");
 
         magic_light = new ShotMagic("magic_light", 2, SMElement.SHINE, 1, 30, 30);
         magic_starburst = new ShotMagic("magic_starburst", 7, SMElement.SHINE, 2, 80, 80, "magic_light");
@@ -331,6 +361,7 @@ public class ItemInit {
         magic_dig = new ShotMagic("magic_dig", 3, SMElement.EARTH, 1, 10, 10);
         magic_rangebreaker = new ShotMagic("magic_rangebreaker", 8, SMElement.EARTH, 2, 30, 20, "magic_dig");
         magic_mining_magia = new ShotMagic("magic_mining_magia", 14, SMElement.EARTH, 3, 50, 30, "magic_dig");
+        magic_earth_destruction = new ShotMagic("magic_earth_destruction", 23, SMElement.EARTH, 4, 80, 50, "magic_dig");
 
         magic_growth_effect = new ChargeMagic("magic_growth_effect", 6, SMElement.EARTH, 1, 300, 100, "magic_growth_aura");
         magic_growth_aura = new ChargeMagic("magic_growth_aura", 5, SMElement.EARTH, 2, 100, 500);
@@ -347,14 +378,16 @@ public class ItemInit {
         card_normal = new CardMagic("card_normal", 50, 0);
         card_heal = new CardHeal("card_heal", 32);
 
+        magickey = new SMItem("magickey");
+
 		// 食べ物 アイテム名　=new (満腹度回復、隠し満腹度(乗算)、"アイテム名", ポーション効果の整数)
 		lemon = new SMFood(3, 0.3F, "lemon", 0);
 		orange = new SMFood(3, 0.3F, "orange", 0);
 		estor_apple = new SMFood(3, 0.5F, "estor_apple", 0);
 		chestnut = new SMFood(4, 0.8F, "chestnut", 0);
 		coconut = new SMFood(3, 1F, "coconut", 0);
-		cheese = new SMFood(4, 0.3F, "cheese",0);
 		banana = new SMFood(2, 1.5F, "banana",0);
+		cheese = new SMFood(4, 0.3F, "cheese",0);
 		whitenet = new SMFood(4, 0.45F, "whitenet",0);
 		rice = new SMFood(4, 0.3F, "rice", 0);
 		edamame = new SMFood(2, 0.3F, "edamame", 1);
@@ -367,14 +400,18 @@ public class ItemInit {
 		yaki_imo = new SMFood(5, 0.5F, "yaki_imo", 1);
 		sweet_potato = new SMFood (6, 0.75F, "sweet_potato", 0);
 		yaki_banana = new SMFood(6, 0.4F, "yaki_banana", 1);
+		yaki_apple = new SMFood(4, 0.55F, "yaki_apple", 0);
 		itigo_daihuku = new SMFood(5, 0.5F, "itigo_daihuku", 0);
 		cooked_corn = new SMFood(8, 0.25F, "cooked_corn", 0);
 		potatobutter = new SMFood(7, 0.5F, "potatobutter", 1);
 		boiled_edamame = new SMFood(6, 0.2F, "boiled_edamame", 0);
+		toast = new SMFood (4, 0.5F, "toast", 0);
 		ogura_toast = new SMFood(9, 0.6F, "ogura_toast", 0);
 		butter_toast = new SMFood(7, 0.4F, "butter_toast", 0);
 		jam_toast = new SMFood(10, 0.4F, "jam_toast", 0);
 		french_toast = new SMFood(10, 0.4F, "french_toast", 0);
+		choko_cornet = new SMFood(8, 0.4F, "choko_cornet", 0);
+		cream_filled_roll = new SMFood(5, 0.75F, "cream_filled_roll", 0);
 		egg_sandwitch = new SMFood(6, 0.75F, "egg_sandwitch", 0);
 		butadon = new SMFood(8, 0.8F, "butadon", 0);
 		gyuudon = new SMFood(10, 0.5F, "gyuudon", 0);
@@ -386,6 +423,8 @@ public class ItemInit {
 		salmon_meuniere = new SMFood(4, 0.6F, "salmon_meuniere", 0);
 		saba_miso = new SMFood(8, 0.5F, "saba_miso", 0);
 		roll_cabbage = new SMFood (11, 0.75F, "roll_cabbage", 0);
+		pizza = new SMFood(10, 0.7F, "pizza", 0);
+		gratin = new SMFood(8, 0.6F, "gratin", 0);
 		beefstew = new SMFood (10, 0.75F, "beefstew", 0);
 		stew = new SMFood (9, 0.95F, "stew", 0);
 		sukiyaki = new SMFood (11, 0.5F, "sukiyaki", 3);
@@ -413,20 +452,18 @@ public class ItemInit {
 		scone = new SMFood (5, 0.6F, "scone", 1);
 		blueberry_muffin = new SMFood(7, 0.5F, "blueberry_muffin", 1);
 		chocolate_muffin = new SMFood(8, 0.35F, "chocolate_muffin", 1);
-		toast = new SMFood (4, 0.5F, "toast", 0);
 		cream_puff = new SMFood (8, 0.65F, "cream_puff", 0);
 		short_cake = new SMFood (6, 1.0F, "short_cake", 0);
 		cheese_cake = new SMFood (4, 1.5F, "cheese_cake", 0);
 		chocolate_cake = new SMFood (5, 1.1F, "chocolate_cake", 0);
 		cake_roll = new SMFood (5, 1.2F, "cake_roll", 0);
-		eclair = new SMFood (8, 0.4F, "eclair", 0);
+		applepie = new SMFood(7, 0.65F, "applepie", 0);
+		eclair = new SMFood (6, 0.6F, "eclair", 0);
+		cream_brulee = new SMFood (8, 0.4F, "cream_brulee", 0);
 		marshmallow = new SMFood (4, 0.5F, "marshmallow", 1);
 		yogurt  = new SMFood(2, 0.5F, "yogurt", 0);
 		croquette  = new SMFood(7, 0.65F, "croquette", 0);
 		fluit_mix = new SMFood(12, 0.1F, "fluit_mix", 0);
-		pizza = new SMFood(10, 0.7F, "pizza", 0);
-		gratin = new SMFood(8, 0.6F, "gratin", 0);
-		applepie = new SMFood(7, 0.65F, "applepie", 0);
 
 		// 飲み物
 		corn_soup = new SMDrink(7, 0.5F, "corn_soup", 0);

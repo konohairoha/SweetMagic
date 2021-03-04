@@ -16,11 +16,11 @@ import sweetmagic.init.enchant.EnchantWand;
 @Mod.EventBusSubscriber
 public class EnchantInit {
 
-	public static Enchantment mfCostDown;
-	public static Enchantment mfCoolTimeDown;
+	public static Enchantment mfCostDown, mfCoolTimeDown;
 	public static Enchantment wandAddPower;
 	public static Enchantment maxMFUP;
 	public static Enchantment mfRecover;
+	public static Enchantment aetherCharm;
 
 	public static List<Enchantment> enchantList = new ArrayList<>();
 
@@ -30,6 +30,7 @@ public class EnchantInit {
 		maxMFUP = new EnchantWand(Enchantment.Rarity.UNCOMMON, "maxmfup", 5);
 		wandAddPower = new EnchantWand(Enchantment.Rarity.RARE, "wandaddpower", 5);
 		mfRecover = new EnchantWand(Enchantment.Rarity.UNCOMMON, "mfrecover", 3);
+		aetherCharm = new EnchantWand(Enchantment.Rarity.UNCOMMON, "aetherCharm", 1);
 	}
 
 	public static void register(IForgeRegistry<Enchantment> register) {

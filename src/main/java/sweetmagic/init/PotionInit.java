@@ -11,17 +11,16 @@ import sweetmagic.init.potion.PotionSM;
 public class PotionInit {
 
 	public static Potion frosty, flame;
-	public static Potion gravity;
-	public static Potion gravity_accele;
+	public static Potion gravity, gravity_accele;
 	public static Potion cyclone;
 	public static Potion shadow;
 	public static Potion aether_barrier;
-	public static Potion deadly_poison;
-	public static Potion grant_poison;
-	public static Potion slow;
-	public static Potion timestop;
+	public static Potion deadly_poison, grant_poison;
+	public static Potion slow, timestop;
 	public static Potion electric_armor;
 	public static Potion refresh_effect;
+	public static Potion babule, regene;
+	public static Potion breakblock;
 
 	public static List<Potion> buffList = new ArrayList<>();		// バフリスト
 	public static List<Potion> deBuffList = new ArrayList<>();	// デバフリスト
@@ -29,18 +28,21 @@ public class PotionInit {
 	public static void init() {
 
 		frosty = new PotionFrost(false, 0x56CBFD, "frosted", "textures/items/magic_frost.png");
-		gravity = new PotionSM(false, 0x56CBFD, "gravity", "textures/items/grav_powder.png");
-		gravity_accele = new PotionSM(false, 0x56CBFD, "gravity_accele", "textures/items/magic_gravity.png");
-		cyclone = new PotionSM(false, 0x56CBFD, "cyclon", "textures/items/magic_cyclon.png");
-		shadow = new PotionSM(false, 0x56CBFD, "shadow", "textures/items/magic_shadow.png");
-		aether_barrier = new PotionSM(false, 0x56CBFD, "aether_barrier", "textures/items/magic_barrier.png");
-		deadly_poison = new PotionSM(false, 0x56CBFD, "deadly_poison", "textures/items/poison_bottle.png");
-		grant_poison = new PotionSM(false, 0x56CBFD, "grant_poison", "textures/items/magic_poison.png");
-		slow = new PotionSM(false, 0x56CBFD, "slow", "textures/items/sannyflower_petal.png");
-		timestop = new PotionSM(false, 0x56CBFD, "timestop", "textures/items/magic_slowtime.png");
-		electric_armor = new PotionSM(false, 0x56CBFD, "electric_armor", "textures/items/magic_thunder.png");
-		refresh_effect = new PotionSM(false, 0x56CBFD, "refresh_effect", "textures/items/magic_effectremover.png");
-		flame = new PotionSM(false, 0x56CBFD, "flame", "textures/items/magic_fire.png");
+		gravity = new PotionSM(false, 0x56CBFD, "gravity", "textures/items/grav_powder.png", true);
+		gravity_accele = new PotionSM(false, 0x56CBFD, "gravity_accele", "textures/items/magic_gravity.png", true);
+		cyclone = new PotionSM(false, 0x56CBFD, "cyclon", "textures/items/magic_cyclon.png", true);
+		shadow = new PotionSM(false, 0x56CBFD, "shadow", "textures/items/magic_shadow.png", false);
+		aether_barrier = new PotionSM(false, 0x56CBFD, "aether_barrier", "textures/items/magic_barrier.png", false);
+		deadly_poison = new PotionSM(false, 0x56CBFD, "deadly_poison", "textures/items/poison_bottle.png", false);
+		grant_poison = new PotionSM(false, 0x56CBFD, "grant_poison", "textures/items/magic_poison.png", false);
+		slow = new PotionSM(false, 0x56CBFD, "slow", "textures/items/sannyflower_petal.png", true);
+		timestop = new PotionSM(false, 0x56CBFD, "timestop", "textures/items/magic_slowtime.png", false);
+		electric_armor = new PotionSM(false, 0x56CBFD, "electric_armor", "textures/items/magic_thunder.png", false);
+		refresh_effect = new PotionSM(false, 0x56CBFD, "refresh_effect", "textures/items/magic_effectremover.png", true);
+		flame = new PotionSM(false, 0x56CBFD, "flame", "textures/items/magic_fire.png", false);
+		babule = new PotionSM(false, 0x56CBFD, "babule", "textures/items/magic_babule.png", true);
+		regene = new PotionSM(false, 0x56CBFD, "regene", "textures/items/magic_heal.png", true);
+		breakblock = new PotionSM(false, 0x56CBFD, "breakblock", "textures/items/magic_dig.png", true);
 	}
 
 	// リストを設定
@@ -52,6 +54,7 @@ public class PotionInit {
 		buffList.add(aether_barrier);
 		buffList.add(grant_poison);
 		buffList.add(electric_armor);
+		buffList.add(regene);
 		buffList.add(MobEffects.SPEED);
 		buffList.add(MobEffects.STRENGTH);
 		buffList.add(MobEffects.INSTANT_HEALTH);
@@ -74,6 +77,7 @@ public class PotionInit {
 		deBuffList.add(deadly_poison);
 		deBuffList.add(slow);
 		deBuffList.add(timestop);
+		deBuffList.add(babule);
 		deBuffList.add(MobEffects.HUNGER);
 		deBuffList.add(MobEffects.POISON);
 		deBuffList.add(MobEffects.WITHER);
@@ -92,7 +96,7 @@ public class PotionInit {
 		return PotionInit.buffList;
 	}
 
-	// バフリストの取得
+	// デバフリストの取得
 	public static List<Potion> getDeBuffPotionList () {
 		return PotionInit.deBuffList;
 	}

@@ -39,7 +39,7 @@ public class BookInit {
 	public static BookEntry fire_nasturtium;
 	public static BookEntry drizzly_mysotis;
 
-	public static BookEntry door, magic_add, bugs;
+	public static BookEntry estor, cosmic, woodchest, cosmos, biome;
 
 	public static void init() {
 
@@ -67,9 +67,13 @@ public class BookInit {
 		mftable = new BookEntry("mftable", magic).setIcon(new ItemStack(BlockInit.mftable));
 		mfstuff = new BookEntry("mfstuff", magic).setIcon(new ItemStack(ItemInit.mf_stuff));
 
-		door = new BookEntry("door", update).setIcon(new ItemStack(ItemInit.woodgold_3));
-		magic_add = new BookEntry("magic_add", update).setIcon(new ItemStack(ItemInit.magic_gravity_break));
-		bugs = new BookEntry("bugs", update).setIcon(new ItemStack(ItemInit.fire_nasturtium_petal));
+//		plant = new BookEntry("plant", update).setIcon(new ItemStack(BlockInit.antique_brick_pot_r));
+//		recipe = new BookEntry("recipe", update).setIcon(new ItemStack(BlockInit.twilight_alstroemeria));
+		estor = new BookEntry("estor", update).setIcon(new ItemStack(BlockInit.estor_sapling));
+		cosmic = new BookEntry("cosmic", update).setIcon(new ItemStack(ItemInit.cosmic_crystal));
+		woodchest = new BookEntry("woodchest", update).setIcon(new ItemStack(BlockInit.prism_woodchest));
+		cosmos = new BookEntry("cosmos", update).setIcon(new ItemStack(BlockInit.cosmos));
+		biome = new BookEntry("biome", update).setIcon(new ItemStack(BlockInit.sugarbell_plant));
 
 		sugarbell.addPage(new BookPageText(sugarbell, "sugarbell").addRelatedEntries(sannyflower, moonblossom, alstroemeria));
 		sannyflower.addPage(new BookPageText(sannyflower, "sannyflower").addRelatedEntries(moonblossom, alstroemeria));
@@ -86,8 +90,12 @@ public class BookInit {
 		mftable.addPage(new BookPageText(mftable, "mftable").addRelatedEntries(aetherwand, mfchanger, mftank, mfstuff));
 		mfstuff.addPage(new BookPageText(mfstuff, "mfstuff").addRelatedEntries(aetherwand, mfchanger, mftank, mftable));
 
-		door.addPage(new BookPageText(door, "door"));
-		magic_add.addPage(new BookPageText(magic_add, "magic_add"));
-		bugs.addPage(new BookPageText(bugs, "bugs"));
+//		plant.addPage(new BookPageText(plant, "plant"));
+//		recipe.addPage(new BookPageText(recipe, "recipe"));
+		estor.addPage(new BookPageText(estor, "estor"));
+		cosmic.addPage(new BookPageText(cosmic, "cosmic"));
+		woodchest.addPage(new BookPageText(woodchest, "woodchest"));
+		cosmos.addPage(new BookPageText(cosmos, "cosmos"));
+		biome.addPage(new BookPageText(biome, "biome"));
 	}
 }

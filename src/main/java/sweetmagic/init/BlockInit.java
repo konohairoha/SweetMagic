@@ -36,14 +36,18 @@ import sweetmagic.init.block.blocks.BlockOven;
 import sweetmagic.init.block.blocks.BlockParallelInterfere;
 import sweetmagic.init.block.blocks.BlockPole;
 import sweetmagic.init.block.blocks.BlockPot;
+import sweetmagic.init.block.blocks.BlockRattanBasket;
 import sweetmagic.init.block.blocks.BlockSMOre;
+import sweetmagic.init.block.blocks.BlockStendGlass;
 import sweetmagic.init.block.blocks.BlockStove;
+import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.init.block.blocks.ChestnutPlank;
 import sweetmagic.init.block.blocks.ChestnutSlab;
 import sweetmagic.init.block.blocks.ChestnutStairs;
 import sweetmagic.init.block.blocks.CleroLanp;
 import sweetmagic.init.block.blocks.FacePlanks;
 import sweetmagic.init.block.blocks.FruitLeaves;
+import sweetmagic.init.block.blocks.GoldCrest;
 import sweetmagic.init.block.blocks.IronFence;
 import sweetmagic.init.block.blocks.MagicBook;
 import sweetmagic.init.block.blocks.ObMagia;
@@ -59,6 +63,7 @@ import sweetmagic.init.block.blocks.SMLog;
 import sweetmagic.init.block.blocks.SMPlate;
 import sweetmagic.init.block.blocks.SMSapling;
 import sweetmagic.init.block.blocks.SMTable;
+import sweetmagic.init.block.blocks.SMTableDot;
 import sweetmagic.init.block.blocks.SMTrapDoor;
 import sweetmagic.init.block.blocks.SpawnStone;
 import sweetmagic.init.block.blocks.StardustCrystal;
@@ -79,7 +84,7 @@ import sweetmagic.init.block.magic.MFFurnace;
 import sweetmagic.init.block.magic.MFPot;
 import sweetmagic.init.block.magic.MFTable;
 import sweetmagic.init.block.magic.MFTank;
-import sweetmagic.init.block.magic.MagicDirt;
+import sweetmagic.init.block.magic.MagicBarrier;
 import sweetmagic.init.block.magic.MagicLight;
 import sweetmagic.init.block.magic.PedalCreate;
 
@@ -118,7 +123,7 @@ public class BlockInit {
 	public static Block estor_planks, estor_slab, estor_stairs, estor_plate;
 
 	// ガラス
-	public static Block sugarglass, shading_sugarglass, frosted_glass_line, frosted_glass, prismglass;
+	public static Block sugarglass, shading_sugarglass, frosted_glass_line, frosted_glass, prismglass, shading_prismglass;
 
 	// 板ガラス
 	public static Block sugarglass_pane, shading_sugarglass_pane, frosted_glass_line_pane, frosted_glass_pane, prismglass_pane;
@@ -135,10 +140,10 @@ public class BlockInit {
 
 	// 花
 	public static Block cornflower, lily_valley, twilight_alstroemeria, lier_rose;
-	public static Block clerodendrum, clerolanp;
+	public static Block clerodendrum, clerolanp, cosmos, blackrose;
 
 	// 鉱石
-	public static Block ac_ore, alt_block;
+	public static Block ac_ore, alt_block, cosmic_crystal_ore;
 
 	// MFブロック
 	public static Block mfchanger, mftank, mfpot, mffisher, flyishforer, mftable;
@@ -153,15 +158,20 @@ public class BlockInit {
 	// 光源
 	public static Block magiclight, glow_light, antique_candle, gorgeous_lamp, glow_lamp, magic_circle, twilightlight;
 	public static Block modenlanp;
+	public static Block stendglass_lamp_g_off, stendglass_lamp_g_on, stendglass_lamp_off, stendglass_lamp_on;
 
 	// レンガ
 	public static Block antique_brick_0, antique_brick_1, antique_brick_2;
 	public static Block antique_brick_0w, antique_brick_1w, antique_brick_2w;
 	public static Block antique_brick_b;
+	public static Block antique_brick_0l, antique_brick_1l, antique_brick_2l;
+	public static Block antique_brick_0g, antique_brick_1g, antique_brick_2g;
 	public static Block antique_brick_stairs, antique_brick_slab;
 	public static Block antique_brick_stairs_w, antique_brick_slab_w;
 	public static Block antique_brick_stairs_b, antique_brick_slab_b;
-	public static Block antique_tdoor_0, antique_tdoor_0w, antique_tdoor_b;
+	public static Block antique_brick_stairs_l, antique_brick_slab_l;
+	public static Block antique_brick_stairs_g, antique_brick_slab_g;
+	public static Block antique_tdoor_0, antique_tdoor_0w, antique_tdoor_b, antique_tdoor_l;
 	public static Block flagstone, flagstone_stairs, flagstone_slab;
 	public static Block flagstone_color, flagstone_color_stairs, flagstone_color_slab;
 	public static Block old_brick, old_brick_stairs, old_brick_slab;
@@ -171,9 +181,20 @@ public class BlockInit {
 	public static Block old_brick_l, old_brick_l_stairs, old_brick_l_slab;
 	public static Block old_brick_b, old_brick_b_stairs, old_brick_b_slab;
 	public static Block old_brick_s, old_brick_s_stairs, old_brick_s_slab;
+	public static Block longtile_brick_o, longtile_brick_o_stairs, longtile_brick_o_slab;
+	public static Block longtile_brick_p, longtile_brick_p_stairs, longtile_brick_p_slab;
+	public static Block longtile_brick_r, longtile_brick_r_stairs, longtile_brick_r_slab;
+	public static Block longtile_brick_y, longtile_brick_y_stairs, longtile_brick_y_slab;
+	public static Block longtile_brick_b, longtile_brick_b_stairs, longtile_brick_b_slab;
+	public static Block longtile_brick_g, longtile_brick_g_stairs, longtile_brick_g_slab;
+	public static Block longtile_brick, longtile_brick_stairs, longtile_brick_slab;
+	public static Block longtile_brick_l, longtile_brick_l_stairs, longtile_brick_l_slab;
+	public static Block longtile_brick_w, longtile_brick_w_stairs, longtile_brick_w_slab;
+
+	public static Block longtile_brick_r_tdoor, longtile_brick_p_tdoor;
 
 	// 窓
-	public static Block antique_window_white, antique_window_brown, antique_window_brown2;
+	public static Block antique_window_white, antique_window_brown, antique_window_brown2, antique_window_green;
 
 	// ドア
 	public static Block black_moderndoor, brown_2paneldoor, brown_5paneldoor, brown_elegantdoor, brown_arch_door, brown_arch_plantdoor;
@@ -196,16 +217,25 @@ public class BlockInit {
 
 	// 家具
 	public static Block cafeboard, kanban_top, kanban_bot;
-	public static Block smchair, antique_back_chair, smtable, smtable_lace;
+	public static Block smchair, antique_back_chair, smtable, smtable_lace, smtable_dot;
 	public static Block moden_rack, moden_rack_brown, moden_wallrack;
 	public static Block moden_stair, plate, magicbook;
+	public static Block rattan_chair_y, rattan_chair_b, rattan_chair_d;
+	public static Block rattan_basket_y, rattan_basket_b, rattan_basket_d;
+	public static Block prism_woodchest, estor_woodchest;
+	public static Block rattan_chest_y, rattan_chest_b;
+	public static Block treasure_chest;
+
+	// 草
+	public static Block goldcrest;
 
 	public static Block white_ironfence, black_ironfence;
 	public static Block antique_brick_pot_r, orange_planks_pot, orange_planks_pot_w, estor_planks_pot, compost_drit;
+	public static Block longtile_brick_pot_o, longtile_brick_pot_l;
 
 	public static Block woodbox;
 
-	public static Block spawn_stone, smspaner, sturdust_crystal_bot, sturdust_crystal_top;
+	public static Block spawn_stone, smspaner, sturdust_crystal_bot, sturdust_crystal_top, magicbarrier_off, magicbarrier_on;
 
 	// ブロックをまず登録
 	public static Block sample;
@@ -293,11 +323,12 @@ public class BlockInit {
 		estor_plate = new SMPlate("estor_plate");
 
 		// ガラス
-		sugarglass = new SMGlass("sugarglass", 0);
-		shading_sugarglass = new SMGlass("shading_sugarglass", 1);
-		frosted_glass = new SMGlass("frosted_glass", 0);
-		frosted_glass_line = new SMGlass("frosted_glass_line", 0);
-		prismglass = new SMGlass("prismglass", 2);
+		sugarglass = new SMGlass("sugarglass", 0, false, false);
+		shading_sugarglass = new SMGlass("shading_sugarglass", 1, true, false);
+		frosted_glass = new SMGlass("frosted_glass", 2, false, false);
+		frosted_glass_line = new SMGlass("frosted_glass_line", 3, false, false);
+		prismglass = new SMGlass("prismglass", 4, false, true);
+		shading_prismglass = new SMGlass("shading_prismglass", 5, true, true);
 
 		// 板ガラス
 		sugarglass_pane = new SMGlassPane("sugarglass_pane", blockList, 0);
@@ -330,12 +361,15 @@ public class BlockInit {
 		// 花
 		cornflower = new BlockCornFlower("cornflower", 0);
 		lily_valley = new BlockCornFlower("lily_valley", 1);
+		cosmos = new BlockCornFlower("cosmos", 2);
+		blackrose = new BlockCornFlower("blackrose", 3);
 		twilight_alstroemeria = new BlockAlstroemeria("twilight_alstroemeria");
 		lier_rose = new BlockLierRose("lier_rose");
 		clerolanp = new CleroLanp("clerolanp");
 
 		// 鉱石
 		ac_ore = new BlockSMOre("ac_ore", 0);
+		cosmic_crystal_ore = new BlockSMOre("cosmic_crystal_ore", 1);
 		alt_block = new SMIron("alt_block", 2.4F, 16.0F, 1, 0);
 
 		// MFブロック
@@ -368,6 +402,10 @@ public class BlockInit {
 		glow_light = new BlockLight("glow_light");
 		gorgeous_lamp = new BlockLight("gorgeous_lamp");
 		modenlanp = new BlockModenLanp("modenlanp");
+		stendglass_lamp_g_off = new BlockStendGlass("stendglass_lamp_g_off", false, 0, blockList);
+		stendglass_lamp_g_on = new BlockStendGlass("stendglass_lamp_g_on", true, 1, noTabList);
+		stendglass_lamp_off = new BlockStendGlass("stendglass_lamp_off", false, 2, blockList);
+		stendglass_lamp_on = new BlockStendGlass("stendglass_lamp_on", true, 3, noTabList);
 
 		// レンガ
 		antique_brick_0 = new AntiqueBrick("antique_brick_0", 1.25F, 1024F, 0, 0);
@@ -377,15 +415,26 @@ public class BlockInit {
 		antique_brick_1w = new AntiqueBrick("antique_brick_1w", 1.25F, 1024F, 0, 0);
 		antique_brick_2w = new AntiqueBrick("antique_brick_2w", 1.25F, 1024F, 0, 0);
 		antique_brick_b = new AntiqueBrick("antique_brick_b", 1.25F, 1024F, 0, 0);
+		antique_brick_0l = new AntiqueBrick("antique_brick_0l", 1.25F, 1024F, 0, 0);
+		antique_brick_1l = new AntiqueBrick("antique_brick_1l", 1.25F, 1024F, 0, 0);
+		antique_brick_2l = new AntiqueBrick("antique_brick_2l", 1.25F, 1024F, 0, 0);
+		antique_brick_0g = new AntiqueBrick("antique_brick_0g", 1.25F, 1024F, 0, 0);
+		antique_brick_1g = new AntiqueBrick("antique_brick_1g", 1.25F, 1024F, 0, 0);
+		antique_brick_2g = new AntiqueBrick("antique_brick_2g", 1.25F, 1024F, 0, 0);
 		antique_brick_stairs = new AntiqueStairs("antique_brick_stairs", antique_brick_0.getDefaultState());
 		antique_brick_stairs_w = new AntiqueStairs("antique_brick_stairs_w", antique_brick_0w.getDefaultState());
 		antique_brick_stairs_b = new AntiqueStairs("antique_brick_stairs_b", antique_brick_b.getDefaultState());
+		antique_brick_stairs_l = new AntiqueStairs("antique_brick_stairs_l", antique_brick_0l.getDefaultState());
+		antique_brick_stairs_g = new AntiqueStairs("antique_brick_stairs_g", antique_brick_0g.getDefaultState());
 		antique_brick_slab = new AntiqueSlab("antique_brick_slab");
 		antique_brick_slab_w = new AntiqueSlab("antique_brick_slab_w");
 		antique_brick_slab_b = new AntiqueSlab("antique_brick_slab_b");
+		antique_brick_slab_l = new AntiqueSlab("antique_brick_slab_l");
+		antique_brick_slab_g = new AntiqueSlab("antique_brick_slab_g");
 		antique_tdoor_0 = new SMTrapDoor("antique_tdoor_0", 0, Material.ROCK);
 		antique_tdoor_0w = new SMTrapDoor("antique_tdoor_0w", 0, Material.ROCK);
 		antique_tdoor_b = new SMTrapDoor("antique_tdoor_b", 0, Material.ROCK);
+		antique_tdoor_l = new SMTrapDoor("antique_tdoor_l", 0, Material.ROCK);
 		flagstone = new AntiqueBrick("flagstone", 1.25F, 1024F, 0, 0);
 		flagstone_stairs = new AntiqueStairs("flagstone_stairs", flagstone.getDefaultState());
 		flagstone_slab = new AntiqueSlab("flagstone_slab");
@@ -415,9 +464,41 @@ public class BlockInit {
 		old_brick_s_stairs = new AntiqueStairs("old_brick_s_stairs", old_brick_s.getDefaultState());
 		old_brick_s_slab = new AntiqueSlab("old_brick_s_slab");
 
+		longtile_brick_o = new AntiqueBrick("longtile_brick_o", 1.25F, 1024F, 0, 0);
+		longtile_brick_o_stairs = new AntiqueStairs("longtile_brick_o_stairs", longtile_brick_o.getDefaultState());
+		longtile_brick_o_slab = new AntiqueSlab("longtile_brick_o_slab");
+		longtile_brick_p = new AntiqueBrick("longtile_brick_p", 1.25F, 1024F, 0, 0);
+		longtile_brick_p_stairs = new AntiqueStairs("longtile_brick_p_stairs", longtile_brick_p.getDefaultState());
+		longtile_brick_p_slab = new AntiqueSlab("longtile_brick_p_slab");
+		longtile_brick_r = new AntiqueBrick("longtile_brick_r", 1.25F, 1024F, 0, 0);
+		longtile_brick_r_stairs = new AntiqueStairs("longtile_brick_r_stairs", longtile_brick_r.getDefaultState());
+		longtile_brick_r_slab = new AntiqueSlab("longtile_brick_r_slab");
+		longtile_brick_y = new AntiqueBrick("longtile_brick_y", 1.25F, 1024F, 0, 0);
+		longtile_brick_y_stairs = new AntiqueStairs("longtile_brick_y_stairs", longtile_brick_y.getDefaultState());
+		longtile_brick_y_slab = new AntiqueSlab("longtile_brick_y_slab");
+		longtile_brick_b = new AntiqueBrick("longtile_brick_b", 1.25F, 1024F, 0, 0);
+		longtile_brick_b_stairs = new AntiqueStairs("longtile_brick_b_stairs", longtile_brick_b.getDefaultState());
+		longtile_brick_b_slab = new AntiqueSlab("longtile_brick_b_slab");
+		longtile_brick_g = new AntiqueBrick("longtile_brick_g", 1.25F, 1024F, 0, 0);
+		longtile_brick_g_stairs = new AntiqueStairs("longtile_brick_g_stairs", longtile_brick_g.getDefaultState());
+		longtile_brick_g_slab = new AntiqueSlab("longtile_brick_g_slab");
+		longtile_brick = new AntiqueBrick("longtile_brick", 1.25F, 1024F, 0, 0);
+		longtile_brick_stairs = new AntiqueStairs("longtile_brick_stairs", longtile_brick.getDefaultState());
+		longtile_brick_slab = new AntiqueSlab("longtile_brick_slab");
+		longtile_brick_l = new AntiqueBrick("longtile_brick_l", 1.25F, 1024F, 0, 0);
+		longtile_brick_l_stairs = new AntiqueStairs("longtile_brick_l_stairs", longtile_brick_l.getDefaultState());
+		longtile_brick_l_slab = new AntiqueSlab("longtile_brick_l_slab");
+		longtile_brick_w = new AntiqueBrick("longtile_brick_w", 1.25F, 1024F, 0, 0);
+		longtile_brick_w_stairs = new AntiqueStairs("longtile_brick_w_stairs", longtile_brick_w.getDefaultState());
+		longtile_brick_w_slab = new AntiqueSlab("longtile_brick_w_slab");
+
+		longtile_brick_r_tdoor = new SMTrapDoor("longtile_brick_r_tdoor", 0, Material.ROCK);
+		longtile_brick_p_tdoor = new SMTrapDoor("longtile_brick_p_tdoor", 0, Material.ROCK);
+
 		antique_window_white = new SMTrapDoor("antique_window_white", 0, Material.WOOD);
 		antique_window_brown = new SMTrapDoor("antique_window_brown", 0, Material.WOOD);
 		antique_window_brown2 = new SMTrapDoor("antique_window_brown2", 0, Material.WOOD);
+		antique_window_green = new SMTrapDoor("antique_window_green", 0, Material.WOOD);
 
 		// ドア
 		black_moderndoor = new SMDoor("black_moderndoor", 0, Material.WOOD, SoundType.METAL);
@@ -433,29 +514,29 @@ public class BlockInit {
 		sannyflower_plant = new MagiaFlower("sannyflower_plant", 0);
 		moonblossom_plant = new MagiaFlower("moonblossom_plant", 1);
 		dm_plant = new MagiaFlower("drizzly_mysotis_plant", 2);
-		sugarbell_plant = new SweetCrops_STAGE4("sugarbell_plant", 0, 1, 6.5f);
-		clerodendrum = new SweetCrops_STAGE4("clerodendrum", 7, 1, 6.5f);
-		strawberry_plant = new SweetCrops_STAGE4("strawberry_plant", 1, 0, 7.2f);
-		sweetpotato_plant = new SweetCrops_STAGE4("sweetpotato_plant", 2, 0, 7.5f);
-		j_radish_plant = new SweetCrops_STAGE4("j_radish_plant", 3, 0, 7.2f);
-		lettuce_plant = new SweetCrops_STAGE4("lettuce_plant", 4, 0, 6.8f);
-		cabbage_plant = new SweetCrops_STAGE4("cabbage_plant", 5, 0, 6.8f);
-		glowflower_plant = new SweetCrops_STAGE4("glowflower_plant", 6, 1, 6.8f);
-		cotton_plant = new SweetCrops_STAGE4("cotton_plant", 8, 1, 6.8f);
-		blueberry_plant = new SweetCrops_STAGE5("blueberry_plant", 0, 1, 7.5f);
-		sticky_stuff_plant = new SweetCrops_STAGE5("sticky_stuff_plant", 4, 1, 5.0f);
-		rice_plant = new SweetCrops_STAGE6("rice_plant", 1, 0, 6.0f);
-		soybean_plant = new SweetCrops_STAGE6("soybean_plant",2, 0, 7.1f);
-		azuki_plant = new SweetCrops_STAGE6("azuki_plant",3, 0, 6.7f);
-		whitenet_plant = new BlockWhitenet("whitenet_plant", -1, -1, 5.3f);
-		corn_plant = new SweetCrops_Tall("corn_plant", 0, 1, 7.8f);
-		tomato_plant = new SweetCrops_Tall("tomato_plant", 1, 1, 7.5f);
-		egg_plant = new SweetCrops_Tall("egg_plant", 2, 1, 6.4f);
-		fire_nasturtium_plant = new SweetCrops_STAGE4("fire_nasturtium_plant", 9, 1, 8.0f);
-		olive_plant = new SweetCrops_STAGE5("olive_plant", 1, 1, 5.6f);
-		vannila_plant = new SweetCrops_STAGE5("vannila_plant",2 ,0, 6.3f);
-		onion_plant = new SweetCrops_STAGE5("onion_plant", 3, 0, 5.6f);
-		raspberry_plant = new SweetCrops_STAGE6("raspberry_plant",0, 1, 6.0f);
+		sugarbell_plant = new SweetCrops_STAGE4("sugarbell_plant", 0, 1, 6.5F);
+		clerodendrum = new SweetCrops_STAGE4("clerodendrum", 7, 1, 6.5F);
+		strawberry_plant = new SweetCrops_STAGE4("strawberry_plant", 1, 0, 7.2F);
+		sweetpotato_plant = new SweetCrops_STAGE4("sweetpotato_plant", 2, 0, 7.5F);
+		j_radish_plant = new SweetCrops_STAGE4("j_radish_plant", 3, 0, 7.2F);
+		lettuce_plant = new SweetCrops_STAGE4("lettuce_plant", 4, 0, 6.8F);
+		cabbage_plant = new SweetCrops_STAGE4("cabbage_plant", 5, 0, 6.8F);
+		glowflower_plant = new SweetCrops_STAGE4("glowflower_plant", 6, 1, 6.8F);
+		cotton_plant = new SweetCrops_STAGE4("cotton_plant", 8, 1, 6.8F);
+		blueberry_plant = new SweetCrops_STAGE5("blueberry_plant", 0, 1, 7.5F);
+		sticky_stuff_plant = new SweetCrops_STAGE5("sticky_stuff_plant", 4, 1, 5.0F);
+		rice_plant = new SweetCrops_STAGE6("rice_plant", 1, 0, 6.0F);
+		soybean_plant = new SweetCrops_STAGE6("soybean_plant",2, 0, 7.1F);
+		azuki_plant = new SweetCrops_STAGE6("azuki_plant",3, 0, 6.7F);
+		whitenet_plant = new BlockWhitenet("whitenet_plant", -1, -1, 5.3F);
+		corn_plant = new SweetCrops_Tall("corn_plant", 0, 1, 7.8F);
+		tomato_plant = new SweetCrops_Tall("tomato_plant", 1, 1, 7.5F);
+		egg_plant = new SweetCrops_Tall("egg_plant", 2, 1, 6.4F);
+		fire_nasturtium_plant = new SweetCrops_STAGE4("fire_nasturtium_plant", 9, 1, 8.0F);
+		olive_plant = new SweetCrops_STAGE5("olive_plant", 1, 1, 5.6F);
+		vannila_plant = new SweetCrops_STAGE5("vannila_plant",2 ,0, 6.3F);
+		onion_plant = new SweetCrops_STAGE5("onion_plant", 3, 0, 5.6F);
+		raspberry_plant = new SweetCrops_STAGE6("raspberry_plant",0, 1, 6.0F);
 		chestnut_plant = new BlockChestnut("chestnut_plant", 0);
 		coconut_plant = new BlockChestnut("coconut_plant", 1);
 		banana_plant = new BlockChestnut("banana_plant", 2);
@@ -465,6 +546,8 @@ public class BlockInit {
 		smspaner = new SpawnStone("smspaner", 1);
 		sturdust_crystal_bot = new StardustCrystal("sturdust_crystal_bot", 0, blockList);
 		sturdust_crystal_top = new StardustCrystal("sturdust_crystal_top", 1, noTabList);
+		magicbarrier_on = new MagicBarrier("magicbarrier_on", 0);
+		magicbarrier_off = new MagicBarrier("magicbarrier_off", 1);
 
 		pole_down = new BlockPole("pole_down", blockList, 0);
 		pole = new BlockPole("pole", noTabList, 1);
@@ -480,6 +563,7 @@ public class BlockInit {
 		woodbox = new ChestnutSlab("woodbox");
 		smtable = new SMTable("smtable");
 		smtable_lace = new SMTable("smtable_lace");
+		smtable_dot = new SMTableDot("smtable_dot");
 
 		moden_rack = new BlockModenRack("moden_rack", 0);
 		moden_rack_brown = new BlockModenRack("moden_rack_brown", 0);
@@ -487,18 +571,34 @@ public class BlockInit {
 		plate = new BlockModenRack("plate", 2);
 		moden_stair = new BlockModenStair("moden_stair");
 		magicbook = new MagicBook("magicbook");
+		prism_woodchest = new BlockWoodChest("prism_woodchest", 0);
+		estor_woodchest = new BlockWoodChest("estor_woodchest", 0);
+		rattan_chest_y = new BlockWoodChest("rattan_chest_y", 0);
+		rattan_chest_b = new BlockWoodChest("rattan_chest_b", 0);
+		treasure_chest = new BlockWoodChest("treasure_chest", 1);
+
+		rattan_chair_y = new SMChair("rattan_chair_y", 2);
+		rattan_chair_b = new SMChair("rattan_chair_b", 2);
+		rattan_chair_d = new SMChair("rattan_chair_d", 2);
+		rattan_basket_y = new BlockRattanBasket("rattan_basket_y", 0);
+		rattan_basket_b = new BlockRattanBasket("rattan_basket_b", 0);
+		rattan_basket_d = new BlockRattanBasket("rattan_basket_d", 0);
+
+		goldcrest = new GoldCrest("goldcrest");
 
 		compost_drit = new PlantPot("compost_drit", SoundType.GROUND, 3);
 		antique_brick_pot_r = new PlantPot("antique_brick_pot_r", SoundType.GROUND, 0);
 		orange_planks_pot = new PlantPot("orange_planks_pot", SoundType.GROUND, 1);
 		orange_planks_pot_w = new PlantPot("orange_planks_pot_w", SoundType.GROUND, 2);
 		estor_planks_pot = new PlantPot("estor_planks_pot", SoundType.GROUND, 3);
+		longtile_brick_pot_o = new PlantPot("longtile_brick_pot_o", SoundType.GROUND, 4);
+		longtile_brick_pot_l = new PlantPot("longtile_brick_pot_l", SoundType.GROUND, 5);
 
 		white_ironfence = new IronFence("white_ironfence");
 		black_ironfence = new IronFence("black_ironfence");
 
 		// 裏データ
-		sample = new MagicDirt("sample");
+		sample = new BlockLanp("sample", 0, 32F, 0, 1, 0.5F, SoundType.GLASS, noTabList);
 
 	}
 
