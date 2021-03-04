@@ -4,14 +4,14 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeProvider;
-import net.minecraft.world.gen.ChunkGeneratorOverworld;
 import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.DimensionInit;
 
 public class WorldProviderSweetMagic extends WorldProvider {
+
+    private IChunkGenerator chunkGenerator;
 
 	@Override
 	public DimensionType getDimensionType() {
@@ -26,15 +26,14 @@ public class WorldProviderSweetMagic extends WorldProvider {
 
 	@Override
 	public IChunkGenerator createChunkGenerator() {
-		return new ChunkGeneratorOverworld(this.world, this.world.getSeed() * 2, true, "");
+        return this.chunkGenerator;
 	}
 
 	@Override
 	protected void init() {
-		this.doesWaterVaporize = false;
-		this.hasSkyLight = true;
-		this.biomeProvider = new BiomeProvider(world.getWorldInfo());
-//		this.biomeProvider = new SMBiomeProvider(this.world.getWorldInfo());
+		super.init();
+        this.chunkGenerator = new SMChunkGen(this.world, this.getSeed(), true, this.world.getWorldInfo().getGeneratorOptions());
+        this.biomeProvider = new SMBiomeProvider(this.world.getWorldInfo());
 	}
 
 	// 雲の高さ

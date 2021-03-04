@@ -28,15 +28,19 @@ public class WorldGenStructure extends WorldGenerator implements IStructure {
 
 	public void generateStructure(World world, BlockPos pos) {
 
-		MinecraftServer mcServer = world.getMinecraftServer();
-		TemplateManager manager = worldServer.getStructureTemplateManager();
-		ResourceLocation location = new ResourceLocation(SweetMagicCore.MODID, this.structureName);
-		Template template = manager.get(mcServer, location);
+		Template template = this.getTemplate(world, this.structureName);
 
 		if (template != null) {
 			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
 			template.addBlocksToWorldChunk(world, pos, settings);
 		}
+	}
+
+	public Template getTemplate (World world, String name) {
+		MinecraftServer mcServer = world.getMinecraftServer();
+		TemplateManager manager = worldServer.getStructureTemplateManager();
+		ResourceLocation location = new ResourceLocation(SweetMagicCore.MODID, name);
+		return manager.get(mcServer, location);
 	}
 }

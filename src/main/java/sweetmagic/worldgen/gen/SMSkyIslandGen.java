@@ -2,26 +2,23 @@ package sweetmagic.worldgen.gen;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import sweetmagic.config.SMConfig;
-import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.base.BaseWorldGen;
 import sweetmagic.util.GenHelper;
 import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class SMSkyIslandGen extends BaseWorldGen {
 
-	public static List<ItemStack> chestA = new ArrayList<>();
 	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("skyisland");
 	public List<GenHelper> skyList = new ArrayList<>();
 
@@ -69,20 +66,7 @@ public class SMSkyIslandGen extends BaseWorldGen {
 		IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH);
 		world.setBlockState(pos.add(14, 12, 14), state, 3);
 		world.setBlockState(pos.add(15, 12, 14), state, 3);
-		this.setChest(world, this.rand, pos.add(14, 12, 14), chestA, SMConfig.dungeon_lootchance);
-		this.setChest(world, this.rand, pos.add(15, 12, 14), chestA, SMConfig.dungeon_lootchance);
+    	this.setLootTable(world, rand, pos.add(14, 12, 14), LootTableInit.SMFOODS);
+    	this.setLootTable(world, rand, pos.add(15, 12, 14), LootTableInit.SMFOODS);
     }
-
-	public static void setLootChestA() {
-		Random rand = new Random();
-        chestA.add(new ItemStack(ItemInit.cream_puff, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.cocoa, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.fruit_crepe, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.short_cake, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.banana_smoothy, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.choco_pie, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.chocolate_cake, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.cheese_cake, rand.nextInt(4) + 2));
-        chestA.add(new ItemStack(ItemInit.strawberrymilk, rand.nextInt(4) + 2));
-	}
 }

@@ -19,7 +19,7 @@ public class FluitForestFlowerGen extends BaseFlowerGen {
 
 	// バイオーム確認
 	public boolean checkBiome (Biome biome) {
-		return biome != BiomeInit.FLUITFOREST && biome != BiomeInit.PRISMFOREST;
+		return biome != BiomeInit.FLUITFOREST && biome != BiomeInit.PRISMFOREST && biome != BiomeInit.SLIVERBERG;
 	}
 
 	// IBlockStateの取得
@@ -30,7 +30,9 @@ public class FluitForestFlowerGen extends BaseFlowerGen {
 		// フルーツの森
 		if (biome == BiomeInit.FLUITFOREST) {
 
-			switch (this.rand.nextInt(5)) {
+			this.maxY = 16;
+
+			switch (this.rand.nextInt(7)) {
 			case 0:
 				state = BlockInit.lily_valley.getDefaultState();
 				break;
@@ -46,12 +48,20 @@ public class FluitForestFlowerGen extends BaseFlowerGen {
 			case 4:
 				state = BlockInit.olive_plant.getDefaultState().withProperty(SweetState.STAGE5, 4);
 				break;
+			case 5:
+				state = BlockInit.blackrose.getDefaultState();
+				break;
+			case 6:
+				state = BlockInit.cosmos.getDefaultState();
+				break;
 			}
 		}
 
 		// プリズムフォレスト
 		else if (biome == BiomeInit.PRISMFOREST) {
-			switch (this.rand.nextInt(5)) {
+
+			this.maxY = 16;
+			switch (this.rand.nextInt(6)) {
 			case 0:
 				state = BlockInit.sugarbell_plant.getDefaultState().withProperty(SweetState.STAGE4, 3);
 				break;
@@ -67,7 +77,15 @@ public class FluitForestFlowerGen extends BaseFlowerGen {
 			case 4:
 				state = BlockInit.glowflower_plant.getDefaultState().withProperty(SweetState.STAGE4, 3);
 				break;
+			case 5:
+				state = BlockInit.goldcrest.getDefaultState();
+				break;
 			}
+		}
+
+		else if (biome == BiomeInit.SLIVERBERG) {
+			this.maxY = 40;
+			state = BlockInit.goldcrest.getDefaultState();
 		}
 
 		return state;
@@ -97,6 +115,10 @@ public class FluitForestFlowerGen extends BaseFlowerGen {
 				if (!this.checkSetBlock(world, pos, state2)) { continue; }
 
 				world.setBlockState(pos.up(), state1, 2);
+
+				if (state1 == BlockInit.goldcrest.getDefaultState()) {
+					world.setBlockState(pos.up(2), state1, 2);
+				}
 			}
 		}
 	}

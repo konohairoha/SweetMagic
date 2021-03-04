@@ -11,6 +11,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
+import sweetmagic.worldgen.gen.WorldGenEstor;
 import sweetmagic.worldgen.gen.WorldGenFruitTree;
 
 public class BiomeFruitForest extends Biome {
@@ -18,8 +19,16 @@ public class BiomeFruitForest extends Biome {
 	public static final WorldGenerator ORANGE = new WorldGenFruitTree(false, BlockInit.orange_log, BlockInit.orange_leaves);
 	public static final WorldGenerator CHESTNUT = new WorldGenFruitTree(false, BlockInit.chestnut_log, BlockInit.chestnut_leaves);
 	public static final WorldGenerator LEMON = new WorldGenFruitTree(false, BlockInit.lemon_log, BlockInit.lemon_leaves);
+	public static final WorldGenerator ESTOR = new WorldGenEstor(false, BlockInit.estor_log, BlockInit.estor_leaves);
 	public static final WorldGenBirchTree BIRCH= new WorldGenBirchTree(false, false);
 	public static final WorldGenTrees ORK = new WorldGenTrees(false);
+
+	public BiomeFruitForest(String name, BiomeProperties property) {
+        super(property);
+        this.decorator.treesPerChunk = 3;
+        this.decorator.grassPerChunk = 2;
+        this.setRegistryName(name);
+    }
 
     public BiomeFruitForest() {
         super(new BiomeProperties("FluitForest").setTemperature(1F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
@@ -37,7 +46,7 @@ public class BiomeFruitForest extends Biome {
 	// 木の生成
 	public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
 
-		switch (rand.nextInt(5)) {
+		switch (rand.nextInt(6)) {
 		case 0:
 			return (WorldGenAbstractTree) ORANGE;
 		case 1:
@@ -48,6 +57,8 @@ public class BiomeFruitForest extends Biome {
 			return (WorldGenAbstractTree) BIRCH;
 		case 4:
 			return (WorldGenAbstractTree) ORK;
+		case 5:
+			return (WorldGenAbstractTree) ESTOR;
 		}
 
 		return (WorldGenAbstractTree) ORANGE;

@@ -45,7 +45,8 @@ public class WorldGenCoconutTree extends WorldGenAbstractTree {
 
 		for (int y = 1; y <= 8; y++) {
 			if (!world.isAirBlock(pos.add(0, y, 0))) {
-				if (world.getBlockState(pos.add(0, y, 0)).getMaterial() == Material.PLANTS){ return false; }
+				Material mate = world.getBlockState(pos.add(0, y, 0)).getMaterial();
+				if (mate == Material.PLANTS || mate == Material.SAND){ return false; }
 			}
 		}
 
@@ -165,6 +166,6 @@ public class WorldGenCoconutTree extends WorldGenAbstractTree {
 
 	// 草か土かチェック
 	public boolean checkBlock (Block block) {
-		return block != Blocks.DIRT && block != Blocks.GRASS;
+		return block != Blocks.DIRT && block != Blocks.GRASS && block != Blocks.SAND;
 	}
 }

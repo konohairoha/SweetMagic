@@ -12,11 +12,18 @@ public class BiomePrismBerg extends Biome {
 
 	public static final WorldGenerator PRISM = new WorldGenPrsmTree(BlockInit.prism_log, BlockInit.prism_leaves, false);
 
-    public BiomePrismBerg() {
-        super(new BiomeProperties("PrismBerg").setTemperature(-1F).setBaseHeight(0.2F).setHeightVariation(0.1F).setRainfall(0.6F));
-        this.decorator.treesPerChunk = 1;
+	public BiomePrismBerg(String name, BiomeProperties property) {
+        super(property);
+        this.decorator.treesPerChunk = 0;
         this.decorator.grassPerChunk = 2;
-        this.setRegistryName("PrismBerg");
+        this.setRegistryName(name);
+    }
+
+    public BiomePrismBerg(String name) {
+        super(new BiomeProperties(name).setTemperature(-1F).setBaseHeight(0.4F).setHeightVariation(1.3F).setRainfall(0.6F));
+        this.decorator.treesPerChunk = 0;
+        this.decorator.grassPerChunk = 2;
+        this.setRegistryName(name);
     }
 
     // チャンス
