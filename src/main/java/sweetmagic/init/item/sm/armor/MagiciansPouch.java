@@ -10,12 +10,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.entity.model.ModelRobe;
+import sweetmagic.init.entity.model.ModelPouch;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.SoundHelper;
 
@@ -28,7 +31,7 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
         setUnlocalizedName(name);
         setRegistryName(name);
         this.data = data;
-		ItemInit.noTabList.add(this);
+		ItemInit.itemList.add(this);
 	}
 
 	/**
@@ -47,7 +50,7 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelRobe next = new ModelRobe(0.375F, slot.getSlotIndex());
+		ModelPouch next = new ModelPouch(0.375F, slot.getIndex());
 		next.setModelAttributes(model);
 		return next;
 	}
@@ -62,4 +65,37 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 			PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_ROBE, 1F, 0.25F), (EntityPlayerMP) player);
 		}
   	}
+
+	// 装備してる間機能する内容
+	@Override
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			// アクセサリーの取得
+			IAcce acce = (IAcce) st.getItem();
+
+			try {
+				// アクセサリーのonupdate呼び出し
+				acce.onUpdate(world, player, st);
+			}
+
+			catch (Throwable e) { }
+		}
+	}
+
+	//アイテムにダメージを与える処理を無効
+	@Override
+	public void setDamage(ItemStack stack, int damage) {
+		return;
+	}
 }
