@@ -33,9 +33,9 @@ public class PlayerSoundPKT implements IMessage {
 	// 変数書きこみ
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(sound);
-		buf.writeFloat(pitch);
-		buf.writeFloat(vol);
+		buf.writeInt(this.sound);
+		buf.writeFloat(this.pitch);
+		buf.writeFloat(this.vol);
 	}
 
 	public static class Handler implements IMessageHandler<PlayerSoundPKT, IMessage> {
@@ -46,7 +46,7 @@ public class PlayerSoundPKT implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 				@Override
 				public void run() {
-					SoundHelper.PlaySoundToPlayer(sound, pitch, vol);
+					SoundHelper.PlaySoundToPlayer(mdg.sound, mdg.pitch, mdg.vol);
 				}
 			});
 			return null;

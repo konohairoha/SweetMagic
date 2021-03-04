@@ -22,7 +22,8 @@ public class RemovePotion implements IMessage {
 
 	/**
 	 * 1 = 幻影
-	 * 2 = 全デバフ解除
+	 * 2 = リジェネ
+	 * 3 = 全デバフ解除
 	 */
 
 	// 変数読み出し
@@ -51,9 +52,10 @@ public class RemovePotion implements IMessage {
 
 					switch (potion) {
 					case 1:
+					case 2:
 						player.removeActivePotionEffect(this.getPotion(potion));
 						break;
-					case 2:
+					case 3:
 						this.reflash(player);
 						break;
 					}
@@ -68,6 +70,8 @@ public class RemovePotion implements IMessage {
 					case 1:
 						pot = PotionInit.shadow;
 						break;
+					case 2:
+						pot = PotionInit.regene;
 					}
 
 					return pot;

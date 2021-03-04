@@ -70,14 +70,6 @@ public class KeyPressPKT implements IMessage {
 								robe.openGUI(player.world, player, armor);
 								return;
 							}
-
-							ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-
-							if (!legs.isEmpty() && legs.getItem() instanceof IPouch) {
-								IPouch robe = (IPouch) legs.getItem();
-								robe.openGUI(player.world, player, legs);
-								return;
-							}
 						}
 
 						return;
@@ -93,6 +85,19 @@ public class KeyPressPKT implements IMessage {
 							wand.backSlot(player.world, player, stack);
 						}
 						return;
+
+					// ポーチ
+					case POUCH:
+
+						ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+
+						// ポーチ
+						if (!legs.isEmpty() && legs.getItem() instanceof IPouch) {
+							IPouch robe = (IPouch) legs.getItem();
+							robe.openGUI(player.world, player, legs);
+						}
+						return;
+
 					default:
 						break;
 					}
