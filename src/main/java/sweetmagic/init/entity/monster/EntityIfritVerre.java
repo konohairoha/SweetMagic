@@ -4,6 +4,7 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IRangedAttackMob;
@@ -16,6 +17,7 @@ import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -41,39 +43,38 @@ import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
-import sweetmagic.init.entity.projectile.EntityCyclonMagic;
-import sweetmagic.init.entity.projectile.EntityDigMagic;
-import sweetmagic.init.entity.projectile.EntityElectricMagic;
+import sweetmagic.init.entity.projectile.EntityExplosionMagic;
 import sweetmagic.init.entity.projectile.EntityFireMagic;
 import sweetmagic.init.entity.projectile.EntityFlameNova;
-import sweetmagic.init.entity.projectile.EntityFrostMagic;
 import sweetmagic.init.entity.projectile.EntityGravityMagic;
+import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.util.ParticleHelper;
 
-public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMob, ISMMob {
+public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISMMob {
 
+	public BlockPos tpPos = null;
     public int spellTicks = 0;
 	public boolean isCharge = false;
 	private int coolTime = 0;
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
-	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
 
-	public EntityWitchMadameVerre(World world) {
+	public EntityIfritVerre(World world) {
 		super(world);
 		this.experienceValue = 120;
 		this.setSize(0.4F, 1.4F);
 	}
 
 	public static void registerFixesWitch(DataFixer fixer) {
-		EntityLiving.registerFixesMob(fixer, EntityWitchMadameVerre.class);
+		EntityLiving.registerFixesMob(fixer, EntityIfritVerre.class);
 	}
 
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
 		this.tasks.addTask(2, new EntityAIAttackRanged(this, 1.0D, 60, 10.0F));
 		this.tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D));
-		this.tasks.addTask(4, new EntityAIThunderbolt(this, true));
+		this.tasks.addTask(4, new EntityAIMeteoRain(this, true));
 		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
@@ -104,12 +105,20 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
         this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4D);
 		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(1.0D);
 	}
 
 	public void onLivingUpdate() {
 
 		this.tickTime++;
 		if (this.damageCoolTime > 0) { this.damageCoolTime--; }
+
+		if (this.tickTime % 5 == 0 && this.isInLava() && this.tpPos != null) {
+
+			if (this.attemptTeleport(this.tpPos.getX(), this.tpPos.getY(), this.tpPos.getZ())) {
+				this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
+			}
+		}
 
 		// 5秒経てば
 		if (this.tickTime % 80 == 0) {
@@ -161,41 +170,37 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 		// 体力半分以上
 		else {
 
-			boolean isUnique = this.isUnique();
-			int time = isUnique ? 800 : 400;
-			int coolTime = isUnique ? 200 : 300;
-
 			switch (this.rand.nextInt(4)) {
 			case 0:
 				// リフレッシュ・エフェクト
-				if (!this.isPotionActive(PotionInit.refresh_effect)) {
-					this.addPotionEffect(new PotionEffect(PotionInit.electric_armor, time, 1));
+				if (!this.isPotionActive(PotionInit.regene)) {
+					this.addPotionEffect(new PotionEffect(PotionInit.regene, 400, 3));
 					this.playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
-					this.coolTime += coolTime * 1.25;
+					this.coolTime += 300;
 				}
 				return;
 			case 1:
 				// ルナッティクムーン
 				if (!this.isPotionActive(PotionInit.shadow)) {
-					this.addPotionEffect(new PotionEffect(PotionInit.shadow, time, isUnique ? 9 : 4));
+					this.addPotionEffect(new PotionEffect(PotionInit.shadow, 400, 4));
 					this.playSound(SMSoundEvent.MAGICSTART, 1F, 1F);
-					this.coolTime += coolTime;
+					this.coolTime += 300;
 				}
 				return;
 			case 2:
 				// エーテルバリアー
 				if (!this.isPotionActive(PotionInit.aether_barrier)) {
-					this.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, time, 1));
+					this.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 1));
 					this.playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
-					this.coolTime += coolTime;
+					this.coolTime += 300;
 				}
 				return;
 			case 3:
 				// 攻撃力強化
 				if (!this.isPotionActive(MobEffects.STRENGTH)) {
-					this.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, time, isUnique ? 4 : 1));
+					this.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 400, 1));
 					this.playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
-					this.coolTime += coolTime;
+					this.coolTime += 300;
 				}
 				return;
 			}
@@ -203,12 +208,12 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	}
 
 	public float getHealValue () {
-		return this.isUnique() ? this.getMaxHealth() * 0.2F : this.getMaxHealth() / 2;
+		return this.isUnique() ? this.getMaxHealth() * 0.15F : this.getMaxHealth() / 3;
 	}
 
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.canSpawn(this.world, this, 15);
+		return super.getCanSpawnHere() && this.isSMDimension(this.world);
 	}
 
 	@Override
@@ -218,16 +223,28 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 		if (!this.isUnique()) { return; }
 
 		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-
 	}
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
     	if (this.isAtterckerSMMob(src)) { return false; }
 
+    	// ダメージソースチェック
+    	if (this.checkDamageSrc(src)) {
+    		this.heal(amount / 5);
+			ParticleHelper.spawnHeal(this, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
+    		return false;
+    	}
+
 		// ダメージ倍処理
     	if (!this.isUnique()) {
     		amount = this.getDamageAmount(this.world , src, amount);
+    	}
+
+    	// ダメージを跳ね返す
+    	if (src.getImmediateSource() instanceof EntityLivingBase) {
+    		EntityLivingBase entity = (EntityLivingBase) src.getImmediateSource();
+			entity.attackEntityFrom(DamageSource.MAGIC, amount / 2);
     	}
 
 		if (!this.isSMDamage(src)) {
@@ -239,6 +256,18 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 		return super.attackEntityFrom(src, amount);
 	}
 
+    // ダメージソースチェック
+    public boolean checkDamageSrc (DamageSource src) {
+
+    	if (src == DamageSource.IN_FIRE || src == DamageSource.ON_FIRE || src.isExplosion()) {
+    		return true;
+    	}
+
+    	Entity entity = src.getImmediateSource();
+    	return entity instanceof EntityFireMagic || entity instanceof EntityExplosionMagic;
+    }
+
+    // 死亡時
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
@@ -253,12 +282,12 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 				this.entityDropItem(new ItemStack(ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4), 0F);
 
 				if (this.rand.nextBoolean()) {
-					this.entityDropItem(new ItemStack(ItemInit.witch_scroll, 1), 0F);
+					this.entityDropItem(new ItemStack(ItemInit.scorching_jewel, 1), 0F);
 				}
 			}
 
 			else if (this.rand.nextFloat() <= 0.01F) {
-				this.entityDropItem(new ItemStack(ItemInit.witch_scroll, 1), 0F);
+				this.entityDropItem(new ItemStack(ItemInit.scorching_jewel, 1), 0F);
 			}
 		}
 	}
@@ -269,14 +298,17 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	}
 
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+
 		EntityBaseMagicShot entity = this.getShot();
+		if (entity == null) { return; }
+
         double x = target.posX - this.posX;
         double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
         double z = target.posZ - this.posZ;
         double xz = (double)MathHelper.sqrt(x * x + z * z);
 		entity.shoot(x, y - xz * 0.015D, z, this.isUnique() ? 3F : 2F, 0);	// 射撃速度
 
-		int dame = this.isUnique() ? 10 : 4;
+		int dame = this.isUnique() ? 8 : 4;
 		entity.setDamage(entity.getDamage() + dame);
 		this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
         this.world.spawnEntity(entity);
@@ -289,27 +321,26 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 		switch (rand) {
 		case 0:
-			if (this.isUnique()) {
-				entity = new EntityFlameNova(this.world, this, ItemStack.EMPTY);
-			} else {
-				entity = new EntityFireMagic(this.world, this, ItemStack.EMPTY);
-			}
+			entity = new EntityFlameNova(this.world, this, ItemStack.EMPTY);
 			break;
 		case 1:
-			entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, this.isUnique());
+			entity = new EntityFireMagic(this.world, this, ItemStack.EMPTY);
 			break;
 		case 2:
-			entity = new EntityCyclonMagic(this.world, this, ItemStack.EMPTY);
+			entity = new EntityExplosionMagic(this.world, this, ItemStack.EMPTY, 1);
 			break;
 		case 3:
 			entity = new EntityGravityMagic(this.world, this, ItemStack.EMPTY);
-			if (this.isUnique()) {
-				entity.range = 6D;
-				entity.isHitDead = true;
-			}
+			entity.range = 6D;
+			entity.isHitDead = true;
 			break;
 		case 4:
-			entity = new EntityDigMagic(this.world, this, ItemStack.EMPTY, 0);
+			EntityBlaze blaze = new EntityBlaze(this.world);
+			if (this.isUnique()) {
+				blaze.setHealth(40F);
+				blaze.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 3, true, false));
+			}
+			this.world.spawnEntity(blaze);
 			break;
 		}
 
@@ -377,20 +408,20 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	}
 
 	public ITextComponent getDisplayName() {
-		return new TextComponentTranslation("entity.witchcmadame_verre.name", new Object[0]);
+		return new TextComponentTranslation("entity.spirit_fire_ifrite.name", new Object[0]);
 	}
 
-	public class EntityAIThunderbolt extends EntityAIBase {
+	public class EntityAIMeteoRain extends EntityAIBase {
 
 		protected int spellWarmup;
 		protected int spellCooldown;
 		public World world;
-		public EntityWitchMadameVerre witch;
+		public EntityIfritVerre brave;
 		public final boolean isStop;
 
-		public EntityAIThunderbolt (EntityWitchMadameVerre entity, boolean isStop) {
-			this.witch = entity;
-			this.world = this.witch.world;
+		public EntityAIMeteoRain (EntityIfritVerre entity, boolean isStop) {
+			this.brave = entity;
+			this.world = this.brave.world;
 			this.isStop = isStop;
 		}
 
@@ -399,19 +430,19 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			if (this.getTarget() == null) {
 				return false;
 			} else {
-				return this.witch.ticksExisted >= this.spellCooldown && this.witch.isHalfHelth();
+				return this.brave.ticksExisted >= this.spellCooldown && this.brave.isHalfHelth();
 			}
 		}
 
 		// 実行できるか
 		public boolean shouldContinueExecuting() {
-			return this.witch.getAttackTarget() != null && this.spellWarmup > 0;
+			return this.brave.getAttackTarget() != null && this.spellWarmup > 0;
 		}
 
 		public void startExecuting() {
 			this.spellWarmup = this.getCastWarmupTime();
-			this.witch.spellTicks = this.getCastingTime();
-			this.spellCooldown = this.witch.ticksExisted + this.getCastingInterval();
+			this.brave.spellTicks = this.getCastingTime();
+			this.spellCooldown = this.brave.ticksExisted + this.getCastingInterval();
 			this.setCharge(true);
 		}
 
@@ -421,7 +452,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			--this.spellWarmup;
 			Random rand = world.rand;
 			int range = 16;
-			EntityLivingBase target = this.witch.getAttackTarget();
+			EntityLivingBase target = this.brave.getAttackTarget();
 			if (target == null) { return; }
 
 			double x = (rand.nextDouble() * range) - rand.nextDouble() * range;
@@ -431,15 +462,15 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	        int posY = this.world.canSeeSky(pos) ? 20 : 7;
 
 			if (!this.world.isRemote) {
-				EntityElectricMagic entity = new EntityElectricMagic(this.world, this.witch, ItemStack.EMPTY);
+				EntityMeteorMagic entity = new EntityMeteorMagic(this.world, this.brave, ItemStack.EMPTY);
 				entity.shoot(0, entity.motionY - 0.33F, 0, 0, 0);
-				entity.motionY -= 3;
+				entity.motionY -= 1;
 				entity.setPosition(pos.getX(), pos.getY() + posY, pos.getZ());
-				entity.setDamage(entity.getDamage() + 10);
+				entity.setDamage(entity.getDamage() + 6);
 				this.world.spawnEntity(entity);
 			}
 
-			this.witch.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
+			this.brave.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
 
 			if (this.spellWarmup == 0) {
 				this.castSpell();
@@ -468,13 +499,13 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 		// ターゲット取得
 		public EntityLivingBase getTarget () {
-			return this.witch.getAttackTarget();
+			return this.brave.getAttackTarget();
 		}
 
 		// チャージの設定
 		public void setCharge (boolean charge) {
 			if (this.isStop) {
-				this.witch.isCharge = charge;
+				this.brave.isCharge = charge;
 			}
 		}
 	}
