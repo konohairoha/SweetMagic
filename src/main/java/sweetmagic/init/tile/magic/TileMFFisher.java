@@ -78,40 +78,6 @@ public class TileMFFisher extends TileMFBase {
 		return this.needMF;
 	}
 
-//	@Override
-//	public void update () {
-//
-//		super.update();
-//
-//		if (this.getTime() % 20 != 0) { return; }
-//
-//		// ランダム時間の初期化
-//		if (this.randTime == 0) {
-//			this.randTime = this.rand.nextInt(this.randTick);
-//		}
-//
-//		// MFが最大に達していないなら
-//		if (this.getMF() < this.getMaxMF()) {
-//			this.smeltItem();
-//		}
-//
-//		// 時間を超えた場合釣りを行う
-//		if (this.tickTime >= (this.randTick + this.randTime)) {
-//
-//			this.tickTime = 0;
-//
-//			// 必要MFを持っていると釣りのルートテーブル呼び出し
-//			if (this.getMF() >= this.needMF) {
-//				this.setMF(this.getMF() - this.needMF);
-//				this.onFishing();
-//
-//				this.randTick = this.getBlock(this.pos.up()) instanceof MFPot ? 150 : 300;
-//			}
-//		}
-//
-//		this.markDirty();
-//	}
-
 	@Override
 	public void serverUpdate() {
 

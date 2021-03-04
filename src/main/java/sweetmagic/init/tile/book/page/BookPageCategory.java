@@ -34,7 +34,7 @@ public class BookPageCategory extends BookPage {
 	public void drawScreen(GuiGuidBook gui, int mouseX, int mouseY, float partialTicks) {
 		int y = gui.guiTop + 9;
 		int x = gui.guiLeft + (GuiGuidBook.WIDTH / 2);
-		gui.drawCenteredText(TextFormatting.UNDERLINE + "" + TextFormatting.BOLD + I18n.translateToLocal(category.getName()), x, y, 0x000000);
+		gui.drawCenteredText(TextFormatting.UNDERLINE + "" + TextFormatting.BOLD + I18n.translateToLocal(this.category.getName()), x, y, 0x000000);
 	}
 
 	@Override
@@ -81,32 +81,38 @@ public class BookPageCategory extends BookPage {
 
 		@Override
 		public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks) {
-			if (this.visible) {
-				boolean flag = mouseX >= this.x && mouseY >= this.y
-						&& mouseX < this.x + this.width && mouseY < this.y + this.height;
-				if (flag) {
-					if (this.ticksHovered < width) {
-						this.ticksHovered++;
-					}
-					int rectWidth = Math.min(ticksHovered * 10, width + 15);
-					Gui.drawRect(x, y, x + rectWidth, y + height, 0x40000000);
-				} else {
-					this.ticksHovered = 0;
+
+			if (!this.visible) { return; }
+
+			boolean flag = mouseX >= this.x && mouseY >= this.y
+					&& mouseX < this.x + this.width && mouseY < this.y + this.height;
+
+			if (flag) {
+
+				if (this.ticksHovered < width) {
+					this.ticksHovered++;
 				}
-				this.fontRenderer.drawString(I18n.translateToLocal(this.displayString), x + fontRenderer.FONT_HEIGHT + 2 + 1, y + 2, 0xFFFFFF, true);
-				if (this.entry != null && !this.entry.getIcon().isEmpty()) {
-					float scale = (fontRenderer.FONT_HEIGHT + 2) / 16F;
 
-					GlStateManager.pushMatrix();
-					GlStateManager.scale(scale, scale, scale);
-					GlStateManager.color(1F, 1F, 1F, 1F);
-					RenderHelper.enableGUIStandardItemLighting();
+				int rectWidth = Math.min(ticksHovered * 10, width + 15);
+				Gui.drawRect(x, y, x + rectWidth, y + height, 0x40000000);
+			}
 
-					mc.getRenderItem().renderItemIntoGUI(this.entry.getIcon(), (int) ((x) / scale), (int) (y / scale));
+			else {
+				this.ticksHovered = 0;
+			}
 
-					RenderHelper.disableStandardItemLighting();
-					GlStateManager.popMatrix();
-				}
+			this.fontRenderer.drawString(I18n.translateToLocal(this.displayString), x + this.fontRenderer.FONT_HEIGHT + 2 + 1, y + 2, 0xFFFFFF, true);
+
+			if (this.entry != null && !this.entry.getIcon().isEmpty()) {
+				float scale = (this.fontRenderer.FONT_HEIGHT + 2) / 16F;
+
+				GlStateManager.pushMatrix();
+				GlStateManager.scale(scale, scale, scale);
+				GlStateManager.color(1F, 1F, 1F, 1F);
+				RenderHelper.enableGUIStandardItemLighting();
+				mc.getRenderItem().renderItemIntoGUI(this.entry.getIcon(), (int) ((x) / scale), (int) (y / scale));
+				RenderHelper.disableStandardItemLighting();
+				GlStateManager.popMatrix();
 			}
 		}
 

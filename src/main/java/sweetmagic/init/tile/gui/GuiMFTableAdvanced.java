@@ -102,12 +102,10 @@ public class GuiMFTableAdvanced extends GuiContainer {
 
 		if (!this.tile.getWandItem(0).isEmpty()) {
 
-//			ItemStack stack = this.tile.getWandItem(0);
-
-//			IWand wand = (IWand) stack.getItem();
-//
-//			int wandMF = wand.getMF(stack);
-//			int wabdMax = wand.getMaxMF(stack);
+			ItemStack stack = this.tile.getWandItem(0);
+			IWand wand = (IWand) stack.getItem();
+			int wandMF = wand.getMF(stack);
+			int wabdMax = wand.getMaxMF(stack);
 
 			//描画位置を計算
 			int tip_x2 = (this.width - this.xSize) / 2;
@@ -123,7 +121,7 @@ public class GuiMFTableAdvanced extends GuiContainer {
 				//GUIの左上からの位置
 				int xAxis = (mouseX - (this.width - this.xSize) / 2);
 				int yAxis = (mouseY - (this.height - this.ySize) / 2);
-				this.drawHoveringText(String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf", xAxis, yAxis);
+				this.drawHoveringText(String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf", xAxis, yAxis);
 			}
 		}
 
@@ -132,10 +130,9 @@ public class GuiMFTableAdvanced extends GuiContainer {
 			ItemStack iStack = this.tile.getWandItem(i);
 			if (iStack.isEmpty()) { continue; }
 
-//			IWand wand = (IWand) iStack.getItem();
-//
-//			int wandMF = wand.getMF(iStack);
-//			int wabdMax = wand.getMaxMF(iStack);
+			IWand wand = (IWand) iStack.getItem();
+			int wandMF = wand.getMF(iStack);
+			int wabdMax = wand.getMaxMF(iStack);
 
 			//描画位置を計算
 			int tip_x2 = (this.width - this.xSize) / 2;
@@ -152,7 +149,7 @@ public class GuiMFTableAdvanced extends GuiContainer {
 				int xAxis = (mouseX - (this.width - this.xSize) / 2);
 				int yAxis = (mouseY - (this.height - this.ySize) / 2);
 
-				this.drawHoveringText(String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf", xAxis, yAxis);
+				this.drawHoveringText(String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf", xAxis, yAxis);
 			}
 		}
 	}

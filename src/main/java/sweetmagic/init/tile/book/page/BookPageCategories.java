@@ -76,18 +76,18 @@ public class BookPageCategories extends BookPage {
 	            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 
 	            if (flag) {
-	            	ticksHovered++;
-	            	if (ticksHovered % 2 == 0 && frame < 7) {
-	            		frame++;
+	            	this.ticksHovered++;
+	            	if (this.ticksHovered % 2 == 0 && this.frame < 7) {
+	            		this.frame++;
 	            	}
 	            	String text = I18n.translateToLocal(this.displayString);
 	            	int stringWidth = fontRenderer.getStringWidth(text);
-	            	fontRenderer.drawString(text, x + (width / 2) - (stringWidth / 2), y + height, 0x000000);
+	            	this.fontRenderer.drawString(text, x + (this.width / 2) - (stringWidth / 2), y + this.height, 0x000000);
 					GlStateManager.color(1F, 1F, 1F, 1F);
 	            } else {
-	            	ticksHovered = 0;
-	            	if (frame > 0) {
-	            		frame--;
+	            	this.ticksHovered = 0;
+	            	if (this.frame > 0) {
+	            		this.frame--;
 	            	}
 //	            	GlStateManager.color(0F, 0F, 0F, 1F);
 	            }

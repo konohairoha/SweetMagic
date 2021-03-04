@@ -7,41 +7,26 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import sweetmagic.init.tile.inventory.InventoryPouch;
-import sweetmagic.init.tile.slot.SlotPredicates;
+import sweetmagic.init.tile.chest.TileRattanBasket;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
-public class ContainerPouch extends Container {
+public class ContainerRattanBasket extends Container {
 
-	private final InventoryPouch inventory;
-	private final World world;
-	private final EntityPlayer player;
+	public final TileRattanBasket tile;
 
-	public ContainerPouch(InventoryPlayer invPlayer, InventoryPouch gemInv) {
+	public ContainerRattanBasket(InventoryPlayer invPlayer, TileRattanBasket tile) {
 
-		this.inventory = gemInv;
-		this.player = invPlayer.player;
-		this.world = this.player.getEntityWorld();
-		SlotPredicates.stack = this.player.getHeldItemMainhand();
-
-		for (int k = 0; k < 2; ++k)
-			for (int j = 0; j < 4; ++j)
-				this.addSlotToContainer(new ValidatedSlot(this.inventory, j + k * 4, 53 + j * 18, 8 + k * 18, SlotPredicates.ISMAGICITEMS));
+		this.tile = tile;
+		for (int k = 0; k < 6; ++k)
+			for (int j = 0; j < 9; ++j)
+				this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), j + k * 9, 8 + j * 18, 18 + k * 18, s -> true));
 
 		for (int i = 0; i < 3; ++i)
 			for (int j = 0; j < 9; ++j)
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 7 + j * 18, 50 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 140 + i * 18));
 
 		for (int l = 0; l < 9; ++l)
-			this.addSlotToContainer(new Slot(invPlayer, l, 7 + l * 18, 108));
-
-	}
-
-	@Override
-	public void onContainerClosed(EntityPlayer player) {
-		super.onContainerClosed(player);
-		this.inventory.writeBack();
+			this.addSlotToContainer(new Slot(invPlayer, l, 8 + l * 18, 198));
 	}
 
 	@Nonnull
@@ -50,7 +35,7 @@ public class ContainerPouch extends Container {
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = (Slot) this.inventorySlots.get(slotIndex);
 
-		int slotCount = this.inventory.getSlots();
+		int slotCount = 54;
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();

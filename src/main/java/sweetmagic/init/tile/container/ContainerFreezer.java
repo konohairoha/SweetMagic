@@ -74,7 +74,7 @@ public class ContainerFreezer extends Container {
 		// 入力スロット
 		for (int i = 0; i < 8; i++)
 			for (int k = 0; k < 13; k++)
-				this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), k + i * 13, 12 + 18 * k, 5 + 18 * i, SlotPredicates.ISFOOD));
+				this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), k + i * 13, 12 + 18 * k, 5 + 18 * i, s -> true));
 
 		// Player Inventory
 		for (int i = 0; i < 3; i++)

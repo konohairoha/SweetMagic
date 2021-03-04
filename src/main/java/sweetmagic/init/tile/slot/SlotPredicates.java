@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.magiaflux.MagiaFluxInfo;
@@ -53,6 +54,9 @@ public final class SlotPredicates {
 
 	// クリスタル以外か
     public static final Predicate<ItemStack> ISNOTCRYSTAL = input -> !input.isEmpty() && doesItemHaveEmc(input) && isNotCrystal(input);
+
+	// 魔法アイテムか
+    public static final Predicate<ItemStack> ISMAGICITEMS = input -> !input.isEmpty() && isMagicItems(input);
 
     // MFを持っているかどうか
 	public static boolean doesItemHaveEmc(ItemStack stack) {
@@ -107,6 +111,11 @@ public final class SlotPredicates {
 	// クリスタルじゃないかどうか
 	public static boolean isNotCrystal(ItemStack stack) {
 		Item item = stack.getItem();
-		return item != ItemInit.aether_crystal && item != ItemInit.divine_crystal && item != ItemInit.pure_crystal;
+		return item != ItemInit.aether_crystal && item != ItemInit.divine_crystal && item != ItemInit.pure_crystal && item != ItemInit.deus_crystal && item != ItemInit.cosmic_crystal;
+	}
+
+	public static boolean isMagicItems(ItemStack stack) {
+		Item item = stack.getItem();
+		return item instanceof ISMItem || item instanceof IAcce;
 	}
 }

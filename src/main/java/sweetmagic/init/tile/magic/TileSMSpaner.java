@@ -17,8 +17,10 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
+import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
+import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.ISMMob;
 import sweetmagic.util.PlayerHelper;
@@ -127,12 +129,20 @@ public class TileSMSpaner extends TileSMBase {
 			entity = new EntityBlazeTempest(this.world);
 			break;
 		case 3:
+			// ファントムゾンビ
+			entity = new EntityPhantomZombie(this.world);
+			break;
+		case 4:
 			// ウィッチマスター
 			entity = new EntityWitchMadameVerre(this.world);
 			break;
-		case 4:
-			// ファントムゾンビ
-			entity = new EntityPhantomZombie(this.world);
+		case 5:
+			// ウィンディーネ
+			entity = new EntityWindineVerre(this.world);
+			break;
+		case 6:
+			// イフリート
+			entity = new EntityIfritVerre(this.world);
 			break;
 		}
 
@@ -160,10 +170,8 @@ public class TileSMSpaner extends TileSMBase {
 	public void setMob () {
 		this.data += 1;
 
-		if (this.data > 3) {
+		if (this.data > 5) {
 			this.data = 0;
 		}
-
 	}
-
 }

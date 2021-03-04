@@ -93,15 +93,11 @@ public class GuiMFTable extends GuiContainer {
 
 
 		ItemStack stack = this.tile.getWandItem(0);
+		if (stack.isEmpty()) { return; }
 
-		if (stack.isEmpty()) {
-			return;
-		}
-
-//		IWand wand = (IWand) stack.getItem();
-
-//		int wandMF = wand.getMF(stack);
-//		int wabdMax = wand.getMaxMF(stack);
+		IWand wand = (IWand) stack.getItem();
+		int wandMF = wand.getMF(stack);
+		int wabdMax = wand.getMaxMF(stack);
 
 		//描画位置を計算
 		int tip_x2 = (this.width - this.xSize) / 2;
@@ -118,7 +114,7 @@ public class GuiMFTable extends GuiContainer {
 			int xAxis = (mouseX - (this.width - this.xSize) / 2);
 			int yAxis = (mouseY - (this.height - this.ySize) / 2);
 
-			this.drawHoveringText(String.format("%,d", mf) + "mf / " + String.format("%,d", max) + "mf", xAxis, yAxis);
+			this.drawHoveringText(String.format("%,d", wandMF) + "mf / " + String.format("%,d", wabdMax) + "mf", xAxis, yAxis);
 		}
 	}
 }

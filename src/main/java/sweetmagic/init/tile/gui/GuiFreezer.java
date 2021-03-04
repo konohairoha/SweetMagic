@@ -1,14 +1,18 @@
 package sweetmagic.init.tile.gui;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import sweetmagic.init.tile.container.ContainerFreezer;
 import sweetmagic.init.tile.cook.TileFreezer;
+import vazkii.quark.api.IChestButtonCallback;
 
-public class GuiFreezer extends GuiContainer {
+@Optional.Interface(modid="quark", iface="vazkii.quark.api.IChestButtonCallback")
+public class GuiFreezer extends GuiContainer implements IChestButtonCallback {
 
 	private static final ResourceLocation top = new ResourceLocation("sweetmagic", "textures/gui/gui_freezer.png");
 	private static final ResourceLocation bottom = new ResourceLocation("sweetmagic", "textures/gui/gui_freezer_chest.png");
@@ -98,5 +102,11 @@ public class GuiFreezer extends GuiContainer {
 	// 上のブロックかどうか
 	public boolean isTop () {
 		return this.tile.isTop();
+	}
+
+	@Optional.Method(modid="quark")
+	@Override
+	public boolean onAddChestButton(GuiButton button, int type) {
+		return !this.isTop();
 	}
 }

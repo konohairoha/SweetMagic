@@ -23,16 +23,21 @@ public class BookEntryCategory extends BookEntry {
 
 	@Override
 	public List<BookPage> getPages() {
+
 		List<BookPage> pages = new ArrayList<BookPage>();
 		int numEntries = this.entryCategory.getEntries().size();
-		int numPages = numEntries / entries_per_page;
-		if (numEntries % entries_per_page != 0) {
+		int numPages = numEntries / this.entries_per_page;
+
+		if (numEntries % this.entries_per_page != 0) {
 			numPages++;
 		}
+
 		for (int i = 0; i < numPages; i++) {
+
 			BookPageCategory page = new BookPageCategory(this.entryCategory, this);
-			for (int j = 0; j < entries_per_page && (j + (i * entries_per_page)) < numEntries; j++) {
-				page.addEntry(this.entryCategory.getEntries().get(j + (i * entries_per_page)));
+
+			for (int j = 0; j < this.entries_per_page && (j + (i * this.entries_per_page)) < numEntries; j++) {
+				page.addEntry(this.entryCategory.getEntries().get(j + (i * this.entries_per_page)));
 			}
 			pages.add(page);
 		}

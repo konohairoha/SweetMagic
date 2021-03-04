@@ -5,7 +5,9 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -19,16 +21,22 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.EntityArchSpider;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
+import sweetmagic.init.entity.monster.EntityBraveSkeleton;
 import sweetmagic.init.entity.monster.EntityElectricCube;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
+import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
+import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.util.PlayerHelper;
+import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
 public class TileSpawnStone extends TileSMBase {
@@ -57,8 +65,41 @@ public class TileSpawnStone extends TileSMBase {
 		Random rand = this.world.rand;
 
 		if (!this.isRand) {
-			this.data = rand.nextInt(7);
+			this.data = rand.nextInt(6);
 		}
+
+		Block block = this.getBlock(this.pos.down());
+		boolean isBoss = false;
+
+		// 下のブロックチェック
+		if (block == BlockInit.ac_ore) {
+			this.data = 6;
+			isBoss = true;
+		} else if (block == Blocks.PACKED_ICE) {
+			this.data = 7;
+			isBoss = true;
+		} else if (block == Blocks.MAGMA) {
+			this.data = 8;
+			isBoss = true;
+		} else if (block == Blocks.SKULL) {
+			this.data = 9;
+			isBoss = true;
+		}
+
+		if (!isBoss) {
+			this.summonMob(rand);
+		}
+
+		else {
+			this.summonBoss(rand);
+		}
+
+		this.breakBlock(this.pos, this.world, false);
+		this.playSound(this.pos, SMSoundEvent.HORAMAGIC, 1F, 1F);
+	}
+
+	// モブ召喚
+	public void summonMob (Random rand) {
 
 		for (int i = 0; i < 4; i++) {
 
@@ -116,18 +157,29 @@ public class TileSpawnStone extends TileSMBase {
 				// ウィッチマスター
 				entity = new EntityWitchMadameVerre(this.world);
 				break;
+			case 7:
+				// ウィンディーネ
+				entity = new EntityWindineVerre(this.world);
+				break;
+			case 8:
+				// イフリート
+				entity = new EntityIfritVerre(this.world);
+				break;
 			}
+
+			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 1200, 1, true, false));
 
 			// ユニークモンスターなら
 			if (i == 3) {
+
 				entity.setFire(0);
 				entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60D);
 				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 				entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(36D);
 				entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6D);
 				entity.setHealth(60F);
-				entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 600, 3, true, false));
-				entity.addPotionEffect(new PotionEffect(PotionInit.shadow, 600, 4, true, false));
+				entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 1200, 3, true, false));
+				entity.addPotionEffect(new PotionEffect(PotionInit.shadow, 1200, 4, true, false));
 
 				// エレキキューブは対象外
 				if (this.data != 0) {
@@ -141,9 +193,68 @@ public class TileSpawnStone extends TileSMBase {
 			entity.setLocationAndAngles(x, y, z, 0, 0F);
 			this.world.spawnEntity(entity);
 		}
+	}
 
-		this.breakBlock(this.pos, this.world, false);
-		this.playSound(this.pos, SMSoundEvent.HORAMAGIC, 1F, 1F);
+	// ボス召喚
+	public void summonBoss (Random rand) {
+
+		EntityLivingBase entity = null;
+		boolean isBuff = false;
+
+		switch (this.data) {
+		case 6:
+			// ウィッチマスター
+			entity = new EntityWitchMadameVerre(this.world);
+			entity.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2400, 3, true, false));
+			isBuff = true;
+			break;
+		case 7:
+			// ウィンディーネ
+			entity = new EntityWindineVerre(this.world);
+			entity.addPotionEffect(new PotionEffect(PotionInit.regene, 99999, 3, true, false));
+			entity.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 99999, 1, true, false));
+			isBuff = true;
+			break;
+		case 8:
+			// イフリート
+			entity = new EntityIfritVerre(this.world);
+			entity.addPotionEffect(new PotionEffect(PotionInit.regene, 2400, 2, true, false));
+			entity.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 2400, 1, true, false));
+			isBuff = true;
+			((EntityIfritVerre) entity).tpPos = this.pos;
+			break;
+		case 9:
+			// ブレイブスケルトン
+			entity = new EntityBraveSkeleton(this.world);
+			this.world.setBlockState(this.pos.down(), Blocks.AIR.getDefaultState(), 2);
+		}
+
+		int x = rand.nextInt(7) - 3 + this.pos.getX();
+		int y = rand.nextInt(3) + 1 + this.pos.getY();
+		int z = rand.nextInt(7) - 3 + this.pos.getZ();
+		BlockPos pos = new BlockPos(x, y, z);
+		entity.setLocationAndAngles(x, y, z, 0, 0F);
+		SMUtil.tameAIAnger((EntityLiving) entity, this.player);
+
+		// バフあ
+		if (isBuff) {
+			entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(256D);
+			entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.33D);
+			entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64D);
+			entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10D);
+			entity.setHealth(256F);
+
+			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 4800, 3, true, false));
+			entity.addPotionEffect(new PotionEffect(PotionInit.shadow, 4800, 4, true, false));
+			this.world.spawnEntity(entity);
+		}
+
+		else {
+			((EntityLiving) entity).onInitialSpawn(this.world.getDifficultyForLocation(pos), (IEntityLivingData) null);
+			AnvilChunkLoader.spawnEntity(entity, world);
+			this.world.playEvent(2004, pos, 0);
+		}
+
 	}
 
 	@Override

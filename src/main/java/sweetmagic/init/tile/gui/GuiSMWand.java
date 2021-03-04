@@ -92,6 +92,9 @@ public class GuiSMWand extends GuiContainer {
 		case 16:
 			this.to16Slot(x, y);
 			break;
+		case 25:
+			this.to25Slot(x, y);
+			break;
 		}
 
 	}
@@ -160,6 +163,15 @@ public class GuiSMWand extends GuiContainer {
 		for (int i = 0; i < 4; i++)
 			for (int k = 0; k < 4; k++)
 				this.drawTexturedModalRect(x + 49 + 30 * i, y + 19 + 23 * k, 238, 0, 18, 18);
+	}
+
+	// 25スロット
+	public void to25Slot (int x, int y) {
+
+		// 上と下
+		for (int i = 0; i < 5; i++)
+			for (int k = 0; k < 5; k++)
+				this.drawTexturedModalRect(x + 39 + 24 * i, y + 13 + 19 * k, 238, 0, 18, 18);
 	}
 
 	@Override

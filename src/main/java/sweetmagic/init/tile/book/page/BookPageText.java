@@ -37,18 +37,7 @@ public class BookPageText extends BookPage {
 
 		int y = gui.guiTop + 12;
 		int x = gui.guiLeft + (GuiGuidBook.WIDTH / 2);
-		int maxY = gui.guiTop + GuiGuidBook.HEIGHT - 19;
-
-//		if (this.entry != null && !this.entry.getIcon().isEmpty()) {
-//
-//			GlStateManager.pushMatrix();
-//			GlStateManager.scale(1F, 1F, 1F);
-//			GlStateManager.color(1F, 1F, 1F, 1F);
-//			RenderHelper.enableGUIStandardItemLighting();
-//			gui.mc.getRenderItem().renderItemIntoGUI(this.entry.getIcon(), x - 10, y - 15);
-//			RenderHelper.disableStandardItemLighting();
-//			GlStateManager.popMatrix();
-//		}
+		int maxY = gui.guiTop + GuiGuidBook.HEIGHT;
 
 		gui.drawCenteredText(TextFormatting.UNDERLINE + "" + TextFormatting.BOLD + I18n.translateToLocal(entry.getName()), x, y, 0x000000);
 		y += gui.getFontRenderer().FONT_HEIGHT + 4;

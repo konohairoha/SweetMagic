@@ -1,9 +1,9 @@
 package sweetmagic.init.tile.gui;
 
-import org.lwjgl.opengl.GL11;
-
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
@@ -14,12 +14,12 @@ import vazkii.quark.api.IChestButtonCallback;
 @Optional.Interface(modid="quark", iface="vazkii.quark.api.IChestButtonCallback")
 public class GuiPouch extends GuiContainer implements IChestButtonCallback {
 
-	private final static ResourceLocation TEX = new ResourceLocation( "textures/gui/container/generic_54.png");
+	private static final ResourceLocation TEX = new ResourceLocation("sweetmagic","textures/gui/gui_moden_rack.png");
 
 	public GuiPouch(InventoryPlayer inventoryPlayer, InventoryPouch inv) {
 		super(new ContainerPouch(inventoryPlayer, inv));
-		this.xSize = 176;
-		this.ySize = 222;
+		this.xSize = 173;
+		this.ySize = 132;
 	}
 
 	@Override
@@ -30,21 +30,24 @@ public class GuiPouch extends GuiContainer implements IChestButtonCallback {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
-	}
+	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float partialRenderTick, int xMouse, int yMouse){
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		this.mc.getTextureManager().bindTexture(TEX);
+		GlStateManager.color(1, 1, 1, 1);
+		Minecraft.getMinecraft().renderEngine.bindTexture(TEX);
+
+		// 座標の取得
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
+
+		for (int k = 0; k < 2; k++) {
+			this.drawTexturedModalRect(x + 52, y + 7 + k * 18, 173, 0, 54, 18);
+			this.drawTexturedModalRect(x + 70, y + 7 + k * 18, 173, 0, 54, 18);
+		}
 	}
 
-	@Optional.Method(modid="quark")
 	@Override
-	public boolean onAddChestButton(GuiButton button, int type) {
+	public boolean onAddChestButton(GuiButton arg0, int arg1) {
 		return true;
 	}
 }
