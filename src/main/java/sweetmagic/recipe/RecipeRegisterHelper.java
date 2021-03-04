@@ -17,6 +17,13 @@ public class RecipeRegisterHelper {
 	public Block glass = null;
 	public Block pane = null;
 
+	public String dye = null;
+
+	public String brick = null;
+	public Block brick_0 = null;
+	public Block brick_1 = null;
+	public Block brick_2 = null;
+
 	public RecipeRegisterHelper (Block planks, Block stairs, Block slab) {
 		this.planks = planks;
 		this.stairs = stairs;
@@ -37,6 +44,20 @@ public class RecipeRegisterHelper {
 	public RecipeRegisterHelper (Block glass, Block pane) {
 		this.glass = glass;
 		this.pane = pane;
+	}
+
+	public RecipeRegisterHelper (Block planks, String dye, boolean flag) {
+		this.planks = planks;
+		this.dye = dye;
+	}
+
+	public RecipeRegisterHelper (String brick, Block brick_0, Block brick_1, Block brick_2, Block stairs, Block slab) {
+		this.brick = brick;
+		this.brick_0 = brick_0;
+		this.brick_1 = brick_1;
+		this.brick_2 = brick_2;
+		this.stairs = stairs;
+		this.slab = slab;
 	}
 
 	public Block getPlanks () {
@@ -73,5 +94,25 @@ public class RecipeRegisterHelper {
 
 	public Block getPane () {
 		return this.pane;
+	}
+
+	public String getDye () {
+		return this.dye;
+	}
+
+	public String getBrick () {
+		return this.brick;
+	}
+
+	public Block getBrick0 () {
+		return this.brick_0;
+	}
+
+	public Block getBrick1 () {
+		return this.brick_1;
+	}
+
+	public Block getBrick2 () {
+		return this.brick_2;
 	}
 }
