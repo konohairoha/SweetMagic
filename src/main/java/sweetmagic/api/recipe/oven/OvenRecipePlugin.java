@@ -43,6 +43,13 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.chocolate_muffin, 4)}
 		));
 
+		// アップルマフィン
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("cropAplle", 2),
+			new Object[] { new ItemStack(ItemInit.vannila_essence, 2), new OreItems("dustFlour", 2), new OreItems("egg", 2), new OreItems("dustSugar", 2), "bucketMilk", "foodButter" },
+			new ItemStack[] { new ItemStack(ItemInit.apple_muffin, 4)}
+		));
+
 		//サーモンのムニエル
 		recipe.addRecipe(new OvenRecipes(
 			new ItemStack(Items.FISH, 1, 1),

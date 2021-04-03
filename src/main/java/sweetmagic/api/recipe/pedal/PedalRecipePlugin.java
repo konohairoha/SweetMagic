@@ -57,6 +57,28 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.aether_furnace_bottom) }
 		));
 
+		// ツールリペアラー
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.divine_crystal, 2),
+			new Object[] { new ItemStack(ItemInit.mf_sbottle, 4), new ItemStack(BlockInit.pillar_stone, 8), new ItemStack(ItemInit.alternative_ingot, 8) },
+			new ItemStack[] { new ItemStack(BlockInit.tool_repair) }
+		));
+
+		// マギア・リライト
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.deus_crystal),
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(ItemInit.alternative_ingot, 16),
+					new ItemStack(ItemInit.magicmeal, 8), new ItemStack(ItemInit.mystical_page, 2), new ItemStack(ItemInit.mf_bottle, 4) },
+			new ItemStack[] { new ItemStack(BlockInit.magia_rewrite) }
+		));
+
+		// エーテルホッパー
+		recipe.addRecipe(new PedalRecipes(
+			"hopper",
+			new Object[] { new OreItems("chestWood", 2), new ItemStack(ItemInit.aether_crystal, 4) },
+			new ItemStack[] { new ItemStack(BlockInit.aether_hopper, 2) }
+		));
+
 		// パラレル・インターフィアー
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(Items.BOOK),
@@ -64,6 +86,14 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 					, new ItemStack(Blocks.CARPET, 4, 5), new ItemStack(Items.ENDER_EYE, 4) , new ItemStack(ItemInit.mf_bottle, 2)
 					, new ItemStack(ItemInit.witch_tears), new ItemStack(Blocks.ENCHANTING_TABLE)},
 			new ItemStack[] { new ItemStack(BlockInit.parallel_interfere) }
+		));
+
+		// スターダスト・ウィッシュ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(Items.BOOK, 16),
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new OreItems("chestWood", 64), new ItemStack(ItemInit.pure_crystal, 4)
+					, new ItemStack(ItemInit.mystical_page, 4), new ItemStack(Items.ENDER_EYE, 16), new ItemStack(Blocks.ENCHANTING_TABLE) },
+			new ItemStack[] { new ItemStack(BlockInit.stardust_wish) }
 		));
 
 		// 夜の帳
@@ -74,11 +104,112 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.veil_darkness) }
 		));
 
+		// エーテルローブ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.cotton_cloth, 24),
+			new Object[] { new ItemStack(ItemInit.aether_crystal, 6), new ItemStack(Items.GOLD_INGOT, 4), new OreItems("slimeball", 16) },
+			new ItemStack[] { new ItemStack(ItemInit.magicians_robe) }
+		));
+
 		// ポーチ
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(Items.LEATHER, 16),
 			new Object[] { new OreItems("chestWood"), new ItemStack(ItemInit.aether_crystal, 4), new OreItems("string", 8), new ItemStack(Items.IRON_NUGGET), new ItemStack(Blocks.WOODEN_BUTTON) },
 			new ItemStack[] { new ItemStack(ItemInit.magicians_pouch) }
+		));
+
+		// ハーネス
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(Items.FEATHER, 8),
+			new Object[] { new ItemStack(ItemInit.cotton_cloth, 8), new ItemStack(ItemInit.aether_crystal, 8), new OreItems("string", 8), new ItemStack(ItemInit.mystical_page) },
+			new ItemStack[] { new ItemStack(ItemInit.angel_harness) }
+		));
+
+		// チョーカー
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.aether_crystal, 4),
+			new Object[] { new ItemStack(Items.IRON_INGOT, 6), new ItemStack(Items.GOLD_NUGGET, 4), new ItemStack(ItemInit.b_mf_bottle, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.aether_choker) }
+		));
+
+		// ワープブロック
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.witch_tears),
+			new Object[] { new ItemStack(ItemInit.clero_petal, 8), new ItemStack(BlockInit.alt_block) },
+			new ItemStack[] { new ItemStack(BlockInit.warp_block, 2) }
+		));
+
+		// 杖の台座
+		recipe.addRecipe(new PedalRecipes(
+			new OreItems("stone", 4),
+			new Object[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(Items.IRON_INGOT, 4) },
+			new ItemStack[] { new ItemStack(BlockInit.wand_pedal) }
+		));
+
+		// 霧雨の勿忘草の花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.dm_flower, 8),
+			new Object[] { new ItemStack(ItemInit.mf_sbottle, 8), new ItemStack(BlockInit.mfchanger), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.mfpot) }
+		));
+
+		// 黄昏時の夢百合草の花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.mfpot),
+			new Object[] { new ItemStack(BlockInit.twilight_alstroemeria), new ItemStack(ItemInit.divine_crystal, 2)
+					, new ItemStack(ItemInit.mf_bottle), new ItemStack(BlockInit.mfchanger) },
+			new ItemStack[] { new ItemStack(BlockInit.twilightalstroemeria_pot) }
+		));
+
+		// スノードロップの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.snowdrop, 4),
+			new Object[] { new ItemStack(ItemInit.mf_sbottle, 4), new ItemStack(ItemInit.aether_crystal, 6), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.snowdrop_pot) }
+		));
+
+		// トルコキキョウの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.turkey_balloonflower, 16),
+			new Object[] { new ItemStack(ItemInit.sannyflower_petal, 16), new ItemStack(ItemInit.moonblossom_petal, 16),
+					new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.mf_bottle, 2) },
+			new ItemStack[] { new ItemStack(BlockInit.turkey_balloonflower_pot) }
+		));
+
+		// 群青の薔薇の花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.ultramarine_rose, 16),
+			new Object[] { new ItemStack(ItemInit.sannyflower_petal, 16),
+					new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_bottle, 4), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.ultramarine_rose_pot) }
+		));
+
+		// ソリッドスターの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.solid_star, 16),
+			new Object[] { new ItemStack(ItemInit.divine_crystal), new ItemStack(ItemInit.mf_sbottle, 6), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.solid_star_pot) }
+		));
+
+		// ジニアの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.zinnia, 16),
+			new Object[] { new ItemStack(ItemInit.divine_crystal), new ItemStack(ItemInit.mf_bottle, 2), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.zinnia_pot) }
+		));
+
+		// カーネーションの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.carnation_crayola, 8),
+			new Object[] { new ItemStack(ItemInit.mf_sbottle, 4), new ItemStack(ItemInit.cosmic_crystal_shard, 2), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.carnation_crayola_pot) }
+		));
+
+		// ハイドラの花瓶
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.hydrangea, 8),
+			new Object[] { new ItemStack(ItemInit.divine_crystal), new ItemStack(ItemInit.mf_sbottle, 6), new ItemStack(Items.FLOWER_POT) },
+			new ItemStack[] { new ItemStack(BlockInit.hydrangea_pot) }
 		));
 	}
 }

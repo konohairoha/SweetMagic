@@ -50,9 +50,9 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 
 		// 回復魔法
 		recipe.addRecipe(new ObMagiaRecipes(
-			new ItemStack(ItemInit.magicmeal, 2),
-			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.sannyflower_petal, 2)
-					, new ItemStack(ItemInit.sugarbell, 3), new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack(ItemInit.sannyflower_petal, 2),
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.sugarbell, 2)
+					, new ItemStack(ItemInit.magicmeal, 3), new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_regene) }
 		));
 
@@ -91,8 +91,16 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_starburst),
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.sugarbell, 32),
-			new ItemStack(ItemInit.sannyflower_petal, 32), new ItemStack(BlockInit.glow_light, 64), new ItemStack(ItemInit.mystical_page, 2) },
+			new ItemStack(ItemInit.sannyflower_petal, 32), new ItemStack(BlockInit.glow_light, 16), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_sacredbuster) }
+		));
+
+		// 光/炎魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_sacredbuster),
+			new ItemStack[] { new ItemStack(ItemInit.magic_flamenova), new ItemStack(ItemInit.cosmic_crystal_shard, 4),
+			new ItemStack(ItemInit.prizmium, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_shining_flare) }
 		));
 
 		// 炎魔法
@@ -285,7 +293,7 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 
 		// 攻撃力アップ魔法
 		recipe.addRecipe(new ObMagiaRecipes(
-			new ItemStack(ItemInit.magic_shadowwolf),
+			new ItemStack(ItemInit.magic_shadowgolem),
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.stray_soul, 16), new ItemStack(ItemInit.ender_shard, 32),
 			new ItemStack(ItemInit.moonblossom_petal, 32), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_shadow) }
@@ -330,6 +338,14 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_regene_shield) }
 		));
 
+		// バリア強化 + 持続回復魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_regene_shield),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.dm_flower, 32), new ItemStack(ItemInit.prizmium, 32)
+					, new ItemStack(ItemInit.mystical_page, 3)},
+			new ItemStack[] { new ItemStack(ItemInit.magic_magia_protection) }
+		));
+
 		// 泡射撃魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.dm_flower, 8),
@@ -343,6 +359,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack(ItemInit.magic_bubleprison),
 			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.dm_flower, 24), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_scumefang) }
+		));
+
+		// 泡窒息リジェネ解除射撃魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_scumefang),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.dm_flower, 32), new ItemStack(ItemInit.mystical_page, 3) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_foamy_hell) }
 		));
 
 		// 毒魔法
@@ -395,8 +418,16 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_growth_effect),
 			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.sugarbell, 16) , new ItemStack(ItemInit.sannyflower_petal, 16)
-					 , new ItemStack(ItemInit.mystical_page, 1)},
+					 , new ItemStack(ItemInit.mysterious_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_growth_aura) }
+		));
+
+		// 作物広範囲育成魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_growth_aura),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 32) , new ItemStack(ItemInit.sannyflower_petal, 32)
+					 , new ItemStack(ItemInit.mystical_page, 4)},
+			new ItemStack[] { new ItemStack(ItemInit.magic_growth_verre) }
 		));
 
 		// 小爆発魔法

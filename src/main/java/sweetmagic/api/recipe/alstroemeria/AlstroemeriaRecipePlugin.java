@@ -1,8 +1,12 @@
 package sweetmagic.api.recipe.alstroemeria;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -70,21 +74,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.dm_seed) }
 		));
 
-		// 霧雨の勿忘草の花瓶
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(ItemInit.dm_flower, 8),
-			new Object[] { new ItemStack(ItemInit.mf_sbottle, 8), new ItemStack(BlockInit.mfchanger), new ItemStack(Items.FLOWER_POT) },
-			new ItemStack[] { new ItemStack(BlockInit.mfpot) }
-		));
-
-		// 黄昏時の夢百合草の花瓶
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.mfpot),
-			new Object[] { new ItemStack(BlockInit.twilight_alstroemeria), new ItemStack(ItemInit.divine_crystal, 2)
-					, new ItemStack(ItemInit.mf_bottle), new ItemStack(BlockInit.mfchanger) },
-			new ItemStack[] { new ItemStack(BlockInit.twilightalstroemeria_pot) }
-		));
-
 		// オルタナティブインゴット
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			"ingotIron",
@@ -134,13 +123,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(ItemInit.ender_shard),
 			new Object[] { new ItemStack(ItemInit.mf_sbottle), new ItemStack(BlockInit.cornflower)},
 			new ItemStack[] { new ItemStack(Items.CHORUS_FRUIT, 3) }
-		));
-
-		// エーテルローブ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(ItemInit.cotton_cloth, 24),
-			new Object[] { new ItemStack(ItemInit.aether_crystal, 6), new ItemStack(Items.GOLD_INGOT, 4), new OreItems("slimeball", 16) },
-			new ItemStack[] { new ItemStack(ItemInit.magicians_robe) }
 		));
 
 		// クレロランプ
@@ -250,6 +232,20 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.advanced_aether_furnace_bottom) }
 		));
 
+		// マスターマギアタンク
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.advanced_mftank),
+			new Object[] { new ItemStack(BlockInit.sugarglass, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2)},
+			new ItemStack[] { new ItemStack(BlockInit.mm_tank) }
+		));
+
+		// マスターマギアテーブル
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.advanced_mftable),
+			new Object[] { new ItemStack(BlockInit.prism_log, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2) },
+			new ItemStack[] { new ItemStack(BlockInit.mm_table) }
+		));
+
 		// 黄昏の明かり
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new OreItems("glowstone", 4),
@@ -315,9 +311,9 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 
 		// 赤ネザーレンガ
 		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.antique_brick_0, 16),
+			new ItemStack(Blocks.NETHERRACK, 16),
 			new Object[] { new OreItems("dyeRed") },
-			new ItemStack[] { new ItemStack(Blocks.RED_NETHER_BRICK, 16) }
+			new ItemStack[] { new ItemStack(Blocks.RED_NETHER_BRICK, 24) }
 		));
 
 		// プリズムウッドチェスト
@@ -348,6 +344,110 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.rattan_chest_b) }
 		));
 
+		// 緑4パネガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { "dyeGreen", new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.green4panel_glass, 32) }
+		));
+
+		// 緑4パネガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { "dyeGreen", new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.green4panel_glass, 32) }
+		));
+
+		// 茶4パネガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { "dyeBrown", new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.brown4panel_glass, 32) }
+		));
+
+		// 薄茶4パネガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.brown4panel_glass, 16),
+			new Object[] { "dyeWhite", new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.lightbrown4panel_glass, 32) }
+		));
+
+		// 濃茶4パネガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.brown4panel_glass, 16),
+			new Object[] { "dyeBlack", new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.darkbrown4panel_glass, 32) }
+		));
+
+		// 網ガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { new ItemStack(Blocks.IRON_BARS), new OreItems("stickWood", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.ami_glass, 32) }
+		));
+
+		// ゴージャスガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { new ItemStack(Items.IRON_NUGGET), "dyeBlack" },
+			new ItemStack[] { new ItemStack(BlockInit.gorgeous_glass, 32) }
+		));
+
+		// ゴージャスガラス（白）
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { new ItemStack(Items.IRON_NUGGET), "dyeWhite" },
+			new ItemStack[] { new ItemStack(BlockInit.gorgeous_glass_w, 32) }
+		));
+
+		// ゴージャスガラス（白）
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { new ItemStack(Items.IRON_NUGGET), "dyeWhite" },
+			new ItemStack[] { new ItemStack(BlockInit.gorgeous_glass_w, 32) }
+		));
+
+		// マジックバリアガラス
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(BlockInit.sugarglass, 16),
+			new Object[] { new ItemStack(ItemInit.magicmeal, 4) },
+			new ItemStack[] { new ItemStack(BlockInit.magicbarrier_off, 32) }
+		));
+
+		// コルクボード
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(Items.LEATHER),
+			new Object[] { new OreItems("stickWood", 4), "dyeBrown" },
+			new ItemStack[] { new ItemStack(BlockInit.corkboard, 4) }
+		));
+
+		// ウォールボード
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(Items.LEATHER),
+			new Object[] { new OreItems("stickWood", 4), "dyeWhite" },
+			new ItemStack[] { new ItemStack(BlockInit.wallboard, 4) }
+		));
+
+		// ウォールボード（黒）
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(Items.LEATHER),
+			new Object[] { new OreItems("stickWood", 4), "dyeBlack" },
+			new ItemStack[] { new ItemStack(BlockInit.wallboard_black, 4) }
+		));
+
+		// 店看板
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(Items.IRON_NUGGET, 4),
+			new Object[] { new ItemStack(Items.LEATHER) },
+			new ItemStack[] { new ItemStack(BlockInit.shopboard, 4) }
+		));
+
+		// 羽根
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.cotton),
+			new Object[] { new ItemStack(Items.STRING, 4) },
+			new ItemStack[] { new ItemStack(Items.FEATHER, 2) }
+		));
 
 		// ブロック、ハーフ、階段をリストに突っ込む
 		List<RecipeRegisterHelper> recipeList = new ArrayList<>();
@@ -366,9 +466,27 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 
 			// アンティーク→ロングタイルレンガ
 			recipe.addRecipe(new AlstroemeriaRecipes(
-				new OreItems("antique_brick_all", 16),
-				new Object[] { new OreItems("stone", 12), new OreItems(re.getDye()) },
+				new OreItems("stone", 12),
+				new Object[] { new OreItems("antique_brick_all", 16), new OreItems(re.getDye()) },
 				new ItemStack[] { new ItemStack(re.getPlanks(), 32) }
+			));
+		}
+
+		Map<Block, String> vaseRecipe = new HashMap<>();
+		vaseRecipe.put(BlockInit.flower_vese_o, "dyeOrange");
+		vaseRecipe.put(BlockInit.flower_vese_w, "dyeWhite");
+		vaseRecipe.put(BlockInit.flower_vese_b, "dyeBlue");
+		vaseRecipe.put(BlockInit.flower_vese_p, "dyePurple");
+		vaseRecipe.put(BlockInit.flower_vese_s, "dyeLightBlue");
+		vaseRecipe.put(BlockInit.flower_vese_y, "dyeYellow");
+
+		for (Entry<Block, String> map : vaseRecipe.entrySet()) {
+
+			// 花瓶
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				new ItemStack(Items.BRICK, 3),
+				new Object[] { map.getValue() },
+				new ItemStack[] { new ItemStack(map.getKey(), 4) }
 			));
 		}
 	}

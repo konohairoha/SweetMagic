@@ -41,7 +41,7 @@ public class FlourMillRecipePlugin implements IFlourMillRecipePlugin {
 		// 小麦
 		recipe.addRecipe(new FlourMillRecipes(
 			"cropWheat",
-			new ItemStack[] { new ItemStack(ItemInit.flourpowder, 3), new ItemStack(ItemInit.flourpowder)
+			new ItemStack[] { new ItemStack(ItemInit.flourpowder, 3), new ItemStack(ItemInit.flourpowder), new ItemStack (ItemInit.plant_chips)
 		}));
 
 		// バニラ

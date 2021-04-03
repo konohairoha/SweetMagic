@@ -61,5 +61,12 @@ public class FermenterRecipePlugin implements IFermenterRecipePlugin {
 			new Object[] { "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.miso, 4)}
 		));
+
+		// 骨粉
+		recipe.addRecipe(new FermenterRecipes(
+			new OreItems("listAllseed", 8),
+			new Object[] { new OreItems("treeSapling", 4) },
+			new ItemStack[] { new ItemStack(Items.DYE, 24, 15) }
+		));
 	}
 }
