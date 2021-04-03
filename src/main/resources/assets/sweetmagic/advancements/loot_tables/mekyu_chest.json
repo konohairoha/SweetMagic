@@ -1,0 +1,100 @@
+{
+  "pools": [
+    {
+        "name": "smbounus",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:blood_sucking_ring",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:emelald_pias",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:varrier_pendant",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:magicians_grobe",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:divine_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:pure_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:cosmic_crystal_shard",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:sannyflower_petal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 20 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:moonblossom_petal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 20 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:turkey_balloonflower_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:mf_sbottle",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:mf_bottle",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:ultramarine_rose_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:snowdrop_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:alternative_ingot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:twilightlight",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "minecraft:diamond",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "minecraft:emerald",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+        }
+      ]
+    }
+  ]
+}
