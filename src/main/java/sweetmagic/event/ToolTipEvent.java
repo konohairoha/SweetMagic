@@ -17,7 +17,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IChoker;
 import sweetmagic.api.iitem.IElementItem;
+import sweetmagic.api.iitem.IHarness;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMItem;
@@ -48,6 +51,10 @@ public class ToolTipEvent {
 
 				String tipEle = new TextComponentTranslation(enumString(item.getElement().name()), new Object[0]).getFormattedText();
 				String tipType = new TextComponentTranslation(enumString(item.getType().name()), new Object[0]).getFormattedText();
+
+				if (item.getSubElement() != null) {
+					tipEle += "/" + new TextComponentTranslation(enumString(item.getSubElement().name()), new Object[0]).getFormattedText();
+				}
 
 				String texEle = new TextComponentTranslation(getTipName("smelement"), new Object[0]).getFormattedText() + " ： " + tipEle;
 				String texType = new TextComponentTranslation(getTipName("smtype"), new Object[0]).getFormattedText() +  " ： " + tipType;
@@ -121,13 +128,12 @@ public class ToolTipEvent {
 			tooltip.add(I18n.format(TextFormatting.GREEN + tipMF + " : " + String.format("%,d", wand.getMF(stack))));
 			tooltip.add(I18n.format(TextFormatting.GREEN + tipLv + " : " + String.format("%,d", needExp)));
 
-//			// tier3なら属性表示
-//			if (wand.getTier() >= 3) {
-//				String tipEle = new TextComponentTranslation(enumString(wand.getElement(stack)), new Object[0]).getFormattedText();
-//				String texEle = new TextComponentTranslation(getTipName("smelement"), new Object[0]).getFormattedText() + " ： " + tipEle;
-//				tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
-//			}
-
+			// 属性杖なら属性表示
+			if (wand.isNotElement()) {
+				String tipEle = new TextComponentTranslation(enumString(wand.getWandElement().toString()), new Object[0]).getFormattedText();
+				String texEle = new TextComponentTranslation(getTipName("smelement"), new Object[0]).getFormattedText() + " ： " + tipEle;
+				tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
+			}
 
 			// シフトを押したとき
 			if (Keyboard.isKeyDown(42)) {
@@ -142,6 +148,43 @@ public class ToolTipEvent {
 			}
 		}
 
+		// MF関連アイテムのとき
+		else if (itemStack instanceof IMFTool) {
+
+
+			IMFTool wand = (IMFTool) itemStack;
+			String tipMF = getTip("tip.mf.name");
+			tooltip.add(I18n.format(TextFormatting.GREEN + tipMF + " : " + String.format("%,d", wand.getMF(stack))));
+
+			// ローブ
+			if (itemStack instanceof IRobe) {
+
+				IRobe robe = (IRobe) itemStack;
+
+				// キー操作
+				String open = getTip("tip.open.name");
+				String amor = getTip("tip.robe_armor.name");
+				tooltip.add(I18n.format(amor + TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.OPEN) + open));
+
+				String dame = getTip("tip.smmagic_damagecut.name");
+
+				// Math.floorを使わないと端数が出る
+				String cut =  Math.floor( ( 1 - robe.getMagicDamageCut() ) * 100) + "";
+				tooltip.add(I18n.format(TextFormatting.GREEN + dame + " ： " + cut) + "%");
+
+			}
+
+			else if (itemStack instanceof IHarness) {
+				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness.name")));
+				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness_charge.name")));
+				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness_dus.name")));
+			}
+
+			else if (itemStack instanceof IChoker) {
+				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.aether_choker.name")));
+			}
+		}
+
 		// 属性アイテムのとき
 		else if (itemStack instanceof IElementItem && !(itemStack instanceof ISMItem)) {
 
@@ -153,21 +196,7 @@ public class ToolTipEvent {
 			tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
 		}
 
-		else if (itemStack instanceof IRobe) {
-
-			IRobe robe = (IRobe) itemStack;
-
-			// キー操作
-			String open = getTip("tip.open.name");
-			String amor = getTip("tip.robe_armor.name");
-			tooltip.add(I18n.format(amor + TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.OPEN) + open));
-
-			String dame = getTip("tip.smmagic_damagecut.name");
-			String cut = ( 1 - robe.getMagicDamageCut() ) * 100 + "";
-			tooltip.add(I18n.format(TextFormatting.GREEN + dame + " ： " + cut) + "%");
-
-		}
-
+		// ポーチ
 		else if (itemStack instanceof IPouch) {
 
 			// キー操作
@@ -176,6 +205,7 @@ public class ToolTipEvent {
 			tooltip.add(I18n.format(amor + TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.POUCH) + open));
 		}
 
+		// 装備品
 		else if (itemStack instanceof IAcce) {
 
 			IAcce acce = (IAcce) itemStack;

@@ -36,6 +36,8 @@ public class SMSoundEvent {
 	public static final SoundEvent ROBE = createEvent("robe");
 	public static final SoundEvent WRITE = createEvent("write");
 	public static final SoundEvent GROW = createEvent("grow");
+	public static final SoundEvent MAGICCRAFT = createEvent("magic_craft");
+	public static final SoundEvent BABULE = createEvent("babule");
 
 	private static SoundEvent createEvent(String sound){
 		ResourceLocation name = new ResourceLocation(SweetMagicCore.MODID, sound);
@@ -72,6 +74,8 @@ public class SMSoundEvent {
 		registry.register(ROBE);
 		registry.register(WRITE);
 		registry.register(GROW);
+		registry.register(MAGICCRAFT);
+		registry.register(BABULE);
 	}
 
 	public SMSoundEvent() {}

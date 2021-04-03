@@ -35,7 +35,6 @@ public class WandRenderEvent {
 		EntityPlayer player = mc.player;					// プレイヤーを取得
 		ItemStack stack = player.getHeldItemMainhand();		// ItemStackを取得
 		Item item = stack.getItem();						// Itemを取得
-
 		if (stack.isEmpty() || !(item instanceof IWand)) { return; }
 
 		IWand wand = (IWand) item;

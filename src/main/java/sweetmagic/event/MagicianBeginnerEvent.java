@@ -170,20 +170,20 @@ public class MagicianBeginnerEvent {
 
 		switch (tags.getInteger(FACING)) {
 		case 0:
-			box = new AxisAlignedBB(pos, pos.add(-14, 10, -14));
-			box = box.offset(-x + 1, -y + 0.075, -z + 1);
-			break;
-		case 90:
-			box = new AxisAlignedBB(pos, pos.add(-14, 10, 14));
-			box = box.offset(-x + 1, -y + 0.075, -z );
-			break;
-		case 180:
 			box = new AxisAlignedBB(pos, pos.add(14, 10, 14));
 			box = box.offset(-x, -y + 0.075, -z);
 			break;
-		case 270:
+		case 90:
 			box = new AxisAlignedBB(pos, pos.add(14, 10, -14));
 			box = box.offset(-x, -y + 0.075, -z + 1);
+			break;
+		case 180:
+			box = new AxisAlignedBB(pos, pos.add(-14, 10, -14));
+			box = box.offset(-x + 1, -y + 0.075, -z + 1);
+			break;
+		case 270:
+			box = new AxisAlignedBB(pos, pos.add(-14, 10, 14));
+			box = box.offset(-x + 1, -y + 0.075, -z );
 			break;
 		}
 

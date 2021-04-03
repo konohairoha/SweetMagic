@@ -1,8 +1,7 @@
 package sweetmagic.event;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -11,15 +10,16 @@ import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
-import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMArmor;
-import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 
 public class XPPickupEvent {
+
+	public static final EntityEquipmentSlot[] ARMORSLOT = new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND, EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET };
 
 	// 経験値取得イベント
 	@SubscribeEvent
@@ -28,58 +28,24 @@ public class XPPickupEvent {
 		// プレイヤーじゃなかったら
 		if (event.getEntityPlayer() == null || !(event.getEntityPlayer() instanceof EntityPlayer)) { return; }
 
-		// ItemStackの取得
-		EntityPlayer player = event.getEntityPlayer();
-		ItemStack stack = player.getHeldItemMainhand();
-		int value = event.getOrb().getXpValue();
-
-		// 杖の修繕イベント呼び出し
-		this.wandEvent(stack, value);
-
 		// ローブの修繕イベント呼び出し
-		this.robeEvent(player, value);
-
-	}
-
-	// 杖の修繕イベント
-	public void wandEvent (ItemStack stack, int value) {
-
-		// 杖じゃなかったら終了
-		if (stack.isEmpty() || !(stack.getItem() instanceof IWand)) { return; }
-
-		// MF回復エンチャがついていなかったら終了
-		IWand wand = IWand.getWand(stack);
-		int level = wand.getEnchantLevel(EnchantInit.mfRecover, stack);
-
-		// エンチャが0以下かMFが最大値なら終了
-		if (level <= 0 || wand.isMaxMF(stack)) { return; }
-
-		// エンチャレベル分増やす
-		value = value >= 4 ? value / 3 : value;
-		value *= level;
-
-		// 取得した経験値分MFを増やす
-		wand.insetMF(stack, value);
+		this.armorRepair(event.getEntityPlayer(), event.getOrb().getXpValue());
 	}
 
 	// ローブの修繕イベント
-	public void robeEvent (EntityPlayer player, int value) {
+	public void armorRepair (EntityPlayer player, int value) {
 
-		List<EntityEquipmentSlot> slotList = new ArrayList<>();
-		slotList.add(EntityEquipmentSlot.CHEST);
-		slotList.add(EntityEquipmentSlot.LEGS);
-
-		for (EntityEquipmentSlot slot : slotList) {
+		for (EntityEquipmentSlot slot : ARMORSLOT) {
 
 			// 防具の取得
 			ItemStack stack = player.getItemStackFromSlot(slot);
-			if (stack.isEmpty() || !(stack.getItem() instanceof ISMArmor)) { continue; }
-
 			Item item = stack.getItem();
+			if (stack.isEmpty() || ( !(item instanceof ISMArmor) && !(item instanceof IMFTool) )) { continue; }
 
-			// ローブなら修繕処理呼び出し
-			if (item instanceof IRobe) {
-				if(!this.robeRegene(player, stack, value)) { continue; }
+
+			// MFToolなら
+			if (item instanceof IMFTool) {
+				if(!this.healRepair(player, stack, value)) { continue; }
 			}
 
 			// ポーチなら
@@ -87,26 +53,6 @@ public class XPPickupEvent {
 				this.emelaldPiasEffect(player, stack, value);
 			}
 		}
-	}
-
-	// ローブ修繕
-	public boolean robeRegene (EntityPlayer player, ItemStack stack, int value) {
-
-		// エンチャレベルの取得
-		ISMArmor robe = (ISMArmor) stack.getItem();
-		int level = robe.getEnchantLevel(EnchantInit.mfRecover, stack);
-
-		// エンチャが0以下かMFが最大値なら終了
-		if (level <= 0 || stack.getItemDamage() == 0) { return false; }
-
-		// エンチャレベル分増やす
-		value = value >= 4 ? value / 3 : value;
-		value *= level;
-
-		// ダメージ回復
-		stack.setItemDamage(stack.getItemDamage() - value);
-
-		return true;
 	}
 
 	// 経験値増加
@@ -137,5 +83,29 @@ public class XPPickupEvent {
 				if (!acce.isDuplication()) { return; }
 			}
 		}
+	}
+
+	public boolean healRepair (EntityPlayer player, ItemStack stack, int value) {
+
+		// MF回復エンチャがついていなかったら終了
+		IMFTool wand = (IMFTool) stack.getItem();
+		int level = this.getEnchantLevel(EnchantInit.mfRecover, stack);
+
+		// エンチャが0以下かMFが最大値なら終了
+		if (level <= 0 || wand.isMaxMF(stack)) { return false; }
+
+		// エンチャレベル分増やす
+		value = value >= 4 ? value / 3 : value;
+		value *= level;
+
+		// 取得した経験値分MFを増やす
+		wand.insetMF(stack, value);
+
+		return true;
+	}
+
+	// エンチャレベル取得
+	public int getEnchantLevel (Enchantment enchant, ItemStack stack) {
+		return Math.min(EnchantmentHelper.getEnchantmentLevel(enchant, stack), 10);
 	}
 }

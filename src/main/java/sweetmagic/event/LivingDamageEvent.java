@@ -23,6 +23,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.config.SMConfig;
@@ -61,21 +62,7 @@ public class LivingDamageEvent {
 
 			// 未来視レベル2以上なら
 			if (target.isPotionActive(PotionInit.timestop) && target.getActivePotionEffect(PotionInit.timestop).getAmplifier() >= 1) {
-
-				if (src.getTrueSource() instanceof EntityLiving) {
-
-					EntityLiving living = ( EntityLiving) attacker;
-					target.removePotionEffect(PotionInit.timestop);
-
-					// 敵を動かなくさせる
-					EventUtil.tameAIDonmov(living, 6);
-					DamageSource damage = SMDamage.MagicDamage(living, target);
-					attacker.attackEntityFrom(damage, newDam);
-
-					// ダメージを向こうにしてイベントを無効化
-					event.setAmount(0F);
-					event.setCanceled(true);
-				}
+				this.futureVision(event, src, target, attacker, newDam);
 			}
 
 			// 燃焼なら
@@ -89,7 +76,7 @@ public class LivingDamageEvent {
 			}
 
 			// 攻撃されたのがプレイヤーの場合
-			if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor)) {
+			if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker.isNonBoss()) {
 				newDam = this.getElecArmor(target, attacker, newDam);
 			}
 		}
@@ -104,24 +91,37 @@ public class LivingDamageEvent {
 			newDam = this.barrierCut(target, newDam);
 		}
 
-		// ローブを着ていたら
-		if (target.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem() instanceof IRobe) {
+		ItemStack chest =target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+		Item chestItem = chest.getItem();
 
-			IRobe robe = (IRobe) target.getItemStackFromSlot(EntityEquipmentSlot.CHEST).getItem();
+		// ローブを着ていたら
+		if (chestItem instanceof IRobe) {
+
+			IRobe robe = (IRobe) chestItem;
 			Entity attacker = src.getTrueSource();
+			boolean canDMCut = true;
+
+			if (chestItem instanceof IMFTool) {
+				IMFTool tool = (IMFTool) chestItem;
+				canDMCut = !tool.isEmpty(chest);
+
+				if (canDMCut) {
+					tool.setMF(chest, (int) (tool.getMF(chest) - newDam));
+				}
+			}
 
 			// SMMobの攻撃ならダメージカット
-			if (attacker instanceof ISMMob) {
+			if (attacker instanceof ISMMob && canDMCut) {
 				newDam *= robe.getSMMobDamageCut();
 			}
 
 			// プレイヤーによる攻撃ならダメージを固定
-			else if (attacker instanceof EntityPlayer) {
-				newDam = 0.13F;
+			else if (attacker instanceof EntityPlayer && canDMCut) {
+				newDam = 0.1F;
 			}
 
 			// 魔法ダメージならダメージカット
-			if (src.getImmediateSource() instanceof EntityBaseMagicShot || src == DamageSource.MAGIC) {
+			if ( (src.getImmediateSource() instanceof EntityBaseMagicShot || src == DamageSource.MAGIC ) && canDMCut) {
 				newDam *= robe.getMagicDamageCut();
 			}
 		}
@@ -169,13 +169,21 @@ public class LivingDamageEvent {
 		// ポーション取得
 		PotionEffect effect = entity.getActivePotionEffect(PotionInit.electric_armor);
 		int level = effect.getAmplifier() + 1;
+		int time = effect.getDuration() - (int) (dame * 20);
+
+		liv.removePotionEffect(PotionInit.electric_armor);
 
 		// 反撃ダメージ
-		float counter = dame * (level / 5);
+		float counter = dame * (level * 0.2F);
 		float health = liv.getHealth();
 
-		liv.setHealth( (health - counter) <= 0 ? 1 : health - counter );
+		liv.setHealth( Math.max(1, health - counter) );
 		dame -= 2;
+
+		// 時間が残ってるなら
+		if (time > 0) {
+			PlayerHelper.addPotion(entity, PotionInit.electric_armor, time, level, false);
+		}
 
 		return dame;
 	}
@@ -218,6 +226,36 @@ public class LivingDamageEvent {
 		}
 
 		return dame;
+	}
+
+	public float futureVision (LivingHurtEvent event, DamageSource src, EntityLivingBase target, EntityLivingBase attacker, float newDam) {
+
+		if (src.getTrueSource() instanceof EntityLiving) {
+
+			EntityLiving living = ( EntityLiving) attacker;
+
+			// 未来視を5分減らす
+			PotionEffect effect = target.getActivePotionEffect(PotionInit.timestop);
+			int level = effect.getAmplifier() + 1;
+			int time = effect.getDuration() - 6000;
+			target.removePotionEffect(PotionInit.timestop);
+
+			// 時間が残ってるなら
+			if (time > 0) {
+				PlayerHelper.addPotion(target, PotionInit.timestop, time, level, false);
+			}
+
+			// 敵を動かなくさせる
+			EventUtil.tameAIDonmov(living, 6);
+			DamageSource damage = SMDamage.MagicDamage(living, target);
+			attacker.attackEntityFrom(damage, newDam);
+
+			// ダメージを向こうにしてイベントを無効化
+			newDam = 0F;
+			event.setAmount(0F);
+			event.setCanceled(true);
+		}
+		return newDam;
 	}
 
 	// エーテルバリア

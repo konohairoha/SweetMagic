@@ -43,6 +43,7 @@ public class SMLoottableEvent {
 			pool.addEntry(new LootEntryItem(SMUtil.getItemBlock(BlockInit.prism_sapling), 20, 8, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":prism_sapling"));
 			pool.addEntry(new LootEntryItem(SMUtil.getItemBlock(BlockInit.banana_sapling), 20, 8, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":banana_sapling"));
 			pool.addEntry(new LootEntryItem(SMUtil.getItemBlock(BlockInit.estor_sapling), 20, 8, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":estor_sapling"));
+			pool.addEntry(new LootEntryItem(ItemInit.mf_sbottle, 5, 5, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":mf_sbottle"));
 		}
 
 		// ピラミッドのチェスト
