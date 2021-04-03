@@ -20,9 +20,6 @@ public class RenderRockBlast extends RenderLightMagic {
 
 	public void renderAnimetion (EntityBaseMagicShot entity, double x, double y, double z, float entityYaw, float partialTicks) {
 
-//		Long worldTime = entity.world.getTotalWorldTime();
-//        float rot = worldTime % 360;
-
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -32,9 +29,6 @@ public class RenderRockBlast extends RenderLightMagic {
 		float dz = (float) (z + 0.5F);
         GlStateManager.scale(0.75F, 0.75F, 0.75F);
 		GlStateManager.translate(dx, dy, dz);
-//        GlStateManager.rotate(rot, 1F, 0F, 0F);
-//        GlStateManager.rotate(rot, 0F, 1F, 0F);
-//        GlStateManager.rotate(rot, 0F, 0F, 1F);
 		Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(Blocks.STONE.getDefaultState(), 1);
 		GlStateManager.popMatrix();
 		GlStateManager.disableBlend();

@@ -10,11 +10,12 @@ import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 
 @SideOnly(Side.CLIENT)
 public class RenderSkullFrost extends RenderLiving<EntitySkeleton> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation("sweetmagic:textures/entity/skullflost.png");
+	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/skullflost.png");
 
 	public RenderSkullFrost(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelSkeleton(), 0.3F);
@@ -29,6 +30,6 @@ public class RenderSkullFrost extends RenderLiving<EntitySkeleton> {
 
 	@Override
 	protected ResourceLocation getEntityTexture(EntitySkeleton entity) {
-		return TEXTURES;
+		return TEX;
 	}
 }

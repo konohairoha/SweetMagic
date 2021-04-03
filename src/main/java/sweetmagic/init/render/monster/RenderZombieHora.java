@@ -16,13 +16,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.model.ModelHora;
 import sweetmagic.init.entity.monster.EntityZombieHora;
 
 @SideOnly(Side.CLIENT)
 public class RenderZombieHora extends RenderLiving<EntityZombieHora> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation("sweetmagic:textures/entity/hora.png");
+	public static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/hora.png");
     private static final ResourceLocation GUARDIAN_BEAM_TEXTURE = new ResourceLocation("textures/entity/guardian_beam.png");
 
 	public RenderZombieHora(RenderManager rendermanagerIn) {

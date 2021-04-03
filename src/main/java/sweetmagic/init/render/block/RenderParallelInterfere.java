@@ -2,28 +2,44 @@ package sweetmagic.init.render.block;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import sweetmagic.SweetMagicCore;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
+import sweetmagic.init.tile.magic.TileStardustWish;
+import sweetmagic.util.RenderUtils;
 
 public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParallelInterfere> {
 
-	public static final ResourceLocation TEX = new ResourceLocation("sweetmagic", "textures/entity/magicbook.png");
-	public static final ResourceLocation RUNE_TEX = new ResourceLocation("sweetmagic", "textures/block/hexagram_pastelcolor.png");
+	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/magicbook.png");
+	public static final ResourceLocation TEX_STAR = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardustbook.png");
+	public static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
 	public final ModelBook model = new ModelBook();
 
 	public void render(TileParallelInterfere te, double x, double y, double z, float parTick, int destroyStage, float alpha) {
+
 		GlStateManager.pushMatrix();
 		this.renderBook(te, x, y, z, parTick);
 		GlStateManager.popMatrix();
+
+//		if (te instanceof TileStardustWish) {
+//	        GlStateManager.pushMatrix();
+//	        GlStateManager.translate((float) x + 0.5F, (float) y + 1F, (float) z + 0.5F);
+//			this.renderStarDust(te, x, y, z, parTick);
+//	        GlStateManager.popMatrix();
+//		}
 	}
 
 	public void renderBook (TileParallelInterfere te, double x, double y, double z, float parTick) {
@@ -31,11 +47,9 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 		GlStateManager.translate((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
 		float f = (float) te.tickTime + parTick;
 		GlStateManager.translate(0.0F, 0.1F + MathHelper.sin(f * 0.1F) * 0.01F + 0.25, 0.0F);
-        float f1;
+		float f1;
 
-		for (f1 = te.bookRot - te.bookRotPre; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) {
-			;
-		}
+		for (f1 = te.bookRot - te.bookRotPre; f1 >= (float) Math.PI; f1 -= ((float) Math.PI * 2F)) { ; }
 
 		while (f1 < -(float) Math.PI) {
 			f1 += ((float) Math.PI * 2F);
@@ -44,7 +58,7 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 		float f2 = te.bookRotPre + f1 * parTick;
 		GlStateManager.rotate(-f2 * (180F / (float) Math.PI), 0.0F, 1.0F, 0.0F);
 		GlStateManager.rotate(80.0F, 0.0F, 0.0F, 1.0F);
-		this.bindTexture(TEX);
+		this.bindTexture(this.getTex(te));
 		float f3 = te.pageFlipPrev + (te.pageFlip - te.pageFlipPrev) * parTick + 0.25F;
 		float f4 = te.pageFlipPrev + (te.pageFlip - te.pageFlipPrev) * parTick + 0.75F;
 		f3 = (f3 - (float) MathHelper.fastFloor((double) f3)) * 1.6F - 0.3F;
@@ -55,14 +69,14 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 		if (f3 > 1F) { f3 = 1F; }
 		if (f4 > 1F) { f4 = 1F; }
 
-        float f5 = te.bookSpreadPrev + (te.bookSpread - te.bookSpreadPrev) * parTick;
+		float f5 = te.bookSpreadPrev + (te.bookSpread - te.bookSpreadPrev) * parTick;
 		GlStateManager.enableCull();
 		this.model.render((Entity) null, f, f3, f4, f5, 0.0F, 0.0625F);
 
 		Long worldTime = te.getWorld().getTotalWorldTime();
-        float rot = worldTime % 720;
+		float rot = worldTime % 720;
 		GlStateManager.disableLighting();
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 		GlStateManager.rotate(100F, 0F, 0F, 1F);
@@ -81,5 +95,47 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 
 		GlStateManager.disableBlend();
 		GlStateManager.enableLighting();
+	}
+
+	public ResourceLocation getTex (TileParallelInterfere te) {
+
+		ResourceLocation tex = null;
+
+		if (te instanceof TileStardustWish) {
+			tex = TEX_STAR;
+		}
+
+		else {
+			tex = TEX;
+		}
+
+		return tex;
+	}
+
+	public void renderStarDust (TileParallelInterfere te, double x, double y, double z, float parTick) {
+
+		float rotY = (te.getTime() + parTick) / 10F;
+		float rotX = -0.125F;
+		float rotZ = 0;
+		float scale = 0.5F;
+
+		ItemStack stack = new ItemStack(ItemInit.cosmic_crystal_shard);
+		RenderItem render = Minecraft.getMinecraft().getRenderItem();
+
+		int count = 4;
+		float pi = 180F / (float) Math.PI;
+
+		for (int i = 0; i < count; i++) {
+
+			GlStateManager.pushMatrix();
+			GlStateManager.translate(x + 0.5, y + 1.25F, z + 0.5F);
+			GlStateManager.rotate(rotZ * pi, 0F, 0F, 1F);
+			GlStateManager.rotate(rotY * pi + (i * (360 / count)), 0F, 1F, 0F);
+			GlStateManager.rotate(rotX * pi, 1F, 0F, 0F);
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.translate(1.25F, 0F, 0F);
+			RenderUtils.renderItem(render, stack, 0, 0F, 0, 0, 0, 0, 0);
+			GlStateManager.popMatrix();
+		}
 	}
 }

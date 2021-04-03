@@ -14,12 +14,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.model.ModelHora;
 import sweetmagic.init.entity.monster.EntityZombieKronos;
 
 public class RenderZombieKronos extends RenderLiving<EntityZombieKronos> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation("sweetmagic:textures/entity/kronos.png");
+	public static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/kronos.png");
     private static final ResourceLocation GUARDIAN_BEAM_TEXTURE = new ResourceLocation("textures/entity/guardian_beam.png");
 
 	public RenderZombieKronos(RenderManager rendermanagerIn) {

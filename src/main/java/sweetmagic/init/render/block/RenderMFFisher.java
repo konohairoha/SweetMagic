@@ -14,13 +14,14 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.magic.TileMFFisher;
 import sweetmagic.util.RenderUtils;
 
 public class RenderMFFisher extends TileEntitySpecialRenderer<TileMFFisher> {
 
-	private static final ResourceLocation RUNE_TEXTURE = new ResourceLocation("sweetmagic", "textures/block/mahoujin.png");
+	private static final ResourceLocation RUNE_TEXTURE = new ResourceLocation(SweetMagicCore.MODID, "textures/block/mahoujin.png");
 	float size = 0.5F;
 
 	@Override

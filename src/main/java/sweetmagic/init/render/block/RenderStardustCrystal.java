@@ -13,12 +13,13 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.magic.TileStardustCrystal;
 
 public class RenderStardustCrystal extends TileEntitySpecialRenderer<TileStardustCrystal> {
 
-	public static final ResourceLocation TEX = new ResourceLocation("sweetmagic", "textures/entity/stardust_crystal.png");
-	public static final ResourceLocation RUNE_TEX = new ResourceLocation("sweetmagic", "textures/block/hexagram_pastelcolor.png");
+	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardust_crystal.png");
+	public static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
 	public final ModelBase model = new ModelEnderCrystal(0.0F, false);
 	public Long worldTime;
 

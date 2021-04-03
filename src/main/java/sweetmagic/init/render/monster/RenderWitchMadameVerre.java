@@ -7,30 +7,29 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 
 @SideOnly(Side.CLIENT)
 public class RenderWitchMadameVerre extends RenderLiving<EntityWitchMadameVerre> {
 
-	private static final ResourceLocation WITCH_TEXTURES = new ResourceLocation("sweetmagic:textures/entity/witchmadameverre.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/witchmadameverre.png");
 
-	public RenderWitchMadameVerre(RenderManager renderManagerIn) {
-		super(renderManagerIn, new ModelWitch(0.0F), 0.5F);
-		//        this.addLayer(new LayerHeldItemWitch(this));
+	public RenderWitchMadameVerre(RenderManager render) {
+		super(render, new ModelWitch(0.0F), 0.5F);
 	}
 
 	public ModelWitch getMainModel() {
 		return (ModelWitch) super.getMainModel();
 	}
 
-	public void doRender(EntityWitchMadameVerre entity, double x, double y, double z, float entityYaw,
-			float partialTicks) {
+	public void doRender(EntityWitchMadameVerre entity, double x, double y, double z, float entityYaw, float partialTicks) {
 		((ModelWitch) this.mainModel).holdingItem = !entity.getHeldItemMainhand().isEmpty();
 		super.doRender(entity, x, y, z, entityYaw, partialTicks);
 	}
 
 	protected ResourceLocation getEntityTexture(EntityWitchMadameVerre entity) {
-		return WITCH_TEXTURES;
+		return TEX;
 	}
 
 	public void transformHeldFull3DItemLayer() {

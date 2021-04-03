@@ -24,6 +24,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.ParticleHelper;
 
@@ -59,7 +60,13 @@ public class PotionSM extends PotionBase {
 
 		// リフレッシュ・エフェクト
 		if (this == PotionInit.refresh_effect) {
-			this.actionReflash(world, entity);
+
+			try {
+				this.actionReflash(world, entity);
+			}
+
+			catch (Throwable e) { }
+
 		}
 
 		// スロー
@@ -88,8 +95,14 @@ public class PotionSM extends PotionBase {
 			entity.motionX *= 0.67;
 			entity.motionZ *= 0.67;
 
-			if (amplifier >= 1 && entity.getActivePotionEffect(PotionInit.babule).getDuration() % 20 == 0) {
+			int time = entity.getActivePotionEffect(PotionInit.babule).getDuration();
+
+			if (amplifier >= 1 && time % 20 == 0) {
 				entity.attackEntityFrom(DamageSource.FALL, 1F);
+			}
+
+			if (time % 20 == 0) {
+				entity.playSound(SMSoundEvent.BABULE, 1F, (world.rand.nextFloat() * 0.3F) + 1F);
 			}
 		}
 
@@ -97,7 +110,7 @@ public class PotionSM extends PotionBase {
 		if (this == PotionInit.regene && entity.getActivePotionEffect(PotionInit.regene).getDuration() % 60 == 0) {
 
 			// 体力が最大以上なら
-			if (entity.getHealth() < entity.getMaxHealth() && !entity.isDead) {
+			if (entity.getHealth() < entity.getMaxHealth() && entity.isEntityAlive()) {
 				entity.setHealth(entity.getHealth() + (amplifier + 1));
 				ParticleHelper.spawnHeal(entity, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
 			}
@@ -118,16 +131,9 @@ public class PotionSM extends PotionBase {
 		}
 
 		// 燃焼状態
-		if (this == PotionInit.flame) {
-
-			if (entity.getHealth() > 1F) {
-				entity.setHealth(entity.getHealth() - 1);
-				entity.world.playSound(null, new BlockPos(entity), SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.NEUTRAL, 1F, 1F);
-			}
-
-			else {
-				entity.attackEntityFrom(DamageSource.WITHER, 1F);
-			}
+		if (this == PotionInit.flame && entity.getHealth() > 1F) {
+			entity.setHealth(entity.getHealth() - 1);
+			entity.world.playSound(null, new BlockPos(entity), SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.NEUTRAL, 1F, 1F);
 		}
 	}
 
@@ -143,8 +149,14 @@ public class PotionSM extends PotionBase {
 
 	// デバフ解除
 	public void actionReflash (World world, EntityLivingBase entity) {
-		for (Potion potion : PotionInit.getDeBuffPotionList()) {
-			entity.removePotionEffect(potion);
+
+		for (PotionEffect effect : entity.getActivePotionEffects()) {
+
+			// デバフなら
+			Potion potion = effect.getPotion();
+			if (potion.isBadEffect()) {
+				entity.removePotionEffect(potion);
+			}
 		}
 	}
 

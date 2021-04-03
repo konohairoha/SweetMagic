@@ -43,11 +43,6 @@ public class RenderPedalCreate extends TileEntitySpecialRenderer<TilePedalCreate
 		RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.scale(0.7F, 0.7F, 0.7F);
 
-        // 投入アイテムの個数取得
-//        int maxAmount = te.getInputCount();
-//		System.out.println("========AMO" + amount);
-//		System.out.println("========MAX" + maxAmount);
-
 		for (int i = 0; i < 8; i++) {
 
 			ItemStack input = ItemStack.EMPTY;

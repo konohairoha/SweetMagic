@@ -10,12 +10,13 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 
 @SideOnly(Side.CLIENT)
 public class RenderLightMagic<T extends Entity> extends Render<T> {
 
-	private static final ResourceLocation tex = new ResourceLocation("sweetmagic:textures/particle/notex.png");
+	private static final ResourceLocation tex = new ResourceLocation(SweetMagicCore.MODID, "textures/particle/notex.png");
 
 	public RenderLightMagic(RenderManager renderManager) {
 		super(renderManager);

@@ -26,14 +26,14 @@ public class PotionBase extends Potion {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderHUDEffect(PotionEffect effect, Gui gui, int x, int y, float z, float alpha) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(sprite);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.sprite);
 		this.drawModalRectWithCustomSizedTexture(x + 3, y + 3, z, 0, 0, 18, 18, 18, 18);
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void renderInventoryEffect(PotionEffect effect, Gui gui, int x, int y, float z) {
-		Minecraft.getMinecraft().renderEngine.bindTexture(sprite);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.sprite);
 		this.drawModalRectWithCustomSizedTexture(x + 6, y + 7, z, 0, 0, 18, 18, 18, 18);
 	}
 
