@@ -7,6 +7,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.util.EnumHelper;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iitem.IChoker;
+import sweetmagic.api.iitem.IHarness;
+import sweetmagic.api.iitem.IPouch;
+import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMArmor;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
@@ -29,8 +33,23 @@ public class EnchantWand extends Enchantment {
 
 		Item item = stack.getItem();
 
-		if (this == EnchantInit.mfRecover && item instanceof ISMArmor) {
-			return true;
+		if (item instanceof ISMArmor) {
+
+			if (item instanceof IRobe || item instanceof IChoker) {
+				return this == EnchantInit.mfRecover || this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP;
+			}
+
+			else if (item instanceof IPouch) {
+				return this == EnchantInit.aetherCharm;
+			}
+
+			else if (item instanceof IHarness) {
+				return this == EnchantInit.mfRecover || this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP;
+			}
+
+//			else if (item instanceof IChoker) {
+//				return this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP;
+//			}
 		}
 
 		return item instanceof IWand;

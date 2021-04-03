@@ -19,7 +19,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
-import sweetmagic.init.tile.plant.TileParticleF;
+import sweetmagic.init.tile.plant.TileSannyFlower;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.SweetState;
 
@@ -165,6 +165,6 @@ public class BaseMagicalCrops extends BlockBush implements IGrowable {
 
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-		return new TileParticleF(); // TileEntityクラスを返す
+		return new TileSannyFlower(); // TileEntityクラスを返す
 	}
 }

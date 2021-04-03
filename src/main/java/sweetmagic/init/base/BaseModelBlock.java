@@ -93,6 +93,12 @@ public class BaseModelBlock extends Block {
 		}
 	}
 
+	// アイテムのスポーン
+	public void spawnItem (World world, EntityPlayer player, ItemStack stack) {
+		BlockPos pos = new BlockPos(player);
+		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY() + 0.5, pos.getZ(), stack));
+	}
+
 	// ブロック破壊処理
 	public boolean breakBlock(BlockPos pos, World world, boolean dropBlock) {
 

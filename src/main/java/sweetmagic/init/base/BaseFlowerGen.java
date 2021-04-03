@@ -42,7 +42,8 @@ public class BaseFlowerGen implements IWorldGenerator {
 		this.rand = this.getRand(world, chunkX, chunkZ);
 		int posX = (chunkX * 16) + 8;
 		int posZ = (chunkZ * 16) + 8;
-		if (this.checkBiome(world.getBiome(new BlockPos(posX, 60, posZ)))) { return; }
+		Biome bio = world.getBiome(new BlockPos(posX, 60, posZ));
+		if (this.checkBiome(bio)) { return; }
 
 		this.genFlower(world, this.rand, posX, posZ, this.state);
 	}

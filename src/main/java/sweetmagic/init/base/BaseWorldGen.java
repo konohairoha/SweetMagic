@@ -14,12 +14,17 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraft.world.gen.IChunkGenerator;
+import net.minecraft.world.storage.loot.LootContext;
+import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.util.WorldHelper;
 
 public class BaseWorldGen implements IWorldGenerator {
@@ -44,7 +49,7 @@ public class BaseWorldGen implements IWorldGenerator {
 	public void generate(Random rand, int chunkX, int chunkZ, World world, IChunkGenerator gen, IChunkProvider pro) {
 
     	// コンフィグ確認
-    	if (!this.checkConfig() || WorldHelper.isFlat(world)) { return; }
+    	if (!this.checkConfig() || this.checkFeatures(world) || WorldHelper.isFlat(world) ) { return; }
 
 		//ネザー、エンドでは生成しない
 		int dimId = world.provider.getDimension();
@@ -129,7 +134,6 @@ public class BaseWorldGen implements IWorldGenerator {
 		this.setSpawner(world, rand, pos);
 	}
 
-
 	public void setSpawner (World world, Random rand, BlockPos pos) {
 
 		TileEntity tile = world.getTileEntity(pos);
@@ -164,5 +168,45 @@ public class BaseWorldGen implements IWorldGenerator {
 				}
 			}
 		}
+	}
+
+	// ルートテーブルの設定
+	public void setLootTable (World world, Random rand, BlockPos pos, ResourceLocation src) {
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile instanceof TileEntityChest) {
+			((TileEntityChest) tile).setLootTable(src, rand.nextLong());
+		}
+	}
+
+	// ルートテーブルの設定
+	public void setLootTable (World world, Random rand, BlockPos pos, ResourceLocation src, float chance) {
+
+		if (world.isRemote) { return; }
+
+		TileEntity tile = world.getTileEntity(pos);
+		if (!(tile instanceof TileWoodChest)) { return; }
+
+    	TileWoodChest chest = (TileWoodChest) tile;
+
+    	for (int i = 0; i < chest.getInvSize(); i++) {
+
+			if (rand.nextFloat() >= chance || !chest.getChestItem(i).isEmpty()) { continue; }
+
+			// ルートテーブルをリストに入れて取り出してインベントリに入れる
+			LootContext.Builder lootcontext = new LootContext.Builder((WorldServer) world);
+			LootTable loot =  world.getLootTableManager().getLootTableFromLocation(src);
+
+			List<ItemStack> items =loot.generateLootForPools(rand, lootcontext.build());
+			if (items.isEmpty() || items.size() < 0) { continue; }
+
+			ItemStack stack = items.get(rand.nextInt(items.size()));
+
+			chest.chestInv.insertItem(i, stack, false);
+    	}
+	}
+
+	// 構造物の生成が有効か
+	public boolean checkFeatures (World world) {
+		return !world.getWorldInfo().isMapFeaturesEnabled();
 	}
 }
