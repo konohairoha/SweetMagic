@@ -3,6 +3,7 @@ package sweetmagic.init.block.crop;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFarmland;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -158,7 +159,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 	public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
 		IBlockState state2 = world.getBlockState(pos.down());
 		Block block = state2.getBlock();
-		if ( (this.getNowStateMeta(state2) <= 1 && block == this) || block instanceof PlantPot ) {
+		if ( (this.getNowStateMeta(state2) <= 1 && block == this) || block instanceof PlantPot || block instanceof BlockFarmland) {
 			return true;
 		} else if (this.stayGrnd == 1 && this.canSustainBush(state2) && block != this) {
 			return false;

@@ -27,7 +27,7 @@ public class MFChange extends BaseMFBlock {
 		super(name);
 		this.data = data;
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LEVEL, Integer.valueOf(0)));
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
 	}
 
 	@Override

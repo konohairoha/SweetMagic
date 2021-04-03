@@ -10,6 +10,7 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
+import sweetmagic.init.tile.magic.TileMFMMTank;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.magic.TileMFTankAdvanced;
 
@@ -20,7 +21,7 @@ public class MFTank extends BaseMFBlock {
     public MFTank(String name, int data) {
 		super(name);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
     }
 
 	// ブロックでのアクション
@@ -37,6 +38,8 @@ public class MFTank extends BaseMFBlock {
 			return new TileMFTank();
 		case 1:
 			return new TileMFTankAdvanced();
+		case 2:
+			return new TileMFMMTank();
 		}
 		return null;
 	}

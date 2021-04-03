@@ -44,8 +44,7 @@ public interface ISMCrop {
 			if (!(block instanceof ISMCrop)) { continue; }
 
 			// 右クリック呼び出し
-			this.onRicghtClick(world, player, state, p, stack);
-//			ISMCrop crop = (ISMCrop) block;
+			((ISMCrop) block).onRicghtClick(world, player, state, p, stack);
 		}
 	}
 

@@ -48,6 +48,12 @@ public class MagicBarrier extends BaseModelBlock {
 
 		if (world.isRemote || this.data == 1 || stack.getItem() != ItemInit.magickey) { return false; }
 
+//		if (world.isRemote) {
+//			player.playSound(SoundEvents.BLOCK_IRON_DOOR_OPEN, 1F, 1F);
+//			return true;
+//		}
+//		player.playSound(SoundEvents.BLOCK_IRON_DOOR_OPEN, 1F, 1F);
+
 		world.playEvent(2001, pos, Block.getStateId(state));
 		world.setBlockState(pos, BlockInit.magicbarrier_off.getDefaultState(), 2);
 		if (!player.isCreative()) { stack.shrink(1); }

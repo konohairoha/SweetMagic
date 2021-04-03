@@ -54,6 +54,11 @@ public class SpawnStone extends BaseModelBlock {
 		return false;
 	}
 
+	@Override
+	public int getExpDrop(IBlockState state, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
+		return 50 + RANDOM.nextInt(50) + RANDOM.nextInt(50);
+	}
+
     @Override
 	public boolean hasTileEntity(IBlockState state) {
 		return true;
@@ -71,7 +76,6 @@ public class SpawnStone extends BaseModelBlock {
 
 		return new TileSMSpaner();
 	}
-
 
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
         return ItemStack.EMPTY;

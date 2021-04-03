@@ -28,7 +28,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseMagicalCrops;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
-import sweetmagic.init.tile.plant.TileParticleF;
+import sweetmagic.init.tile.plant.TileSannyFlower;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.SweetState;
 
@@ -271,17 +271,17 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	// サニーフラワーなら
 	public boolean isSanny () {
-		return this.data == 0 && TileParticleF.flagDaytime;
+		return this.data == 0 && TileSannyFlower.flagDaytime;
 	}
 
 	// ムーンブロッサムなら
 	public boolean isMoon () {
-		return this.data == 1 && !TileParticleF.flagDaytime;
+		return this.data == 1 && !TileSannyFlower.flagDaytime;
 	}
 
 	// ドリズリィなら
 	public boolean isDM () {
-		return this.data == 2 && TileParticleF.flagRaining;
+		return this.data == 2 && TileSannyFlower.flagRaining;
 	}
 
 	//右クリックの処理
@@ -328,6 +328,6 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 	@Nonnull
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-		return new TileParticleF();
+		return new TileSannyFlower();
 	}
 }

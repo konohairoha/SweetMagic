@@ -46,7 +46,6 @@ public class BlockCandle extends BaseModelBlock {
 		return 0.5F;
 	}
 
-
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
 			float hitZ, int meta, EntityLivingBase placer) {

@@ -187,13 +187,10 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 
 			// プレイヤーのInventoryの取得
 			NonNullList<ItemStack> pInv = player.inventory.mainInventory;
-
-			Boolean tmFlg = false; 				// 時間操作用
+			Boolean tmFlg = false; 						// 時間操作用
 			Random rand = world.rand;
-			int age = getNowStateMeta(state);		// 花の状態を取得
-
-			// 手に持ってるアイテム
-			ItemStack stack = player.getHeldItem(hand);
+			int age = getNowStateMeta(state);			// 花の状態を取得
+			ItemStack stack = player.getHeldItem(hand);	// 手に持ってるアイテム
 
 			if (stack.getItem() == ItemInit.veil_darkness) {
 

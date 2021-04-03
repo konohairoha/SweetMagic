@@ -35,7 +35,7 @@ import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.SweetState;
 
-public class SweetCrops_STAGE4 extends  BlockBush implements IGrowable, ISMCrop {
+public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	public Random srand = new Random();
 	public int stage = 4;

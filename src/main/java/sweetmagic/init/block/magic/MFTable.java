@@ -22,6 +22,7 @@ import sweetmagic.api.recipe.mftable.MFTableRecipeInfo;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
+import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.util.SMUtil;
@@ -33,7 +34,7 @@ public class MFTable extends BaseMFBlock {
     public MFTable(String name, int data) {
 		super(name);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
     }
 
 	// ブロックでのアクション
@@ -59,7 +60,7 @@ public class MFTable extends BaseMFBlock {
 		int tier = wand.getTier();
 
 		// クリエワンドなら
-		if (wand.isCreativeWand() || tier >= 5) {
+		if (wand.isCreativeWand() || tier >= 7) {
 			this.openGui(world, player, pos);
 			return;
 		}
@@ -134,11 +135,22 @@ public class MFTable extends BaseMFBlock {
 
 	// GUIを開く
 	public void openGui (World world, EntityPlayer player, BlockPos pos) {
-		if (this.data == 0) {
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFTABLE_GUI, world, pos.getX(), pos.getY(), pos.getZ());
-		} else if (this.data == 1) {
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFTABLE_ADVANCED_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+
+		int guiId = 0;
+
+		switch (this.data) {
+		case 0:
+			guiId = SMGuiHandler.MFTABLE_GUI;
+			break;
+		case 1:
+			guiId = SMGuiHandler.MFTABLE_ADVANCED_GUI;
+			break;
+		case 2:
+			guiId = SMGuiHandler.MMTABLE;
+			break;
 		}
+
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -148,6 +160,8 @@ public class MFTable extends BaseMFBlock {
 			return new TileMFTable();
 		case 1:
 			return new TileMFTableAdvanced();
+		case 2:
+			return new TileMFMMTable();
 		}
 		return null;
 	}

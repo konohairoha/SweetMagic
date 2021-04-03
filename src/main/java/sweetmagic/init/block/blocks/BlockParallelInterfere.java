@@ -29,15 +29,19 @@ import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
+import sweetmagic.init.tile.magic.TileStardustWish;
 
 public class BlockParallelInterfere extends BaseFaceBlock {
 
-	public BlockParallelInterfere(String name) {
+	public final int data;
+
+	public BlockParallelInterfere(String name, int data) {
 		super(Material.IRON, name);
 		setHardness(1.0F);
 		setResistance(16F);
 		setSoundType(SoundType.STONE);
 		disableStats();
+		this.data = data;
 		BlockInit.blockList.add(this);
 	}
 
@@ -53,7 +57,15 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-		return new TileParallelInterfere();
+
+		switch (this.data) {
+		case 0:
+			return new TileParallelInterfere();
+		case 1:
+			return new TileStardustWish();
+		}
+
+		return null;
 	}
 
 	//右クリックの処理
@@ -62,7 +74,18 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 		if (world.isRemote) { return true; }
 
 		this.playerSound(world, pos, SMSoundEvent.PAGE, 0.33F, 1F);
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.PARALLELINTERFERE_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+		int guiId = 0;
+
+		switch (this.data) {
+		case 0:
+			guiId = SMGuiHandler.PARALLELINTERFERE_GUI;
+			break;
+		case 1:
+			guiId = SMGuiHandler.STARDUSTWISH;
+			break;
+		}
+
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}
 
@@ -80,7 +103,7 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		//xx_xx.langファイルから文字を取得する方法
 		TextComponentTranslation text1 = new TextComponentTranslation("tip.parallelinterfere_title.name", new Object[0]);
 		TextComponentTranslation text2 = new TextComponentTranslation("tip.parallelinterfere_text.name", new Object[0]);

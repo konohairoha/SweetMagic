@@ -23,7 +23,7 @@ public class BlockCornFlower extends BlockBush {
 		this.disableStats();
 		this.setCreativeTab(null);
 		this.data = meta;
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
 	}
 
 	/**
