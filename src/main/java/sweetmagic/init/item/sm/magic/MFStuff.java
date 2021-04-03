@@ -19,20 +19,19 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 
 public class MFStuff extends SMItem {
 
 	public MFStuff (String name) {
-		super(name);
+		super(name, ItemInit.magicList);
 	}
 
 	// ブロックを右クリック
 	@Override
 	public EnumActionResult useStack (World world, EntityPlayer player, ItemStack stack, BlockPos pos, EnumFacing face) {
 
-		System.out.println("==" + world.getActualHeight());
-		System.out.println("==" + world.getTopSolidOrLiquidBlock(new BlockPos(pos.getX(), 0, pos.getY())));
 		if (player.isSneaking()) { return EnumActionResult.PASS; }
 
 		NBTTagCompound tags = stack.getTagCompound();

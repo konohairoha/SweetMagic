@@ -1,5 +1,7 @@
 package sweetmagic.init.item.sm.sweetmagic;
 
+import java.util.List;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -16,6 +18,12 @@ public class SMItem extends Item {
         setUnlocalizedName(name);
         setRegistryName(name);
         ItemInit.itemList.add(this);
+    }
+
+	public SMItem(String name, List<Item> list) {
+        setUnlocalizedName(name);
+        setRegistryName(name);
+        list.add(this);
     }
 
 	@Override

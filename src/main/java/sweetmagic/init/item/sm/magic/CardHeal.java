@@ -10,13 +10,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 import sweetmagic.util.ParticleHelper;
 
-public class CardHeal extends SMItem{
+public class CardHeal extends SMItem {
 
-	public CardHeal (String name, int value) {
-		super(name);
+	public CardHeal(String name, int value) {
+		super(name, ItemInit.magicList);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(value);
 	}
@@ -37,12 +38,12 @@ public class CardHeal extends SMItem{
 	}
 
 	@Override
-	public boolean isEnchantable(ItemStack stack){
+	public boolean isEnchantable(ItemStack stack) {
 		return false;
 	}
 
 	@Override
-	public boolean isBookEnchantable(ItemStack stack, ItemStack book){
+	public boolean isBookEnchantable(ItemStack stack, ItemStack book) {
 		return false;
 	}
 }

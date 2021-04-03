@@ -8,6 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.ISMItem;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
@@ -24,7 +25,7 @@ public class MFSlotItem extends SMItem implements ISMItem {
 	ResourceLocation icon;
 
 	public MFSlotItem (String name, SMType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.setType(type);
 		this.setElement(ele);
 		this.setTier(tier);

@@ -20,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.enchant.EnchantWand;
 import sweetmagic.init.item.sm.eitem.SMType;
 
@@ -35,7 +36,7 @@ public class SMWand extends SMItem implements IWand {
 	public BlockPos wandPos = new BlockPos(0, 0, 0);
 
 	public SMWand (String name, int tier, int maxMF, int slot) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.setTier(tier);
 		this.setMaxMF(maxMF);
 		this.setSlot(slot);

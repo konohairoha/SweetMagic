@@ -11,10 +11,12 @@ import sweetmagic.init.item.sm.eitem.SMElement;
 
 public class CosmicWand extends SMWand {
 
-	int downTime = 0;
+	public int downTime = 0;
+	public final SMElement element;
 
-	public CosmicWand (String name, int tier, int maxMF, int slot) {
+	public CosmicWand (String name, int tier, int maxMF, int slot, SMElement element) {
 		super(name, tier, maxMF, slot);
+		this.element = element;
 	}
 
 	// 魔法アクション中の処理
@@ -25,10 +27,15 @@ public class CosmicWand extends SMWand {
 
 		// レベルの取得
 		int level = this.getLevel(stack);
-		int enchaLevel = this.getEnchantLevel(EnchantInit.wandAddPower, stack);
+		int enchaLevel = this.addWandLevel(world, player, stack, smItem, EnchantInit.wandAddPower);
+
+		// 杖と魔法の属性一致してるなら
+		if (this.isNotElement() && smItem.getElement() == this.getWandElement()) {
+			enchaLevel += 2;
+		}
+
 
 		tags.setInteger(LEVEL, (level + this.getTier() - 2 + enchaLevel));
-
 		flag = smItem.onItemAction(world, player, stack, item);
 
 		// レベルを戻す
@@ -44,9 +51,9 @@ public class CosmicWand extends SMWand {
 		// クリエワンド以外なら
 		if (!this.isCreativeWand()) {
 
-			// 光属性なら
-			if (smItem.getElement() == SMElement.getElement(this.getElement(stack))) {
-				this.downTime = (this.getTier() - 2) * 10;
+			// 杖と魔法の属性一致してるなら
+			if (this.isNotElement() && smItem.getElement() == this.getWandElement()) {
+				this.downTime = 15;
 			}
 
 			// それ以外の属性なら
@@ -55,30 +62,33 @@ public class CosmicWand extends SMWand {
 			}
 
 			// クールタイム
-			player.getCooldownTracker().setCooldown(item, this.getCoolTime(stack, smItem.getCoolTime()));
+			player.getCooldownTracker().setCooldown(item, this.getCoolTime(player, stack, smItem.getCoolTime()));
 
 			// 使用した魔法分だけ消費
-			this.setMF(stack, this.setMF(stack, smItem));
+			this.setMF(stack, this.setMF(player, stack, smItem));
 
 			// アイテムを消費するかどうか
 			if (smItem.isShirink()) {
 				this.shrinkItem(player, stack, (Item) smItem);
 			}
 
-			// actionFlagがtrueなら経験値を増やす
-			if (actionFlag) {
-				int addExp = (int) smItem.getUseMF() / 10 ;
-
-				addExp = addExp <= 0 ? 0 : addExp;
-
-				// レベルアップできるかどうか
-				this.levelUpCheck(world, player, stack, addExp);
+			// actionFlagがtrueならレベルアップチェック
+			if (actionFlag && !world.isRemote) {
+				this.levelUpCheck(world, player, stack, this.getAddExp(player, smItem));
 			}
 		}
 	}
 
+
 	// クールタイム減少時間の値
+	@Override
 	public int getCoolTimeDown () {
 		return this.downTime;
+	}
+
+	// 杖の属性
+	@Override
+	public SMElement getWandElement () {
+		return this.element;
 	}
 }

@@ -31,7 +31,7 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
         setUnlocalizedName(name);
         setRegistryName(name);
         this.data = data;
-		ItemInit.itemList.add(this);
+		ItemInit.magicList.add(this);
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelPouch next = new ModelPouch(0.375F, slot.getIndex());
+		ModelPouch next = new ModelPouch(0.375F, slot.getSlotIndex());
 		next.setModelAttributes(model);
 		return next;
 	}
@@ -95,7 +95,5 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 
 	//アイテムにダメージを与える処理を無効
 	@Override
-	public void setDamage(ItemStack stack, int damage) {
-		return;
-	}
+	public void setDamage(ItemStack stack, int damage) { }
 }

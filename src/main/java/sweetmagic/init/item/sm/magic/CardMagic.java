@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityNomal;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
@@ -27,7 +28,7 @@ public class CardMagic extends SMItem {
 	private int data;
 
 	public CardMagic (String name, int value, int meta) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(value);
 		this.data = meta;

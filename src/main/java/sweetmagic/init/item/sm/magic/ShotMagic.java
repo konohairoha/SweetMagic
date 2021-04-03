@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.entity.projectile.EntityBabuleMagic;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
@@ -22,6 +23,7 @@ import sweetmagic.init.entity.projectile.EntityFrostMagic;
 import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.init.entity.projectile.EntityLightMagic;
 import sweetmagic.init.entity.projectile.EntityPoisonMagic;
+import sweetmagic.init.entity.projectile.EntityShinigFlare;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 
@@ -29,6 +31,7 @@ public class ShotMagic extends MFSlotItem {
 
 	public final int data;
 	ResourceLocation icon;
+	public SMElement subEle = null;
 
 	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
@@ -40,6 +43,13 @@ public class ShotMagic extends MFSlotItem {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
         this.data = meta;
 		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+	}
+
+	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir, SMElement subEle) {
+		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
+        this.data = meta;
+		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.setSubElement(subEle);
 	}
 
 	/**
@@ -63,6 +73,12 @@ public class ShotMagic extends MFSlotItem {
 	 * 17 = 魔法爆発
 	 * 18 = 暴風魔法
 	 * 19 = 大重力魔法
+	 * 20 = 泡魔法
+	 * 21 = 泡窒息魔法
+	 * 22 = 範囲猛毒魔法
+	 * 23 = 5範囲dig魔法
+	 * 24 = 泡窒息リジェネ解除魔法
+	 * 25 = 炎/光魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -134,6 +150,24 @@ public class ShotMagic extends MFSlotItem {
 		case 19:
 			toolTip.add("tip.magic_gravity_break.name");
 			break;
+		case 20:
+			toolTip.add("tip.magic_bubleprison.name");
+			break;
+		case 21:
+			toolTip.add("tip.magic_scumefang.name");
+			break;
+		case 22:
+			toolTip.add("tip.magic_deadly_poison.name");
+			break;
+		case 23:
+			toolTip.add("tip.magic_earth_destruction.name");
+			break;
+		case 24:
+			toolTip.add("tip.magic_foamy_hell.name");
+			break;
+		case 25:
+			toolTip.add("tip.magic_shining_flare.name");
+			break;
 		}
 
 		return toolTip;
@@ -199,7 +233,7 @@ public class ShotMagic extends MFSlotItem {
 				entity.setDamage(3);
 				break;
 			case 11:
-				entity = new EntityPoisonMagic(world, player, stack);
+				entity = new EntityPoisonMagic(world, player, stack, 0);
 				isDamage = false;
 				break;
 			case 12:
@@ -239,6 +273,25 @@ public class ShotMagic extends MFSlotItem {
 				entity.range = 12D;
 				entity.isHitDead = true;
 				break;
+			case 20:
+				entity = new EntityBabuleMagic(world, player, stack, 0);
+				break;
+			case 21:
+				entity = new EntityBabuleMagic(world, player, stack, 1);
+				break;
+			case 22:
+				entity = new EntityPoisonMagic(world, player, stack, 1);
+				break;
+			case 23:
+				entity = new EntityDigMagic(world, player, stack, 3);
+				break;
+			case 24:
+				entity = new EntityBabuleMagic(world, player, stack, 2);
+				break;
+			case 25:
+				entity = new EntityShinigFlare(world, player, stack);
+				entity.setDamage(5);
+				break;
 			}
 
 			// ダメージを与える場合
@@ -257,7 +310,7 @@ public class ShotMagic extends MFSlotItem {
 			}
 
 			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
-			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + (power >= 3 ? 3 : power), 0);	// 射撃速度
+			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power, 3), 0);	// 射撃速度
 			world.spawnEntity(entity);
 
 			if (tripleShot) {
@@ -322,7 +375,7 @@ public class ShotMagic extends MFSlotItem {
 	// 左右の矢の射撃
 	public void shotSacred(World world, EntityPlayer player, ItemStack stack, float power) {
 
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i <= 9; i++) {
 
 			EntityBaseMagicShot entity = null;
 
@@ -343,5 +396,17 @@ public class ShotMagic extends MFSlotItem {
 			world.spawnEntity(entity);
 			entity.plusTick = -100;
 		}
+	}
+
+	// サブ属性の取得
+	@Override
+	public SMElement getSubElement () {
+		return this.subEle;
+	}
+
+	// サブ属性の設定
+	@Override
+	public void setSubElement (SMElement ele) {
+		this.subEle = ele;
 	}
 }

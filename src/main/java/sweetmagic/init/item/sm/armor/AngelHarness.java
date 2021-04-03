@@ -3,7 +3,6 @@ package sweetmagic.init.item.sm.armor;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
@@ -11,22 +10,20 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.api.iitem.IMFTool;
-import sweetmagic.api.iitem.IRobe;
-import sweetmagic.handlers.PacketHandler;
-import sweetmagic.handlers.SMGuiHandler;
+import sweetmagic.api.iitem.IHarness;
+import sweetmagic.api.iitem.ISMArmor;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.entity.model.ModelRobe;
-import sweetmagic.packet.PlayerSoundPKT;
-import sweetmagic.util.SoundHelper;
+import sweetmagic.init.PotionInit;
+import sweetmagic.init.entity.model.ModelPouch;
 
-public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
+public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 
-	private final int data;
+	public final int data;
 	public int maxMF;
+	public int tickTime = 0;
 
-	public MagiciansRobe(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
+	public AngelHarness(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
 		super(material, render, slot);
         setUnlocalizedName(name);
         setRegistryName(name);
@@ -36,8 +33,10 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	}
 
 	/**
-	 * 0 = エーテルローブ
-	 * 1 = 強化ローブ
+	 * 0 = ヘルメット
+	 * 1 = チェストプレート
+	 * 2 = レギンス
+	 * 3 = ブーツ
 	 */
 
 	// 特定のアイテムで修復可能に
@@ -49,32 +48,43 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelRobe next = new ModelRobe(0.375F, slot.getSlotIndex());
+		ModelPouch next = new ModelPouch(0.375F, slot.getIndex());
 		next.setModelAttributes(model);
 		return next;
 	}
 
+	// 装備してる間機能する内容
 	@Override
-  	public void openGUI (World world, EntityPlayer player, ItemStack stack) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
 
-		if (!world.isRemote) {
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFROBE_GUI, world, 0, -1, -1);
+		player.fallDistance = 0;
 
-			// クライアント（プレイヤー）へ送りつける
-			PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_ROBE, 1F, 0.25F), (EntityPlayerMP) player);
+		// 飛行中なら終了
+		if (player.capabilities.isFlying || this.getMF(stack) <= 0) { return; }
+
+		// MFが１以上かつジャンプしてるなら
+		if (SweetMagicCore.proxy.isJumpPressed() && !player.isPotionActive(PotionInit.breakblock)) {
+			player.motionY += 0.2F;
+			this.tickTime++;
 		}
-  	}
 
-	// SMモブのダメージカット率（1だとダメージカット無し）
-	@Override
-	public float getSMMobDamageCut () {
-		return this.data == 1 ? 0.65F : 0.75F;
-	}
+		// スニークしてないなら
+		else if (!player.isSneaking()) {
+			player.motionY *= 0.825;
+		}
 
-	// 魔法ダメージカット率（1だとダメージカット無し）
-	@Override
-	public float getMagicDamageCut () {
-		return this.data == 1 ? 0.65F : 0.75F;
+		// ダッシュボタン押してるなら
+		if (SweetMagicCore.proxy.isDushPressed() && Math.abs(player.motionX) + Math.abs(player.motionZ) < 2) {
+			player.motionX *= 1.1F;
+			player.motionZ *= 1.1F;
+			this.tickTime++;
+		}
+
+		// 4tickに一回MFを消費
+		if (this.tickTime >= 4) {
+			this.tickTime -= 4;
+			this.setMF(stack, this.getMF(stack) - 1);
+		}
 	}
 
 	// エンチャントエフェクト描画

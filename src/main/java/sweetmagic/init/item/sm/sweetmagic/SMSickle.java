@@ -138,7 +138,7 @@ public class SMSickle extends ItemHoe {
 
 	public void getPickPlant (World world, EntityPlayer player, BlockPos pos, ItemStack stack) {
 
-		Block block = world.getBlockState(new BlockPos(player)).getBlock();
+		Block block = world.getBlockState(pos).getBlock();
 		if (!(block instanceof ISMCrop)) { return; }
 
 		ISMCrop crop = (ISMCrop) block;

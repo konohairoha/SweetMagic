@@ -18,6 +18,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.eitem.SMAcceType;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 
@@ -29,7 +30,7 @@ public class SMAcce extends SMItem implements IAcce {
 	private static final AttributeModifier SPEED_BOOST = new AttributeModifier("speed_boost", 0.15, 0).setSaved(false);
 
 	public SMAcce (String name, SMAcceType type, boolean isDup, int data) {
-        super(name);
+		super(name, ItemInit.magicList);
         this.setAcceType(type);
         this.isDup = isDup;
 		this.data = data;
@@ -44,6 +45,7 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 4 = 血吸の指輪
 	 * 5 = エメラルドピアス
 	 * 6 = フォーチュンリング
+	 * 7 = 夜の帳
 	 */
 
 	@Override
@@ -71,6 +73,15 @@ public class SMAcce extends SMItem implements IAcce {
 		case 6:
 			toolTip.add("tip.fortune_ring.name");
 			break;
+		case 7:
+			toolTip.add("tip.veil_buff.name");
+			break;
+		case 8:
+			toolTip.add("tip.varrier_pendant.name");
+			break;
+		case 9:
+			toolTip.add("tip.magicians_grobe.name");
+			break;
 		}
 
 		return toolTip;
@@ -83,6 +94,9 @@ public class SMAcce extends SMItem implements IAcce {
 		// 血吸の指輪
 		case 4:
 			return player.getHealth() > 1;
+		// 守護のペンダント
+		case 8:
+			return player.getHealth() <= 6 && !player.getCooldownTracker().hasCooldown(stack.getItem());
 		}
 
 		return true;
@@ -91,18 +105,31 @@ public class SMAcce extends SMItem implements IAcce {
 	// 常に発動したいならここで
 	public void onUpdate(World world, EntityPlayer player, ItemStack stack) {
 
+		// 発動条件を満たさないなら終了
+		if (!this.canUseEffect(world, player, stack)) { return; }
+
 		switch (this.data) {
 		case 2:
 			// 灼熱の宝玉
 			this.scorchEffect(world, player, stack);
 			break;
 		case 3:
-			// 血吸の指輪
+			// 人魚の衣
 			this.mermaidEffect(world, player, stack);
+			break;
 		case 6:
 			// フォーチュンリング
 			player.addPotionEffect(new PotionEffect(MobEffects.LUCK, 201, 1, true, false));
 			break;
+		case 7:
+			// 夜の帳
+			player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 201, 0, true, false));
+			break;
+		case 8:
+			// 守護の守り
+			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 1));
+			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 200, 4));
+			player.getCooldownTracker().setCooldown(stack.getItem(), 12000);
 		}
 	}
 
@@ -139,6 +166,8 @@ public class SMAcce extends SMItem implements IAcce {
 
 			player.setAir(300);
 			player.fallDistance = 0F;
+			player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 201, 0, true, false));
+
 
 			if (!player.capabilities.isFlying && SweetMagicCore.proxy.isJumpPressed()) {
 				player.motionY += 0.04825;
@@ -161,7 +190,7 @@ public class SMAcce extends SMItem implements IAcce {
 
 		switch (this.data) {
 		case 0:
-			this.addPotion(player, MobEffects.STRENGTH, 600, 1, true);
+			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 600, 1, true, false));
 			return true;
 		case 4:
 
@@ -189,11 +218,28 @@ public class SMAcce extends SMItem implements IAcce {
 		case 0:
 			tipEntity = new TextComponentTranslation("entity.braveskeleton.name", new Object[0]).getFormattedText();
 			break;
+		case 1:
+			tipEntity = new TextComponentTranslation("entity.witchmadameverre.name", new Object[0]).getFormattedText();
+			break;
+		case 2:
+			tipEntity = new TextComponentTranslation("entity.ifrite.name", new Object[0]).getFormattedText();
+			break;
+		case 3:
+			tipEntity = new TextComponentTranslation("entity.windine.name", new Object[0]).getFormattedText();
+			break;
+		case 8:
+			tipEntity = new TextComponentTranslation("entity.ancientfairy.name", new Object[0]).getFormattedText();
+			break;
 
 		}
 
   		if (!tipEntity.equals("")) {
   	  		String tip = new TextComponentTranslation("tip.dropboss.name", new Object[0]).getFormattedText() + " " + tipEntity;
+  			tooltip.add(I18n.format(TextFormatting.GREEN + tip));
+  		}
+
+  		if (this.data == 7) {
+  			String tip = new TextComponentTranslation("tip.veil_darkness.name", new Object[0]).getFormattedText();
   			tooltip.add(I18n.format(TextFormatting.GREEN + tip));
   		}
   	}

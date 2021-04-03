@@ -59,6 +59,7 @@ public class ChargeMagic extends MFSlotItem {
 	 * 4 = 時間低速化魔法
 	 * 5 = 範囲作物成長魔法
 	 * 6 = 小範囲作物成長魔法
+	 * 7 = 作物広範囲魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -89,7 +90,10 @@ public class ChargeMagic extends MFSlotItem {
 			toolTip.add("tip.magic_growthaura.name");
 			break;
 		case 6:
-			toolTip.add("tip.magic_growthaura.name");
+			toolTip.add("tip.magic_growth_effect.name");
+			break;
+		case 7:
+			toolTip.add("tip.magic_growth_verre.name");
 			break;
 		}
 
@@ -127,10 +131,13 @@ public class ChargeMagic extends MFSlotItem {
 			// 範囲作物成長魔法
 			flag = this.growthAura(world, player, stack, tags);
 			break;
-
 		case 6:
 			// 小範囲作物成長魔法
 			flag = this.growthEffect(world, player, stack, tags);
+			break;
+		case 7:
+			// 作物広範囲魔法
+			flag = this.growthVerre(world, player, stack, tags);
 			break;
 		}
 
@@ -273,8 +280,7 @@ public class ChargeMagic extends MFSlotItem {
 	public boolean growthAura (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
 		// 杖の取得
-		IWand wand = IWand.getWand(stack);
-		int level = IWand.getLevel(wand, stack) + 4;
+		int level = 5;
 		this.rangeGrow(world, new BlockPos(player), level);
 		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
 		return this.rangeGrow(world, new BlockPos(player), level);
@@ -320,6 +326,17 @@ public class ChargeMagic extends MFSlotItem {
 		}
 
 		return isGrow;
+	}
+
+	// 広範囲作物育成魔法
+	public boolean growthVerre (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack) + 4;
+		this.rangeGrow(world, new BlockPos(player), level);
+		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
+		return this.rangeGrow(world, new BlockPos(player), level);
 	}
 
 	@Override

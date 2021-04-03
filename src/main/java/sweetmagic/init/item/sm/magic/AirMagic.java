@@ -8,7 +8,9 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.FoodStats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -57,6 +59,8 @@ public class AirMagic extends MFSlotItem {
 	 * 12 = 弾のベクトル無効化
 	 * 13 = 敵スタン魔法
 	 * 14 = 敵スタン + 反撃魔法
+	 * 15 = 持続回復 + バリア魔法
+	 * 16 = 持続回復Ⅲ + バリア魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -112,6 +116,12 @@ public class AirMagic extends MFSlotItem {
 			break;
 		case 14:
 			toolTip.add("tip.magic_futurevision.name");
+			break;
+		case 15:
+			toolTip.add("tip.magic_regene_shield.name");
+			break;
+		case 16:
+			toolTip.add("tip.magic_magia_protection.name");
 			break;
 		}
 
@@ -184,6 +194,12 @@ public class AirMagic extends MFSlotItem {
 		case 14:
 			// 敵スタン + 反撃魔法
 			flag = this.futureVisionMagic(world, player, stack, tags);
+			break;
+		case 15:
+		case 16:
+			// 持続回復Ⅲ + バリア魔法
+			flag = this.regeneBarrierAction(world, player, stack, tags);
+			break;
 		}
 
 		return flag;
@@ -204,12 +220,14 @@ public class AirMagic extends MFSlotItem {
 		int level = IWand.getLevel(wand, stack);
 
 		// 幻影を与える
-		this.addPotion(player, PotionInit.shadow, this.effectTime(level), level);
+		this.addPotion(player, PotionInit.shadow, this.effectTime(level), level, true);
 		this.playSound(world, player, SMSoundEvent.MAGICSTART, 1.25F, 1F);
 
 		long worldTime = world.getWorldTime() % 24000;
 		boolean isNight = worldTime >= 12000;
-		player.setHealth(isNight ? player.getHealth() * 0.75F : player.getHealth() / 2F);
+		player.setHealth(isNight ? player.getHealth() * 0.75F : player.getHealth() * 0.5F);
+		FoodStats stats = player.getFoodStats();
+		stats.setFoodLevel((int) (isNight ? stats.getFoodLevel() * 0.75F : stats.getFoodLevel() * 0.5F));
 
 		return true;
 	}
@@ -253,7 +271,7 @@ public class AirMagic extends MFSlotItem {
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		this.addPotion(player, PotionInit.grant_poison, this.effectTime(level), 0);
+		this.addPotion(player, PotionInit.grant_poison, this.effectTime(level), 0, true);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 		return true;
 	}
@@ -279,7 +297,7 @@ public class AirMagic extends MFSlotItem {
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		this.addPotion(player, PotionInit.electric_armor, this.effectTime(level), --level);
+		this.addPotion(player, PotionInit.electric_armor, this.effectTime(level), --level, true);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 		return true;
 	}
@@ -370,6 +388,7 @@ public class AirMagic extends MFSlotItem {
 		int level = IWand.getLevel(wand, stack);
 
 		this.addPotion(player, MobEffects.JUMP_BOOST, this.effectTime(level), 1, false);
+		player.addPotionEffect(new PotionEffect(MobEffects.JUMP_BOOST, this.effectTime(level), 1, true, false));
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 
 		return true;
@@ -414,20 +433,31 @@ public class AirMagic extends MFSlotItem {
 		return true;
 	}
 
+	// 持続回復 + バリア魔法
+	public boolean regeneBarrierAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+		int time = this.data == 16 ? (int) (this.effectTime(level) * 1.25) : this.effectTime(level);
+		int potionLevel = this.data == 16 ? 3 : 1;
+
+		this.addPotion(player, PotionInit.aether_barrier, time, --level, false);
+		this.addPotion(player, PotionInit.regene, this.effectTime(level), potionLevel, false);
+		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+		player.getActivePotionEffects();
+
+		return true;
+	}
+
 	// 魔法が使えるかチェック
 	@Override
 	public boolean canItemMagic (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
 		switch (this.data) {
 		case 9:
-
-			// 向き取得
-	        Vec3d vec3d = player.getLookVec();
-	        vec3d = vec3d.normalize().scale(17);
-	        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY, player.posZ + vec3d.z);
-
 	        // 空が見えるなら打てる
-	        return world.canSeeSky(pos);
+	        return world.canSeeSky(new BlockPos(player));
 
 		}
 		return true;

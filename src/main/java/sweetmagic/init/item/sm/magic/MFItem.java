@@ -11,6 +11,7 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 
 public class MFItem extends SMItem {
@@ -19,7 +20,7 @@ public class MFItem extends SMItem {
 	public int magiaflux;
 
 	public MFItem (String name, int magiaflux) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.magiaflux = magiaflux;
 	}
 

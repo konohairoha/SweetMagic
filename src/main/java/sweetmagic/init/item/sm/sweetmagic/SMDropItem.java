@@ -12,13 +12,14 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.init.ItemInit;
 
 public class SMDropItem extends SMItem {
 
 	public final String name;
 
 	public SMDropItem (String name) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.name = name;
 	}
 
