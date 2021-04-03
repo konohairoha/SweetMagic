@@ -6,20 +6,22 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
+import sweetmagic.init.tile.chest.TileGravityChest;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.chest.TileRattanBasket;
 import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.init.tile.container.BookContainer;
 import sweetmagic.init.tile.container.ContainerAetherFurnace;
+import sweetmagic.init.tile.container.ContainerAetherHopper;
 import sweetmagic.init.tile.container.ContainerFreezer;
+import sweetmagic.init.tile.container.ContainerGravityChest;
 import sweetmagic.init.tile.container.ContainerJuiceMaker;
 import sweetmagic.init.tile.container.ContainerMFChanger;
-import sweetmagic.init.tile.container.ContainerMFChangerAdvanced;
 import sweetmagic.init.tile.container.ContainerMFFisher;
 import sweetmagic.init.tile.container.ContainerMFFurnace;
 import sweetmagic.init.tile.container.ContainerMFTable;
-import sweetmagic.init.tile.container.ContainerMFTableAdvanced;
 import sweetmagic.init.tile.container.ContainerMFTank;
+import sweetmagic.init.tile.container.ContainerMagiaWrite;
 import sweetmagic.init.tile.container.ContainerModenRack;
 import sweetmagic.init.tile.container.ContainerParallelInterfere;
 import sweetmagic.init.tile.container.ContainerPouch;
@@ -27,23 +29,24 @@ import sweetmagic.init.tile.container.ContainerRattanBasket;
 import sweetmagic.init.tile.container.ContainerRobe;
 import sweetmagic.init.tile.container.ContainerSMWand;
 import sweetmagic.init.tile.container.ContainerStove;
+import sweetmagic.init.tile.container.ContainerToolRepair;
 import sweetmagic.init.tile.container.ContainerWoodChest;
 import sweetmagic.init.tile.cook.TileFreezer;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 import sweetmagic.init.tile.cook.TileStove;
-import sweetmagic.init.tile.furnace.TileMFF;
 import sweetmagic.init.tile.gui.GuiAetherFurnace;
+import sweetmagic.init.tile.gui.GuiAetherHopper;
 import sweetmagic.init.tile.gui.GuiBook;
 import sweetmagic.init.tile.gui.GuiFreezer;
+import sweetmagic.init.tile.gui.GuiGravityChest;
 import sweetmagic.init.tile.gui.GuiGuidBook;
 import sweetmagic.init.tile.gui.GuiJuiceMaker;
 import sweetmagic.init.tile.gui.GuiMFChanger;
-import sweetmagic.init.tile.gui.GuiMFChangerAdvanced;
 import sweetmagic.init.tile.gui.GuiMFF;
 import sweetmagic.init.tile.gui.GuiMFFisher;
 import sweetmagic.init.tile.gui.GuiMFTable;
-import sweetmagic.init.tile.gui.GuiMFTableAdvanced;
 import sweetmagic.init.tile.gui.GuiMFTank;
+import sweetmagic.init.tile.gui.GuiMagiaWrite;
 import sweetmagic.init.tile.gui.GuiModenRack;
 import sweetmagic.init.tile.gui.GuiParallelInterfere;
 import sweetmagic.init.tile.gui.GuiPouch;
@@ -51,18 +54,25 @@ import sweetmagic.init.tile.gui.GuiRattanBasket;
 import sweetmagic.init.tile.gui.GuiRobe;
 import sweetmagic.init.tile.gui.GuiSMWand;
 import sweetmagic.init.tile.gui.GuiStove;
+import sweetmagic.init.tile.gui.GuiToolRepair;
 import sweetmagic.init.tile.gui.GuiWoodChest;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.init.tile.inventory.InventoryRobe;
 import sweetmagic.init.tile.inventory.InventorySMWand;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
+import sweetmagic.init.tile.magic.TileAetherHopper;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
+import sweetmagic.init.tile.magic.TileMFF;
 import sweetmagic.init.tile.magic.TileMFFisher;
+import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
+import sweetmagic.init.tile.magic.TileMagiaWrite;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
+import sweetmagic.init.tile.magic.TileStardustWish;
+import sweetmagic.init.tile.magic.TileToolRepair;
 
 public class SMGuiHandler implements IGuiHandler {
 
@@ -86,6 +96,12 @@ public class SMGuiHandler implements IGuiHandler {
 	public static final int GUIDBOOK = 18;
 	public static final int RATTAMBASKET = 19;
 	public static final int WOODCHEST = 20;
+	public static final int TOOLREPAIR = 21;
+	public static final int GRAVITYCHEST = 22;
+	public static final int MAGIAWRITE = 23;
+	public static final int AETHERHOPPER = 24;
+	public static final int MMTABLE = 25;
+	public static final int STARDUSTWISH = 26;
 
 	///サーバ側の処理
 	@Override
@@ -124,15 +140,27 @@ public class SMGuiHandler implements IGuiHandler {
 		} else if(ID == SMGuiHandler.PARALLELINTERFERE_GUI) {
 			return new ContainerParallelInterfere(player.inventory, (TileParallelInterfere) tile);
 		} else if(ID == SMGuiHandler.MFTABLE_ADVANCED_GUI) {
-			return new ContainerMFTableAdvanced(player.inventory, (TileMFTableAdvanced) tile);
+			return new ContainerMFTable(player.inventory, (TileMFTableAdvanced) tile);
 		} else if(ID == SMGuiHandler.MFCHANGER_ADVANCED_GUI) {
-			return new ContainerMFChangerAdvanced(player.inventory, (TileMFChangerAdvanced) tile);
+			return new ContainerMFChanger(player.inventory, (TileMFChangerAdvanced) tile);
 		} else if(ID == SMGuiHandler.MODENRACK_GUI) {
 			return new ContainerModenRack(player.inventory, (TileModenRack) tile);
 		} else if(ID == SMGuiHandler.RATTAMBASKET) {
 			return new ContainerRattanBasket(player.inventory, (TileRattanBasket) tile);
 		} else if(ID == SMGuiHandler.WOODCHEST) {
 			return new ContainerWoodChest(player.inventory, (TileWoodChest) tile);
+		} else if(ID == SMGuiHandler.TOOLREPAIR) {
+			return new ContainerToolRepair(player.inventory, (TileToolRepair) tile);
+		} else if(ID == SMGuiHandler.GRAVITYCHEST) {
+			return new ContainerGravityChest(player.inventory, (TileGravityChest) tile);
+		} else if(ID == SMGuiHandler.MAGIAWRITE) {
+			return new ContainerMagiaWrite(player.inventory, (TileMagiaWrite) tile);
+		} else if(ID == SMGuiHandler.AETHERHOPPER) {
+			return new ContainerAetherHopper(player.inventory, (TileAetherHopper) tile);
+		} else if(ID == SMGuiHandler.MMTABLE) {
+			return new ContainerMFTable(player.inventory, (TileMFMMTable) tile);
+		} else if(ID == SMGuiHandler.STARDUSTWISH) {
+			return new ContainerParallelInterfere(player.inventory, (TileStardustWish) tile);
 		}
 		return null;
 	}
@@ -176,9 +204,9 @@ public class SMGuiHandler implements IGuiHandler {
 		} else if(ID == SMGuiHandler.PARALLELINTERFERE_GUI) {
 			return new GuiParallelInterfere(player.inventory, (TileParallelInterfere) tile);
 		} else if(ID == SMGuiHandler.MFTABLE_ADVANCED_GUI) {
-			return new GuiMFTableAdvanced(player.inventory, (TileMFTableAdvanced) tile);
+			return new GuiMFTable(player.inventory, (TileMFTableAdvanced) tile);
 		} else if(ID == SMGuiHandler.MFCHANGER_ADVANCED_GUI) {
-			return new GuiMFChangerAdvanced(player.inventory, (TileMFChangerAdvanced) tile);
+			return new GuiMFChanger(player.inventory, (TileMFChangerAdvanced) tile);
 		} else if(ID == SMGuiHandler.MODENRACK_GUI) {
 			return new GuiModenRack(player.inventory, (TileModenRack) tile);
 		} else if (ID == SMGuiHandler.GUIDBOOK) {
@@ -187,6 +215,18 @@ public class SMGuiHandler implements IGuiHandler {
 			return new GuiRattanBasket(player.inventory, (TileRattanBasket) tile);
 		} else if(ID == SMGuiHandler.WOODCHEST) {
 			return new GuiWoodChest(player.inventory, (TileWoodChest) tile);
+		} else if(ID == SMGuiHandler.TOOLREPAIR) {
+			return new GuiToolRepair(player.inventory, (TileToolRepair) tile);
+		} else if(ID == SMGuiHandler.GRAVITYCHEST) {
+			return new GuiGravityChest(player.inventory, (TileGravityChest) tile);
+		} else if(ID == SMGuiHandler.MAGIAWRITE) {
+			return new GuiMagiaWrite(player.inventory, (TileMagiaWrite) tile);
+		} else if(ID == SMGuiHandler.AETHERHOPPER) {
+			return new GuiAetherHopper(player.inventory, (TileAetherHopper) tile);
+		} else if(ID == SMGuiHandler.MMTABLE) {
+			return new GuiMFTable(player.inventory, (TileMFMMTable) tile);
+		} else if(ID == SMGuiHandler.STARDUSTWISH) {
+			return new GuiParallelInterfere(player.inventory, (TileStardustWish) tile);
 		}
 		return null;
 	}

@@ -1,7 +1,10 @@
 package sweetmagic.handlers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
@@ -31,6 +34,7 @@ public class RecipeHandler {
 	public static void registerCrafting() {
 
 		String modId = SweetMagicCore.MODID;
+		Ingredient recipeBook = Ingredient.fromStacks(SMUtil.getOreArray("recipeBook"));
 
 		/*草ブロックから粘土*/
 		if (SMConfig.help_recipe) {
@@ -213,14 +217,205 @@ public class RecipeHandler {
 			}
 		);
 
+		// 柱
+        GameRegistry.addShapelessRecipe(new ResourceLocation(modId, "pillar_stone"), new ResourceLocation(modId),
+            new ItemStack(BlockInit.pillar_stone, 4),
+            new Ingredient[] { Ingredient.fromStacks(new ItemStack(Blocks.STONEBRICK, 1, 3)), recipeBook }
+        );
+
+        // 柱
+        GameRegistry.addShapelessRecipe(new ResourceLocation(modId, "pillar_white"), new ResourceLocation(modId),
+            new ItemStack(BlockInit.pillar_stone_w, 4),
+            new Ingredient[] { Ingredient.fromStacks(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 32767)), recipeBook }
+        );
+
+		// ウィザードローブ
 		RecipeHandler.addRecipe("wizard_robe",
 			new RecipeNBTExtend(new ResourceLocation(modId, "wizard_robe"),
 			new ItemStack(ItemInit.wizard_robe),
+				"APA",
 				"DRD",
+				"APA",
 				'D', "dyeBlack",
-				'R', ItemInit.magicians_robe
+				'P', ItemInit.pure_crystal,
+				'A', "magicAccessori",
+				'R', "magicians_grobe"
 			)
 		);
+
+		// フェアリーローブ
+		RecipeHandler.addRecipe("feary_robe",
+			new RecipeNBTExtend(new ResourceLocation(modId, "feary_robe"),
+			new ItemStack(ItemInit.feary_robe),
+				"APA",
+				"DRD",
+				"APA",
+				'D', "dyeGreen",
+				'P', ItemInit.pure_crystal,
+				'A', "magicAccessori",
+				'R', "magicians_grobe"
+			)
+		);
+
+		// ウィンディーネローブ
+		RecipeHandler.addRecipe("windine_robe",
+			new RecipeNBTExtend(new ResourceLocation(modId, "windine_robe"),
+			new ItemStack(ItemInit.windine_robe),
+				"APA",
+				"DRD",
+				"APA",
+				'D', "dyeBlue",
+				'P', ItemInit.pure_crystal,
+				'A', "magicAccessori",
+				'R', "magicians_grobe"
+			)
+		);
+
+		// イフリートローブ
+		RecipeHandler.addRecipe("ifrite_robe",
+			new RecipeNBTExtend(new ResourceLocation(modId, "ifrite_robe"),
+			new ItemStack(ItemInit.ifrite_robe),
+				"APA",
+				"DRD",
+				"APA",
+				'D', "dyeRed",
+				'P', ItemInit.pure_crystal,
+				'A', "magicAccessori",
+				'R', "magicians_grobe"
+			)
+		);
+
+		// ピュアクリスタルチョーカー
+		RecipeHandler.addRecipe("pure_choker",
+			new RecipeNBTExtend(new ResourceLocation(modId, "pure_choker"),
+			new ItemStack(ItemInit.pure_choker),
+				"MPM",
+				"PAP",
+				"MPM",
+				'A', ItemInit.aether_choker,
+				'P', ItemInit.pure_crystal,
+				'M', ItemInit.mf_bottle
+			)
+		);
+
+		// 重力チェスト
+		RecipeHandler.addRecipe("gravity_chest",
+			new RecipeNBTExtend(new ResourceLocation(modId, "gravity_chest"),
+			new ItemStack(BlockInit.gravity_chest),
+				"BBB",
+				"MWM",
+				"BBB",
+				'B', ItemInit.mf_sbottle,
+				'M', ItemInit.mysterious_page,
+				'W', "woodChest"
+			)
+		);
+
+
+		// シュガーベルの種
+		GameRegistry.addShapelessRecipe(new ResourceLocation(modId, ItemInit.sugarbell_seed.getUnlocalizedName()), new ResourceLocation(modId),
+			new ItemStack(ItemInit.sugarbell_seed, 4),
+			new Ingredient[] {
+				Ingredient.fromStacks(SMUtil.getOreArray("listAllseed")),
+				Ingredient.fromStacks(SMUtil.getOreArray("dirt"))
+			}
+		);
+
+		Map<Item, String> aetherRecipe = new HashMap<>();
+		aetherRecipe.put(ItemInit.aether_wand_r, "dyeRed");
+		aetherRecipe.put(ItemInit.aether_wand_g, "dyeGreen");
+		aetherRecipe.put(ItemInit.aether_wand_b, "dyeBlue");
+		aetherRecipe.put(ItemInit.aether_wand_y, "dyeYellow");
+		aetherRecipe.put(ItemInit.aether_wand_p, "dyePurple");
+
+		for (Entry<Item, String> map : aetherRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(modId, item.getUnlocalizedName()),
+				new ItemStack(item),
+					" C ",
+					"DWD",
+					" C ",
+					'C', ItemInit.magicmeal,
+					'D', map.getValue(),
+					'W', "aetherWand"
+				)
+			);
+		}
+
+		Map<Item, String> divineRecipe = new HashMap<>();
+		divineRecipe.put(ItemInit.divine_wand_r, "dyeRed");
+		divineRecipe.put(ItemInit.divine_wand_g, "dyeGreen");
+		divineRecipe.put(ItemInit.divine_wand_b, "dyeBlue");
+		divineRecipe.put(ItemInit.divine_wand_y, "dyeYellow");
+		divineRecipe.put(ItemInit.divine_wand_p, "dyePurple");
+
+		for (Entry<Item, String> map : divineRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(modId, item.getUnlocalizedName()),
+				new ItemStack(item),
+					" C ",
+					"DWD",
+					" C ",
+					'C', ItemInit.aether_crystal,
+					'D', map.getValue(),
+					'W', "divineWand"
+				)
+			);
+		}
+
+		Map<Item, String> pureRecipe = new HashMap<>();
+		pureRecipe.put(ItemInit.purecrystal_wand_r, "dyeRed");
+		pureRecipe.put(ItemInit.purecrystal_wand_g, "dyeGreen");
+		pureRecipe.put(ItemInit.purecrystal_wand_b, "dyeBlue");
+		pureRecipe.put(ItemInit.purecrystal_wand_y, "dyeYellow");
+		pureRecipe.put(ItemInit.purecrystal_wand_p, "dyePurple");
+
+		for (Entry<Item, String> map : pureRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(modId, item.getUnlocalizedName()),
+				new ItemStack(item),
+					" C ",
+					"DWD",
+					" C ",
+					'C', ItemInit.divine_crystal,
+					'D', map.getValue(),
+					'W', "purecrystalWand"
+				)
+			);
+		}
+
+		Map<Item, String> deusRecipe = new HashMap<>();
+		deusRecipe.put(ItemInit.deuscrystal_wand_r, "dyeRed");
+		deusRecipe.put(ItemInit.deuscrystal_wand_g, "dyeGreen");
+		deusRecipe.put(ItemInit.deuscrystal_wand_b, "dyeBlue");
+		deusRecipe.put(ItemInit.deuscrystal_wand_y, "dyeYellow");
+		deusRecipe.put(ItemInit.deuscrystal_wand_p, "dyePurple");
+
+		for (Entry<Item, String> map : deusRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(modId, item.getUnlocalizedName()),
+				new ItemStack(item),
+					" C ",
+					"DWD",
+					" C ",
+					'C', ItemInit.pure_crystal,
+					'D', map.getValue(),
+					'W', "deuscrystalWand"
+				)
+			);
+		}
 
 		// ブロック、ハーフ、階段をリストに突っ込む
 		List<RecipeRegisterHelper> recipeList = new ArrayList<>();
@@ -342,7 +537,6 @@ public class RecipeHandler {
 
 		// 鉱石辞書を取得
 		Ingredient cobble = Ingredient.fromStacks(SMUtil.getOreArray("cobblestone"));
-		Ingredient recipeBook = Ingredient.fromStacks(SMUtil.getOreArray("recipeBook"));
 
 		for (RecipeRegisterHelper recipe : recipeList3) {
 
@@ -485,6 +679,30 @@ public class RecipeHandler {
 				}
 			);
 		}
+
+		Map<Block, Block> busketRecipe = new HashMap<>();
+		busketRecipe.put(BlockInit.iberis_umbellata, BlockInit.iberis_umbellata_basket);
+		busketRecipe.put(BlockInit.campanula, BlockInit.campanula_basket);
+		busketRecipe.put(BlockInit.primula_polyansa, BlockInit.primula_polyansa_basket);
+		busketRecipe.put(BlockInit.christmas_rose, BlockInit.christmas_rose_basket);
+		busketRecipe.put(BlockInit.portulaca, BlockInit.portulaca_basket);
+		Ingredient stick = Ingredient.fromStacks(SMUtil.getOreArray("stickWood"));
+
+		for (Entry<Block, Block> map : busketRecipe.entrySet()) {
+
+			Block flower = map.getKey();
+			Block basket = map.getValue();
+
+			GameRegistry.addShapelessRecipe(new ResourceLocation(modId, basket.getUnlocalizedName()), new ResourceLocation(modId),
+				new ItemStack(basket, 4),
+				new Ingredient[] {
+					Ingredient.fromStacks(new ItemStack(flower)),
+					stick,
+					stick,
+					stick
+				}
+			);
+		}
 	}
 
     public static Multimap<String,IRecipe> recipeMultimap = HashMultimap.create();
@@ -508,11 +726,12 @@ public class RecipeHandler {
 		GameRegistry.addSmelting(ItemInit.plant_chips, new ItemStack(Items.DYE, 1, 15), 0.05F);
 		GameRegistry.addSmelting(ItemInit.sweetpotato, new ItemStack(ItemInit.yaki_imo), 0.1F);
 		GameRegistry.addSmelting(ItemInit.eggplant, new ItemStack(ItemInit.yakinasu), 0.1F);
-		GameRegistry.addSmelting(BlockInit.chestnut_log, new ItemStack(Items.COAL), 0.15F);
-		GameRegistry.addSmelting(BlockInit.coconut_log, new ItemStack(Items.COAL), 0.15F);
-		GameRegistry.addSmelting(BlockInit.lemon_log, new ItemStack(Items.COAL), 0.15F);
-		GameRegistry.addSmelting(BlockInit.orange_log, new ItemStack(Items.COAL), 0.15F);
-		GameRegistry.addSmelting(BlockInit.prism_log, new ItemStack(Items.COAL), 0.15F);
+		GameRegistry.addSmelting(BlockInit.chestnut_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(BlockInit.coconut_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(BlockInit.lemon_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(BlockInit.orange_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(BlockInit.prism_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
+		GameRegistry.addSmelting(BlockInit.estor_log, new ItemStack(Items.COAL, 1, 1), 0.15F);
 		GameRegistry.addSmelting(ItemInit.banana, new ItemStack(ItemInit.yaki_banana), 0.1F);
 		GameRegistry.addSmelting(ItemInit.estor_apple, new ItemStack(ItemInit.yaki_apple), 0.1F);
 	}

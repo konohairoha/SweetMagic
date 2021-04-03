@@ -65,12 +65,43 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("dyeWhite", BlockInit.lily_valley);
 		OreDictionary.registerOre("dyeBlack", BlockInit.blackrose);
 		OreDictionary.registerOre("dyePink", BlockInit.cosmos);
+		OreDictionary.registerOre("dyePink", BlockInit.iberis_umbellata);
 		OreDictionary.registerOre("dyeRed", ItemInit.strawberry);
+		OreDictionary.registerOre("dyeRed", BlockInit.primula_polyansa);
 		OreDictionary.registerOre("dyeBrown", ItemInit.chestnut);
+		OreDictionary.registerOre("dyeBrown", BlockInit.carnation_crayola);
 		OreDictionary.registerOre("dyeYellow", ItemInit.lemon);
+		OreDictionary.registerOre("dyeYellow", BlockInit.solid_star);
 		OreDictionary.registerOre("dyeOrange", ItemInit.orange);
+		OreDictionary.registerOre("dyeOrange", BlockInit.portulaca);
 		OreDictionary.registerOre("dyePurple", ItemInit.blueberry);
+		OreDictionary.registerOre("dyePurple", BlockInit.campanula);
 		OreDictionary.registerOre("dyeGreen", ItemInit.vannila_pods);
+		OreDictionary.registerOre("dyeGreen", BlockInit.christmas_rose);
+		OreDictionary.registerOre("dyeLime", BlockInit.white_clover);
+		OreDictionary.registerOre("dyeLightGray", BlockInit.foxtail_grass);
+		OreDictionary.registerOre("dyeGray", BlockInit.snowdrop);
+		OreDictionary.registerOre("dyeLightBlue", BlockInit.ultramarine_rose);
+		OreDictionary.registerOre("dyeMagenta", BlockInit.zinnia);
+		OreDictionary.registerOre("dyeLightBlue", BlockInit.hydrangea);
+
+		OreDictionary.registerOre("dye", BlockInit.cornflower);
+		OreDictionary.registerOre("dye", BlockInit.lily_valley);
+		OreDictionary.registerOre("dye", BlockInit.blackrose);
+		OreDictionary.registerOre("dye", BlockInit.cosmos);
+		OreDictionary.registerOre("dye", BlockInit.iberis_umbellata);
+		OreDictionary.registerOre("dye", BlockInit.primula_polyansa);
+		OreDictionary.registerOre("dye", BlockInit.carnation_crayola);
+		OreDictionary.registerOre("dye", BlockInit.solid_star);
+		OreDictionary.registerOre("dye", BlockInit.portulaca);
+		OreDictionary.registerOre("dye", BlockInit.campanula);
+		OreDictionary.registerOre("dye", BlockInit.christmas_rose);
+		OreDictionary.registerOre("dye", BlockInit.white_clover);
+		OreDictionary.registerOre("dye", BlockInit.foxtail_grass);
+		OreDictionary.registerOre("dye", BlockInit.snowdrop);
+		OreDictionary.registerOre("dye", BlockInit.ultramarine_rose);
+		OreDictionary.registerOre("dye", BlockInit.zinnia);
+		OreDictionary.registerOre("dye", BlockInit.hydrangea);
 
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_0);
 		OreDictionary.registerOre("antique_brick", BlockInit.antique_brick_1);
@@ -101,6 +132,11 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_2l);
 		OreDictionary.registerOre("antique_brick_all", BlockInit.antique_brick_b);
 
+		OreDictionary.registerOre("woodChest", BlockInit.estor_woodchest);
+		OreDictionary.registerOre("woodChest", BlockInit.prism_woodchest);
+		OreDictionary.registerOre("woodChest", BlockInit.rattan_chest_b);
+		OreDictionary.registerOre("woodChest", BlockInit.rattan_chest_y);
+
 		OreDictionary.registerOre("orange_planks", BlockInit.orange_planks);
 		OreDictionary.registerOre("slabWood", BlockInit.orange_slab);
 		OreDictionary.registerOre("orange_planks", BlockInit.orange_planks_huti1);
@@ -114,11 +150,65 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("orange_planks_w", BlockInit.orange_planks_wdamage);
 		OreDictionary.registerOre("orange_planks_w", BlockInit.orange_planks_wmossy);
 
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand);
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand_r);
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand_g);
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand_b);
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand_y);
+		OreDictionary.registerOre("aetherWand", ItemInit.aether_wand_p);
+
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand);
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand_r);
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand_g);
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand_b);
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand_y);
+		OreDictionary.registerOre("divineWand", ItemInit.divine_wand_p);
+
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand);
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand_r);
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand_g);
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand_b);
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand_y);
+		OreDictionary.registerOre("purecrystalWand", ItemInit.purecrystal_wand_p);
+
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand);
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand_r);
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand_g);
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand_b);
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand_y);
+		OreDictionary.registerOre("deuscrystalWand", ItemInit.deuscrystal_wand_p);
+
+		OreDictionary.registerOre("cosmiccrystalWand", ItemInit.cosmiccrystal_wand);
+		OreDictionary.registerOre("cosmiccrystalWand", ItemInit.sacred_meteor_wand);
+		OreDictionary.registerOre("cosmiccrystalWand", ItemInit.snowdust_wand);
+
+		OreDictionary.registerOre("magicians_grobe", ItemInit.magicians_robe);
+		OreDictionary.registerOre("magicians_grobe", ItemInit.wizard_robe);
+		OreDictionary.registerOre("magicians_grobe", ItemInit.feary_robe);
+
+		OreDictionary.registerOre("magicAccessori", ItemInit.warrior_bracelet);
+		OreDictionary.registerOre("magicAccessori", ItemInit.witch_scroll);
+		OreDictionary.registerOre("magicAccessori", ItemInit.scorching_jewel);
+		OreDictionary.registerOre("magicAccessori", ItemInit.mermaid_veil);
+		OreDictionary.registerOre("magicAccessori", ItemInit.blood_sucking_ring);
+		OreDictionary.registerOre("magicAccessori", ItemInit.emelald_pias);
+		OreDictionary.registerOre("magicAccessori", ItemInit.fortune_ring);
+		OreDictionary.registerOre("magicAccessori", ItemInit.veil_darkness);
+		OreDictionary.registerOre("magicAccessori", ItemInit.varrier_pendant);
+		OreDictionary.registerOre("magicAccessori", ItemInit.magicians_grobe);
+
 		OreDictionary.registerOre("blockGlass", BlockInit.sugarglass);
 		OreDictionary.registerOre("blockGlass", BlockInit.shading_sugarglass);
 		OreDictionary.registerOre("blockGlass", BlockInit.frosted_glass);
 		OreDictionary.registerOre("blockGlass", BlockInit.frosted_glass_line);
 		OreDictionary.registerOre("blockGlass", BlockInit.prismglass);
+		OreDictionary.registerOre("blockGlass", BlockInit.green4panel_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.brown4panel_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.lightbrown4panel_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.darkbrown4panel_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.ami_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.gorgeous_glass);
+		OreDictionary.registerOre("blockGlass", BlockInit.gorgeous_glass_w);
 
 		OreDictionary.registerOre("stone", BlockInit.old_brick);
 		OreDictionary.registerOre("stone", BlockInit.old_brick_b);
@@ -256,5 +346,6 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("listAllseed", ItemInit.lettuce_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.cabbage_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.azuki_seed);
+		OreDictionary.registerOre("listAllseed", Items.WHEAT_SEEDS);
 	}
 }
