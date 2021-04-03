@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:baseblock",
+    "textures": {
+      "particle": "sweetmagic:block/crafttable_top",
+      "top": "sweetmagic:block/crafttable_top",
+      "bottom": "sweetmagic:block/crafttable_down_3",
+      "north": "sweetmagic:block/crafttable_side_3",
+      "south": "sweetmagic:block/crafttable_side_3",
+      "east": "sweetmagic:block/crafttable_side_3",
+      "west": "sweetmagic:block/crafttable_side_3"
+    }
+  },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

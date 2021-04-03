@@ -3,8 +3,8 @@
   "defaults": {
     "model": "sweetmagic:cafeboard",
     "textures": {
-      	"0": "sweetmagic:block/billboard",
-		"layer0": "sweetmagic:items/cafeboard"
+      	"0": "sweetmagic:block/billboard_white",
+		"layer0": "sweetmagic:items/cafeboard_w"
     }
   },
   "variants": {

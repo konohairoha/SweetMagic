@@ -3,12 +3,12 @@
   "defaults": {
     "model": "sweetmagic:parallel_interfere",
     "textures": {
-      "1": "sweetmagic:block/mtable_sokumen",
-      "2": "sweetmagic:block/nuno_1",
-      "3": "sweetmagic:block/nuno_0",
-      "4": "sweetmagic:block/table",
-      "5": "sweetmagic:block/empty",
-      "6": "sweetmagic:block/empty"
+      "1": "sweetmagic:block/pillar_white_down",
+      "2": "sweetmagic:block/empty",
+      "3": "sweetmagic:block/empty",
+      "4": "sweetmagic:block/pillar_white_top",
+      "5": "sweetmagic:block/stardust_cloth_top",
+      "6": "sweetmagic:block/stardust_cloth_side"
     }
   },
   "variants": {

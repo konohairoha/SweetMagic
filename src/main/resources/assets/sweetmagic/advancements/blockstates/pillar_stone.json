@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:basewood",
+    	"textures": {
+      		"particle": "sweetmagic:block/pillar_stone_normal",
+      		"top": "sweetmagic:block/pillar_stone_top",
+      		"side": "sweetmagic:block/pillar_stone_normal"
+    	}
+    },
+"variants": {
+	"bot=false,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/pillar_stone_normal" } },
+	"bot=true,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/pillar_stone_down" } },
+	"bot=true,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/pillar_stone_middle" } },
+	"bot=false,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/pillar_stone_up" } },
+
+     "inventory": [{ }]
+    }
+}

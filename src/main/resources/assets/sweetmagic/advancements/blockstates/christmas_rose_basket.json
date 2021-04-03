@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cross",
+    	"textures": {
+      		"cross": "sweetmagic:block/christmas_rose_basket",
+          "layer0": "sweetmagic:block/christmas_rose_basket"
+    	},
+    "transform": "forge:default-item"
+    },
+"variants": {
+	"bot=false,top=false": { "model": "cross", "textures": { "cross": "sweetmagic:block/christmas_rose_basket" } },
+	"bot=true,top=false": { "model": "cross", "textures": { "cross": "sweetmagic:block/christmas_rose_basket_chain" } },
+	"bot=true,top=true": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_middle" } },
+	"bot=false,top=true": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_top" } },
+
+     "inventory": [{ "model": "builtin/generated" }]
+    }
+}

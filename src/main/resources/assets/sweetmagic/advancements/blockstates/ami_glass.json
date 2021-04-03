@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:basewood",
+    	"textures": {
+      		"particle": "sweetmagic:block/glass_ami_normal",
+      		"top": "sweetmagic:block/glass_ami_normal",
+      		"side": "sweetmagic:block/glass_ami_normal"
+    	}
+    },
+"variants": {
+	"bot=false,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_ami_normal" } },
+	"bot=true,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_ami_down" } },
+	"bot=true,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_ami_middle" } },
+	"bot=false,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_ami_up" } },
+
+     "inventory": [{ }]
+    }
+}

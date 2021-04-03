@@ -1,10 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:modern_wallrack",
-    "textures": {
-      "0": "sweetmagic:block/wood_rightbrown"
-    }
+    "model": "sweetmagic:magia_rewrite"
   },
   "variants": {
     "facing": {

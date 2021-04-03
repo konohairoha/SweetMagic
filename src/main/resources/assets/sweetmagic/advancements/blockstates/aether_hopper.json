@@ -1,0 +1,17 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:aether_hopper_down"
+  },
+  "variants": {
+    "facing": {
+		"north": { "model": "sweetmagic:aether_hopper_side", "y": 180  },
+		"east":  { "model": "sweetmagic:aether_hopper_side", "y": 270 },
+		"south": { "model": "sweetmagic:aether_hopper_side", "y": 0 },
+		"west":  { "model": "sweetmagic:aether_hopper_side", "y": 90 },
+		"up":    {  },
+		"down": { "x": 180 }
+    },
+     "inventory": [{ }]
+  }
+}

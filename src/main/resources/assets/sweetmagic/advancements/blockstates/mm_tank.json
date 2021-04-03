@@ -5,7 +5,7 @@
     "textures": {
       "particle": "sweetmagic:block/tank_top",
       "top": "sweetmagic:block/tank_top",
-      "side": "sweetmagic:block/tank_side2"
+      "side": "sweetmagic:block/tank_side3"
     }
     },
     "variants": {

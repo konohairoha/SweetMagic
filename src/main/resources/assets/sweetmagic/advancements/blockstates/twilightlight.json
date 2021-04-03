@@ -1,9 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "cube_all",
+    "model": "sweetmagic:nomodel",
         "textures": {
-          "all": "sweetmagic:particle/notex"
+          "#0": "sweetmagic:particle/notex",
+          "1": "sweetmagic:particle/particle_twilightlight"
         },
     "transform": "forge:default-item"
   },

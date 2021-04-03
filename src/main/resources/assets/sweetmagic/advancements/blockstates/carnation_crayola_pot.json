@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cross",
+        "textures": {
+          "cross": "sweetmagic:block/carnation_crayola_pot",
+          "layer0": "sweetmagic:block/carnation_crayola_pot"
+        },
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "normal": [{}],
+     "inventory": [{ "model": "builtin/generated" }]
+  }
+}
