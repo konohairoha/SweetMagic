@@ -16,6 +16,18 @@ public class ParticleHelper {
 		}
 	}
 
+	public static void spawnParticle(World world, BlockPos pos, EnumParticleTypes type, int count, double speed) {
+		if (world instanceof WorldServer) {
+			((WorldServer) world).spawnParticle(type, pos.getX(), pos.getY(), pos.getZ(), count, 0, 0, 0, speed, 0);
+		}
+	}
+
+	public static void spawnParticle(World world, BlockPos pos, EnumParticleTypes type, double x, double y, double z) {
+		if (world instanceof WorldServer) {
+			((WorldServer) world).spawnParticle(type, pos.getX(), pos.getY(), pos.getZ(), x, y, z, 0, 0, 0);
+		}
+	}
+
 	public static void spawnBoneMeal(World world, BlockPos pos, EnumParticleTypes type) {
 		if (world instanceof WorldServer) {
 			((WorldServer) world).spawnParticle(type, pos.getX() + 0.5F, pos.getY() + 0.33F, pos.getZ() + 0.5F, 8, 0.25, 0.1, 0.25, 0, 0);

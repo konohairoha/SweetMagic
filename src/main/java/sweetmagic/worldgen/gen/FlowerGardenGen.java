@@ -1,4 +1,4 @@
-     package sweetmagic.worldgen.gen;
+package sweetmagic.worldgen.gen;
 
 import java.util.Random;
 
@@ -6,21 +6,28 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import sweetmagic.config.SMConfig;
+import net.minecraft.world.biome.Biome;
+import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.DimensionInit;
 import sweetmagic.init.base.BaseFlowerGen;
 
-public class CFlowerGen extends BaseFlowerGen {
+public class FlowerGardenGen extends BaseFlowerGen {
 
-	public CFlowerGen(int seedRand) {
+	public FlowerGardenGen(int seedRand) {
 		this.seedRand = seedRand;
+	}
+
+	// バイオーム確認
+	public boolean checkBiome (Biome biome) {
+		return biome != BiomeInit.FLOWERGARDEN && biome != BiomeInit.FLOWERVALLEY;
 	}
 
 	// IBlockStateの取得
 	public IBlockState getState () {
 
 		IBlockState state = null;
+
+		this.maxY = 31;
 
 		switch (this.rand.nextInt(16)) {
 		case 0:
@@ -72,7 +79,6 @@ public class CFlowerGen extends BaseFlowerGen {
 			state = BlockInit.turkey_balloonflower.getDefaultState();
 			break;
 		}
-
 		return state;
 	}
 
@@ -80,7 +86,7 @@ public class CFlowerGen extends BaseFlowerGen {
 	public void genFlower (World world, Random rand, int posX, int posZ, IBlockState state) {
 
 		// チャンス
-		for (int k = 0; k < 8; k++) {
+		for (int k = 0; k < 6; k++) {
 
 			int randX = posX + rand.nextInt(16);
 			int y = rand.nextInt(this.maxY) + this.minY;
@@ -88,7 +94,7 @@ public class CFlowerGen extends BaseFlowerGen {
 			IBlockState state1 = this.getState();
 
 			// 花の塊
-			for (int i = 0; i < 16; i++) {
+			for (int i = 0; i < 32; i++) {
 
 				int pX = randX + rand.nextInt(8) - rand.nextInt(8);
 				int pY = y + rand.nextInt(4) - rand.nextInt(4);
@@ -100,18 +106,6 @@ public class CFlowerGen extends BaseFlowerGen {
 
 				world.setBlockState(pos.up(), state1, 2);
 			}
-		}
-	}
-
-	// ディメンションチェック
-	public boolean checkDimeintion (int dim) {
-
-		if (!SMConfig.genFlowers) {
-			return dim != DimensionInit.dimID;
-		}
-
-		else {
-			return dim == 1 || dim == -1;
 		}
 	}
 

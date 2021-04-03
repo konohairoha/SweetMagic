@@ -18,6 +18,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureStart;
+import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.LootTableInit;
 import sweetmagic.init.base.BaseMaoGen;
@@ -94,6 +95,11 @@ public class MapGenTogijyo extends BaseMaoGen {
 	                    if (block == Blocks.DIAMOND_BLOCK) {
 	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.WEST), 2);
 	                    	this.setLootTable(world, rand, pos, LootTableInit.SMFOODS);
+	                    	continue;
+	                    }
+
+	                    else if (block == Blocks.CHEST) {
+	                    	this.setLootTable(world, rand, pos, LootTableList.CHESTS_SIMPLE_DUNGEON);
 	                    	continue;
 	                    }
 

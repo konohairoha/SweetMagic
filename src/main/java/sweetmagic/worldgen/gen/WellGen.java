@@ -38,6 +38,11 @@ public class WellGen extends BaseWorldGen {
     	return SMConfig.isGenStructure;
     }
 
+    // ディメンション確認
+    public boolean checkDimension (int dimId) {
+    	return dimId != 0;
+    }
+
     // 生成不可能なバイオーム
     public boolean checkBiome (World world, BlockPos pos, Biome biome) {
     	return !BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST);

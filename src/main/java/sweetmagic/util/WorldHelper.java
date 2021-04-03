@@ -128,7 +128,7 @@ public class WorldHelper {
 			if (ent instanceof IMob) { continue; }
 
 			// デバフを除去
-			for (Potion potion : PotionInit.getDeBuffPotionList()) {
+			for (Potion potion : PotionInit.deBuffList) {
 				ent.removePotionEffect(potion);
 			}
 
@@ -146,7 +146,7 @@ public class WorldHelper {
 
 			if (ent instanceof IMob || ent.isPotionActive(potion)) { continue; }
 
-			ent.addPotionEffect(new PotionEffect(potion, time, level, true, false));
+			ent.addPotionEffect(new PotionEffect(potion, time, level, true, true));
 
 			// パーティクルスポーン
 			ParticleHelper.spawnHeal(ent, particle, 16, 1, 4);
@@ -154,7 +154,7 @@ public class WorldHelper {
 	}
 
 	//プレイや吸い寄せ
-	public static void suctionPlayer(World world, AxisAlignedBB aabb, double x, double y, double z, EntityLivingBase entity, int tickTime) {
+	public static void suctionPlayer(World world, AxisAlignedBB aabb, double x, double y, double z, EntityLivingBase entity, double power) {
 
 		List<EntityLivingBase> list = getEntityList(world, aabb);
 
@@ -171,9 +171,9 @@ public class WorldHelper {
 
 			if (vel > 0.0D) {
 				vel *= dist * vel;
-				ent.motionX += dX / vel * 0.0775;
-				ent.motionY += dY / vel * 0.135;
-				ent.motionZ += dZ / vel * 0.0775;
+				ent.motionX += dX / vel * power;
+				ent.motionY += dY / vel * power * 2;
+				ent.motionZ += dZ / vel * power;
 			}
 		}
 	}

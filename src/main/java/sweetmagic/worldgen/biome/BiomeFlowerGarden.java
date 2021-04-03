@@ -28,7 +28,7 @@ public class BiomeFlowerGarden extends Biome {
         super(property);
         this.decorator.treesPerChunk = 0;
         this.decorator.grassPerChunk = 3;
-        this.decorator.flowersPerChunk = 10;
+        this.decorator.flowersPerChunk = 0;
         this.setRegistryName(name);
         this.addDefaultFlowers();
     }
@@ -36,7 +36,7 @@ public class BiomeFlowerGarden extends Biome {
     public BiomeFlowerGarden() {
         super(new BiomeProperties("FlowerGarden").setTemperature(1F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
         this.decorator.treesPerChunk = 0;
-        this.decorator.flowersPerChunk = 80;
+        this.decorator.flowersPerChunk = 0;
 //        this.decorator.grassPerChunk = 2;
         this.setRegistryName("FlowerGarden");
         this.addDefaultFlowers();

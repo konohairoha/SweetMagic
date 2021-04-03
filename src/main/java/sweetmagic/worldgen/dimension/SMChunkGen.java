@@ -33,9 +33,12 @@ import net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
 import sweetmagic.worldgen.dungen.map.MapGenDekaijyu;
+import sweetmagic.worldgen.dungen.map.MapGenIdo;
 import sweetmagic.worldgen.dungen.map.MapGenKutiMura;
+import sweetmagic.worldgen.dungen.map.MapGenMekyu;
 import sweetmagic.worldgen.dungen.map.MapGenPyramid;
 import sweetmagic.worldgen.dungen.map.MapGenTogijyo;
+import sweetmagic.worldgen.dungen.map.MapWitchHouse;
 import sweetmagic.worldgen.map.SMMapGenCaves;
 import sweetmagic.worldgen.map.SMMapGenRiver;
 
@@ -79,6 +82,9 @@ public class SMChunkGen implements IChunkGenerator {
     private MapGenDekaijyu dekaijyu = new MapGenDekaijyu(this);
     private MapGenTogijyo togijyo = new MapGenTogijyo(this);
     private MapGenKutiMura kutimura = new MapGenKutiMura(this);
+    private MapGenMekyu mekyu = new MapGenMekyu(this);
+    private MapGenIdo ido = new MapGenIdo(this);
+    private MapWitchHouse witchhouse = new MapWitchHouse(this);
 
 
     public SMChunkGen(World world, long seed, boolean enabled, String option) {
@@ -103,6 +109,18 @@ public class SMChunkGen implements IChunkGenerator {
 
             if (TerrainGen.getModdedMapGen(this.kutimura, InitMapGenEvent.EventType.CUSTOM) instanceof MapGenKutiMura) {
             	this.kutimura = (MapGenKutiMura) TerrainGen.getModdedMapGen(this.kutimura, InitMapGenEvent.EventType.CUSTOM);
+            }
+
+            if (TerrainGen.getModdedMapGen(this.mekyu, InitMapGenEvent.EventType.CUSTOM) instanceof MapGenMekyu) {
+            	this.mekyu = (MapGenMekyu) TerrainGen.getModdedMapGen(this.mekyu, InitMapGenEvent.EventType.CUSTOM);
+            }
+
+            if (TerrainGen.getModdedMapGen(this.ido, InitMapGenEvent.EventType.CUSTOM) instanceof MapGenIdo) {
+            	this.ido = (MapGenIdo) TerrainGen.getModdedMapGen(this.ido, InitMapGenEvent.EventType.CUSTOM);
+            }
+
+            if (TerrainGen.getModdedMapGen(this.witchhouse, InitMapGenEvent.EventType.CUSTOM) instanceof MapWitchHouse) {
+            	this.witchhouse = (MapWitchHouse) TerrainGen.getModdedMapGen(this.witchhouse, InitMapGenEvent.EventType.CUSTOM);
             }
         }
         this.world = world;
@@ -168,6 +186,9 @@ public class SMChunkGen implements IChunkGenerator {
         this.dekaijyu .generate(this.world, x, z, primer);
         this.togijyo .generate(this.world, x, z, primer);
         this.kutimura .generate(this.world, x, z, primer);
+        this.mekyu .generate(this.world, x, z, primer);
+        this.ido .generate(this.world, x, z, primer);
+        this.witchhouse .generate(this.world, x, z, primer);
 
         Chunk chunk = new Chunk(this.world, primer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -380,6 +401,9 @@ public class SMChunkGen implements IChunkGenerator {
         this.dekaijyu.generateStructure(this.world, this.rand, chunkpos);
         this.togijyo.generateStructure(this.world, this.rand, chunkpos);
         this.kutimura.generateStructure(this.world, this.rand, chunkpos);
+        this.mekyu.generateStructure(this.world, this.rand, chunkpos);
+        this.ido.generateStructure(this.world, this.rand, chunkpos);
+        this.witchhouse.generateStructure(this.world, this.rand, chunkpos);
 
 		if (TerrainGen.populate(this, this.world, this.rand, x, z, flag, EventType.DUNGEON)) {
 			for (int j2 = 0; j2 < this.settings.dungeonChance; ++j2) {
@@ -479,6 +503,18 @@ public class SMChunkGen implements IChunkGenerator {
 
     	else if ("kuchihatetamura".equals(structure) && this.kutimura != null) {
         	return this.kutimura.isInsideStructure(pos);
+    	}
+
+    	else if ("mekyu".equals(structure) && this.mekyu != null) {
+        	return this.mekyu.isInsideStructure(pos);
+    	}
+
+    	else if ("ido".equals(structure) && this.ido != null) {
+        	return this.ido.isInsideStructure(pos);
+    	}
+
+    	else if ("witchhouse_main".equals(structure) && this.witchhouse != null) {
+        	return this.witchhouse.isInsideStructure(pos);
     	}
 
         if (!this.mapFeaturesEnabled) { return false; }

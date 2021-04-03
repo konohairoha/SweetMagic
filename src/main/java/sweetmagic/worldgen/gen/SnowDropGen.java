@@ -8,50 +8,33 @@ import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
-import net.minecraftforge.common.BiomeDictionary;
 import sweetmagic.init.base.BaseFlowerGen;
-import sweetmagic.util.SweetState;
 
-public class SugarGen extends BaseFlowerGen {
+public class SnowDropGen extends BaseFlowerGen {
 
-	public int chance = 8;
-
-	public SugarGen(Block flower, int seedRand) {
+	public SnowDropGen(Block flower, int seedRand) {
 		super(flower);
 		this.seedRand = seedRand;
-	}
-
-	public SugarGen(Block flower, int seedRand, int chance) {
-		super(flower);
-		this.seedRand = seedRand;
-		this.chance = chance;
+		this.maxY = 31;
 	}
 
 	// バイオーム確認
 	public boolean checkBiome (Biome biome) {
-		return !BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS);
+		return biome.getDefaultTemperature() > 0;
 	}
 
 	// 花の生成
 	public void genFlower (World world, Random rand, int posX, int posZ, IBlockState state) {
 
-		boolean isSun = this.seedRand == 16;
-		if (!isSun && world.rand.nextInt(3) != 0) { return; }
-
-		boolean isRas = this.chance != 8;
-		int size = isSun ? 16 : 8;
-		int chance = size / 4;
-		IBlockState state1 = isRas ? state.withProperty(SweetState.STAGE6, 5) : state.withProperty(SweetState.STAGE4, 3);
-
 		// チャンス
-		for (int k = 0; k < chance; k++) {
+		for (int k = 0; k < 4; k++) {
 
 			int randX = posX + rand.nextInt(16);
 			int y = rand.nextInt(this.maxY) + this.minY;
 			int randZ = posZ + rand.nextInt(16);
 
 			// 花の塊
-			for (int i = 0; i < size; i++) {
+			for (int i = 0; i < 8; i++) {
 
 				int pX = randX + rand.nextInt(8) - rand.nextInt(8);
 				int pY = y + rand.nextInt(4) - rand.nextInt(4);
@@ -61,13 +44,13 @@ public class SugarGen extends BaseFlowerGen {
 				IBlockState state2 = world.getBlockState(pos);
 				if (!this.checkSetBlock(world, pos, state2)) { continue; }
 
-				world.setBlockState(pos.up(), state1, 2);
+				world.setBlockState(pos.up(), this.state, 2);
 			}
 		}
 	}
 
 	// 植えれるかのチェック
 	public boolean checkSetBlock (World world, BlockPos p1, IBlockState state) {
-		return world.canSeeSky(p1.up()) && state.getBlock() == Blocks.GRASS;
+		return state.getBlock() == Blocks.GRASS;
 	}
 }

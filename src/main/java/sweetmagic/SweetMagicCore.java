@@ -27,6 +27,7 @@ import sweetmagic.handlers.RegistryHandler;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.proxy.CommonProxy;
 import sweetmagic.recipe.RecipeManager;
+import sweetmagic.util.SMChunkLoader;
 
 /*
  * modを読み込む用のコアクラス
@@ -37,14 +38,14 @@ public class SweetMagicCore {
 
     public static final String MODID = "sweetmagic";
     public static final String NAME = "SweetMagic";
-    public static final String VERSION = "1.1.4";
+    public static final String VERSION = "1.1.5";
     public static final String CLIENTPROXY = "sweetmagic.proxy.ClientProxy";
     public static final String COMMONPROXY = "sweetmagic.proxy.CommonProxy";
 
     // GUIを考えてMODのインスタンスを作っておく
     @Instance(SweetMagicCore.MODID)
   	public static SweetMagicCore INSTANCE;
-  	public static CreativeTabs SMTab = new SMTab("sweetmagicTab"), SMFoodTab = new SMFoodTab("sweetmagicFoodTab");
+  	public static CreativeTabs SMTab = new SMTab("sweetmagicTab"), SMMagicTab = new SMMagicTab("sweetmagicMagicTab"), SMFoodTab = new SMFoodTab("sweetmagicFoodTab");
   	@SidedProxy(clientSide = SweetMagicCore.CLIENTPROXY, serverSide = SweetMagicCore.COMMONPROXY)
   	public static CommonProxy proxy;
   	public static Logger logger;
@@ -74,6 +75,9 @@ public class SweetMagicCore {
 
 		// パケット
 		PacketHandler.register();
+
+		// チャンクローダー
+		SMChunkLoader.getInstance().preInit();
 
     }
 

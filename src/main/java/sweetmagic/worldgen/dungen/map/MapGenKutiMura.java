@@ -31,7 +31,7 @@ public class MapGenKutiMura extends BaseMaoGen {
 
     public MapGenKutiMura(SMChunkGen provider) {
         super(provider);
-        this.distance = 40;
+        this.distance = 35;
     }
 
     public String getStructureName() {
@@ -99,12 +99,20 @@ public class MapGenKutiMura extends BaseMaoGen {
 	                    if (block == Blocks.AIR) { continue; }
 
 	                    if (block == BlockInit.treasure_chest) {
-	                    	this.setLootTable(world, rand, pos, LootTableList.CHESTS_END_CITY_TREASURE, 0.25F);
+	                    	this.setLootTable(world, rand, pos, LootTableInit.PYM, 0.25F);
 	                    }
 
 	                    else if (block == Blocks.GOLD_BLOCK) {
 	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.EAST), 2);
 	                    	this.setLootTable(world, rand, pos, this.getLootTable(rand));
+	                    }
+
+	                    else if (block == BlockInit.smspaner) {
+	                    	this.setSMSpaner(world, rand, pos);
+	                    }
+
+	                    else if (block == Blocks.PACKED_ICE) {
+	                    	world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 2);
 	                    }
 	                }
 				}
@@ -120,10 +128,10 @@ public class MapGenKutiMura extends BaseMaoGen {
         		src = LootTableInit.SMBOUNUS;
         		break;
         	case 1:
-        		src = LootTableList.CHESTS_SIMPLE_DUNGEON;
+        		src = LootTableList.CHESTS_END_CITY_TREASURE;
         		break;
         	case 2:
-        		src = LootTableList.CHESTS_VILLAGE_BLACKSMITH;
+        		src = LootTableInit.MOBCHEST;
         		break;
         	}
 

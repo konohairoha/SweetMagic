@@ -36,7 +36,7 @@ public class CemeteryGen extends BaseWorldGen {
 
     public CemeteryGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance;
-		this.minChance = 0;
+		this.minChance = 1;
 		this.seedRand = 10;
     }
 

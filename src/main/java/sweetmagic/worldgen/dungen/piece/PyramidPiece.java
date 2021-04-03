@@ -13,7 +13,7 @@ import sweetmagic.init.base.BaseStructureTemplate;
 public class PyramidPiece {
 
     public static void registerIdoPiece() {
-        MapGenStructureIO.registerStructureComponent(PyramidPiece.PyramidTemplate.class, "PYR");
+        MapGenStructureIO.registerStructureComponent(PyramidPiece.PyramidTemplate.class, "MQ");
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<PyramidTemplate> list, Random random) {

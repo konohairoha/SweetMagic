@@ -36,7 +36,7 @@ public class GeddanGen extends BaseWorldGen {
 	public final WorldGenStructure UP = new WorldGenStructure("geddan_up");
 
     public GeddanGen() {
-		this.maxChance = SMConfig.dungeon_spawnchance * 2;
+		this.maxChance = SMConfig.dungeon_spawnchance * 3;
 		this.minChance = 0;
 		this.seedRand = 256;
     }

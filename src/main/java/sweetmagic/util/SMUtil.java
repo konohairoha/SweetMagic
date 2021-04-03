@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,6 +30,7 @@ public class SMUtil {
 
 	public static Random rand = new Random();
 	public static final UUID TOOL_REACH = UUID.fromString("7f10172d-de69-49d7-81bd-9594286a6827");
+	public static final EntityEquipmentSlot[] EQUIPMENT_SLOTS = new EntityEquipmentSlot[] { EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET };
 
 	public static boolean isEmpty(ItemStack item) {
 		if (item == null) {
@@ -412,4 +414,12 @@ public class SMUtil {
 		return (ArrayList) world.getEntitiesWithinAABB(css, entity.getEntityBoundingBox().grow(x, y, z));
 	}
 
+    public static EntityEquipmentSlot getEquipmentSlot (int index) {
+
+        if (index >= 0 && index < EQUIPMENT_SLOTS.length) {
+            return EQUIPMENT_SLOTS[index];
+        }
+
+        return null;
+    }
 }

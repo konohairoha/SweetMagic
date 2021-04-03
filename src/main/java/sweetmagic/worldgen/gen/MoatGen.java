@@ -1,28 +1,22 @@
 package sweetmagic.worldgen.gen;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.BiomeDictionary;
 import sweetmagic.config.SMConfig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.DimensionInit;
-import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseWorldGen;
 import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class MoatGen extends BaseWorldGen {
 
-	public static List<ItemStack> chestA = new ArrayList<>();
 	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("moat");
 
     public MoatGen() {
@@ -50,7 +44,7 @@ public class MoatGen extends BaseWorldGen {
     	gen.generate(world, this.rand, pos);
 
     	// 隠しチェスト
-    	this.setChest(world, rand, pos.add(12, 2, 1), chestA, SMConfig.dungeon_lootchance);
+    	this.setLootTable(world, this.rand, pos.add(12, 2, 1), LootTableList.CHESTS_END_CITY_TREASURE);
 
 		IBlockState dirt = Blocks.DIRT.getDefaultState();
 		for (int x = 0; x < 41; x++) {
@@ -63,7 +57,7 @@ public class MoatGen extends BaseWorldGen {
 		}
 
     	this.setSpaner(world, pos.add(21, 2, 23), 3);
-    	this.setChest(world, rand, pos.add(14, 6, 16), chestA, SMConfig.dungeon_lootchance);
+    	this.setLootTable(world, this.rand, pos.add(14, 6, 16), LootTableList.CHESTS_END_CITY_TREASURE);
     }
 
 	public void setBlock (World world, BlockPos pos, IBlockState state) {
@@ -75,18 +69,6 @@ public class MoatGen extends BaseWorldGen {
 		TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
 		tile.data = rand;
 		tile.isRand = true;
-	}
-
-    //ルートテーブルの内容設定
-	public static void setLootChestA() {
-		Random rand = new Random();
-        chestA.add(new ItemStack(BlockInit.mfpot, 1));
-        chestA.add(new ItemStack(BlockInit.advanced_aether_furnace_bottom, 1));
-        chestA.add(new ItemStack(BlockInit.advanced_mfchanger, 1));
-        chestA.add(new ItemStack(BlockInit.advanced_mftable, 1));
-        chestA.add(new ItemStack(BlockInit.advanced_mftank, 1));
-        chestA.add(new ItemStack(ItemInit.divine_crystal, rand.nextInt(8) + 4));
-        chestA.add(new ItemStack(ItemInit.mf_bottle, rand.nextInt(12) + 4));
 	}
 
 	// 乱数取得

@@ -7,9 +7,9 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
@@ -23,27 +23,29 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
 import sweetmagic.init.base.BaseMaoGen;
 import sweetmagic.init.base.BaseStructureStart;
+import sweetmagic.init.block.blocks.BlockWoodChest;
+import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.dimension.SMChunkGen;
-import sweetmagic.worldgen.dungen.piece.PyramidPiece;
+import sweetmagic.worldgen.dungen.piece.MekyuPiece;
 
-public class MapGenPyramid extends BaseMaoGen {
+public class MapGenMekyu extends BaseMaoGen {
 
-    public MapGenPyramid(SMChunkGen provider) {
+    public MapGenMekyu(SMChunkGen provider) {
         super(provider);
-        this.distance = 30;
+        this.distance = 32;
     }
 
     public String getStructureName() {
-        return "pyramid_main";
+        return "mekyu";
     }
 
     // バイオームリストの取得
     public List<Biome> getBiomeList () {
-    	return Arrays.<Biome>asList(BiomeInit.COCONUTBEACH);
+    	return Arrays.<Biome>asList(BiomeInit.PRISMFOREST);
     }
 
     protected StructureStart getStructureStart(int chunkX, int chunkZ) {
-        return new MapGenPyramid.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
+        return new MapGenMekyu.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
     }
 
     // 生成クラス
@@ -57,6 +59,7 @@ public class MapGenPyramid extends BaseMaoGen {
 
         public void create(World world, SMChunkGen chunk, Random rand, int chunkX, int chunkZ) {
 
+            Rotation rot = Rotation.NONE;
             ChunkPrimer primer = new ChunkPrimer();
             chunk.setChunkGen(chunkX, chunkZ, primer);
             int i = 5;
@@ -69,8 +72,8 @@ public class MapGenPyramid extends BaseMaoGen {
             int posY = Math.min(69, Math.min(Math.min(y1, l), Math.min(i1, j1)));
 
             BlockPos pos = new BlockPos(chunkX * 16 + 8, posY, chunkZ * 16 + 8);
-            List<PyramidPiece.PyramidTemplate> list = Lists.<PyramidPiece.PyramidTemplate>newLinkedList();
-            PyramidPiece.generateCore(world.getSaveHandler().getStructureTemplateManager(), pos, Rotation.NONE, list, rand);
+            List<MekyuPiece.MekyuTemplate> list = Lists.<MekyuPiece.MekyuTemplate>newLinkedList();
+            MekyuPiece.generateCore(world.getSaveHandler().getStructureTemplateManager(), pos, rot, list, rand);
 
             this.components.addAll(list);
             this.updateBoundingBox();
@@ -83,38 +86,54 @@ public class MapGenPyramid extends BaseMaoGen {
 			for (int x = sbb.minX; x <= sbb.maxX; ++x) {
 				for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 					for (int z = sbb.minZ; z <= sbb.maxZ; ++z) {
+
 						BlockPos pos = new BlockPos(x, y, z);
-
-	                    if (world.isAirBlock(pos) || !this.boundingBox.isVecInside(pos)) { continue; }
-
 	                    Block block = world.getBlockState(pos).getBlock();
+	                    if (block == Blocks.AIR) { continue; }
 
 	                    if (block == Blocks.DIAMOND_BLOCK) {
-	                    	this.setMobSpawner(world, rand, pos);
+	                    	world.setBlockState(pos, BlockInit.treasure_chest.getDefaultState().withProperty(BlockWoodChest.FACING, EnumFacing.WEST), 2);
+	                    	this.setLootTable(world, rand, pos, LootTableInit.MEQCHEST, 0.425F);
 	                    }
+
+						else if (block == BlockInit.treasure_chest) {
+							this.setLootTable(world, rand, pos, LootTableInit.PYM, 0.25F);
+						}
 
 	                    else if (block == Blocks.GOLD_BLOCK) {
-	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.WEST), 2);
-	                    	this.setLootTable(world, rand, pos, LootTableInit.MOBCHEST);
+	                    	world.setBlockState(pos, BlockInit.smspaner.getDefaultState(), 2);
+	                    	this.setSMSpaner(world, rand, pos);
 	                    }
 
-	                    else if (block == Blocks.LAPIS_BLOCK) {
-	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.WEST), 2);
+	                    else if (block == Blocks.CHEST) {
+	                    	this.setLootTable(world, rand, pos, this.getLoot(rand));
+	                    }
+
+	                    else if (block == Blocks.TRAPPED_CHEST) {
 	                    	this.setLootTable(world, rand, pos, LootTableInit.PYM);
 	                    }
 
-	                    else if (block == Blocks.IRON_BLOCK) {
-	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.EAST), 2);
-	                    	this.setLootTable(world, rand, pos, LootTableList.CHESTS_END_CITY_TREASURE);
-	                    }
+						else if (block == BlockInit.spawn_stone) {
 
-	                    else if (block == BlockInit.alt_block) {
-	                    	world.setBlockState(pos, Blocks.TRAPPED_CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 2);
-	                    	this.setLootTable(world, rand, pos, LootTableList.CHESTS_SIMPLE_DUNGEON);
-	                    }
+		                    Block underBlock = world.getBlockState(pos.down()).getBlock();
+
+		                    if (underBlock == BlockInit.longtile_brick_r || underBlock == BlockInit.longtile_brick_p) {
+
+								world.setBlockState(pos, BlockInit.spawn_stone.getDefaultState(), 2);
+
+								TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
+								tile.isPowerUp= 1;
+								tile.isBossSummon = false;
+		                    }
+						}
 	                }
 				}
             }
+        }
+
+        // ルートテーブルの取得
+        public ResourceLocation getLoot (Random rand) {
+        	return rand.nextBoolean() ? LootTableInit.MOBCHEST : LootTableList.CHESTS_END_CITY_TREASURE;
         }
     }
 }

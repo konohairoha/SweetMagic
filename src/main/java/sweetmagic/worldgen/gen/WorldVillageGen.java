@@ -1,16 +1,13 @@
 package sweetmagic.worldgen.gen;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockBush;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.passive.EntityVillager;
-import net.minecraft.init.Biomes;
-import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.registries.ForgeRegistry;
 import sweetmagic.config.SMConfig;
@@ -23,8 +20,8 @@ public class WorldVillageGen extends BaseWorldGen {
 	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("vill_house");
 
     public WorldVillageGen() {
-		this.maxChance = SMConfig.dungeon_spawnchance * 2;
-		this.minChance = 1;
+		this.maxChance = SMConfig.dungeon_spawnchance;
+		this.minChance = 10;
 		this.seedRand = 39;
     }
 
@@ -37,13 +34,13 @@ public class WorldVillageGen extends BaseWorldGen {
     // 生成不可能なバイオーム
     @Override
     public boolean checkBiome (World world, BlockPos pos, Biome biome) {
-    	return biome != Biomes.PLAINS && biome != Biomes.SAVANNA && biome != Biomes.FOREST;
+		return !BiomeDictionary.hasType(biome, BiomeDictionary.Type.FOREST) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS);
     }
 
     // 村チェック
     @Override
     public boolean checkVillage (World world, BlockPos pos) {
-    	return world.villageCollection.getNearestVillage(pos, 32) == null;
+    	return world.villageCollection.getNearestVillage(pos, 24) == null;
     }
 
     // 生成できる座標であるか
@@ -57,14 +54,16 @@ public class WorldVillageGen extends BaseWorldGen {
 
     	pos = pos.down(2);
 
-    	for (int x = 2; x < 8; x++) {
-    		for (int z = 2; z < 12; z++) {
-    			Block block = world.getBlockState(pos.add(x + 20, 3, z + 8)).getBlock();
-        		if (block != Blocks.AIR && !(block instanceof BlockBush)) {
-        			return;
-        		}
-        	}
-    	}
+    	System.out.println("=============" + pos);
+
+//    	for (int x = 2; x < 8; x++) {
+//    		for (int z = 2; z < 12; z++) {
+//    			Block block = world.getBlockState(pos.add(x + 20, 3, z + 8)).getBlock();
+//        		if (block != Blocks.AIR && !(block instanceof BlockBush)) {
+//        			return;
+//        		}
+//        	}
+//    	}
 
         WorldGenerator gen = this.SM_HOUSE;
     	gen.generate(world, this.rand, pos);
