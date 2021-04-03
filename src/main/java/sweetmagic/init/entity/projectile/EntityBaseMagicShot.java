@@ -14,9 +14,11 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChangeGameState;
@@ -36,10 +38,15 @@ import net.minecraft.world.WorldServer;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
@@ -243,6 +250,10 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				this.spawnParticle();
 			}
 
+			else {
+
+			}
+
 			if (this.isWet()) {
 				this.extinguish();
 			}
@@ -395,6 +406,9 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 	// パーティクルスポーン
 	protected void spawnParticle () {}
+
+	// 音を鳴らす
+	protected void playSound () {}
 
 	public static void registerFixesThrowable(DataFixer fixer, String name){}
 
@@ -570,9 +584,37 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				int addExp = this.getExp(IWand.getSMItem((EntityPlayer) this.getThrower(), this.stack));
 
 				// 経験値の追加
-				wand.levelUpCheck(this.world, (EntityPlayer) this.getThrower(), this.stack, addExp);
+				wand.levelUpCheck(this.world, (EntityPlayer) this.getThrower(), this.stack, addExp *= this.acceValue());
 			}
 		}
+	}
+
+	// 装備品効果
+	public float acceValue () {
+
+		if (this.getThrower() == null || !(this.getThrower() instanceof EntityPlayer)) { return 1; }
+
+		ItemStack leg = this.getThrower().getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return 1; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch((EntityPlayer) this.getThrower());
+		IItemHandlerModifiable inv = neo.inventory;
+		float addPower = 1F;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			if (st.getItem() == ItemInit.magicians_grobe) {
+				addPower += 0.2F;
+			}
+		}
+
+		return addPower;
 	}
 
 	// 経験値の取得
@@ -631,6 +673,25 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				ender.setDead();
 			}
 		}
+	}
+
+	public boolean checkThrower (EntityLivingBase entity) {
+
+		// プレイヤーが射撃者なら
+		if (!(this.getThrower() instanceof IMob)) {
+
+			// ヒットしたえんちちーが敵モブ以外ならfalse
+			if (!(entity instanceof IMob)) { return false; }
+		}
+
+		// プレイヤー以外が射撃者なら
+		else {
+
+			// ヒットしたえんちちーが敵モブならfalse
+			if (entity instanceof IMob) { return false; }
+		}
+
+		return true;
 	}
 
 	public int getTick () {

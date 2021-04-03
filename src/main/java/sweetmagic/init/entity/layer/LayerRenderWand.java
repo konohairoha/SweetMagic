@@ -26,7 +26,7 @@ public class LayerRenderWand extends LayerEffectBase<EntityLivingBase> {
 
 	@Override
 	public boolean shouldRender(EntityLivingBase entity, float parTick) {
-		return PlayerHelper.isPlayer(entity) && !entity.isSneaking() && !entity.isPlayerSleeping() && !entity.isRiding()&& !entity.isElytraFlying();
+		return PlayerHelper.isPlayer(entity) && !entity.isSneaking() && !entity.isPlayerSleeping() && !entity.isRiding() && !entity.isElytraFlying();
 	}
 
 	@Override

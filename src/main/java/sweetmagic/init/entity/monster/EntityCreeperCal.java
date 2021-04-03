@@ -1,5 +1,6 @@
 package sweetmagic.init.entity.monster;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -23,6 +24,7 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
+import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.ItemInit;
@@ -80,21 +82,30 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 				this.timeSinceIgnited = 0;
 			} else if (this.timeSinceIgnited > 0) {
 
-				WorldHelper.suctionPlayer(world, this.getEntityBoundingBox().grow(7), this.posX, this.posY, this.posZ, this, this.fuseTime + this.timeSinceIgnited);
+				WorldHelper.suctionPlayer(world, this.getEntityBoundingBox().grow(7), this.posX, this.posY, this.posZ, this, 0.0775D);
 
 				if (this.world.isRemote) {
 					for(int k = 0; k <= (this.timeSinceIgnited / 4); k++) {
-						float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-						float f2 = (float) (this.posY + 0.25F + this.rand.nextFloat() * 1.5);
-						float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
-						FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
+
+						float randX = (this.rand.nextFloat() - this.rand.nextFloat()) * 2.5F;
+						float randY = (this.rand.nextFloat() - this.rand.nextFloat()) * 1.5F;
+						float randZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 2.5F;
+
+						float x = (float) (this.posX - 0.5F + randX);
+						float y = (float) (this.posY + 0.25F + randY);
+						float z = (float) (this.posZ - 0.5F + randZ);
+						float xSpeed = -randX * 0.075F;
+						float ySpeed = -randY * 0.075F;
+						float zSpeed = -randZ * 0.075F;
+
+						Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
+						FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
 					}
 				}
 			}
 
 			if (this.timeSinceIgnited >= this.fuseTime) {
 				this.timeSinceIgnited = this.fuseTime;
-
 				this.explodeCal();
 			}
 
@@ -111,6 +122,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 	public void explodeCal() {
 		if (!this.world.isRemote) {
 
+            boolean flag = ForgeEventFactory.getMobGriefingEvent(this.world, this);
 			EntityAreaEffectCloud entity = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
 			entity.setRadiusOnUse(-0.5F);
 			entity.setWaitTime(10);
@@ -122,7 +134,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 	        this.world.spawnEntity(entity);
 
 	        float explo = this.isDayElapse(this.world, 5) ? 2.5F : 4F;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.getPowered() ? explo * 2 : explo, true);
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.getPowered() ? explo * 2 : explo, flag);
 			this.setDead();
 			this.dead = true;
 		}
@@ -142,9 +154,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
-    		return false;
-		}
+    	if (this.isAtterckerSMMob(src)) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.world , src, amount);

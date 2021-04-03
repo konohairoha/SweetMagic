@@ -33,13 +33,11 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
     }
 
 	public boolean attackEntityAsMob(Entity entity) {
-		if (super.attackEntityAsMob(entity)) {
-			if (entity instanceof EntityLivingBase) {
-				EntityLivingBase living = (EntityLivingBase) entity;
-				int time = this.isUnique() ? 300: 200;
-				int level = this.isUnique() ? 1: 0;
-				living.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, time, level));
-			}
+		if (super.attackEntityAsMob(entity) && entity instanceof EntityLivingBase) {
+			EntityLivingBase living = (EntityLivingBase) entity;
+			int time = this.isUnique() ? 300: 200;
+			int level = this.isUnique() ? 1: 0;
+			living.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, time, level));
 		}
 		return true;
 	}
@@ -76,12 +74,12 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 		this.setCanPickUpLoot(this.rand.nextFloat() < 0.35F * f);
 
 		if (this.rand.nextFloat() < 0.03F) {
-			EntitySkullFrost chicken = new EntitySkullFrost(this.world);
-			chicken.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
-			chicken.onInitialSpawn(difficulty, (IEntityLivingData) null);
-			chicken.setChickenJockey(true);
-			this.world.spawnEntity(chicken);
-			chicken.startRiding(this);
+			EntitySkullFrost skell = new EntitySkullFrost(this.world);
+			skell.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+			skell.onInitialSpawn(difficulty, (IEntityLivingData) null);
+			skell.setChickenJockey(true);
+			this.world.spawnEntity(skell);
+			skell.startRiding(this);
 		}
 
     	return super.onInitialSpawn(difficulty, living);

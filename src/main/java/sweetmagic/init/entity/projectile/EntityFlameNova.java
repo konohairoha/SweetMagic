@@ -11,7 +11,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.PotionInit;
 
 public class EntityFlameNova extends EntityFireMagic {
@@ -46,16 +45,21 @@ public class EntityFlameNova extends EntityFireMagic {
 		super.entityHit(living);
 
 		this.playSound(living, SoundEvents.ENTITY_GENERIC_EXPLODE, 0.45F, 1F);
-		int level = IWand.getLevel(IWand.getWand(this.stack), this.stack);
+		int level = this.getWandLevel();
 		double range = 5D;
 
 		// 範囲内のえんちちーを取得
 		List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
-			if (!(entity instanceof IMob)) { continue; }
 
-			entity.setFire(3 * (level + 1));
+			if (!this.checkThrower(entity)) { continue; }
+
+
+			if (!(this.getThrower() instanceof IMob)) {
+				entity.setFire(3 * (level + 1));
+			}
+
 			entity.addPotionEffect(new PotionEffect(PotionInit.flame, 40 * (level + 1), 1));
 			this.checkShadow(entity);
 		}

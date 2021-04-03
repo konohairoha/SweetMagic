@@ -75,6 +75,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 	public EntityBraveSkeleton(World world) {
 		super(world);
+        this.setSize(0.7F, 2.55F);
 		this.experienceValue = 500;
 		this.isImmuneToFire = true;
 	}
@@ -436,9 +437,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 		// 離れすぎてたら近づく
 		if (d3 > 128D) {
-
 			double speed = this.isRiding() ? 2D : 3.5D;
-
 			Vec3d vec = this.findChargePoint(this, entity, 2.1);
 			this.limbSwingAmount += 1.5;
 			double x = vec.x, y = vec.y, z = vec.z;
@@ -449,8 +448,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 	// ターゲットと高低差を確認
 	public boolean checkDifHeight (EntityLivingBase entity) {
-		double dif = entity.posY - this.posY;
-		return dif > 1;
+		return entity.posY - this.posY > 1;
 	}
 
 	public float getEyeHeight() {
@@ -481,7 +479,6 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 				target.attackEntityFrom(src, 6F);
 				target.hurtResistantTime = 0;
 				target.motionY += 0.2D;
-
 				this.heroicSpirit(p, target);
 
 				if (target instanceof EntityPlayer && this.world.rand.nextBoolean()) {
@@ -645,8 +642,8 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 				BlockPos pos = new BlockPos(this.brave);
 				ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.VILLAGER_ANGRY);
 
-				for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 0, -8), pos.add(8, 6, 8))) {
-					if (this.world.rand.nextInt(8) != 0) { continue; }
+				for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 0, -8), pos.add(8, 5, 8))) {
+					if (this.world.rand.nextInt(12) != 0) { continue; }
 					ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.FLAME, 1, 0.075D);
 				}
 
@@ -674,8 +671,8 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 			this.world.createExplosion(this.brave, this.brave.posX, this.brave.posY, this.brave.posZ, 8F, false);
 			BlockPos pos = new BlockPos(this.brave);
 
-			for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 0, -8), pos.add(8, 1, 8))) {
-				if (this.world.rand.nextInt(24) != 0) { continue; }
+			for (BlockPos p : BlockPos.getAllInBox(pos.add(-7, 0, -7), pos.add(7, 0, 7))) {
+				if (this.world.rand.nextInt(32) != 0) { continue; }
 				ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.EXPLOSION_HUGE, 1, 0.075D);
 			}
 		}

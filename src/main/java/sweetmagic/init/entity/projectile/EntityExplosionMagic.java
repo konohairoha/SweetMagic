@@ -88,6 +88,7 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 	public void createExplo (float explo) {
 
 		List<EntityLivingBase> list = this.getEntityList(explo, explo, explo);
+		if (list.isEmpty()) { return; }
 
 		for (EntityLivingBase entity : list ) {
 

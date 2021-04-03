@@ -57,12 +57,12 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	private int coolTime = 0;
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
-	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getBossName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
 
 	public EntityWitchMadameVerre(World world) {
 		super(world);
 		this.experienceValue = 120;
-		this.setSize(0.4F, 1.4F);
+		this.setSize(0.4F, 1.45F);
 	}
 
 	public static void registerFixesWitch(DataFixer fixer) {
@@ -132,10 +132,10 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 		if (this.coolTime > 0) {
 			this.coolTime--;
-		}
 
-		// クールタイムが終わってないなら
-		if (this.coolTime > 0) { return; }
+			// クールタイムが終わってないなら
+			if (this.coolTime > 0) { return; }
+		}
 
 		// 体力半分以下なら
 		if (this.getHealth() <= this.getMaxHealth() / 2) {
@@ -169,7 +169,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			case 0:
 				// リフレッシュ・エフェクト
 				if (!this.isPotionActive(PotionInit.refresh_effect)) {
-					this.addPotionEffect(new PotionEffect(PotionInit.electric_armor, time, 1));
+					this.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, time, 0));
 					this.playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 					this.coolTime += coolTime * 1.25;
 				}
@@ -214,7 +214,6 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	@Override
 	protected void updateAITasks() {
 
-		super.updateAITasks();
 		if (!this.isUnique()) { return; }
 
 		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
@@ -322,7 +321,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 	// 二つ名かどうか
     public boolean isUnique () {
-    	return this.getMaxHealth() >= 128F;
+    	return this.getMaxHealth() >= 200F;
     }
 
 	// 体力半分かどうか
@@ -332,7 +331,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 	@Override
 	protected boolean canDespawn() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	@Override
@@ -340,7 +339,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 	@Override
 	public boolean isNonBoss() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	public void setSwingingArms(boolean swingingArms) {
@@ -365,18 +364,18 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
-		this.bossInfo.setName(this.getDisplayName());
+		this.bossInfo.setName(this.getBossName());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tags) {
 		super.readEntityFromNBT(tags);
 		if (this.hasCustomName()) {
-			this.bossInfo.setName(this.getDisplayName());
+			this.bossInfo.setName(this.getBossName());
 		}
 	}
 
-	public ITextComponent getDisplayName() {
+	public ITextComponent getBossName () {
 		return new TextComponentTranslation("entity.witchcmadame_verre.name", new Object[0]);
 	}
 
@@ -399,7 +398,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			if (this.getTarget() == null) {
 				return false;
 			} else {
-				return this.witch.ticksExisted >= this.spellCooldown && this.witch.isHalfHelth();
+				return this.witch.ticksExisted >= this.spellCooldown && this.witch.isHalfHelth() && this.witch.isUnique();
 			}
 		}
 
@@ -435,7 +434,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 				entity.shoot(0, entity.motionY - 0.33F, 0, 0, 0);
 				entity.motionY -= 3;
 				entity.setPosition(pos.getX(), pos.getY() + posY, pos.getZ());
-				entity.setDamage(entity.getDamage() + 10);
+				entity.setDamage(entity.getDamage() + 5);
 				this.world.spawnEntity(entity);
 			}
 
@@ -453,7 +452,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 		// ウォームアップタイム
 		protected int getCastWarmupTime() {
-			return 200;
+			return 120;
 		}
 
 		// キャストタイム
@@ -463,7 +462,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 		// インターバル
 		protected int getCastingInterval() {
-			return 500;
+			return 700;
 		}
 
 		// ターゲット取得

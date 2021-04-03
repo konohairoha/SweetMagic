@@ -37,7 +37,7 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 	int tickTime = 0;
 	private int teleportDelay;
 	Random rand = new Random();
-    public boolean chickenJockey;
+	public boolean chickenJockey;
 
 	public EntitySkullFrost(World world) {
 		super(world);
@@ -97,20 +97,32 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 
 		else {
 
-			EntityArrow entity = this.getArrow(par1);
 			if (this.getHeldItemMainhand().getItem() instanceof ItemBow) {
+				EntityArrow entity = this.getArrow(par1);
 				entity = ((ItemBow) this.getHeldItemMainhand().getItem()).customizeArrow(entity);
+				double d0 = target.posX - this.posX;
+				double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entity.posY;
+				double d2 = target.posZ - this.posZ;
+				double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+				entity.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 0);
+				entity.setDamage(entity.getDamage() + (this.isDayElapse(this.world, 5) ? 0 : 2));
+				this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1F, 1F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				this.world.spawnEntity(entity);
 			}
-			double d0 = target.posX - this.posX;
-			double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - entity.posY;
-			double d2 = target.posZ - this.posZ;
-			double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-			entity.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 0);
-			entity.setDamage(entity.getDamage() + (this.isDayElapse(this.world, 5) ? 0 : 2));
-			this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1F, 1F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-			this.world.spawnEntity(entity);
-		}
 
+			else {
+
+				EntityBaseMagicShot entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, false);
+		        double x = target.posX - this.posX;
+		        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
+		        double z = target.posZ - this.posZ;
+		        double xz = (double)MathHelper.sqrt(x * x + z * z);
+				entity.shoot(x, y - xz * 0.015D, z, 2F, 0);	// 射撃速度
+				entity.setDamage(entity.getDamage() + 4);
+				this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+		        this.world.spawnEntity(entity);
+			}
+		}
 	}
 
 	@Override

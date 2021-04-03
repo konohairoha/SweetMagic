@@ -185,6 +185,7 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 		List<EntityPlayer> playerList = this.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(-5, -2, -5), pos.add(5, 2, 5)));
 
 		for (EntityPlayer pl : playerList) {
+
 			if (pl == player) { continue; }
 
 			// ダメージを与える

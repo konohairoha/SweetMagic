@@ -18,9 +18,9 @@ import net.minecraft.util.math.MathHelper;
 
 public abstract class LayerEffectBase <T extends EntityLivingBase> implements LayerRenderer<T> {
 
-	private final RenderLivingBase<?> renderer;
-	private final int texWidth;
-	private final int texHeight;
+	public final RenderLivingBase<?> renderer;
+	public final int texWidth;
+	public final int texHeight;
 
 	public LayerEffectBase(RenderLivingBase<?> renderer, int texWidth, int texHeight) {
 		this.texWidth = texWidth;
@@ -68,7 +68,7 @@ public abstract class LayerEffectBase <T extends EntityLivingBase> implements La
 		return entity.world.getCombinedLight(pos, 0);
 	}
 
-	private void renderEntityModel(T entity, float limbSwing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch, float scale) {
+	public void renderEntityModel(T entity, float limbSwing, float swingAmount, float parTick, float ageTick, float headYaw, float headPitch, float scale) {
 
 		ModelBase model = this.getModel(entity, parTick);
 		boolean flag = entity.isInvisible();

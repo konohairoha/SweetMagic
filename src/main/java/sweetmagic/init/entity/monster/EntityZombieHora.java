@@ -34,6 +34,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfoServer;
@@ -108,9 +110,8 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 		this.bossInfo.setName(this.getDisplayName());
 	}
 
-	@Override
-	protected void entityInit() {
-		super.entityInit();
+	public ITextComponent getDisplayName() {
+		return new TextComponentTranslation("entity.zombiehora.name", new Object[0]);
 	}
 
 	public Color getColor () {
@@ -221,7 +222,7 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 				FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
 			}
 
-			if (world instanceof WorldServer) {
+			if (this.world instanceof WorldServer) {
 				int dayTime = 24000;
 	            WorldServer sever = world.getMinecraftServer().getWorld(0);
 	            long day = (sever.getWorldTime() / dayTime);
@@ -283,12 +284,8 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 		}
 	}
 
-	@Override
-	public void onLivingUpdate() {
+	public void fall(float dis, float dama) { }
 
-		super.onLivingUpdate();
-		this.fallDistance = 0;
-	}
 
 	@Override
 	public boolean attackEntityFrom(DamageSource src, float amount) {
@@ -327,7 +324,7 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 	private boolean teleportTo(double x, double y, double z) {
 		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
 		if (MinecraftForge.EVENT_BUS.post(event)) { return false; }
-		boolean success = attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		boolean success = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 		if (success) {
 			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
 		}
@@ -540,9 +537,9 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 		}
 	}
 
-	class AICastingSpell extends EntitySpellcasterIllager.AICastingApell {
+	public class AICastingSpell extends EntitySpellcasterIllager.AICastingApell {
 
-		private AICastingSpell() {
+		public AICastingSpell() {
 			super();
 		}
 
@@ -559,7 +556,7 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 
 	public class AISummonSpell extends EntitySpellcasterIllager.AIUseSpell {
 
-		private AISummonSpell() {
+		public AISummonSpell() {
 			super();
 		}
 
@@ -592,19 +589,29 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 
 
 				if (entity.isHalfHelth() && !liv.isPotionActive(PotionInit.refresh_effect)) {
+
 					for (Potion potion : PotionInit.buffList) {
-						liv.removePotionEffect(potion);
+						if (liv.isPotionActive(potion)) {
+							liv.removePotionEffect(potion);
+						}
 					}
 				}
 			}
 
+			// 体力が半分以下なら
 			if (entity.isHalfHelth()) {
 				entity.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 600, 0, true, false));
 			}
 
+			// 半分以上なら自身のデバフ解除
 			else {
-				for (Potion potion : PotionInit.deBuffList) {
-					entity.removePotionEffect(potion);
+				for (PotionEffect effect : entity.getActivePotionEffects()) {
+
+					// デバフなら
+					Potion potion = effect.getPotion();
+					if (potion.isBadEffect()) {
+						entity.removePotionEffect(potion);
+					}
 				}
 			}
 		}

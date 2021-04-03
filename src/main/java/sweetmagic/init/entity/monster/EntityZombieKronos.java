@@ -1,13 +1,11 @@
 package sweetmagic.init.entity.monster;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.entity.Entity;
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -19,16 +17,13 @@ import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.monster.EntitySpellcasterIllager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNodeType;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -36,34 +31,35 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraft.world.storage.loot.LootTableList;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import net.minecraftforge.fml.client.FMLClientHandler;
-import sweetmagic.client.particle.ParticleMagicDig;
+import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
-import sweetmagic.init.entity.projectile.EntityCyclonMagic;
-import sweetmagic.init.entity.projectile.EntityDigMagic;
-import sweetmagic.init.entity.projectile.EntityElectricMagic;
-import sweetmagic.init.entity.projectile.EntityFireMagic;
-import sweetmagic.init.entity.projectile.EntityFrostMagic;
-import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.util.SMUtil;
 
-public class EntityZombieKronos extends EntitySpellcasterIllager implements IRangedAttackMob, ISMMob {
+public class EntityZombieKronos extends EntitySpellcasterIllager implements ISMMob {
 
 	public int deathTicks = 0;
 	public int tickTime = 0;
-	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.PINK, BossInfo.Overlay.NOTCHED_10);
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.BLUE, BossInfo.Overlay.NOTCHED_10);
 	public EntityLivingBase suportEntity1;
 	public EntityLivingBase suportEntity2;
-	public List<EntityBaseMagicShot> magicList = new ArrayList<>();
-	public float oldHealth;
-	public float newHealth;
+	public int pX = (int) this.posX;
+	public int pY = (int) this.posY;
+	public int pZ = (int) this.posZ;
 
 	// えんちちーの炎ダメージを減らしたかったらここで
 	public EntityZombieKronos(World world) {
@@ -77,15 +73,15 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		this.setPathPriority(PathNodeType.DAMAGE_FIRE, 0.0F);
 	}
 
-	//えーあい
+	// えーあい
 	@Override
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(0, new EntityAISwimming(this));
 		this.tasks.addTask(1, new EntityZombieKronos.AICastingSpell());
 		this.tasks.addTask(2, new EntityAIAvoidEntity(this, EntityPlayer.class, 8.0F, 0.6D, 1.0D));
-		this.tasks.addTask(3, new EntityZombieKronos.AIMagicSlow());
-		this.tasks.addTask(4, new EntityZombieKronos.AIAttackSpell());
+		this.tasks.addTask(4, new EntityZombieKronos.AISummonSpell());
+		this.tasks.addTask(5, new EntityZombieKronos.AIAttackSpell());
 		this.tasks.addTask(6, new EntityAIWander(this, 0.6D));
 		this.tasks.addTask(7, new EntityAIWatchClosest(this, EntityPlayer.class, 3.0F, 1.0F));
 		this.tasks.addTask(8, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
@@ -98,10 +94,11 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(8D);
-		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.65D);
+		this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(1.5D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64D);
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(512D);
-		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(4D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(1024D);
+		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(2D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(48.0D);
 	}
 
 	@Override
@@ -110,9 +107,12 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		this.bossInfo.setName(this.getDisplayName());
 	}
 
-	@Override
-	protected void entityInit() {
-		super.entityInit();
+	public ITextComponent getDisplayName() {
+		return new TextComponentTranslation("entity.zombiekronos.name", new Object[0]);
+	}
+
+	public Color getColor () {
+		return this.isHalfHelth() ? BossInfo.Color.RED : BossInfo.Color.BLUE;
 	}
 
 	public static void registerFixesEvoker(DataFixer fixer) {
@@ -125,16 +125,11 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
 		}
-
-		this.oldHealth = tags.getFloat("oldHealth");
-		this.newHealth = tags.getFloat("newHealth");
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tags) {
 		super.writeEntityToNBT(tags);
-		tags.setFloat("oldHealth", this.oldHealth);
-		tags.setFloat("newHealth", this.newHealth);
 	}
 
 	@Override
@@ -142,26 +137,26 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		return LootTableList.ENTITIES_EVOCATION_ILLAGER;
 	}
 
-//	@Override
-//	protected void updateAITasks() {
-//
-//		super.updateAITasks();
-//		if (this.deathTicks > 0) { return; }
-//
-//		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
-//		this.motionY *= 0.2D;
-//
-//		EntityLivingBase entity = this.getAttackTarget();
-//		if (entity == null) { return; }
-//
-//		if (this.posY < entity.posY || this.posY < entity.posY + 2.0D) {
-//
-//			if (this.motionY >= 0D) { return; }
-//
-//			this.motionY = 0D;
-//			this.motionY += (0.5D - this.motionY) * 0.25D;
-//		}
-//	}
+	@Override
+	protected void updateAITasks() {
+
+		if (this.deathTicks > 0) { return; }
+
+		super.updateAITasks();
+		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+
+		if (this.isHalfHelth()) {
+			this.bossInfo.setColor(this.getColor());
+		}
+
+		this.motionY *= 0.25D;
+		EntityLivingBase entity = this.getAttackTarget();
+
+		if (entity != null && ( this.posY < entity.posY || this.posY < entity.posY + 2.0D ) ) {
+			if (this.motionY < 0.0D) { this.motionY = 0.0D; }
+			this.motionY += (0.5D - this.motionY) * 0.25D;
+		}
+	}
 
 	@Override
 	protected void onDeathUpdate() {
@@ -172,6 +167,7 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		if (this.deathTicks >= 10 && this.deathTicks <= 300) {
 
 			this.world.setWorldTime((this.world.getWorldTime() + 36));
+			this.bossInfo.setPercent(0);
 
 			if (this.deathTicks % 11 == 0) {
 			    this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 0.5F, 1.0F);
@@ -182,9 +178,10 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 			float f1 = (this.rand.nextFloat() - 0.5F) * 2.0F;
 			float f2 = (this.rand.nextFloat() - 0.5F) * 3.0F;
 			this.world.spawnParticle(EnumParticleTypes.EXPLOSION_HUGE, this.posX + f,
-					this.posY + 2.0D + f1, this.posZ + f2, 0.0D, 0.0D, 0.0D);
+					this.posY + 2D + f1, this.posZ + f2, 0D, 0D, 0D);
 			}
 		}
+
 		this.move(MoverType.SELF, 0.0D, 0.10000000149011612D, 0.0D);
 		if (this.deathTicks >= 300 && !this.world.isRemote) {
 			this.setDead();
@@ -195,219 +192,145 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(32) + 32), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(32) + 32), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(36) + 12), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.divine_crystal, this.rand.nextInt(7) + 2), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.pure_crystal, 4), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.mf_sbottle, this.rand.nextInt(40) + 8), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.mf_bottle, this.rand.nextInt(20) + 4), 0F);
+			this.entityDropItem(new ItemStack(BlockInit.sturdust_crystal_bot, 1), 0F);
 		}
     }
 
-	// 体力が半分以下かどうか
-	public boolean isArmor () {
-		return this.getHealth() < this.getMaxHealth() / 2;
-	}
-
 	@Override
-	public void onLivingUpdate() {
+	public void onUpdate() {
 
-		super.onLivingUpdate();
+		super.onUpdate();
 		if (this.deathTicks > 0) { return; }
 
 		this.tickTime++;
-
-		// パーティクルスポーン
 		if (this.tickTime % 7 == 0) {
-			this.spawnParticle();
-		}
 
-		// サポートえんちちーのチェック
-		if (this.tickTime % 20 == 0) {
-			this.checkSuportEntity();
-			this.oldHealth = this.newHealth;
-			this.newHealth = this.getHealth();
+			if (this.world.isRemote) {
+				float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
+				float f2 = (float) (this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+				float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
+				FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
+			}
 
-			// 体力が半分なら
-			if (this.newHealth < this.halfHealth() && this.oldHealth > this.halfHealth()) {
-				this.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 10000, 1));
+			if (this.world instanceof WorldServer) {
+				int dayTime = 24000;
+	            WorldServer sever = world.getMinecraftServer().getWorld(0);
+	            long day = (sever.getWorldTime() / dayTime);
+				this.world.setWorldTime(12500 + (day * dayTime));
+			}
+
+			WorldInfo info = world.getWorldInfo();
+
+			if (info.isRaining()) {
+				info.setRainTime(0);
+				info.setThunderTime(0);
+				info.setRaining(false);
 			}
 		}
 
-		// 魔法攻撃
-//		if (!this.magicList.isEmpty() && this.tickTime % 10 == 0 && !this.isArmor() && this.getAttackTarget() != null && !world.isRemote) {
-//			this.magicAttack();
-//		}
+		if (this.tickTime % 20 == 0) {
+
+			if (this.suportEntity1 == null || this.suportEntity1.getHealth() <= 0) {
+				this.suportEntity1 = null;
+			}
+
+			if (this.suportEntity2 == null || this.suportEntity2.getHealth() <= 0) {
+				this.suportEntity2 = null;
+			}
+		}
 
 		// 範囲内のモブにバフ
-		if (this.tickTime % 300 == 0) {
-			this.rangeMobBuf();
-			this.tickTime = 0;
-		}
+		if (this.tickTime % 400 == 0) {
 
-	}
+			EntityZombieKronos liv = this;
+			World world = liv.world;
+			liv.suportEntity1 = null;
+			liv.suportEntity2 = null;
 
-	// 体力が半分
-	public float halfHealth () {
-		return this.getHealth() / 2;
-	}
+			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, liv.getEntityBoundingBox().grow(15D, 6D, 15D));
+			int count = 0;
 
-	// パーティクルスポーン
-	public void spawnParticle () {
+			for (EntityLivingBase entity : list) {
 
-		if (this.world.isRemote) {
-			float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-			float f2 = (float) (this.posY + 0.25F + this.rand.nextFloat() * 1.5);
-			float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
+				if (!(entity instanceof ISMMob) || entity == this) { continue; }
 
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleMagicDig.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
-		}
+				int level = this.isHalfHelth() ? 2 : 0;
+				int time = this.isHalfHelth() ? 400 : 300;
+				int maxCount = 2;
+				entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, time, level, true, false));
+				count++;
 
-		// 時間固定
-		this.world.setWorldTime(12500);
-		WorldInfo info = world.getWorldInfo();
+				switch (count) {
+				case 1:
+					liv.suportEntity1 = entity;
+					break;
+				case 2:
+					liv.suportEntity2 = entity;
+					break;
+				}
 
-		// 雨降っていたら晴れに
-		if (info.isRaining()) {
-			info.setRainTime(0);
-			info.setThunderTime(0);
-			info.setRaining(false);
-		}
-	}
-
-	// サポートえんちちーのチェック
-	public void checkSuportEntity () {
-		if (this.suportEntity1 == null || this.suportEntity1.getHealth() <= 0) {
-			this.suportEntity1 = null;
-		}
-
-		if (this.suportEntity2 == null || this.suportEntity2.getHealth() <= 0) {
-			this.suportEntity2 = null;
-		}
-	}
-
-	public void magicAttack () {
-
-		// 攻撃対象の取得
-		EntityLivingBase target = this.getAttackTarget();
-
-		// 魔法の取得
-		EntityBaseMagicShot shot = this.magicList.get(0);
-		shot.thrower = this;
-
-        double x = target.posX - this.posX;
-        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
-		double z = target.posZ - this.posZ;
-		double xz = (double) MathHelper.sqrt(x * x + z * z);
-        shot.shoot(x, y + xz * 0.05D, z, 2F, 0);	// 射撃速度
-        shot.setDamage(shot.getDamage() + 6);
-		this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
-        this.world.spawnEntity(shot);
-//		System.out.println("==============" + shot);
-
-        // リストの削除
-        this.magicList.remove(0);
-
-        if (this.magicList.isEmpty()) {
-        	this.magicList.clear();
-        }
-	}
-
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
-
-		int count = 16;
-        World world = this.world;
-        Random rand = world.rand;
-		int value = rand.nextInt(6);
-
-		for (int i = 0; i < count; i++) {
-
-			EntityBaseMagicShot shot = this.getShot(world, value);
-			shot.setDamage(shot.getDamage() + 6);
-			shot.setHeadingFromThrower(this, this.rotationPitch, this.rotationYaw, 0F, 2.5F, 0F);	//　弾の初期弾速と弾のばらつき
-			shot.shoot(shot.motionX, shot.motionY, shot.motionZ, 0, 0);									// 射撃速度
-			shot.motionY -= rand.nextDouble() * 2;
-			double x = target.posX - 32 + rand.nextDouble() * 64;
-			double y = target.posY + 6 + rand.nextDouble() * 8;
-			double z = target.posZ - 32 + rand.nextDouble() * 64;
-			shot.setPosition(x, y + 2, z);
-			this.world.spawnEntity(shot);
-        }
-	}
-
-	public EntityBaseMagicShot getShot (World world, int value) {
-
-		EntityBaseMagicShot entity = null;
-
-		switch (value) {
-		case 0:
-			entity = new EntityFireMagic(world, this, ItemStack.EMPTY);
-			break;
-		case 1:
-			entity = new EntityFrostMagic(world, this, ItemStack.EMPTY, false);
-			break;
-		case 2:
-			entity = new EntityCyclonMagic(world, this, ItemStack.EMPTY);
-			break;
-		case 3:
-			entity = new EntityGravityMagic(world, this, ItemStack.EMPTY);
-			break;
-		case 4:
-			entity = new EntityDigMagic(world, this, ItemStack.EMPTY, 0);
-			break;
-		case 5:
-			entity = new EntityElectricMagic(world, this, ItemStack.EMPTY);
-			break;
-		}
-
-		return entity;
-	}
-
-
-	// 範囲内のモブにバフ
-	public void rangeMobBuf () {
-
-		EntityZombieKronos liv = this;
-		liv.suportEntity1 = null;
-		liv.suportEntity2 = null;
-
-		List<EntityLivingBase> list = SMUtil.getAABB(EntityLivingBase.class, liv.world, liv, 15, 7.5, 15);
-		int count = 0;
-
-		for (EntityLivingBase entity : list) {
-
-			if (!(entity instanceof ISMMob) || entity == this) { continue; }
-
-			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 2));
-			entity.addPotionEffect(new PotionEffect(MobEffects.SPEED, 400, 1));
-			count++;
-
-			switch (count) {
-			case 1:
-				liv.suportEntity1 = entity;
-				break;
-			case 2:
-				liv.suportEntity2 = entity;
-				break;
+				if (count >= maxCount) { break; }
 			}
-
-			if (count >= 2) { break; }
 		}
 	}
+
+	public void fall(float dis, float dama) { }
+
 
 	@Override
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
-    		return false;
+    	if (this.isAtterckerSMMob(src)) { return false; }
+
+    	// ダメージ倍処理
+		if (this.isSMDamage(src)) {
+
+			if (this.rand.nextInt(2) == 0) {
+				this.teleportRandomly(this.rand);
+			}
 		}
 
-//    	// ダメージ倍処理
-    	Entity entity = src.getImmediateSource();
-//		if (entity instanceof EntityBaseMagicShot) {
-//			amount *= 3F;
-//		}
-
-		if (!(entity instanceof EntityBaseMagicShot)) {
-			amount /= 3;
+		else {
+			amount = 0.0001F;
+			this.teleportRandomly(this.rand);
 		}
 
 		super.attackEntityFrom(src, amount);
 		return true;
+	}
+
+	private boolean teleportRandomly(Random rand) {
+		double x = this.pX + (rand.nextDouble() - 0.5) * 8;
+		double y = this.pY + (double) (rand.nextInt(12) - 4);
+		double z = this.pZ + (rand.nextDouble() - 0.5) * 8;
+		this.spawnParticle();
+		return teleportTo(x, y, z);
+	}
+
+	private boolean teleportTo(double x, double y, double z) {
+		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
+		if (MinecraftForge.EVENT_BUS.post(event)) { return false; }
+		boolean success = this.attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		if (success) {
+			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
+		}
+		return success;
+	}
+
+	public void spawnParticle() {
+		for (int i = 0; i < 8; i++) {
+			float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
+			float f2 = (float) ((float) this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+			float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
+			this.world.spawnParticle(EnumParticleTypes.PORTAL, f1, f2, f3, 0, 0, 0);
+		}
 	}
 
 	@Override
@@ -451,12 +374,13 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 	}
 
 	@Override
-	public void setSwingingArms(boolean swingingArms) {
-	}
-
-	@Override
 	public boolean isNonBoss() {
 		return false;
+	}
+
+	// 体力半分かどうか
+	public boolean isHalfHelth () {
+		return this.getHealth() < this.getMaxHealth() / 2;
 	}
 
 	public class AIAttackSpell extends EntitySpellcasterIllager.AIUseSpell {
@@ -467,29 +391,29 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 
 		@Override
 		protected int getCastingTime() {
-			return 50;
+			return 20;
 		}
 
 		@Override
 		protected int getCastingInterval() {
-			return 400;
+			return 1200;
 		}
 
 		@Override
 		protected void castSpell() {
 
-			EntityLivingBase living = EntityZombieKronos.this.getAttackTarget();
-
+			EntityZombieKronos entity = EntityZombieKronos.this;
+			EntityLivingBase living = entity.getAttackTarget();
 			if (living == null) { return; }
 
 			double d0 = Math.min(living.posY, living.posY);
 			double d1 = Math.max(living.posY, living.posY) + 1.0D;
 			float f = (float) MathHelper.atan2(living.posZ - living.posZ, living.posX - living.posX);
+			int summonCount = entity.isHalfHelth() ? 2 : 1;
 
-			for (int i = 0; i < living.world.rand.nextInt(3) + 1; ++i) {
+			for (int i = 0; i < summonCount; ++i) {
 				float f1 = f + i * (float) Math.PI * 0.4F;
-				this.spawnFangs(living, living.posX + MathHelper.cos(f1) * 1.5D,
-						living.posZ + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
+				this.spawnFangs(living, living.posX + MathHelper.cos(f1) * 1.5D, living.posZ + MathHelper.sin(f1) * 1.5D, d0, d1, f1, 0);
 			}
 		}
 
@@ -508,48 +432,58 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 				}
 
 				pos = pos.down();
-
 				if (pos.getY() < MathHelper.floor(par3) - 1) { break; }
 			}
 
 			if (flag) {
 
 				Random rand = world.rand;
-				int value = rand.nextInt(3);
+				int value = rand.nextInt(6);
 				EntityLivingBase living = null;
-				EntityLivingBase rider = null;
 
 				switch (value) {
 				case 0:
-					living = new EntityArchSpider(world);
-					rider = new EntitySkullFrost(world);
-					rider.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.BOW));
+					living = new EntityBraveSkeleton(world);
 					break;
 				case 1:
-					living = new EntityEnderShadow(world);
-					rider = new EntityBlazeTempest(world);
-					((EntityEnderShadow)living).canSpawnShadow = false;
-					living.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(Items.STONE_SWORD));
-					living.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+					living = new EntityAncientFairy(world);
 					break;
 				case 2:
-					living = new EntityElectricCube(world);
-					rider = new EntityCreeperCal(world);
+					living = new EntityWitchMadameVerre(world);
 					break;
+				case 3:
+					living = new EntityWindineVerre(world);
+					break;
+				case 4:
+					living = new EntityIfritVerre(world);
+					break;
+				case 5:
+					living = new EntityZombieHora(world);
 				}
 
 				double xRand = entity.posX + (rand.nextDouble() - 0.5) * 20.0;
 				double zRand = entity.posZ + (rand.nextDouble() - 0.5) * 20.0;
-
 				living.setLocationAndAngles(xRand, entity.posY, zRand, entity.rotationYaw, 0.0F);
+				living.setHealth(128F);
 				world.spawnEntity(living);
-
-				rider.setLocationAndAngles(xRand, entity.posY, zRand, entity.rotationYaw, 0.0F);
-				world.spawnEntity(rider);
-
-				rider.startRiding(living);
 				SMUtil.tameAIAnger((EntityLiving) living, liv); // タゲをnullに書き換え
-				SMUtil.tameAIAnger((EntityLiving) rider, liv); // タゲをnullに書き換え
+
+				if (world.isRemote) {
+					this.spawnParticl(world, pos);
+				}
+			}
+		}
+
+		public void spawnParticl (World world, BlockPos pos) {
+
+			Random rand = world.rand;
+
+			for (int i = 0; i < 8; i++) {
+				float f1 = (float) pos.getX() - 0.5F + rand.nextFloat();
+				float f2 = (float) (pos.getY() + 0.25F + rand.nextFloat() * 1.5);
+				float f3 = (float) pos.getZ() - 0.5F + rand.nextFloat();
+				Particle particl = new ParticleNomal.Factory().createParticle(0, world, f1, f2, f3, 0, 0, 0);
+				FMLClientHandler.instance().getClient().effectRenderer.addEffect(particl);
 			}
 		}
 
@@ -566,7 +500,7 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 
 	public class AICastingSpell extends EntitySpellcasterIllager.AICastingApell {
 
-		private AICastingSpell() {
+		public AICastingSpell() {
 			super();
 		}
 
@@ -574,18 +508,16 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 		public void updateTask() {
 
 			EntityZombieKronos entity = EntityZombieKronos.this;
-
 			if (entity.getAttackTarget() != null) {
-
 				entity.getLookHelper().setLookPositionWithEntity(entity.getAttackTarget(),
 						entity.getHorizontalFaceSpeed(), entity.getVerticalFaceSpeed());
 			}
 		}
 	}
 
-	public class AIMagicSlow extends EntitySpellcasterIllager.AIUseSpell {
+	public class AISummonSpell extends EntitySpellcasterIllager.AIUseSpell {
 
-		private AIMagicSlow() {
+		public AISummonSpell() {
 			super();
 		}
 
@@ -609,12 +541,39 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 
 			EntityZombieKronos entity = EntityZombieKronos.this;
 			World world = entity.world;
-
 			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(15D, 6D, 15D));
 
 			for (EntityLivingBase liv : list) {
+
 				if (liv instanceof ISMMob) { continue; }
-				liv.addPotionEffect(new PotionEffect(PotionInit.slow, 300, 1));
+				liv.addPotionEffect(new PotionEffect(PotionInit.slow, 200, 0));
+
+
+				if (entity.isHalfHelth() && !liv.isPotionActive(PotionInit.refresh_effect)) {
+
+					for (Potion potion : PotionInit.buffList) {
+						if (liv.isPotionActive(potion)) {
+							liv.removePotionEffect(potion);
+						}
+					}
+				}
+			}
+
+			// 体力が半分以下なら
+			if (entity.isHalfHelth()) {
+				entity.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 600, 0, true, false));
+			}
+
+			// 半分以上なら自身のデバフ解除
+			else {
+				for (PotionEffect effect : entity.getActivePotionEffects()) {
+
+					// デバフなら
+					Potion potion = effect.getPotion();
+					if (potion.isBadEffect()) {
+						entity.removePotionEffect(potion);
+					}
+				}
 			}
 		}
 
@@ -625,98 +584,7 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements IRan
 
 		@Override
 		protected EntitySpellcasterIllager.SpellType getSpellType() {
-			return EntitySpellcasterIllager.SpellType.SUMMON_VEX;
-		}
-	}
-
-	public class AISMMobBuf extends EntitySpellcasterIllager.AIUseSpell {
-
-		private AISMMobBuf() {
-			super();
-		}
-
-		@Override
-		public boolean shouldExecute() {
-
-			if (!super.shouldExecute() ? false : EntityZombieKronos.this.rand.nextInt(8) + 1 > 4) {
-
-				EntityZombieKronos liv = EntityZombieKronos.this;
-				World world = liv.world;
-
-				List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, liv.getEntityBoundingBox().grow(15D, 6D, 15D));
-				int count = 0;
-
-				for (EntityLivingBase entity : list) {
-
-					if (!(entity instanceof ISMMob)) { continue; }
-
-					entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 300, 1));
-					count++;
-
-					switch (count) {
-					case 1:
-						liv.suportEntity1 = entity;
-						break;
-					case 2:
-						liv.suportEntity2 = entity;
-						break;
-					}
-
-					if (count >= 2) { break; }
-
-				}
-			}
-
-			return false;
-		}
-
-		@Override
-		protected int getCastingTime() {
-			return 100;
-		}
-
-		@Override
-		protected int getCastingInterval() {
-			return 340;
-		}
-
-		@Override
-		protected void castSpell() {
-
-			EntityZombieKronos liv = EntityZombieKronos.this;
-			World world = liv.world;
-
-			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, liv.getEntityBoundingBox().grow(15D, 6D, 15D));
-			int count = 0;
-
-			for (EntityLivingBase entity : list) {
-
-				if (!(entity instanceof ISMMob)) { continue; }
-
-				entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 300, 1));
-				count++;
-
-				switch (count) {
-				case 1:
-					liv.suportEntity1 = entity;
-					break;
-				case 2:
-					liv.suportEntity2 = entity;
-					break;
-				}
-
-				if (count >= 2) { break; }
-			}
-		}
-
-		@Override
-		protected SoundEvent getSpellPrepareSound() {
-			return SMSoundEvent.HORAMAGIC;
-		}
-
-		@Override
-		protected EntitySpellcasterIllager.SpellType getSpellType() {
-			return EntitySpellcasterIllager.SpellType.SUMMON_VEX;
+			return EntitySpellcasterIllager.SpellType.DISAPPEAR;
 		}
 	}
 }

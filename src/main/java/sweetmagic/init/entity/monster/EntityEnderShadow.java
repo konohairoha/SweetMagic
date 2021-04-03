@@ -71,15 +71,15 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (this.world.isRemote) {
-			for (int i = 0; i < 2; ++i) {
-				this.world.spawnParticle(EnumParticleTypes.PORTAL,
-						this.posX + (this.rand.nextDouble() - 0.5D) * this.width,
-						this.posY + this.rand.nextDouble() * this.height - 0.25D,
-						this.posZ + (this.rand.nextDouble() - 0.5D) * this.width,
-						(this.rand.nextDouble() - 0.5D) * 2.0D, - this.rand.nextDouble(),
-						(this.rand.nextDouble() - 0.5D) * 2.0D);
-			}
+		if (!this.world.isRemote) { return; }
+
+		for (int i = 0; i < 2; ++i) {
+			double f1 = this.posX + (this.rand.nextDouble() - 0.5D) * this.width;
+			double f2 = this.posY + this.rand.nextDouble() * this.height - 0.25D;
+			double f3 = this.posZ + (this.rand.nextDouble() - 0.5D) * this.width;
+			double f4 = (this.rand.nextDouble() - 0.5D) * 2D;
+			double f6 = (this.rand.nextDouble() - 0.5D) * 2D;
+			this.world.spawnParticle(EnumParticleTypes.PORTAL, f1, f2, f3, f4, - this.rand.nextDouble(), f6);
 		}
 	}
 
@@ -213,7 +213,7 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 		if (MinecraftForge.EVENT_BUS.post(event)) return false;
 		boolean success = attemptTeleport(event.getTargetX(), event.getTargetY(), event.getTargetZ());
 		if (success) {
-			playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
+			this.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1F, 1F);
 		}
 		return success;
 	}
@@ -269,18 +269,21 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
         tags.setBoolean("canSpawnShadow", this.canSpawnShadow);
     }
 
-	class AICopyOwnerTarget extends EntityAITarget {
+	public class AICopyOwnerTarget extends EntityAITarget {
+
+		EntityEnderShadow entity = EntityEnderShadow.this;
+		EntityLiving owner = this.entity.owner;
+
 		public AICopyOwnerTarget(EntityCreature creature) {
 			super(creature, false);
 		}
 
 		public boolean shouldExecute() {
-			return EntityEnderShadow.this.owner != null && EntityEnderShadow.this.owner.getAttackTarget() != null
-					&& this.isSuitableTarget(EntityEnderShadow.this.owner.getAttackTarget(), false);
+			return this.owner != null && this.owner.getAttackTarget() != null && this.isSuitableTarget(this.owner.getAttackTarget(), false);
 		}
 
 		public void startExecuting() {
-			EntityEnderShadow.this.setAttackTarget(EntityEnderShadow.this.owner.getAttackTarget());
+			this.entity.setAttackTarget(this.owner.getAttackTarget());
 			super.startExecuting();
 		}
 	}

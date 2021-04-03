@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.client.particle.ParticleMagicDig;
+import sweetmagic.init.PotionInit;
 import sweetmagic.util.EventUtil;
 import sweetmagic.util.PlayerHelper;
 
@@ -43,13 +44,14 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	 * 0 = tier1
 	 * 1 = tier2
 	 * 2 = tier3
+	 * 3 = tier4
 	 */
 
 	// 地面についたときの処理
 	@Override
 	protected void inGround(RayTraceResult result) {
 
-		if (this.world.isRemote || !PlayerHelper.isPlayer(this.thrower)) { return; }
+		if (this.world.isRemote || !PlayerHelper.isPlayer(this.thrower) || this.getThrower().isPotionActive(PotionInit.breakblock)) { return; }
 
 		try {
 
@@ -59,13 +61,14 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 			BlockPos pos = result.getBlockPos();
 			IBlockState state = this.world.getBlockState(pos);
 			Material material = state.getMaterial();
+			boolean nearDrop = IWand.getWand(this.stack).getLevel(this.stack) >= 3;
 
 			// 1ブロック破壊
 			if (this.data == 0) {
 
 				// 破壊可能なブロックかどうか
 				if (this.canBreakBlock(state, material)) { return; }
-				this.breakBlock(pos);
+				this.breakBlock(pos, nearDrop);
 			}
 
 			// 範囲破壊
@@ -98,52 +101,55 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 					IBlockState target = world.getBlockState(p);
 					Material mate2 = state.getMaterial();
 					if (this.canBreakBlock(target, mate2)) { continue; }
-					this.breakBlock(p);
+					this.breakBlock(p, nearDrop);
 				}
 			}
 
 			// 連続範囲破壊
-			else if (this.data == 2) {
+			else if (this.data == 2 || this.data == 3) {
 
 				int xa = 0, za = 0, ya = 0;
 				int areaX = 0, areaZ = 0, areaY = 0;
 
+				int range = this.data == 3 ? 2 : 1;
+				int inside = this.data == 3 ? 15 : 9;
+
 	            switch (result.sideHit) {
 	                case UP:
-	                	xa = 1;
-	                	ya = 9;
-	                	areaY = -9;
-	                	za = 1;
+	                	xa = range;
+	                	ya = inside;
+	                	areaY = -inside;
+	                	za = range;
 	                	break;
 	                case DOWN:
-	                	xa = 1;
-	                	ya = -9;
-	                	areaY = 9;
-	                	za = 1;
+	                	xa = range;
+	                	ya = -inside;
+	                	areaY = inside;
+	                	za = range;
 	                	break;
 	                case NORTH:
-	                	xa = 1;
-	                	ya = 1;
-	                	za = -9;
-	                	areaZ = 9;
+	                	xa = range;
+	                	ya = range;
+	                	za = -inside;
+	                	areaZ = inside;
 	                	break;
 	                case SOUTH:
-	                	xa = 1;
-	                	ya = 1;
-	                	za = 9;
-	                	areaZ = -9;
+	                	xa = range;
+	                	ya = range;
+	                	za = inside;
+	                	areaZ = -inside;
 	                	break;
 	                case EAST:
-	                	xa = 9;
-	                	areaX = -9;
-	                	ya = 1;
-	                	za = 1;
+	                	xa = inside;
+	                	areaX = -inside;
+	                	ya = range;
+	                	za = range;
 	                	break;
 	                case WEST:
-	                	xa = -9;
-	                	areaX = 9;
-	                	ya = 1;
-	                	za = 1;
+	                	xa = -inside;
+	                	areaX = inside;
+	                	ya = range;
+	                	za = range;
 	                	break;
 	            }
 
@@ -157,7 +163,7 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 
 					Material mate2 = state.getMaterial();
 					if (this.canBreakBlock(target, mate2)) { continue; }
-					this.breakBlock(p);
+					this.breakBlock(p, nearDrop);
 				}
 
 			}
@@ -211,18 +217,14 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	}
 
 	// ブロック破壊処理
-	public boolean breakBlock(BlockPos pos) {
+	public boolean breakBlock(BlockPos pos, boolean nearDrop) {
 
         IBlockState state = this.world.getBlockState(pos);
         Block block = state.getBlock();
-		if (block.isAir(state, this.world, pos)) { return false; }
+		if (block == Blocks.AIR) { return false; }
 
 		this.world.playEvent(2001, pos, Block.getStateId(state));
-
-		BlockPos pos2 = pos;
-		if (IWand.getWand(this.stack).getLevel(this.stack) >= 3) {
-			pos2 = new BlockPos(this.thrower);
-		}
+		BlockPos pos2 = nearDrop ? new BlockPos(this.thrower) : pos;
 
 		if (this.data == 2) {
 			if (!this.world.isRemote) {

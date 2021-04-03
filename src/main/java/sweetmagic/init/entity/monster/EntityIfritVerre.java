@@ -58,12 +58,12 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	private int coolTime = 0;
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
-	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getBossName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
 
 	public EntityIfritVerre(World world) {
 		super(world);
 		this.experienceValue = 120;
-		this.setSize(0.4F, 1.4F);
+		this.setSize(0.6F, 1.75F);
 	}
 
 	public static void registerFixesWitch(DataFixer fixer) {
@@ -230,7 +230,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
     	if (this.isAtterckerSMMob(src)) { return false; }
 
     	// ダメージソースチェック
-    	if (this.checkDamageSrc(src)) {
+    	if (this.isUnique() && this.checkDamageSrc(src)) {
     		this.heal(amount / 5);
 			ParticleHelper.spawnHeal(this, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
     		return false;
@@ -363,7 +363,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 	@Override
 	protected boolean canDespawn() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	@Override
@@ -371,7 +371,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 	@Override
 	public boolean isNonBoss() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	public void setSwingingArms(boolean swingingArms) {
@@ -396,18 +396,18 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
-		this.bossInfo.setName(this.getDisplayName());
+		this.bossInfo.setName(this.getBossName());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tags) {
 		super.readEntityFromNBT(tags);
 		if (this.hasCustomName()) {
-			this.bossInfo.setName(this.getDisplayName());
+			this.bossInfo.setName(this.getBossName());
 		}
 	}
 
-	public ITextComponent getDisplayName() {
+	public ITextComponent getBossName () {
 		return new TextComponentTranslation("entity.spirit_fire_ifrite.name", new Object[0]);
 	}
 
@@ -416,12 +416,12 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		protected int spellWarmup;
 		protected int spellCooldown;
 		public World world;
-		public EntityIfritVerre brave;
+		public EntityIfritVerre ifrite;
 		public final boolean isStop;
 
 		public EntityAIMeteoRain (EntityIfritVerre entity, boolean isStop) {
-			this.brave = entity;
-			this.world = this.brave.world;
+			this.ifrite = entity;
+			this.world = this.ifrite.world;
 			this.isStop = isStop;
 		}
 
@@ -430,19 +430,19 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 			if (this.getTarget() == null) {
 				return false;
 			} else {
-				return this.brave.ticksExisted >= this.spellCooldown && this.brave.isHalfHelth();
+				return this.ifrite.ticksExisted >= this.spellCooldown && this.ifrite.isHalfHelth() && this.ifrite.isUnique();
 			}
 		}
 
 		// 実行できるか
 		public boolean shouldContinueExecuting() {
-			return this.brave.getAttackTarget() != null && this.spellWarmup > 0;
+			return this.ifrite.getAttackTarget() != null && this.spellWarmup > 0;
 		}
 
 		public void startExecuting() {
 			this.spellWarmup = this.getCastWarmupTime();
-			this.brave.spellTicks = this.getCastingTime();
-			this.spellCooldown = this.brave.ticksExisted + this.getCastingInterval();
+			this.ifrite.spellTicks = this.getCastingTime();
+			this.spellCooldown = this.ifrite.ticksExisted + this.getCastingInterval();
 			this.setCharge(true);
 		}
 
@@ -452,7 +452,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 			--this.spellWarmup;
 			Random rand = world.rand;
 			int range = 16;
-			EntityLivingBase target = this.brave.getAttackTarget();
+			EntityLivingBase target = this.ifrite.getAttackTarget();
 			if (target == null) { return; }
 
 			double x = (rand.nextDouble() * range) - rand.nextDouble() * range;
@@ -462,7 +462,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	        int posY = this.world.canSeeSky(pos) ? 20 : 7;
 
 			if (!this.world.isRemote) {
-				EntityMeteorMagic entity = new EntityMeteorMagic(this.world, this.brave, ItemStack.EMPTY);
+				EntityMeteorMagic entity = new EntityMeteorMagic(this.world, this.ifrite, ItemStack.EMPTY);
 				entity.shoot(0, entity.motionY - 0.33F, 0, 0, 0);
 				entity.motionY -= 1;
 				entity.setPosition(pos.getX(), pos.getY() + posY, pos.getZ());
@@ -470,7 +470,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 				this.world.spawnEntity(entity);
 			}
 
-			this.brave.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
+			this.ifrite.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
 
 			if (this.spellWarmup == 0) {
 				this.castSpell();
@@ -484,7 +484,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 		// ウォームアップタイム
 		protected int getCastWarmupTime() {
-			return 200;
+			return 180;
 		}
 
 		// キャストタイム
@@ -494,18 +494,18 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 		// インターバル
 		protected int getCastingInterval() {
-			return 500;
+			return 700;
 		}
 
 		// ターゲット取得
 		public EntityLivingBase getTarget () {
-			return this.brave.getAttackTarget();
+			return this.ifrite.getAttackTarget();
 		}
 
 		// チャージの設定
 		public void setCharge (boolean charge) {
 			if (this.isStop) {
-				this.brave.isCharge = charge;
+				this.ifrite.isCharge = charge;
 			}
 		}
 	}

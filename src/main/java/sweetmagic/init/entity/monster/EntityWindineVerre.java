@@ -67,11 +67,12 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
 	public float capaDame = 0;
-	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getBossName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
 
 	public EntityWindineVerre(World world) {
 		super(world);
 		this.experienceValue = 120;
+		this.setSize(0.5F, 1.5F);
 	}
 
 	public static void registerFixesWitch(DataFixer fixer) {
@@ -220,7 +221,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 			case 0:
 				// リフレッシュ・エフェクト
 				if (!this.isPotionActive(PotionInit.regene)) {
-					this.addPotionEffect(new PotionEffect(PotionInit.electric_armor, 400, 1, true, false));
+					this.addPotionEffect(new PotionEffect(PotionInit.regene, 400, 0, true, false));
 					this.playSound(SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 					this.coolTime += 300;
 				}
@@ -280,14 +281,14 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 		if (isRegene && this.isUnique() || !this.isSMDamage(src)) {
 
 			// リジェネがついてるなら
-			if (isRegene) {
+			if (isRegene && this.isUnique()) {
 
 				this.capaDame += amount;
 
 				// キャパが100を超えたらリジェネ解除
 				if (this.capaDame >= 100) {
 					this.removePotionEffect(PotionInit.regene);
-					this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.5F, 1F);
+					this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.25F, 1F);
 					PacketHandler.sendToClient(new EntityRemovePKT(this, 0, 0, 0, false));
 				}
 			}
@@ -411,7 +412,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 	@Override
 	protected boolean canDespawn() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	@Override
@@ -419,7 +420,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 	@Override
 	public boolean isNonBoss() {
-		return this.isUnique();
+		return !this.isUnique();
 	}
 
 	public void setSwingingArms(boolean swingingArms) {
@@ -444,18 +445,18 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 	@Override
 	public void setCustomNameTag(String name) {
 		super.setCustomNameTag(name);
-		this.bossInfo.setName(this.getDisplayName());
+		this.bossInfo.setName(this.getBossName());
 	}
 
 	@Override
 	public void readEntityFromNBT(NBTTagCompound tags) {
 		super.readEntityFromNBT(tags);
 		if (this.hasCustomName()) {
-			this.bossInfo.setName(this.getDisplayName());
+			this.bossInfo.setName(this.getBossName());
 		}
 	}
 
-	public ITextComponent getDisplayName() {
+	public ITextComponent getBossName () {
 		return new TextComponentTranslation("entity.spirit_water_windine.name", new Object[0]);
 	}
 
@@ -464,12 +465,12 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 		protected int spellWarmup;
 		protected int spellCooldown;
 		public World world;
-		public EntityWindineVerre brave;
+		public EntityWindineVerre windine;
 		public final boolean isStop;
 
 		public EntityAIFrostRain (EntityWindineVerre entity, boolean isStop) {
-			this.brave = entity;
-			this.world = this.brave.world;
+			this.windine = entity;
+			this.world = this.windine.world;
 			this.isStop = isStop;
 		}
 
@@ -478,19 +479,19 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 			if (this.getTarget() == null) {
 				return false;
 			} else {
-				return this.brave.ticksExisted >= this.spellCooldown && this.brave.isHalfHelth();
+				return this.windine.ticksExisted >= this.spellCooldown && this.windine.isHalfHelth() && this.windine.isUnique();
 			}
 		}
 
 		// 実行できるか
 		public boolean shouldContinueExecuting() {
-			return this.brave.getAttackTarget() != null && this.spellWarmup > 0;
+			return this.windine.getAttackTarget() != null && this.spellWarmup > 0;
 		}
 
 		public void startExecuting() {
 			this.spellWarmup = this.getCastWarmupTime();
-			this.brave.spellTicks = this.getCastingTime();
-			this.spellCooldown = this.brave.ticksExisted + this.getCastingInterval();
+			this.windine.spellTicks = this.getCastingTime();
+			this.spellCooldown = this.windine.ticksExisted + this.getCastingInterval();
 			this.setCharge(true);
 		}
 
@@ -500,25 +501,28 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 			--this.spellWarmup;
 			Random rand = world.rand;
 			int range = 16;
-			EntityLivingBase target = this.brave.getAttackTarget();
+			EntityLivingBase target = this.windine.getAttackTarget();
 			if (target == null) { return; }
 
-			double x = (rand.nextDouble() * range) - rand.nextDouble() * range;
-			double y = (rand.nextDouble() * range) - rand.nextDouble() * range;
-			double z = (rand.nextDouble() * range) - rand.nextDouble() * range;
-	        BlockPos pos = new BlockPos(target.posX + x, target.posY + y, target.posZ + z);
-	        int posY = this.world.canSeeSky(pos) ? 20 : 7;
+			for (int i = 0; i < 3; i++) {
 
-			if (!this.world.isRemote) {
-				EntityFrostMagic entity = new EntityFrostMagic(this.world, this.brave, ItemStack.EMPTY, true);
-				entity.shoot(0, entity.motionY - 0.33F, 0, 0, 0);
-				entity.motionY -= 1;
-				entity.setPosition(pos.getX(), pos.getY() + posY, pos.getZ());
-				entity.setDamage(entity.getDamage() + 6);
-				this.world.spawnEntity(entity);
+				double x = (rand.nextDouble() * range) - rand.nextDouble() * range;
+				double y = (rand.nextDouble() * range) - rand.nextDouble() * range;
+				double z = (rand.nextDouble() * range) - rand.nextDouble() * range;
+		        BlockPos pos = new BlockPos(target.posX + x, target.posY + y, target.posZ + z);
+		        int posY = this.world.canSeeSky(pos) ? 20 : 7;
+
+				if (!this.world.isRemote) {
+					EntityFrostMagic entity = new EntityFrostMagic(this.world, this.windine, ItemStack.EMPTY, true);
+					entity.shoot(0, entity.motionY - 0.33F, 0, 0, 0);
+					entity.motionY -= 1;
+					entity.setPosition(pos.getX(), pos.getY() + posY, pos.getZ());
+					entity.setDamage(entity.getDamage() + 6);
+					this.world.spawnEntity(entity);
+				}
 			}
 
-			this.brave.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
+			this.windine.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.33F, 0.67F);
 
 			if (this.spellWarmup == 0) {
 				this.castSpell();
@@ -532,7 +536,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 		// ウォームアップタイム
 		protected int getCastWarmupTime() {
-			return 200;
+			return 180;
 		}
 
 		// キャストタイム
@@ -542,18 +546,18 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 		// インターバル
 		protected int getCastingInterval() {
-			return 500;
+			return 700;
 		}
 
 		// ターゲット取得
 		public EntityLivingBase getTarget () {
-			return this.brave.getAttackTarget();
+			return this.windine.getAttackTarget();
 		}
 
 		// チャージの設定
 		public void setCharge (boolean charge) {
 			if (this.isStop) {
-				this.brave.isCharge = charge;
+				this.windine.isCharge = charge;
 			}
 		}
 	}

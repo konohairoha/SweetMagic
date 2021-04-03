@@ -63,7 +63,6 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 	public void onLivingUpdate() {
 
 		super.onLivingUpdate();
-		this.fallDistance = 0;
 
 		if (!this.world.isRemote) { return; }
 
@@ -73,6 +72,8 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 		this.tickTime = 0;
 		this.spawnParticle();
 	}
+
+    public void fall(float dis, float dama) { }
 
 	public void spawnParticle() {
 

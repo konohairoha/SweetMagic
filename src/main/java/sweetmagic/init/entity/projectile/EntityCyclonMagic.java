@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -78,7 +79,9 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 
 		for (EntityLivingBase entity : list ) {
 
-			if (this.isPlayer(entity) || this.isNotPlayer(entity)) { continue; }
+//			if (!this.checkThrower(entity)) { continue; }
+
+			if (!(this.getThrower() instanceof IMob) && this.getThrower() == entity) { continue; }
 
 			Vec3d p = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d t = new Vec3d(entity.posX, entity.posY, entity.posZ);

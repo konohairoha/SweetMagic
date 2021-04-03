@@ -4,7 +4,6 @@ import java.util.List;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.RayTraceResult;
@@ -44,7 +43,7 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 			for (EntityLivingBase ent : list) {
 
 				// カラミティまたは重力加速があるなら次へ
-				if (!(ent instanceof IMob)) { continue; }
+				if (!this.checkThrower(ent)) { continue; }
 
 				double dX = this.posX - ent.posX;
 				double dY = this.posY - ent.posY;
@@ -57,15 +56,6 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 					ent.motionX += dX / vel * 0.0775;
 					ent.motionY += dY / vel * 0.135;
 					ent.motionZ += dZ / vel * 0.0775;
-				}
-			}
-
-			if (this.world.isRemote) {
-				for(int k = 0; k <= 4; k++) {
-					float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-					float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 1.5);
-					float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
-					FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
 				}
 			}
 
@@ -95,6 +85,31 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 		}
 	}
 
+	public void onUpdate() {
+
+		super.onUpdate();
+
+		// 貫通時
+		if (this.inGround && this.range > 0D && this.world.isRemote) {
+
+			for(int k = 0; k <= 4; k++) {
+				float randX = (this.rand.nextFloat() - this.rand.nextFloat()) * 2.5F;
+				float randY = (this.rand.nextFloat() - this.rand.nextFloat()) * 1.5F;
+				float randZ = (this.rand.nextFloat() - this.rand.nextFloat()) * 2.5F;
+
+				float x = (float) (this.posX - 0.5F + randX);
+				float y = (float) (this.posY + 2F + randY);
+				float z = (float) (this.posZ - 0.5F + randZ);
+				float xSpeed = -randX * 0.075F;
+				float ySpeed = -randY * 0.075F;
+				float zSpeed = -randZ * 0.075F;
+
+				Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
+				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			}
+		}
+	}
+
 	// パーティクルスポーン
 	@Override
 	protected void spawnParticle() {
@@ -121,7 +136,7 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 
 			// 経験値追加処理
 			this.addExp();
-			living.addPotionEffect(new PotionEffect(PotionInit.gravity, 300 * level, 2));
+			living.addPotionEffect(new PotionEffect(PotionInit.gravity, 40 * (level + 1), 2));
 			this.setEntityDead();
 		}
 	}

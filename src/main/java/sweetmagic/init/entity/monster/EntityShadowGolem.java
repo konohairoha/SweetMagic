@@ -52,6 +52,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 	}
 
 	protected void collideWithEntity(Entity entity) {
+
 		if (entity instanceof IMob && this.getRNG().nextInt(10) == 0) {
 			this.setAttackTarget((EntityLivingBase) entity);
 		}
@@ -143,7 +144,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 	@Override
 	public void onUpdate() {
 
-		prevHeadYaw = headYaw;
+		this.prevHeadYaw = this.headYaw;
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -157,6 +158,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 		}
 
 		if (player != null) {
+
 			this.updateYaw(player);
 
 			while (this.rotationYaw - this.prevRotationYaw < -180.0F) {
@@ -226,6 +228,7 @@ public class EntityShadowGolem extends EntityIronGolem {
 		float yaw = this.rotationYaw * 0.017453292F;
 
 		if (rider != null && rider.moveForward > 0F) {
+
 			double d1 = -Math.sin(yaw);
 			double d2 = Math.cos(yaw);
 			double d9 = this.motionX * this.motionX + this.motionZ * this.motionZ;
@@ -246,7 +249,6 @@ public class EntityShadowGolem extends EntityIronGolem {
 			this.motionX *= 0.5D;
 			this.motionZ *= 0.5D;
 		}
-
 	}
 
 	public void isJump () {
@@ -283,19 +285,6 @@ public class EntityShadowGolem extends EntityIronGolem {
 			this.setRotation(this.rotationYaw, this.rotationPitch);
 		}
 	}
-
-//	@Override
-//	@SideOnly(Side.CLIENT)
-//	public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int roat, boolean teleport) {
-//		this.lastX = x;
-//		this.lastY = y;
-//		this.lastZ = z;
-//		this.lastYaw = yaw;
-//		this.lastRot = pitch;
-//		this.lerpSteps = 5;
-//		super.setPositionAndRotationDirect(x, y, z, yaw, pitch, roat, teleport);
-//
-//	}
 
 	@Override
 	public void updatePassenger(Entity entity) {

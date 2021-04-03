@@ -261,13 +261,13 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 		if (tags.getBoolean("tempest")) { this.tempest = tags.getBoolean("tempest"); }
 	}
 
-	static class AIFireballAttack extends EntityAIBase {
+	public class AIFireballAttack extends EntityAIBase {
 
-		private final EntityBlazeTempest blaze;
-		private int attackStep;
-		private int attackTime;
-		World world;
-    	Random rand;
+		public final EntityBlazeTempest blaze;
+		public int attackStep;
+		public int attackTime;
+		public World world;
+		public Random rand;
 
 		public AIFireballAttack(EntityBlazeTempest blazeIn) {
 			this.blaze = blazeIn;
@@ -285,8 +285,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			this.attackStep = 0;
 		}
 
-		public void resetTask() {
-		}
+		public void resetTask() { }
 
 		public void updateTask() {
 
@@ -355,9 +354,9 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			super.updateTask();
 		}
 
-		private double getFollowDistance() {
-			IAttributeInstance iattributeinstance = this.blaze.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
-			return iattributeinstance == null ? 16.0D : iattributeinstance.getAttributeValue();
+		public double getFollowDistance() {
+			IAttributeInstance range = this.blaze.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE);
+			return range == null ? 16.0D : range.getAttributeValue();
 		}
 	}
 }

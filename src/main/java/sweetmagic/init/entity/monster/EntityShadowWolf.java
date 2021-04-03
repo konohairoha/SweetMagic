@@ -76,6 +76,8 @@ public class EntityShadowWolf extends EntityWolf {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+
+		if (!this.world.isRemote) { return; }
 		this.spawnAppearParticles();
 	}
 

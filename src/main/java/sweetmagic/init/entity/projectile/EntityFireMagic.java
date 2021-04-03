@@ -67,7 +67,7 @@ public class EntityFireMagic extends EntityBaseMagicShot {
 		int level = this.getWandLevel();
 
 		if (PlayerHelper.isThowerPlayer(living, this.getThrower())) {
-			living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 100 * level, 0));
+			living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 60 * (level + 1), 0));
 		} else {
 			living.setFire(3 * (level + 1));
 		}
