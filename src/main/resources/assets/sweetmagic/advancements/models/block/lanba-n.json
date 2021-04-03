@@ -1,5 +1,4 @@
 {
-	"credit": "Made with Blockbench",
 	"parent": "block/thin_block",
 	"textures": {
 		"0": "sweetmagic:block/pole",

@@ -1,7 +1,7 @@
 {
 	"textures": {
-		"0": "sweetmagic:block/billboard",
-		"particle": "sweetmagic:block/billboard"
+		"0": "#0",
+		"particle": "#0"
 	},
 	"elements": [
 		{
