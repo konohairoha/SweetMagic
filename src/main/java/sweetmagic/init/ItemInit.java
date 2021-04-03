@@ -13,6 +13,8 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.item.sm.accessorie.SMAcce;
+import sweetmagic.init.item.sm.armor.AetherChoker;
+import sweetmagic.init.item.sm.armor.AngelHarness;
 import sweetmagic.init.item.sm.armor.MagiciansPouch;
 import sweetmagic.init.item.sm.armor.MagiciansRobe;
 import sweetmagic.init.item.sm.eitem.SMAcceType;
@@ -50,7 +52,6 @@ import sweetmagic.init.item.sm.sweetmagic.SMPick;
 import sweetmagic.init.item.sm.sweetmagic.SMShears;
 import sweetmagic.init.item.sm.sweetmagic.SMShovel;
 import sweetmagic.init.item.sm.sweetmagic.SMSickle;
-import sweetmagic.init.item.sm.sweetmagic.SMSummon;
 import sweetmagic.init.item.sm.sweetmagic.SMSword;
 import sweetmagic.init.item.sm.sweetmagic.SMWand;
 
@@ -94,8 +95,24 @@ public class ItemInit {
 	// 杖
 	public static Item mf_stuff, aether_wand, divine_wand, purecrystal_wand, deuscrystal_wand, cosmiccrystal_wand, creative_wand;
 
+	// エーテルワンド
+	public static Item aether_wand_r, aether_wand_g, aether_wand_b, aether_wand_y, aether_wand_p;
+
+	// ディバインワンド
+	public static Item divine_wand_r, divine_wand_g, divine_wand_b, divine_wand_y, divine_wand_p;
+
+	// ピュアクリスタルワンド
+	public static Item purecrystal_wand_r, purecrystal_wand_g, purecrystal_wand_b, purecrystal_wand_y, purecrystal_wand_p;
+
+	// デウスクリスタルワンド
+	public static Item deuscrystal_wand_r, deuscrystal_wand_g, deuscrystal_wand_b, deuscrystal_wand_y, deuscrystal_wand_p;
+
+	// コズミッククリスタルワンド
+	public static Item sacred_meteor_wand, snowdust_wand;
+
 	// 装備品
 	public static Item warrior_bracelet, witch_scroll, scorching_jewel, mermaid_veil, blood_sucking_ring, emelald_pias, fortune_ring;
+	public static Item varrier_pendant, magicians_grobe;
 
 	// ドア
 	public static Item black_moderndoor, brown_2paneldoor, brown_5paneldoor, brown_elegantdoor, brown_arch_door, brown_arch_plantdoor;
@@ -118,7 +135,8 @@ public class ItemInit {
 	public static Item magic_slowtime, magic_deusora, magic_futurevision, magic_frostrain;
 	public static Item magic_tempest_gin, magic_gravity_break, magic_shadowgolem;
 	public static Item magic_bubleprison, magic_scumefang, magic_regene_shield;
-	public static Item magic_deadly_poison, magic_earth_destruction;
+	public static Item magic_deadly_poison, magic_earth_destruction, magic_magia_protection;
+	public static Item magic_foamy_hell, magic_shining_flare, magic_growth_verre;
 
     // 簡易魔法
 	public static Item card_normal, card_heal;
@@ -152,7 +170,7 @@ public class ItemInit {
 	public static Item croquette, choco_pie, fruit_crepe, sweet_potato, french_toast;
 	public static Item banana, yaki_banana, banana_smoothy, mixed_juice, soy_soup, pork_soup;
 	public static Item saba_miso, fluit_mix, pizza, gratin, estor_apple, applepie, yaki_apple;
-	public static Item choko_cornet, cream_filled_roll, cream_brulee;
+	public static Item choko_cornet, cream_filled_roll, cream_brulee, apple_muffin;
 
 	// 飲み物
 	public static Item corn_soup, berryorange_juice, strawberrymilk, coconut_juice, milk_pack;
@@ -161,13 +179,15 @@ public class ItemInit {
 	public static Item vannila_pods, olive, miso;
 
 	// 防具
-	public static Item magicians_robe, wizard_robe, magicians_pouch;
+	public static Item magicians_robe, wizard_robe, feary_robe, windine_robe, ifrite_robe;
+	public static Item magicians_pouch, angel_harness, aether_choker, pure_choker;
 
 	// ダンジョン用
 	public static Item magickey;
 
     public static List<Item> itemList = new ArrayList();
     public static List<Item> foodList = new ArrayList();
+    public static List<Item> magicList = new ArrayList();
     public static List<Item> noTabList = new ArrayList();
 
 	// アイテムにデータを入れる
@@ -190,7 +210,7 @@ public class ItemInit {
         // 鉱石、クリスタル
 		alternative_ingot = new SMItem("alternative_ingot");
 		aether_crystal_shard = new MFItem("aether_crystal_shard", 50);
-		cosmic_crystal_shard = new MFItem("cosmic_crystal_shard", 500);
+		cosmic_crystal_shard = new MFItem("cosmic_crystal_shard", 1000);
 		aether_crystal = new MFItem("aether_crystal", 600);
 		divine_crystal = new MFItem("divine_crystal", 8000);
 		pure_crystal = new MFItem("pure_crystal", 90000);
@@ -221,18 +241,18 @@ public class ItemInit {
         sugarbell_seed = new SMSeed("sugarbell_seed", BlockInit.sugarbell_plant, 1);
 		clero_petal = new MFTeleport("clero_petal", true);
 		clerodendrum_seed = new SMSeed("clerodendrum_seed", BlockInit.clerodendrum, 1);
-		fire_powder = new SMItem("fire_powder");
+		fire_powder = new SMItem("fire_powder", magicList);
 		fire_nasturtium_petal = new MFWeather("fire_nasturtium_petal", 1600, SMElement.FLAME, 0);
         fire_nasturtium_seed = new SMSeed("fire_nasturtium_seed",BlockInit.fire_nasturtium_plant, 1);
-		sticky_stuff_petal = new SMItem("sticky_stuff_petal");
+		sticky_stuff_petal = new SMItem("sticky_stuff_petal", magicList);
         sticky_stuff_seed = new SMSeed("sticky_stuff_seed", BlockInit.sticky_stuff_plant, 1);
         glowflower_seed = new SMSeed("glowflower_seed", BlockInit.glowflower_plant, 1);
-        cotton = new SMItem("cotton");
+        cotton = new SMItem("cotton", magicList);
         cotton_seed = new SMSeed("cotton_seed", BlockInit.cotton_plant, 1);
 
         // MFボトル
 		mf_sbottle = new MFItem("mf_sbottle", 1000);
-		b_mf_bottle = new SMItem("b_mf_bottle");
+		b_mf_bottle = new SMItem("b_mf_bottle", magicList);
 		mf_bottle = new MFItem("mf_bottle", 10000);
 
 		// 魔法素材
@@ -247,26 +267,58 @@ public class ItemInit {
 		witch_tears = new SMDropItem("witch_tears");
 
 		// 魔法素材（魔法）
-		blank_page = new SMItem("blank_page");
-		blank_magic = new SMItem("blank_magic");
+		blank_page = new SMItem("blank_page", magicList);
+		blank_magic = new SMItem("blank_magic", magicList);
 		mysterious_page = new SMDropItem("mysterious_page");
-		mystical_page = new SMItem("mystical_page");
-		cotton_cloth = new SMItem("cotton_cloth");
-		veil_darkness = new SMSummon("veil_darkness");
+		mystical_page = new SMItem("mystical_page", magicList);
+		cotton_cloth = new SMItem("cotton_cloth", magicList);
 
 		// 杖
 		mf_stuff = new MFStuff("magiaflux_stuff");
 		aether_wand = new SMWand("aether_wand", 1, 3000, 3);
 		divine_wand = new SMWand("divine_wand", 2, 15000, 6);
-		purecrystal_wand = new CosmicWand("purecrystal_wand", 3, 40000, 9);
-		deuscrystal_wand = new CosmicWand("deuscrystal_wand", 4, 80000, 12);
-		cosmiccrystal_wand = new CosmicWand("cosmiccrystal_wand", 5, 160000, 16);
+		purecrystal_wand = new SMWand("purecrystal_wand", 3, 40000, 9);
+		deuscrystal_wand = new SMWand("deuscrystal_wand", 4, 80000, 12);
+		cosmiccrystal_wand = new SMWand("cosmiccrystal_wand", 5, 160000, 16);
 		creative_wand = new SMWand("creative_wand", 7, 1, 25);
 
+		aether_wand_r = new SMWand("aether_wand_r", 1, 5000, 3);
+		aether_wand_g = new SMWand("aether_wand_g", 1, 5000, 3);
+		aether_wand_b = new SMWand("aether_wand_b", 1, 5000, 3);
+		aether_wand_y = new SMWand("aether_wand_y", 1, 5000, 3);
+		aether_wand_p = new SMWand("aether_wand_p", 1, 5000, 3);
+
+		divine_wand_r = new SMWand("divine_wand_r", 2, 20000, 6);
+		divine_wand_g = new SMWand("divine_wand_g", 2, 20000, 6);
+		divine_wand_b = new SMWand("divine_wand_b", 2, 20000, 6);
+		divine_wand_y = new SMWand("divine_wand_y", 2, 20000, 6);
+		divine_wand_p = new SMWand("divine_wand_p", 2, 20000, 6);
+
+		purecrystal_wand_r = new SMWand("purecrystal_wand_r", 3, 50000, 9);
+		purecrystal_wand_g = new SMWand("purecrystal_wand_g", 3, 50000, 9);
+		purecrystal_wand_b = new SMWand("purecrystal_wand_b", 3, 50000, 9);
+		purecrystal_wand_y = new SMWand("purecrystal_wand_y", 3, 50000, 9);
+		purecrystal_wand_p = new SMWand("purecrystal_wand_p", 3, 50000, 9);
+
+		deuscrystal_wand_r = new SMWand("deuscrystal_wand_r", 4, 100000, 12);
+		deuscrystal_wand_g = new SMWand("deuscrystal_wand_g", 4, 100000, 12);
+		deuscrystal_wand_b = new SMWand("deuscrystal_wand_b", 4, 100000, 12);
+		deuscrystal_wand_y = new SMWand("deuscrystal_wand_y", 4, 100000, 12);
+		deuscrystal_wand_p = new SMWand("deuscrystal_wand_p", 4, 100000, 12);
+
+		sacred_meteor_wand = new CosmicWand("sacred_meteor_wand", 5, 200000, 20, SMElement.SHINE);
+		snowdust_wand = new CosmicWand("snowdust_wand", 5, 200000, 20, SMElement.FROST);
+
 		// 防具
-		magicians_robe = new MagiciansRobe("magicians_robe", ArmorInit.magicians_robe, 1, EntityEquipmentSlot.CHEST, 1);
-		wizard_robe = new MagiciansRobe("wizard_robe", ArmorInit.wizard_robe, 1, EntityEquipmentSlot.CHEST, 1);
+		aether_choker = new AetherChoker("aether_choker", ArmorInit.aether_choker, 1, EntityEquipmentSlot.HEAD, 0, 5000);
+		pure_choker = new AetherChoker("pure_choker", ArmorInit.pure_choker, 1, EntityEquipmentSlot.HEAD, 0, 40000);
+		magicians_robe = new MagiciansRobe("magicians_robe", ArmorInit.magicians_robe, 1, EntityEquipmentSlot.CHEST, 0, 10000);
+		wizard_robe = new MagiciansRobe("wizard_robe", ArmorInit.wizard_robe, 1, EntityEquipmentSlot.CHEST, 1, 40000);
+		feary_robe = new MagiciansRobe("feary_robe", ArmorInit.feary_robe, 1, EntityEquipmentSlot.CHEST, 1, 40000);
+		windine_robe = new MagiciansRobe("windine_robe", ArmorInit.windine_robe, 1, EntityEquipmentSlot.CHEST, 1, 40000);
+		ifrite_robe = new MagiciansRobe("ifrite_robe", ArmorInit.ifrite_robe, 1, EntityEquipmentSlot.CHEST, 1, 40000);
 		magicians_pouch = new MagiciansPouch("magicians_pouch", ArmorInit.magicians_pouch, 1, EntityEquipmentSlot.LEGS, 2);
+		angel_harness = new AngelHarness("angel_harness", ArmorInit.angel_harness, 1, EntityEquipmentSlot.FEET, 3, 20000);
 
 		// 装備品
 		warrior_bracelet = new SMAcce("warrior_bracelet", SMAcceType.TERMS, false, 0);
@@ -276,6 +328,9 @@ public class ItemInit {
 		blood_sucking_ring = new SMAcce("blood_sucking_ring", SMAcceType.TERMS, true, 4);
 		emelald_pias = new SMAcce("emelald_pias", SMAcceType.TERMS, true, 5);
 		fortune_ring = new SMAcce("fortune_ring", SMAcceType.UPDATE, false, 6);
+		veil_darkness = new SMAcce("veil_darkness", SMAcceType.UPDATE, false, 7);
+		varrier_pendant = new SMAcce("varrier_pendant", SMAcceType.UPDATE, false, 8);
+		magicians_grobe = new SMAcce("magicians_grobe", SMAcceType.TERMS, true, 9);
 
 		// ドア
 		black_moderndoor = new SMIDoor("black_moderndoor_i", BlockInit.black_moderndoor);
@@ -327,6 +382,7 @@ public class ItemInit {
 
         magic_bubleprison = new ShotMagic("magic_bubleprison", 20, SMElement.WATER, 1, 200, 80);
         magic_scumefang = new ShotMagic("magic_scumefang", 21, SMElement.WATER, 2, 280, 150, "magic_bubleprison");
+        magic_foamy_hell = new ShotMagic("magic_foamy_hell", 24, SMElement.WATER, 3, 300, 300, "magic_bubleprison");
 
         magic_elecarmor = new AirMagic("magic_elecarmor", 6, SMElement.LIGHTNING, 1, 1400, 100, "magic_thunder");
         magic_lightningbolt = new ChargeMagic("magic_lightningbolt", 3, SMElement.LIGHTNING, 2, 300, 200, "magic_thunder");
@@ -348,11 +404,13 @@ public class ItemInit {
         magic_vector_halten = new AirMagic("magic_gravity", 12, SMElement.GRAVITY, 2, 1400, 200, "magic_vector_boost");
 
         magic_barrier = new AirMagic("magic_barrier", 3, SMElement.SHINE, 1, 1200, 200);
-        magic_regene_shield = new AirMagic("magic_regene_shield", 15, SMElement.WATER, 2, 3600, 300, "magic_barrier");
+        magic_regene_shield = new AirMagic("magic_regene_shield", 15, SMElement.WATER, 2, 2400, 300, "magic_barrier");
+        magic_magia_protection = new AirMagic("magic_magia_protection", 16, SMElement.WATER, 3, 3000, 500, "magic_barrier");
 
-        magic_light = new ShotMagic("magic_light", 2, SMElement.SHINE, 1, 30, 30);
-        magic_starburst = new ShotMagic("magic_starburst", 7, SMElement.SHINE, 2, 80, 80, "magic_light");
-        magic_sacredbuster = new ShotMagic("magic_sacredbuster", 16, SMElement.SHINE, 3, 200, 200, "magic_light");
+        magic_light = new ShotMagic("magic_light", 2, SMElement.SHINE, 1, 20, 30);
+        magic_starburst = new ShotMagic("magic_starburst", 7, SMElement.SHINE, 2, 40, 80, "magic_light");
+        magic_sacredbuster = new ShotMagic("magic_sacredbuster", 16, SMElement.SHINE, 3, 80, 200, "magic_light");
+        magic_shining_flare = new ShotMagic("magic_shining_flare", 25, SMElement.SHINE, 4, 240, 400, "magic_light", SMElement.FLAME);
 
         magic_tornado = new ShotMagic("magic_tornado", 5, SMElement.CYCLON, 1, 50, 30, "magic_cyclon");
         magic_storm = new ShotMagic("magic_storm", 12, SMElement.CYCLON, 2, 100, 160, "magic_cyclon");
@@ -361,10 +419,11 @@ public class ItemInit {
         magic_dig = new ShotMagic("magic_dig", 3, SMElement.EARTH, 1, 10, 10);
         magic_rangebreaker = new ShotMagic("magic_rangebreaker", 8, SMElement.EARTH, 2, 30, 20, "magic_dig");
         magic_mining_magia = new ShotMagic("magic_mining_magia", 14, SMElement.EARTH, 3, 50, 30, "magic_dig");
-        magic_earth_destruction = new ShotMagic("magic_earth_destruction", 23, SMElement.EARTH, 4, 80, 50, "magic_dig");
+        magic_earth_destruction = new ShotMagic("magic_earth_destruction", 23, SMElement.EARTH, 4, 80, 70, "magic_dig");
 
-        magic_growth_effect = new ChargeMagic("magic_growth_effect", 6, SMElement.EARTH, 1, 300, 100, "magic_growth_aura");
-        magic_growth_aura = new ChargeMagic("magic_growth_aura", 5, SMElement.EARTH, 2, 100, 500);
+        magic_growth_effect = new ChargeMagic("magic_growth_effect", 6, SMElement.EARTH, 1, 200, 100, "magic_growth_aura");
+        magic_growth_aura = new ChargeMagic("magic_growth_aura", 5, SMElement.EARTH, 2, 300, 500);
+        magic_growth_verre = new ChargeMagic("magic_growth_verre", 7, SMElement.EARTH, 3, 400, 800, "magic_growth_aura");
 
         magic_burst = new ShotMagic("magic_burst", 15, SMElement.BLAST, 1, 160, 100, "magic_tamagotti");
         magic_blast = new ShotMagic("magic_tamagotti", 4, SMElement.BLAST, 2, 120, 200);
@@ -452,6 +511,7 @@ public class ItemInit {
 		scone = new SMFood (5, 0.6F, "scone", 1);
 		blueberry_muffin = new SMFood(7, 0.5F, "blueberry_muffin", 1);
 		chocolate_muffin = new SMFood(8, 0.35F, "chocolate_muffin", 1);
+		apple_muffin = new SMFood(5, 0.825F, "apple_muffin", 1);
 		cream_puff = new SMFood (8, 0.65F, "cream_puff", 0);
 		short_cake = new SMFood (6, 1.0F, "short_cake", 0);
 		cheese_cake = new SMFood (4, 1.5F, "cheese_cake", 0);
@@ -504,6 +564,10 @@ public class ItemInit {
 	//アイテムをクリエタブに追加
 	public static void register() {
 
+		for (Item item : magicList) {
+			registerItem(item, 2);
+		}
+
 		for (Item item : itemList) {
 			registerItem(item, 0);
 		}
@@ -513,17 +577,26 @@ public class ItemInit {
 		}
 
 		for (Item item : noTabList) {
-			registerItem(item, 2);
+			registerItem(item, 3);
 		}
 	}
 
 	public static void registerItem(Item item, int data) {
+
     	ForgeRegistries.ITEMS.register(item);
+
     	if (data == 0) {
     		item.setCreativeTab(SweetMagicCore.SMTab);
-    	} else if (data == 1) {
+    	}
+
+    	else if (data == 1) {
     		item.setCreativeTab(SweetMagicCore.SMFoodTab);
     	}
+
+    	else if (data == 2) {
+    		item.setCreativeTab(SweetMagicCore.SMMagicTab);
+    	}
+
         if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
         	ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
     }

@@ -27,22 +27,22 @@ public class PotionInit {
 
 	public static void init() {
 
-		frosty = new PotionFrost(false, 0x56CBFD, "frosted", "textures/items/magic_frost.png");
-		gravity = new PotionSM(false, 0x56CBFD, "gravity", "textures/items/grav_powder.png", true);
-		gravity_accele = new PotionSM(false, 0x56CBFD, "gravity_accele", "textures/items/magic_gravity.png", true);
-		cyclone = new PotionSM(false, 0x56CBFD, "cyclon", "textures/items/magic_cyclon.png", true);
-		shadow = new PotionSM(false, 0x56CBFD, "shadow", "textures/items/magic_shadow.png", false);
-		aether_barrier = new PotionSM(false, 0x56CBFD, "aether_barrier", "textures/items/magic_barrier.png", false);
-		deadly_poison = new PotionSM(false, 0x56CBFD, "deadly_poison", "textures/items/poison_bottle.png", false);
-		grant_poison = new PotionSM(false, 0x56CBFD, "grant_poison", "textures/items/magic_poison.png", false);
-		slow = new PotionSM(false, 0x56CBFD, "slow", "textures/items/sannyflower_petal.png", true);
-		timestop = new PotionSM(false, 0x56CBFD, "timestop", "textures/items/magic_slowtime.png", false);
-		electric_armor = new PotionSM(false, 0x56CBFD, "electric_armor", "textures/items/magic_thunder.png", false);
-		refresh_effect = new PotionSM(false, 0x56CBFD, "refresh_effect", "textures/items/magic_effectremover.png", true);
-		flame = new PotionSM(false, 0x56CBFD, "flame", "textures/items/magic_fire.png", false);
-		babule = new PotionSM(false, 0x56CBFD, "babule", "textures/items/magic_babule.png", true);
-		regene = new PotionSM(false, 0x56CBFD, "regene", "textures/items/magic_heal.png", true);
-		breakblock = new PotionSM(false, 0x56CBFD, "breakblock", "textures/items/magic_dig.png", true);
+		frosty = new PotionFrost(true, 0, "frosted", "textures/items/magic_frost.png");
+		gravity = new PotionSM(true, 0, "gravity", "textures/items/grav_powder.png", true);
+		gravity_accele = new PotionSM(false, 0, "gravity_accele", "textures/items/magic_gravity.png", true);
+		cyclone = new PotionSM(false, 0, "cyclon", "textures/items/magic_cyclon.png", true);
+		shadow = new PotionSM(false, 0, "shadow", "textures/items/magic_shadow.png", false);
+		aether_barrier = new PotionSM(false, 0, "aether_barrier", "textures/items/magic_barrier.png", false);
+		deadly_poison = new PotionSM(true, 0, "deadly_poison", "textures/items/poison_bottle.png", false);
+		grant_poison = new PotionSM(false, 0, "grant_poison", "textures/items/magic_poison.png", false);
+		slow = new PotionSM(true, 0, "slow", "textures/items/sannyflower_petal.png", true);
+		timestop = new PotionSM(false, 0, "timestop", "textures/items/magic_slowtime.png", false);
+		electric_armor = new PotionSM(false, 0, "electric_armor", "textures/items/magic_thunder.png", false);
+		refresh_effect = new PotionSM(false, 0, "refresh_effect", "textures/items/magic_effectremover.png", true);
+		flame = new PotionSM(true, 0, "flame", "textures/items/magic_fire.png", false);
+		babule = new PotionSM(true, 0, "babule", "textures/particle/magic_bubble.png", true);
+		regene = new PotionSM(false, 0, "regene", "textures/items/magic_heal.png", true);
+		breakblock = new PotionSM(false, 0, "breakblock", "textures/items/magic_dig.png", true);
 	}
 
 	// リストを設定
@@ -54,6 +54,7 @@ public class PotionInit {
 		buffList.add(aether_barrier);
 		buffList.add(grant_poison);
 		buffList.add(electric_armor);
+		buffList.add(refresh_effect);
 		buffList.add(regene);
 		buffList.add(MobEffects.SPEED);
 		buffList.add(MobEffects.STRENGTH);

@@ -38,21 +38,26 @@ public class BookInit {
 	public static BookEntry mfstuff;
 	public static BookEntry fire_nasturtium;
 	public static BookEntry drizzly_mysotis;
+	public static BookEntry color_wand;
+	public static BookEntry ele_wand;
 
-	public static BookEntry estor, cosmic, woodchest, cosmos, biome;
+	public static BookEntry key, flower_pot;
+
+	public static BookEntry tier3_block, tool_repar, write, drawer, hopper, robe, harness, choker;
+
+//	public static BookEntry grobe, basket, wand_pedal, warp, dungen;
 
 	public static void init() {
 
 		magic = new BookCategory("magic").setIcon(new ResourceLocation(SweetMagicCore.MODID, "textures/block/alstroemeria_stage1.png"));
-//		structure = new BookCategory("structure").setIcon(new ResourceLocation(SweetMagicCore.MODID, "textures/items/magicianbeginner_book.png"));
+		structure = new BookCategory("structure").setIcon(new ResourceLocation(SweetMagicCore.MODID, "textures/items/magicianbeginner_book.png"));
 		update = new BookCategory("update").setIcon(new ResourceLocation(SweetMagicCore.MODID, "textures/items/magic_light.png"));
 		categories.add(magic);
-//		categories.add(structure);
+		categories.add(structure);
 		categories.add(update);
 
 		categories_entry = new BookEntry("book", null).addPage(new BookPageCategories());
 
-//		aether_crystal = new BookEntry("aether_crystal", magic).setIcon(new ItemStack(ItemInit.aether_crystal));
 		sugarbell = new BookEntry("sugarbell", magic).setIcon(new ItemStack(ItemInit.sugarbell));
 		sannyflower = new BookEntry("sannyflower", magic).setIcon(new ItemStack(BlockInit.sannyflower_plant));
 		moonblossom = new BookEntry("moonblossom", magic).setIcon(new ItemStack(BlockInit.moonblossom_plant));
@@ -66,14 +71,26 @@ public class BookInit {
 		mftank = new BookEntry("mftank", magic).setIcon(new ItemStack(BlockInit.mftank));
 		mftable = new BookEntry("mftable", magic).setIcon(new ItemStack(BlockInit.mftable));
 		mfstuff = new BookEntry("mfstuff", magic).setIcon(new ItemStack(ItemInit.mf_stuff));
+		ele_wand = new BookEntry("ele_wand", magic).setIcon(new ItemStack(ItemInit.sacred_meteor_wand));
+		color_wand = new BookEntry("color_wand", magic).setIcon(new ItemStack(ItemInit.deuscrystal_wand_r));
 
-//		plant = new BookEntry("plant", update).setIcon(new ItemStack(BlockInit.antique_brick_pot_r));
-//		recipe = new BookEntry("recipe", update).setIcon(new ItemStack(BlockInit.twilight_alstroemeria));
-		estor = new BookEntry("estor", update).setIcon(new ItemStack(BlockInit.estor_sapling));
-		cosmic = new BookEntry("cosmic", update).setIcon(new ItemStack(ItemInit.cosmic_crystal));
-		woodchest = new BookEntry("woodchest", update).setIcon(new ItemStack(BlockInit.prism_woodchest));
-		cosmos = new BookEntry("cosmos", update).setIcon(new ItemStack(BlockInit.cosmos));
-		biome = new BookEntry("biome", update).setIcon(new ItemStack(BlockInit.sugarbell_plant));
+		key = new BookEntry("key", structure).setIcon(new ItemStack(ItemInit.magickey));
+		flower_pot = new BookEntry("flower_pot", structure).setIcon(new ItemStack(BlockInit.solid_star_pot));
+
+//		grobe = new BookEntry("grobe", update).setIcon(new ItemStack(ItemInit.magicians_grobe));
+//		basket = new BookEntry("basket", update).setIcon(new ItemStack(BlockInit.rattan_basket_y));
+//		wand_pedal = new BookEntry("wand_pedal", update).setIcon(new ItemStack(BlockInit.wand_pedal));
+//		warp = new BookEntry("warp", update).setIcon(new ItemStack(BlockInit.warp_block_on));
+//		dungen = new BookEntry("dungen", update).setIcon(new ItemStack(ItemInit.magicianbeginner_book));
+
+		tier3_block = new BookEntry("tier3_block", update).setIcon(new ItemStack(BlockInit.mm_tank));
+		tool_repar = new BookEntry("tool_repar", update).setIcon(new ItemStack(BlockInit.tool_repair));
+		write = new BookEntry("write", update).setIcon(new ItemStack(BlockInit.magia_rewrite));
+		drawer = new BookEntry("drawer", update).setIcon(new ItemStack(BlockInit.gravity_chest));
+		hopper = new BookEntry("hopper", update).setIcon(new ItemStack(BlockInit.aether_hopper));
+		robe = new BookEntry("robe", update).setIcon(new ItemStack(ItemInit.windine_robe));
+		harness = new BookEntry("harness", update).setIcon(new ItemStack(ItemInit.angel_harness));
+		choker = new BookEntry("choker", update).setIcon(new ItemStack(ItemInit.aether_choker));
 
 		sugarbell.addPage(new BookPageText(sugarbell, "sugarbell").addRelatedEntries(sannyflower, moonblossom, alstroemeria));
 		sannyflower.addPage(new BookPageText(sannyflower, "sannyflower").addRelatedEntries(moonblossom, alstroemeria));
@@ -83,19 +100,33 @@ public class BookInit {
 		alstroemeria.addPage(new BookPageText(alstroemeria, "alstroemeria").addRelatedEntries(sannyflower, moonblossom, pedalcreate))
 		.addPage(new BookPageText(alstroemeria, "alscraft").addRelatedEntries(sannyflower, moonblossom, pedalcreate));
 		pedalcreate.addPage(new BookPageText(pedalcreate, "pedalcreate").addRelatedEntries(alstroemeria, aetherwand));
-		aetherwand.addPage(new BookPageText(aetherwand, "aetherwand").addRelatedEntries(obmagia, mfchanger, mftank, mftable));
+		aetherwand.addPage(new BookPageText(aetherwand, "aetherwand").addRelatedEntries(obmagia, mfchanger, mftank, mftable, ele_wand, color_wand));
 		obmagia.addPage(new BookPageText(obmagia, "obmagia").addRelatedEntries(aetherwand));
 		mfchanger.addPage(new BookPageText(mfchanger, "mfchanger").addRelatedEntries(aetherwand, mftank, mftable, mfstuff));
 		mftank.addPage(new BookPageText(mftank, "mftank").addRelatedEntries(aetherwand, mfchanger, mftable, mfstuff));
 		mftable.addPage(new BookPageText(mftable, "mftable").addRelatedEntries(aetherwand, mfchanger, mftank, mfstuff));
 		mfstuff.addPage(new BookPageText(mfstuff, "mfstuff").addRelatedEntries(aetherwand, mfchanger, mftank, mftable));
+		color_wand.addPage(new BookPageText(color_wand, "color_wand").addRelatedEntries(aetherwand, ele_wand));
+		ele_wand.addPage(new BookPageText(ele_wand, "ele_wand").addRelatedEntries(aetherwand, color_wand));
 
-//		plant.addPage(new BookPageText(plant, "plant"));
-//		recipe.addPage(new BookPageText(recipe, "recipe"));
-		estor.addPage(new BookPageText(estor, "estor"));
-		cosmic.addPage(new BookPageText(cosmic, "cosmic"));
-		woodchest.addPage(new BookPageText(woodchest, "woodchest"));
-		cosmos.addPage(new BookPageText(cosmos, "cosmos"));
-		biome.addPage(new BookPageText(biome, "biome"));
+		key.addPage(new BookPageText(key, "key"));
+		flower_pot.addPage(new BookPageText(flower_pot, "flower_pot"));
+
+		tier3_block.addPage(new BookPageText(tier3_block, "tier3_block"));
+		tool_repar.addPage(new BookPageText(tool_repar, "tool_repar"));
+		write.addPage(new BookPageText(write, "write"));
+		drawer.addPage(new BookPageText(drawer, "drawer"));
+		hopper.addPage(new BookPageText(hopper, "hopper"));
+		robe.addPage(new BookPageText(robe, "robe"));
+		harness.addPage(new BookPageText(harness, "harness"));
+		choker.addPage(new BookPageText(choker, "choker"));
+
+//		pouch.addPage(new BookPageText(pouch, "pouch"));
+//		acce.addPage(new BookPageText(acce, "acce"));
+//		grobe.addPage(new BookPageText(grobe, "grobe"));
+//		basket.addPage(new BookPageText(basket, "basket"));
+//		wand_pedal.addPage(new BookPageText(wand_pedal, "wand_pedal"));
+//		warp.addPage(new BookPageText(warp, "warp"));
+//		dungen.addPage(new BookPageText(dungen, "dungen"));
 	}
 }

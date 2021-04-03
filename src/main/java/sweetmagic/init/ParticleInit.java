@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.client.particle.ParticleBabule;
 import sweetmagic.client.particle.ParticleIceCrystal;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = SweetMagicCore.MODID)
@@ -20,6 +21,7 @@ public class ParticleInit {
 
 	public static void init () {
 		texList.add(ParticleIceCrystal.ORB_TEX);
+		texList.add(ParticleBabule.BABULE_TEX);
 	}
 
 	@SideOnly(Side.CLIENT)
