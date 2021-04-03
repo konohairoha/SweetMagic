@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures":{
+        "layer0": "sweetmagic:items/divine_wand_g"
+    }
+}

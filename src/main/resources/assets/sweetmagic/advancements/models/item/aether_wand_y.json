@@ -1,0 +1,6 @@
+{
+    "parent": "item/handheld",
+    "textures":{
+        "layer0": "sweetmagic:items/aether_wand_y"
+    }
+}
