@@ -7,16 +7,19 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 
 public class TileSMBase extends TileEntity implements ITickable {
 
@@ -46,6 +49,11 @@ public class TileSMBase extends TileEntity implements ITickable {
 	// ブロックの取得
 	public Block getBlock (BlockPos pos) {
 		return this.getState(pos).getBlock();
+	}
+
+	// タイルえんちちーの取得
+	public TileEntity getTile (BlockPos pos) {
+		return this.world.getTileEntity(pos);
 	}
 
 	public void playSound (BlockPos pos, SoundEvent sound, float vol, float pit) {
@@ -135,6 +143,10 @@ public class TileSMBase extends TileEntity implements ITickable {
 		return tag;
 	}
 
+	public boolean isNotAir () {
+		return this.getBlock(this.pos) != Blocks.AIR;
+	}
+
 	// nbtを呼び出してList<ItemStack>に突っ込む
 	public static List<ItemStack> loadAllItems(NBTTagCompound tag, String name) {
 
@@ -150,5 +162,25 @@ public class TileSMBase extends TileEntity implements ITickable {
 
 //		System.out.println("LOAD：========  " + list);
 		return list;
+	}
+
+	// 対象の座標が空いてるか
+	public boolean isAir (BlockPos pos) {
+		IBlockState state = this.getState(pos);
+		Block block = state.getBlock();
+		return block != Blocks.AIR && block.isFullBlock(state);
+	}
+
+	public boolean isActive(World world, BlockPos pos) {
+		return this.isRedStonePower(world, pos) ? false : true;
+	}
+
+	// レッドストーン信号を受けているかを判断する
+	public boolean isRedStonePower(World world, BlockPos pos) {
+		int redstone = 0;
+		for(EnumFacing dir : EnumFacing.VALUES) {
+			redstone = Math.max(redstone, world.getRedstonePower(pos.offset(dir), dir));
+		}
+		return redstone > 0;
 	}
 }

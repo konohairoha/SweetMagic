@@ -46,10 +46,9 @@ public class ContainerJuiceMaker extends Container {
 			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 161));
 	}
 
-
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isNotAir();
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -18,22 +18,16 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.client.particle.ParticleNomal;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 
 public class TileParallelInterfere extends TileSMBase {
 
 	public int page = 0;
     public float pageFlip;
-    public float pageFlipPrev;
-    public float flipT;
-    public float flipA;
-    public float bookSpread;
-    public float bookSpreadPrev;
-    public float bookRot;
-    public float bookRotPre;
-    public float tRot;
+    public float pageFlipPrev, flipT, flipA, tRot;
+    public float bookSpread, bookSpreadPrev, bookRot, bookRotPre;
     public boolean isOpne;
     private static final Random rand = new Random();
 
@@ -112,9 +106,9 @@ public class TileParallelInterfere extends TileSMBase {
 
 	public void spawnParticl () {
 
-		float f1 = this.pos.getX() + 0.5F/* + this.rand.nextFloat()*/;
+		float f1 = this.pos.getX() + 0.5F;
 		float f2 = this.pos.getY() + 1.25F + this.rand.nextFloat() * 0.5F;
-		float f3 = this.pos.getZ() + 0.5F/* + this.rand.nextFloat()*/;
+		float f3 = this.pos.getZ() + 0.5F;
 		float x = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.15F;
 		float z = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.15F;
 
@@ -131,9 +125,9 @@ public class TileParallelInterfere extends TileSMBase {
 		}
 	};
 
-	private final IItemHandlerModifiable autoOutput = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.OUT);
-	private final IItemHandler autoSide = new CombinedInvWrapper(this.chestInv);
-	private final CombinedInvWrapper join = new CombinedInvWrapper(this.autoInput, this.autoOutput);
+	public final IItemHandlerModifiable autoOutput = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.OUT);
+	public final IItemHandler autoSide = new CombinedInvWrapper(this.chestInv);
+	public final CombinedInvWrapper join = new CombinedInvWrapper(this.autoInput, this.autoOutput);
 
 	@Override
 	public boolean hasCapability(@Nonnull Capability<?> cap, EnumFacing side) {
@@ -194,7 +188,6 @@ public class TileParallelInterfere extends TileSMBase {
 
 	// ページの設定
 	public void setPage (int page) {
-//		if (!this.world.isRemote) { return; }
 		this.page = page;
 	}
 }

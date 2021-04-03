@@ -5,12 +5,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerMFFurnace;
-import sweetmagic.init.tile.furnace.TileMFF;
+import sweetmagic.init.tile.magic.TileMFF;
 
 public class GuiMFF extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/rmfurnace_8.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/rmfurnace_8.png");
 	private final TileMFF tile;
 
 	public GuiMFF(InventoryPlayer invPlayer, TileMFF tile) {
@@ -39,7 +40,7 @@ public class GuiMFF extends GuiContainer {
 
 		int progress;
 
-		if (this.tile.isBurning()) {
+		if (this.tile.canSmelt()) {
 			progress = this.tile.getBurnTimeRemainingScaled(12);
 			this.drawTexturedModalRect(x + 66, y + 38 + 10 - progress, 210, 10 - progress, 21, progress + 2);
 		}

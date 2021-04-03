@@ -5,12 +5,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 
 public class GuiAetherFurnace extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_aetherfurnace.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_aetherfurnace.png");
 	private final TileAetherFurnace tile;
 
 	public GuiAetherFurnace(InventoryPlayer invPlayer, TileAetherFurnace tile) {

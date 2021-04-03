@@ -14,9 +14,9 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.init.block.blocks.BlockModenRack;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 
 public class TileModenRack extends TileSMBase {
 

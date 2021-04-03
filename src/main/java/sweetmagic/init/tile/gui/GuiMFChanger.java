@@ -5,12 +5,14 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerMFChanger;
 import sweetmagic.init.tile.magic.TileMFChanger;
 
 public class GuiMFChanger extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_mfchanger.png");
+	private static final ResourceLocation TEX_TIER1 = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_mfchanger_tier1.png");
+	private static final ResourceLocation TEX_TIER2 = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_mfchanger_tier2.png");
 	private final TileMFChanger tile;
 
 	public GuiMFChanger(InventoryPlayer invPlayer, TileMFChanger tile) {
@@ -31,7 +33,7 @@ public class GuiMFChanger extends GuiContainer {
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
 
 		GlStateManager.color(1, 1, 1, 1);
-		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
+		Minecraft.getMinecraft().renderEngine.bindTexture(this.getTex());
 
 		// 座標の取得
 		int x = (this.width - this.xSize) / 2;
@@ -50,6 +52,22 @@ public class GuiMFChanger extends GuiContainer {
 			// (X開始位置、Y開始位置、ゲージの左下X、ゲージの左下Y、ゲージのXサイズ、ゲージのYサイズ)
 			this.drawTexturedModalRect(x + 35, y + 53, 0, 166, progress, 10);
 		}
+	}
+
+	public ResourceLocation getTex () {
+
+		ResourceLocation tex = null;
+
+		switch (this.tile.getInvSize()) {
+		case 1:
+			tex = TEX_TIER1;
+			break;
+		case 5:
+			tex = TEX_TIER2;
+			break;
+		}
+
+		return tex;
 	}
 
 	@Override

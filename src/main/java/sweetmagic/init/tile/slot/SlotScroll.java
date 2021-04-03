@@ -24,25 +24,25 @@ public class SlotScroll extends ValidatedSlot {
 	// アイテムを取れるかのチェック
 	@Override
 	public boolean canTakeStack(EntityPlayer player) {
-		return !this.getItemHandler().extractItem(this.index + (this.container.tile.page * 9), 1, true).isEmpty();
+		return !this.getItemHandler().extractItem(this.index + (this.container.tile.getPage() * 9), 1, true).isEmpty();
 	}
 
 	// アイテムを取る処理
 	@Nonnull
 	public ItemStack decrStackSize(int amount) {
-        return this.getItemHandler().extractItem(index + (this.container.tile.page * 9), amount, false);
+        return this.getItemHandler().extractItem(index + (this.container.tile.getPage() * 9), amount, false);
     }
 
 	// アイテムを置く処理
 	@Override
 	public void putStack(@Nonnull ItemStack stack) {
-		((IItemHandlerModifiable) this.getItemHandler()).setStackInSlot(this.index + (this.container.tile.page * 9), stack);
+		((IItemHandlerModifiable) this.getItemHandler()).setStackInSlot(this.index + (this.container.tile.getPage() * 9), stack);
 		this.onSlotChanged();
 	}
 
 	// 特定スロットの描画とかいろいろなためのメソッド
 	@Override
 	public ItemStack getStack() {
-		return this.getItemHandler().getStackInSlot(this.index + (this.container.tile.page * 9));
+		return this.getItemHandler().getStackInSlot(this.index + (this.container.tile.getPage() * 9));
 	}
 }

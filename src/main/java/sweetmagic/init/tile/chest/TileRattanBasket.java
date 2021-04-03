@@ -6,16 +6,15 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 
 public class TileRattanBasket extends TileSMBase {
 
@@ -27,12 +26,11 @@ public class TileRattanBasket extends TileSMBase {
 
 		this.tickTime++;
 
-		//30秒経ったら
-		if(this.tickTime % 600 == 0) {
+		// 30秒経ったら
+		if(this.isActive(this.world, this.pos) && this.tickTime % 600 == 0) {
 
-			//捨てる処理のタイミングで音を鳴らす
-			this.world.playSound(null, this.pos, SoundEvents.BLOCK_SAND_BREAK,
-					SoundCategory.BLOCKS, 0.25F, this.world.rand.nextFloat() * 0.19F + 0.9F);
+			// 捨てる処理のタイミングで音を鳴らす
+			this.playSound(this.pos, SoundEvents.BLOCK_SAND_BREAK, 0.25F, this.world.rand.nextFloat() * 0.19F + 0.9F);
 			this.removeTick = true;
 			this.tickTime = 0;
 
@@ -42,7 +40,8 @@ public class TileRattanBasket extends TileSMBase {
 				stack.shrink(stack.getCount());
 			}
 
-			this.markDirty();	//一応マルチのことを考えてクライアントへのNBT書き換え通知もしておく。
+			// 一応マルチのことを考えてクライアントへのNBT書き換え通知もしておく
+			this.markDirty();
 		}
 	}
 

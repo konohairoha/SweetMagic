@@ -9,12 +9,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 
 @SideOnly(Side.CLIENT)
 public class ScrollBar {
 
 	protected GuiContainer gui;
-	protected static final ResourceLocation TEX = new ResourceLocation("sweetmagic", "textures/gui/gui_parallel_book.png");
+	protected static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_parallel_book.png");
 
 	// スクロールバーのテクスチャ座標
 	protected final int scroll_on_x = 0;
@@ -73,7 +74,6 @@ public class ScrollBar {
 
 		// スクロールバーの位置を計算
 		y += this.scroll_coord_y * (float) this.scroll_height;
-
 		int tex_x = scroll_on_x;
 		int tex_y = scroll_on_y;
 
@@ -84,18 +84,15 @@ public class ScrollBar {
 
 		// スクロールバーの描画
 		this.gui.drawTexturedModalRect(x, y, tex_x, tex_y, size_width, size_height);
-
 	}
 
 	public void handleMouseInput() {
 
 		int dwheel = Mouse.getEventDWheel();
 
+		// trueなら上方向へ
 		if (dwheel != 0) {
-
-			// trueなら上方向へ
-			boolean nextFlg = 0 >= dwheel;
-			this.setScrollTo(this.scroll_coord_y, nextFlg);
+			this.setScrollTo(this.scroll_coord_y, 0 >= dwheel);
 		}
 	}
 
@@ -167,16 +164,16 @@ public class ScrollBar {
 		if (next && 1.0F <= work) { return 1.0F; }
 
 		// 位置のRate計算
-		float scrollPageY = Math.round((1F / (float)this.max_page) * 1000F) / 1000F;
+		float scrollPageY = Math.round((1F / (float) this.max_page) * 1000F) / 1000F;
 		List<Float> scrollList = new ArrayList<Float>();
+
 		for (float i = 0; i < this.max_page; i++) {
 			scrollList.add(Math.round(scrollPageY * i * 1000F) / 1000F);
 		}
 
-		scrollList.add(1F);
-
 		// 逆順で検索
 		int scroll_idx = 0;
+		scrollList.add(1F);
 
 		if (next) {
 
@@ -205,6 +202,7 @@ public class ScrollBar {
 				}
 			}
 		}
+
 		this.now_page = scroll_idx;
 		return scrollList.get(scroll_idx);
 	}

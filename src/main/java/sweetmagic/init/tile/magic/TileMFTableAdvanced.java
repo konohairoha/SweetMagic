@@ -10,11 +10,11 @@ import sweetmagic.init.tile.slot.StackHandler;
 public class TileMFTableAdvanced extends TileMFTable {
 
 	public int maxMagiaFlux = 100000; 	// 最大MF量を設定
-	public int useMF = 5000; 			// 一度に補給できるMF;
+	public int useMF = 20000; 			// 一度に補給できるMF;
 	public int slotSize = 4;
 
 	// 杖スロット
-	public final ItemStackHandler wandInventory = new StackHandler(this, 4) {
+	public final ItemStackHandler wandInventory = new StackHandler(this, this.getInvSize()) {
 
         @Override
 		public void onContentsChanged(int slot) {
@@ -63,4 +63,13 @@ public class TileMFTableAdvanced extends TileMFTable {
 		this.setMF(tags.getInteger("magiaFlux"));
 	}
 
+	// 杖に入れるMF量の取得
+	public int getChargeValue () {
+		return this.useMF;
+	}
+
+	// インベントリの数
+	public int getInvSize() {
+		return this.slotSize;
+	}
 }

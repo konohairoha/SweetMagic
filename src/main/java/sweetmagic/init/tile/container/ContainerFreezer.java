@@ -86,7 +86,6 @@ public class ContainerFreezer extends Container {
 			this.addSlotToContainer(new Slot(invPlayer, i, 48 + i * 18, 210));
 	}
 
-
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
 		return this.tile.isNotAir();

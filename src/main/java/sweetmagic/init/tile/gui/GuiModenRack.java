@@ -5,12 +5,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.container.ContainerModenRack;
 
 public class GuiModenRack extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_moden_rack.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_moden_rack.png");
 	private final TileModenRack tile;
 
 	public GuiModenRack(InventoryPlayer invPlayer, TileModenRack tile) {

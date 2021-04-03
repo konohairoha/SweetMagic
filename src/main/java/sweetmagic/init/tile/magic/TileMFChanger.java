@@ -13,10 +13,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
-import sweetmagic.packet.TileMFBlockPKT;
 
 public class TileMFChanger extends TileMFBase {
 
@@ -78,11 +76,11 @@ public class TileMFChanger extends TileMFBase {
 			stack.shrink(value);
 
 			// 最大になったら終了
-			if (this.canMFChange()) { break; }
+			if (!this.canMFChange()) { break; }
 		}
 
 		this.markDirty();
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+		this.sentClient();
 
 		return true;
 	}
@@ -106,7 +104,7 @@ public class TileMFChanger extends TileMFBase {
 	}
 
 	// インベントリの数
-	protected int getInvSize() {
+	public int getInvSize() {
 		return 1;
 	}
 

@@ -25,6 +25,7 @@ import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.PotionInit;
+import sweetmagic.init.entity.monster.EntityAncientFairy;
 import sweetmagic.init.entity.monster.EntityArchSpider;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
 import sweetmagic.init.entity.monster.EntityBraveSkeleton;
@@ -32,6 +33,7 @@ import sweetmagic.init.entity.monster.EntityElectricCube;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
+import sweetmagic.init.entity.monster.EntityPixieVex;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
@@ -43,7 +45,9 @@ public class TileSpawnStone extends TileSMBase {
 
 	public int data = 0;
 	public boolean isRand = false;
+	public boolean isBossSummon = true;
 	public EntityPlayer player = null;
+	public int isPowerUp = 0;
 
 	public void update() {
 
@@ -63,27 +67,31 @@ public class TileSpawnStone extends TileSMBase {
 	public void spawnMob () {
 
 		Random rand = this.world.rand;
-
-		if (!this.isRand) {
-			this.data = rand.nextInt(6);
-		}
-
 		Block block = this.getBlock(this.pos.down());
 		boolean isBoss = false;
 
-		// 下のブロックチェック
-		if (block == BlockInit.ac_ore) {
-			this.data = 6;
-			isBoss = true;
-		} else if (block == Blocks.PACKED_ICE) {
-			this.data = 7;
-			isBoss = true;
-		} else if (block == Blocks.MAGMA) {
-			this.data = 8;
-			isBoss = true;
-		} else if (block == Blocks.SKULL) {
-			this.data = 9;
-			isBoss = true;
+		if (!this.isRand) {
+
+			if (this.isBossSummon && block == BlockInit.ac_ore) {
+				this.data = 6;
+				isBoss = true;
+			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.PACKED_ICE) {
+				this.data = 7;
+				isBoss = true;
+			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.MAGMA) {
+				this.data = 8;
+				isBoss = true;
+			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.SKULL) {
+				this.data = 9;
+				isBoss = true;
+			} else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.poison_block) {
+				this.data = 10;
+				isBoss = true;
+			} else if (this.isPowerUp == 0) {
+				this.data = rand.nextInt(6);
+			} else {
+				this.data = rand.nextInt(9);
+			}
 		}
 
 		if (!isBoss) {
@@ -173,11 +181,11 @@ public class TileSpawnStone extends TileSMBase {
 			if (i == 3) {
 
 				entity.setFire(0);
-				entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(60D);
+				entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getHealth(60D));
 				entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
 				entity.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(36D);
 				entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(6D);
-				entity.setHealth(60F);
+				entity.setHealth(entity.getMaxHealth());
 				entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 1200, 3, true, false));
 				entity.addPotionEffect(new PotionEffect(PotionInit.shadow, 1200, 4, true, false));
 
@@ -187,9 +195,23 @@ public class TileSpawnStone extends TileSMBase {
 				}
 			}
 
+			else if (this.isPowerUp >= 0) {
+				entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(this.getHealth(entity.getMaxHealth()));
+				entity.setHealth(entity.getMaxHealth());
+				entity.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10D);
+			}
+
+
 			int x = rand.nextInt(7) - 3 + this.pos.getX();
 			int y = rand.nextInt(3) + 1 + this.pos.getY();
 			int z = rand.nextInt(7) - 3 + this.pos.getZ();
+
+			if (this.isAir(new BlockPos(x, y, z))) {
+				x = this.pos.getX();
+				y = this.pos.getY() + 1;
+				z = this.pos.getZ();
+			}
+
 			entity.setLocationAndAngles(x, y, z, 0, 0F);
 			this.world.spawnEntity(entity);
 		}
@@ -227,6 +249,26 @@ public class TileSpawnStone extends TileSMBase {
 			// ブレイブスケルトン
 			entity = new EntityBraveSkeleton(this.world);
 			this.world.setBlockState(this.pos.down(), Blocks.AIR.getDefaultState(), 2);
+			break;
+		case 10:
+			// エンシェントフェアリー
+			entity = new EntityAncientFairy(this.world);
+			this.world.setBlockState(this.pos.down(), Blocks.AIR.getDefaultState(), 2);
+
+			Random vRand = this.world.rand;
+
+			for (int i = 0; i < 4; i++) {
+				EntityPixieVex vex = new EntityPixieVex(this.world);
+				double x = this.getPos().getX() + vRand.nextDouble() * 4 - vRand.nextDouble() * 4;
+				double z = this.getPos().getZ() + vRand.nextDouble() * 4 - vRand.nextDouble() * 4;
+
+				vex.setPosition(x, this.getPos().getY() + vRand.nextDouble() * 2, z);
+				vex.data = vRand.nextInt(3);
+				vex.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 99999, 4, true, false));
+				this.world.spawnEntity(vex);
+			}
+
+			break;
 		}
 
 		int x = rand.nextInt(7) - 3 + this.pos.getX();
@@ -254,13 +296,17 @@ public class TileSpawnStone extends TileSMBase {
 			AnvilChunkLoader.spawnEntity(entity, world);
 			this.world.playEvent(2004, pos, 0);
 		}
+	}
 
+	public double getHealth (double health) {
+		return health * ( 1 + this.isPowerUp * 0.5F);
 	}
 
 	@Override
 	public NBTTagCompound writeNBT(NBTTagCompound tags) {
 		super.writeNBT(tags);
 		tags.setInteger("data", this.data);
+		tags.setInteger("isPowerUp", this.isPowerUp);
 		tags.setBoolean("isRand", this.isRand);
 		return tags;
 	}
@@ -269,6 +315,7 @@ public class TileSpawnStone extends TileSMBase {
 	public void readNBT(NBTTagCompound tags) {
 		super.readNBT(tags);
 		this.data = tags.getInteger("data");
+		this.isPowerUp = tags.getInteger("isPowerUp");
 		this.isRand = tags.getBoolean("isRand");
 	}
 

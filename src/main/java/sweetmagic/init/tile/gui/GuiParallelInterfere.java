@@ -10,6 +10,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.tile.container.ContainerParallelInterfere;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
@@ -21,7 +22,7 @@ import vazkii.quark.api.IChestButtonCallback;
 @Optional.Interface(modid="quark", iface="vazkii.quark.api.IChestButtonCallback")
 public class GuiParallelInterfere extends GuiContainer implements IScrollBarChanged, IChestButtonCallback  {
 
-	private static final ResourceLocation TEX = new ResourceLocation("sweetmagic", "textures/gui/gui_parallel_book.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_parallel_book.png");
 	private final TileParallelInterfere tile;
 
 	public ContainerParallelInterfere continer;
@@ -38,7 +39,7 @@ public class GuiParallelInterfere extends GuiContainer implements IScrollBarChan
 		this.ySize = this.guiHeight;
 		this.tile = tile;
 		// x座標 y座標 スクロールの高さ スクロールのページ数
-		this.scrollBar = new ScrollBar(this, 174, 18, 106, this.maxPage);
+		this.scrollBar = new ScrollBar(this, 174, 18, 106, this.getMaxPage());
 		this.player = invPlayer.player;
 	}
 
@@ -60,7 +61,7 @@ public class GuiParallelInterfere extends GuiContainer implements IScrollBarChan
 		this.drawTexturedModalRect(x, y, 0, 0, xSize, ySize);
 
 		// スクロールバーの描画
-		this.scrollBar.setScrollMaxPage(this.maxPage);
+		this.scrollBar.setScrollMaxPage(this.getMaxPage());
 		this.scrollBar.drawScrollBar();
 		this.continer.scrollPage = this.scrollBar.now_page;
 	}
@@ -109,6 +110,21 @@ public class GuiParallelInterfere extends GuiContainer implements IScrollBarChan
 		this.tile.setPage(page);
 		PacketHandler.sendToServer(new ScrollPagePKT(this.scrollBar.now_page));
 		this.continer.onScrollChanged(page);
+	}
+
+	// 最大ページの取得
+	public int getMaxPage () {
+
+		if (this.tile.getInvSize() < 250) {
+
+			return this.maxPage;
+		}
+
+		else {
+
+			return 90;
+		}
+
 	}
 
 	@Optional.Method(modid="quark")

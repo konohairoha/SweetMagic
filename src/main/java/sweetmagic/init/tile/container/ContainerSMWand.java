@@ -56,6 +56,9 @@ public class ContainerSMWand extends Container {
 		case 16:
 			this.to16Slot(gemInv);
 			break;
+		case 20:
+			this.to20Slot(gemInv);
+			break;
 		case 25:
 			this.to25Slot(gemInv);
 			break;
@@ -149,6 +152,14 @@ public class ContainerSMWand extends Container {
 		for (int i = 0; i < 4; i++)
 			for (int j = 0; j < 4; j++)
 			this.addSlotToContainer(new ValidatedSlot(gemInv, i * 4 + j, 50 + j * 30, 20 + i * 23, SlotPredicates.SMELEMENT));
+	}
+
+	// 25スロット
+	public void to20Slot (InventorySMWand gemInv) {
+
+		for (int i = 0; i < 4; i++)
+			for (int j = 0; j < 5; j++)
+			this.addSlotToContainer(new ValidatedSlot(gemInv, i * 5 + j, 40 + j * 24, 14 + i * 21, SlotPredicates.SMELEMENT));
 	}
 
 	// 25スロット

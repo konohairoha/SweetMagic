@@ -10,8 +10,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.tile.magic.TileMFTable;
+import sweetmagic.init.tile.slot.SlotArmor;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.ValidatedSlot;
+import sweetmagic.util.SMUtil;
 
 public class ContainerMFTable extends Container {
 
@@ -20,12 +22,6 @@ public class ContainerMFTable extends Container {
 	public ContainerMFTable(InventoryPlayer invPlayer, TileMFTable tile) {
 		this.tile = tile;
 		this.initSlots(invPlayer);
-	}
-
-	void initSlots(InventoryPlayer invPlayer) {
-
-		// 杖
-		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 0, 38, 48, SlotPredicates.SMWAND));
 
 		// MFアイテム
 		this.addSlotToContainer(new ValidatedSlot(this.tile.getInput(), 0, 134, 67, SlotPredicates.MFF_FUEL));
@@ -33,17 +29,36 @@ public class ContainerMFTable extends Container {
 		// Player Inventory
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 138 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 38 + j * 18, 138 + i * 18));
 
 		// Player HotBar
 		for (int i = 0; i < 9; i++)
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 196));
+			this.addSlotToContainer(new Slot(invPlayer, i, 38 + i * 18, 196));
+
+        // Armor slots
+        for (int y = 0; y < 4; y++)
+            this.addSlotToContainer(new SlotArmor(invPlayer.player, SMUtil.getEquipmentSlot(y), invPlayer, 39 - y, 10, 138 + y * 18));
 	}
 
+	void initSlots(InventoryPlayer invPlayer) {
+
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 0, 38, 49, SlotPredicates.SMWAND));
+
+		if (this.tile.getInvSize() < 4) { return; }
+
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 1, 38, 85, SlotPredicates.SMWAND));
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 2, 15, 23, SlotPredicates.SMWAND));
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 3, 62, 23, SlotPredicates.SMWAND));
+
+		if (this.tile.getInvSize() < 6) { return; }
+
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 4, 2, 60, SlotPredicates.SMWAND));
+		this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), 5, 74, 60, SlotPredicates.SMWAND));
+	}
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isNotAir();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -57,7 +72,7 @@ public class ContainerMFTable extends Container {
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.getSlot(slotIndex);
 
-		int slotCount = 2;
+		int slotCount = this.tile.getInvSize() + 1;
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();

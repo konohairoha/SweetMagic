@@ -10,9 +10,9 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 
 public class TileWoodChest extends TileSMBase {
 

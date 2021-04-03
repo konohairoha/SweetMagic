@@ -48,10 +48,9 @@ public class ContainerMFTank extends Container {
 			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
 	}
 
-
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isNotAir();
 	}
 
 	@Nonnull

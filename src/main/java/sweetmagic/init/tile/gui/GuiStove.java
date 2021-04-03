@@ -5,12 +5,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerStove;
 import sweetmagic.init.tile.cook.TileStove;
 
 public class GuiStove extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_stove.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_stove.png");
 	private final TileStove tile;
 
 	public GuiStove(InventoryPlayer invPlayer, TileStove tile) {

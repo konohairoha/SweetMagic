@@ -19,8 +19,8 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.packet.TileMFBlockPKT;
 
 public class TileMFTank extends TileMFBase {
@@ -171,7 +171,17 @@ public class TileMFTank extends TileMFBase {
     // 送信するMF量
 	@Override
     public int getUseMF () {
-    	return this.maxMagiaFlux == 3000000 ? 5000 : 1000;
+
+		switch (this.getMaxMF()) {
+		case 200000:
+			return 1000;
+		case 3000000:
+			return 5000;
+		case 60000000:
+			return 50000;
+		}
+
+		return 1000;
     }
 
 	private final IItemHandlerModifiable down = new WrappedItemHandler(this.outputInventory, WrappedItemHandler.WriteMode.OUT);

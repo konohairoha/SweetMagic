@@ -135,10 +135,6 @@ public class TileFreezer extends TileSMBase {
 		return ((BlockFreezer) b).isTop;
 	}
 
-	public boolean isNotAir () {
-		return this.getBlock(this.pos) != Blocks.AIR;
-	}
-
 	// 水投入処理
 	public void insetWater () {
 

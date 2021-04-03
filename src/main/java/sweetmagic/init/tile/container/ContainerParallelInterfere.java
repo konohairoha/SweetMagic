@@ -1,5 +1,7 @@
 package sweetmagic.init.tile.container;
 
+import javax.annotation.Nonnull;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -19,7 +21,7 @@ public class ContainerParallelInterfere extends Container implements IScrollChan
 	public ContainerParallelInterfere(InventoryPlayer invPlayer, TileParallelInterfere tile) {
 		this.tile = tile;
 		this.initSlots(invPlayer);
-		this.scrollPage = this.tile.page;
+		this.scrollPage = this.tile.getPage();
 	}
 
 	public void initSlots(InventoryPlayer invPlayer) {
@@ -42,8 +44,8 @@ public class ContainerParallelInterfere extends Container implements IScrollChan
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
-		return true;
+	public boolean canInteractWith(@Nonnull EntityPlayer player) {
+		return this.tile.isNotAir();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -89,6 +91,6 @@ public class ContainerParallelInterfere extends Container implements IScrollChan
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
 		super.onContainerClosed(player);
-		this.tile.page = 0;
+		this.tile.setPage(0);
 	}
 }

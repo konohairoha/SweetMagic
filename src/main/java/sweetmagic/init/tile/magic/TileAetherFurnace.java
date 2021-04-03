@@ -19,8 +19,8 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.util.ItemHelper;
 

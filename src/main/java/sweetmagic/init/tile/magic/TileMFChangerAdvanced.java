@@ -14,7 +14,7 @@ import sweetmagic.init.tile.slot.StackHandler;
 
 public class TileMFChangerAdvanced extends TileMFChanger {
 
-	public int maxMagiaFlux = 100000;
+	public int maxMagiaFlux = 200000;
 
 	public final ItemStackHandler inputInventory = new StackHandler(this, this.getInvSize());	// MFアイテムのスロット
 
@@ -33,7 +33,7 @@ public class TileMFChangerAdvanced extends TileMFChanger {
 
 	// インベントリの数
 	@Override
-	protected int getInvSize() {
+	public int getInvSize() {
 		return 5;
 	}
 

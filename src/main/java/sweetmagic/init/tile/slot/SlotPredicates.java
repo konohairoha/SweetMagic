@@ -2,6 +2,7 @@ package sweetmagic.init.tile.slot;
 
 import java.util.function.Predicate;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
@@ -10,6 +11,7 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.magiaflux.MagiaFluxInfo;
@@ -41,7 +43,7 @@ public final class SlotPredicates {
     public static final Predicate<ItemStack> SMELEMENT = input -> canInputSMItem(input);
 
     // 杖なら
-    public static final Predicate<ItemStack> SMWAND = input -> !input.isEmpty() && input.getItem() instanceof IWand;
+    public static final Predicate<ItemStack> SMWAND = input -> !input.isEmpty() && input.getItem() instanceof IMFTool;
 
     // 水なら
     public static final Predicate<ItemStack> WATERCUP = input -> !input.isEmpty() && isWaterCup(input);
@@ -57,6 +59,15 @@ public final class SlotPredicates {
 
 	// 魔法アイテムか
     public static final Predicate<ItemStack> ISMAGICITEMS = input -> !input.isEmpty() && isMagicItems(input);
+
+    // エンチャがあるかどうか
+    public static final Predicate<ItemStack> HASENCHA = input -> !input.isEmpty() && EnchantmentHelper.getEnchantments(input).size() > 0;
+
+    // 魔法流の杖かどうか
+    public static final Predicate<ItemStack> ISSTUFF = input -> !input.isEmpty() && input.getItem() == ItemInit.mf_stuff && input.hasTagCompound();
+
+    // ダメージを受けているかどうか
+    public static final Predicate<ItemStack> ISDAMA = input -> !input.isEmpty() && input.getItemDamage() != 0;
 
     // MFを持っているかどうか
 	public static boolean doesItemHaveEmc(ItemStack stack) {

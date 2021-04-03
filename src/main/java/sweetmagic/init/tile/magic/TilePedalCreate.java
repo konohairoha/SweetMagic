@@ -17,6 +17,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.client.particle.ParticleLay;
 import sweetmagic.client.particle.ParticleTwilightlight;
+import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.util.ParticleHelper;
 
@@ -44,12 +45,17 @@ public class TilePedalCreate extends TileMFBase {
 		// クラフト中じゃないなら終了
 		if (!this.isCharge) { return; }
 
+		if (this.chargeTime < 9) {
+			this.playSound(this.pos, SMSoundEvent.MAGICCRAFT, 1F, 1F);
+		}
+
 		this.chargeTime++;
 
 		// パーティクルスポーン
 		if (this.world.isRemote) {
 			this.spawnParticle();
 		}
+
 
 		// クラフトしてないなら終了
 		if (this.chargeTime < 10) { return; }
@@ -59,8 +65,7 @@ public class TilePedalCreate extends TileMFBase {
 			this.craftSpawn();
 		}
 
-		catch (Throwable e) {
-	}
+		catch (Throwable e) { }
 	}
 
 	// クラフト処理
@@ -132,7 +137,7 @@ public class TilePedalCreate extends TileMFBase {
 			float f5 = (float) (posY + 0.35F + rand.nextFloat() * 0.75F) + this.nowTick * 0.0075F;
 			float f6 = (float) posZ - 0.5F + rand.nextFloat();
 			List<Integer> color = this.getRGB(rand);
-			Particle particle = new ParticleLay.Factory().createParticle(0, this.world, f4, f5, f6, f4, f5, f6, color.get(0), color.get(1), color.get(2));
+			Particle particle = new ParticleLay.Factory().createParticle(0, this.world, f4, f5, f6, 0, 0, 0, color.get(0), color.get(1), color.get(2));
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
 		}
 	}

@@ -7,13 +7,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerJuiceMaker;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 
 @SideOnly(Side.CLIENT)
 public class GuiJuiceMaker extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_juicemaker.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_juicemaker.png");
 	private final TileJuiceMaker tile;
 
 	public GuiJuiceMaker(InventoryPlayer invPlayer, TileJuiceMaker tile) {

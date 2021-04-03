@@ -2,8 +2,11 @@ package sweetmagic.init.tile.magic;
 
 import java.util.List;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -18,6 +21,7 @@ import sweetmagic.util.ParticleHelper;
 public class TileMFPot extends TileMFBase {
 
 	public static final String ISDEAD = "isDead";
+	public int maxMagiaFlux = 100000;	// 最大MF量を設定
 
 	public TileMFPot () {
 		super(false);
@@ -27,6 +31,7 @@ public class TileMFPot extends TileMFBase {
 	public void serverUpdate() {
 
 		super.serverUpdate();
+		if (!this.canMFChange()) { return; }
 
 		MFPot mfpot = (MFPot) this.getBlock(this.pos);
 
@@ -46,6 +51,10 @@ public class TileMFPot extends TileMFBase {
 		case 5:
 			// ソリッドスター
 			this.solidstarPot();
+			break;
+		case 6:
+			// ジニア
+			this.zinniaPot();
 			break;
 		case 7:
 			// ハイドら
@@ -103,7 +112,7 @@ public class TileMFPot extends TileMFBase {
 			long time = this.getTime();
 
 			if (time % 20 == 0) {
-				this.setMF(this.getMF() + 20);
+				this.setMF(this.getMF() + 10);
 				PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
 			}
 
@@ -146,6 +155,43 @@ public class TileMFPot extends TileMFBase {
 		}
 	}
 
+	// ジニア
+	public void zinniaPot () {
+
+		long time = this.getTime();
+		if (time % 40 != 0) { return; }
+
+		boolean isCharge = true;
+
+		for (int x = -2; x <= 2; ++x) {
+			for (int z = -2; z <= 2; ++z) {
+
+				if (x > -2 && x < 2 && z == -1) { z = 2; }
+
+				for (int y = 0; y <= 1; ++y) {
+
+					BlockPos bpos = this.pos.add(x, y, z);
+					IBlockState state = this.getState(bpos);
+					Block block = state.getBlock();
+					if (block == Blocks.AIR) { continue; }
+
+					float power = block.getLightValue(state) * 0.25F;
+					if (power <= 0) { continue; }
+
+					if (!this.world.isAirBlock(this.pos.add(x / 2, 0, z / 2))) { break; }
+
+					isCharge = true;
+					this.setMF((int) (this.getMF() + power));
+					PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+				}
+			}
+		}
+
+		if (isCharge) {
+			this.spawnParticles();
+		}
+	}
+
 	// ハイドラ
 	public void hydrangeaPot () {
 
@@ -168,7 +214,7 @@ public class TileMFPot extends TileMFBase {
 			if (tags == null || tags.hasKey(ISDEAD)) { continue; }
 
 			tags.setBoolean(ISDEAD, true);
-			mfValue += entity.getMaxHealth();
+			mfValue += entity.getMaxHealth() * 5;
 		}
 
 		if (mfValue > 0) {
@@ -181,5 +227,11 @@ public class TileMFPot extends TileMFBase {
 	// パーティクルスポーン
 	public void spawnParticles() {
 		ParticleHelper.spawnBoneMeal(this.world, this.pos, EnumParticleTypes.VILLAGER_HAPPY);
+	}
+
+	// 最大MF量を取得
+	@Override
+	public int getMaxMF() {
+		return this.maxMagiaFlux;
 	}
 }

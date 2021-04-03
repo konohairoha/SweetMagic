@@ -27,9 +27,15 @@ public class ContainerMFChanger extends Container {
 
 		IItemHandler fuel = this.tile.getInput();
 
-		//Fuel
-//		for (int i = 0; i < 5; i++)
+		if (this.tile.getInvSize() >= 5) {
+
+			for (int i = 0; i < 5; i++)
+				this.addSlotToContainer(new ValidatedSlot(fuel, i, 44 + i * 18, 27, SlotPredicates.MFF_FUEL));
+		}
+
+		else {
 			this.addSlotToContainer(new ValidatedSlot(fuel, 0, 80, 27, SlotPredicates.MFF_FUEL));
+		}
 
 		//Player Inventory
 		for (int i = 0; i < 3; i++)
@@ -41,10 +47,9 @@ public class ContainerMFChanger extends Container {
 			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 128));
 	}
 
-
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isNotAir();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -55,28 +60,28 @@ public class ContainerMFChanger extends Container {
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
-		ItemStack itemstack = ItemStack.EMPTY;
+		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.getSlot(slotIndex);
-		int slotCount = 1;
+		int slotCount = this.tile.getInvSize();
 
 		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+			ItemStack stack1 = slot.getStack();
+			stack = stack1.copy();
 
-			if (slotIndex < slotCount && !this.mergeItemStack(itemstack1, slotCount, 36 + slotCount, false)) {
+			if (slotIndex < slotCount && !this.mergeItemStack(stack1, slotCount, 36 + slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (slotIndex >= slotCount && !this.mergeItemStack(itemstack1, 0, slotCount, false)) {
+			if (slotIndex >= slotCount && !this.mergeItemStack(stack1, 0, slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
+			if (stack1.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return stack;
 	}
 }

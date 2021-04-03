@@ -5,12 +5,13 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerMFFisher;
 import sweetmagic.init.tile.magic.TileMFFisher;
 
 public class GuiMFFisher extends GuiContainer {
 
-	private static final ResourceLocation texture = new ResourceLocation("sweetmagic", "textures/gui/gui_mffisher.png");
+	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_mffisher.png");
 	private final TileMFFisher tile;
 
 	public GuiMFFisher(InventoryPlayer invPlayer, TileMFFisher tile) {

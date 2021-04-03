@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
@@ -23,6 +24,7 @@ import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.ISMMob;
+import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.WorldHelper;
 
@@ -55,22 +57,29 @@ public class TileSMSpaner extends TileSMBase {
 
 		for (int i = 0; i < spawnCount; i++) {
 
+			boolean isAir = this.getBlock(this.pos.down()) == Blocks.AIR;
+
 			EntityLivingBase entity = this.getEntity();
 			int x = rand.nextInt(7) - 3 + this.pos.getX();
-			int y = rand.nextInt(2) + 1 + this.pos.getY();
+			int y = this.pos.getY() + ( isAir ? rand.nextInt(2) + 1 : -(rand.nextInt(2) + 1) );
 			int z = rand.nextInt(7) - 3 + this.pos.getZ();
-			BlockPos pos = new BlockPos(x, y, z);
-			if (this.getBlock(pos) != Blocks.AIR || this.getBlock(pos.up()) != Blocks.AIR) { continue; }
+
+			if (this.isAir(new BlockPos(x, y, z))) {
+				x = this.pos.getX();
+				y = this.pos.getY() + 2 * (isAir ? -1 : 1);
+				z = this.pos.getZ();
+			}
 
 			entity.setPosition(x, y, z);
 			this.setArmor(entity);
-			((EntityLiving) entity).onInitialSpawn(this.world.getDifficultyForLocation(pos), (IEntityLivingData) null);
-			AnvilChunkLoader.spawnEntity(entity, world);
-			this.world.playEvent(2004, pos, 0);
+			((EntityLiving) entity).onInitialSpawn(this.world.getDifficultyForLocation(this.pos), (IEntityLivingData) null);
+			AnvilChunkLoader.spawnEntity(entity, this.world);
+			this.world.playEvent(2004, this.pos, 0);
 			((EntityLiving) entity).spawnExplosionParticle();
 		}
 
 		this.randTime = rand.nextInt(250) + 250;
+		ParticleHelper.spawnBoneMeal(this.world, this.pos, EnumParticleTypes.FLAME);
 	}
 
 	// 範囲内にプレイヤーがいるかどうか
@@ -91,7 +100,8 @@ public class TileSMSpaner extends TileSMBase {
 
 	// 範囲取得
 	public AxisAlignedBB getAABB () {
-		return new AxisAlignedBB(this.pos.add(-15, -5, -15), this.pos.add(15, 5, 15));
+		boolean isAir = this.getBlock(this.pos.down()) == Blocks.AIR;
+		return new AxisAlignedBB(this.pos.add(-15, isAir ? -8 : -4, -15), this.pos.add(15, 5, 15));
 	}
 
 	// 範囲にモブがいるか
@@ -173,5 +183,9 @@ public class TileSMSpaner extends TileSMBase {
 		if (this.data > 5) {
 			this.data = 0;
 		}
+	}
+
+	public void setSpaner () {
+		this.data = new Random().nextInt(7);
 	}
 }

@@ -22,9 +22,9 @@ import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.magic.MFPot;
-import sweetmagic.init.tile.furnace.WrappedItemHandler;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
+import sweetmagic.init.tile.slot.WrappedItemHandler;
 import sweetmagic.packet.TileMFBlockPKT;
 
 public class TileMFFisher extends TileMFBase {
@@ -84,7 +84,7 @@ public class TileMFFisher extends TileMFBase {
 		super.serverUpdate();
 
 		this.tickTime++;
-		if (this.getTime() % 20 != 0) { return; }
+		if (!this.isActive(this.world, this.pos) || this.getTime() % 20 != 0) { return; }
 
 		// ランダム時間の初期化
 		if (this.randTime == 0) {

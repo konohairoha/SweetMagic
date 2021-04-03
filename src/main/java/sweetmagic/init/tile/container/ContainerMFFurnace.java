@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandler;
 import sweetmagic.init.item.sm.magic.MFItem;
-import sweetmagic.init.tile.furnace.TileMFF;
+import sweetmagic.init.tile.magic.TileMFF;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
@@ -70,10 +70,9 @@ public class ContainerMFFurnace extends Container {
 			this.addSlotToContainer(new Slot(invPlayer, i, 24 + i * 18, 142));
 	}
 
-
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isNotAir();
 	}
 
 	@Override
@@ -81,7 +80,6 @@ public class ContainerMFFurnace extends Container {
 		super.addListener(container);
 		container.sendWindowProperty(this, 0, this.tile.furnaceCookTime);
 		container.sendWindowProperty(this, 1, this.tile.getMF());
-		container.sendWindowProperty(this, 2, this.tile.currentItemBurnTime);
 	}
 
 	@Override
@@ -94,14 +92,10 @@ public class ContainerMFFurnace extends Container {
 
 			if (this.lastBurnTime != this.tile.getMF())
 				crafter.sendWindowProperty(this, 1, tile.getMF());
-
-			if (this.lastItemBurnTime != this.tile.currentItemBurnTime)
-				crafter.sendWindowProperty(this, 2, this.tile.currentItemBurnTime);
 		}
 
 		this.lastCookTime = this.tile.furnaceCookTime;
 		this.lastBurnTime = this.tile.getMF();
-		this.lastItemBurnTime = this.tile.currentItemBurnTime;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -111,9 +105,6 @@ public class ContainerMFFurnace extends Container {
 
 		if (par1 == 1)
 			this.tile.setMF(par2);
-
-		if (par1 == 2)
-			this.tile.currentItemBurnTime = par2;
 	}
 
 	@Nonnull

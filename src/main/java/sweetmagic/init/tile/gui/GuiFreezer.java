@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerFreezer;
 import sweetmagic.init.tile.cook.TileFreezer;
 import vazkii.quark.api.IChestButtonCallback;
@@ -14,8 +15,8 @@ import vazkii.quark.api.IChestButtonCallback;
 @Optional.Interface(modid="quark", iface="vazkii.quark.api.IChestButtonCallback")
 public class GuiFreezer extends GuiContainer implements IChestButtonCallback {
 
-	private static final ResourceLocation top = new ResourceLocation("sweetmagic", "textures/gui/gui_freezer.png");
-	private static final ResourceLocation bottom = new ResourceLocation("sweetmagic", "textures/gui/gui_freezer_chest.png");
+	private static final ResourceLocation top = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_freezer.png");
+	private static final ResourceLocation bottom = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_freezer_chest.png");
 	private final TileFreezer tile;
 
 	public GuiFreezer(InventoryPlayer invPlayer, TileFreezer tile) {

@@ -7,6 +7,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerPouch;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 import vazkii.quark.api.IChestButtonCallback;
@@ -14,7 +15,7 @@ import vazkii.quark.api.IChestButtonCallback;
 @Optional.Interface(modid="quark", iface="vazkii.quark.api.IChestButtonCallback")
 public class GuiPouch extends GuiContainer implements IChestButtonCallback {
 
-	private static final ResourceLocation TEX = new ResourceLocation("sweetmagic","textures/gui/gui_moden_rack.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID,"textures/gui/gui_moden_rack.png");
 
 	public GuiPouch(InventoryPlayer inventoryPlayer, InventoryPouch inv) {
 		super(new ContainerPouch(inventoryPlayer, inv));

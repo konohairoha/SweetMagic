@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import sweetmagic.api.iitem.IWand;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.packet.TileMFBlockPKT;
@@ -23,7 +23,7 @@ public class TileMFTable extends TileMFBase {
 	public int slotSize = 1;
 
 	// 杖スロット
-	public final ItemStackHandler wandInventory = new StackHandler(this, this.slotSize) {
+	public final ItemStackHandler wandInventory = new StackHandler(this, this.getInvSize()) {
 
         @Override
 		public void onContentsChanged(int slot) {
@@ -33,7 +33,16 @@ public class TileMFTable extends TileMFBase {
         }
     };
 
-	public final ItemStackHandler inputInventory = new StackHandler(this, this.getInvSize());		// MFアイテムのスロット
+    // MFアイテムのスロット
+	public final ItemStackHandler inputInventory = new StackHandler(this, 1) {
+
+        @Override
+		public void onContentsChanged(int slot) {
+            markDirty();
+            IBlockState state = world.getBlockState(pos);
+            world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 1 | 2);
+        }
+    };
 
 	@Override
 	public void serverUpdate() {
@@ -76,13 +85,12 @@ public class TileMFTable extends TileMFBase {
 
 		for (int i = 0; i < this.getWand().getSlots(); i++) {
 
+			// 杖スロットが空以外なら次へ
 			ItemStack stack = this.getWandItem(i);
-
-			// 杖スロットが空以外
 			if(stack.isEmpty() || this.wandMaxMF(stack) || this.isMfEmpty()){ continue; }
 
 			// 杖にMFを補給
-			IWand wand = (IWand) stack.getItem();
+			IMFTool wand = (IMFTool) stack.getItem();
 			wand.insetMF(stack, this);
 
 			// MFが最大になったときに通知
@@ -97,7 +105,7 @@ public class TileMFTable extends TileMFBase {
 
 	// 杖の杖が最大値を超えているか
 	public boolean wandMaxMF (ItemStack stack) {
-		IWand wand = (IWand) stack.getItem();
+		IMFTool wand = (IMFTool) stack.getItem();
 		return wand.getMF(stack) >= wand.getMaxMF(stack);
 	}
 
@@ -117,8 +125,8 @@ public class TileMFTable extends TileMFBase {
 	}
 
 	// インベントリの数
-	protected int getInvSize() {
-		return 1;
+	public int getInvSize() {
+		return this.slotSize;
 	}
 
 	// MFスロットの取得
@@ -132,13 +140,18 @@ public class TileMFTable extends TileMFBase {
 	}
 
 	// インプットスロットのアイテムを取得
-	public  ItemStack getInputItem() {
+	public ItemStack getInputItem() {
 		return this.getInput().getStackInSlot(0);
 	}
 
 	// 杖スロットのアイテムを取得
 	public  ItemStack getWandItem(int i) {
 		return this.getWand().getStackInSlot(i);
+	}
+
+	// 杖に入れるMF量の取得
+	public int getChargeValue () {
+		return this.useMF;
 	}
 
 	@Override
