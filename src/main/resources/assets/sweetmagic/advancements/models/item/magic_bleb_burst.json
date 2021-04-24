@@ -1,0 +1,7 @@
+{
+    "parent": "sweetmagic:item/basemagic",
+    "textures":{
+        "1":"sweetmagic:items/frame_4",
+        "0":"sweetmagic:items/magic_bubleprison"
+    }
+}
