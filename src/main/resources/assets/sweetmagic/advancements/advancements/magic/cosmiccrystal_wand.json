@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:cosmiccrystal_wand"
+        },
+        "title": {
+            "translate": "smadbent.cosmiccrystal_wand.title"
+        },
+        "description": {
+            "translate": "smadbent.cosmiccrystal_wand.text"
+        }
+    },
+    "parent": "sweetmagic:magic/cosmic_crystal",
+    "criteria": {
+        "cosmiccrystal_wand": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:cosmiccrystal_wand"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 320
+	}
+}

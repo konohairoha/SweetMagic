@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:sugarbell"
+        },
+        "title": {
+            "translate": "smadbent.sugarbell.title"
+        },
+        "description": {
+            "translate": "smadbent.sugarbell.text"
+        }
+    },
+    "parent": "sweetmagic:root",
+    "criteria": {
+        "sugarbell": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:sugarbell"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 5
+	}
+}
