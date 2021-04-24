@@ -12,18 +12,24 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.RegistryHandler;
 import sweetmagic.init.BookInit;
 import sweetmagic.init.VillagerInit;
+import sweetmagic.init.entity.monster.EntityAncientFairy;
 import sweetmagic.init.entity.monster.EntityArchSpider;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
+import sweetmagic.init.entity.monster.EntityBraveSkeleton;
 import sweetmagic.init.entity.monster.EntityCreeperCal;
 import sweetmagic.init.entity.monster.EntityElectricCube;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
+import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
+import sweetmagic.init.entity.monster.EntityPixieVex;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
 import sweetmagic.init.entity.monster.EntityShadowWolf;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
+import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.EntityZombieHora;
 import sweetmagic.init.entity.monster.EntityZombieKronos;
+import sweetmagic.init.entity.projectile.EntityBabuleMagic;
 import sweetmagic.init.entity.projectile.EntityBlazeCyclone;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
@@ -35,10 +41,12 @@ import sweetmagic.init.entity.projectile.EntityFrostMagic;
 import sweetmagic.init.entity.projectile.EntityFrostRain;
 import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.init.entity.projectile.EntityLightMagic;
+import sweetmagic.init.entity.projectile.EntityMagicItem;
 import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.init.entity.projectile.EntityNomal;
 import sweetmagic.init.entity.projectile.EntityPoisonMagic;
 import sweetmagic.init.entity.projectile.EntityRockBlast;
+import sweetmagic.init.entity.projectile.EntityShinigFlare;
 import sweetmagic.init.entity.projectile.EntitySittableBlock;
 
 public class CommonProxy {
@@ -54,6 +62,7 @@ public class CommonProxy {
     public void construct(FMLConstructionEvent event) {}
 	public void registerEntityRender() {}
 	public boolean isJumpPressed() { return false; }
+	public boolean isDushPressed() { return false; }
 
 	public void postInit(FMLPostInitializationEvent event) {
 		BookInit.init();
@@ -78,7 +87,10 @@ public class CommonProxy {
 		arrowEntity(EntityMeteorMagic.class, "meteormagic");
 		arrowEntity(EntityFrostRain.class, "frostrain");
 		arrowEntity(EntityRockBlast.class, "rockblast");
+		arrowEntity(EntityBabuleMagic.class, "babulemagic");
+		arrowEntity(EntityShinigFlare.class, "shiningflare");
 		arrowEntity(EntitySittableBlock.class, "sittable");
+		arrowEntity(EntityMagicItem.class, "magicitem");
 
 		eggEntity(EntitySkullFrost.class, "skullfrost");
 		eggEntity(EntityCreeperCal.class, "creepercalamity");
@@ -86,10 +98,15 @@ public class CommonProxy {
 		eggEntity(EntityEnderShadow.class, "endershadow");
 		eggEntity(EntityElectricCube.class, "electriccube");
 		eggEntity(EntityArchSpider.class, "archspider");
+		eggEntity(EntityPhantomZombie.class, "phantomzombie");
+		eggEntity(EntityWitchMadameVerre.class, "witchmadameverre");
+		eggEntity(EntityWindineVerre.class, "windine");
+		eggEntity(EntityIfritVerre.class, "ifrite");
+		eggEntity(EntityPixieVex.class, "pixievex");
 		eggEntity(EntityZombieHora.class, "zombiehora");
 		arrowEntity(EntityZombieKronos.class, "zombiekronos");
-		eggEntity(EntityWitchMadameVerre.class, "witchmadameverre");
-		eggEntity(EntityPhantomZombie.class, "phantomzombie");
+		eggEntity(EntityBraveSkeleton.class, "braveskeleton");
+		eggEntity(EntityAncientFairy.class, "ancientfairy");
 
 	}
 
