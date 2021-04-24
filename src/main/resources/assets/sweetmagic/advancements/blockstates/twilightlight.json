@@ -3,7 +3,7 @@
   "defaults": {
     "model": "sweetmagic:nomodel",
         "textures": {
-          "#0": "sweetmagic:particle/notex",
+          "0": "sweetmagic:particle/notex",
           "1": "sweetmagic:particle/particle_twilightlight"
         },
     "transform": "forge:default-item"

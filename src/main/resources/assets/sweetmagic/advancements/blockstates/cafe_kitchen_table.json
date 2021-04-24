@@ -1,11 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:mffurnace_on",
-    "textures": {
-      "top": "sweetmagic:block/smbrick_on",
-      "side": "sweetmagic:block/smbrick"
-    }
+    "model": "sweetmagic:cafe_kitchen_table"
   },
   "variants": {
     "facing": {
@@ -14,6 +10,6 @@
       "west": { "y": 270 },
       "east": { "y": 90 }
     },
-    "inventory": [{}]
+        "inventory": [{}]
   }
 }

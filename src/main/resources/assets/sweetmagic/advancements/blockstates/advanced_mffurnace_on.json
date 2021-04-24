@@ -3,8 +3,8 @@
   "defaults": {
     "model": "sweetmagic:mffurnace_on",
     "textures": {
-      "top": "sweetmagic:block/smbrick_on",
-      "side": "sweetmagic:block/smbrick"
+      "top": "sweetmagic:block/furnace2_on",
+      "side": "sweetmagic:block/furnace2_n"
     }
   },
   "variants": {
