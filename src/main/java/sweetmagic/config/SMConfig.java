@@ -83,6 +83,11 @@ public class SMConfig {
 	public static String biome_name = "Generate Biome.";
 	public static String biome_come = "If these flags are set to true, we will generate a biome.";
 
+	// 花
+	public static boolean genFlowers = true;
+	public static String flower_name = "Generate Flowers.";
+	public static String flower_come = "If these flags are set to true, we will generate flowers.";
+
 	// ディメンション
 	public static int dimId = 1222;
 	public static String dim_name = "Set Dimension Id.";
@@ -121,6 +126,7 @@ public class SMConfig {
 			Property look_spawn_mob = cfg.get(MOB, spawn_mob_name, this.spawn_mob, spawn_mob_come);
 			Property look_render = cfg.get(RENDER, render_name, this.isRender, render_come);
 			Property look_biome = cfg.get(BIOME, biome_name, this.genBiome, biome_come);
+			Property look_FLW = cfg.get(STRUCTURE_BOOL, flower_name, this.genFlowers, flower_come);
 			Property look_dim = cfg.get(DIM, dim_name, this.dimId, dim_come);
 
 			// look_○○　で　読み込んだ変数をStatic参照できる変数に代入
@@ -131,6 +137,7 @@ public class SMConfig {
 			this.spawn_mob = look_spawn_mob.getBoolean();
 			this.isRender = look_render.getBoolean();
 			this.genBiome = look_biome.getBoolean();
+			this.genFlowers = look_FLW.getBoolean();
 			this.dimId = look_dim.getInt();
 
 			// int　0以下が設定されていたらデフォルトを設定
