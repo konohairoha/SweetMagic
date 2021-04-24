@@ -26,7 +26,10 @@ import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
+import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.util.ParticleHelper;
+import sweetmagic.util.SMDamage;
+import sweetmagic.util.WorldHelper;
 
 public class PotionSM extends PotionBase {
 
@@ -91,18 +94,32 @@ public class PotionSM extends PotionBase {
 
 		// 泡状態
 		if (this == PotionInit.babule) {
+
 			entity.motionY = 0.0814125F;
 			entity.motionX *= 0.67;
 			entity.motionZ *= 0.67;
 
 			int time = entity.getActivePotionEffect(PotionInit.babule).getDuration();
 
-			if (amplifier >= 1 && time % 20 == 0) {
-				entity.attackEntityFrom(DamageSource.FALL, 1F);
+			if (time % 20 == 0) {
+
+				entity.playSound(SMSoundEvent.BABULE, 1F, (world.rand.nextFloat() * 0.3F) + 1F);
+
+				if (amplifier >= 1) {
+					entity.attackEntityFrom(DamageSource.FALL, 1F);
+					entity.hurtResistantTime = 0;
+				}
 			}
 
-			if (time % 20 == 0) {
-				entity.playSound(SMSoundEvent.BABULE, 1F, (world.rand.nextFloat() * 0.3F) + 1F);
+			if (amplifier >= 3) {
+
+				if (time % 100 == 0) {
+					WorldHelper.magicExplo(world, entity, 5F, amplifier + 2F);
+				}
+
+				else if (time == 1) {
+					WorldHelper.magicExplo(world, entity, 3F, amplifier + 1F);
+				}
 			}
 		}
 
@@ -131,9 +148,10 @@ public class PotionSM extends PotionBase {
 		}
 
 		// 燃焼状態
-		if (this == PotionInit.flame && entity.getHealth() > 1F) {
-			entity.setHealth(entity.getHealth() - 1);
-			entity.world.playSound(null, new BlockPos(entity), SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.NEUTRAL, 1F, 1F);
+		if (this == PotionInit.flame) {
+			DamageSource src = SMDamage.flameDamage;
+			entity.attackEntityFrom(src, 1F);
+			entity.hurtResistantTime = 0;
 		}
 	}
 
@@ -241,20 +259,24 @@ public class PotionSM extends PotionBase {
 	}
 
 	// えんちちーチェック
-	public boolean checkEntity (Entity e) {
+	public boolean checkEntity (Entity entity) {
 
 		boolean flag = false;
 
-		if (e instanceof EntityArrow) {
+		if (entity instanceof EntityArrow) {
 			flag = true;
-		} else if (e instanceof EntityThrowable) {
+		} else if (entity instanceof EntityThrowable) {
 			flag = true;
-		} else if (e instanceof EntityFireball) {
+		} else if (entity instanceof EntityFireball) {
 			flag = true;
-		} else if (e instanceof IProjectile) {
+		} else if (entity instanceof IProjectile) {
 			flag = false;
-		} else if (e instanceof IMob) {
+		} else if (entity instanceof IMob) {
 			flag = true;
+		}
+
+		if (flag && entity instanceof EntityBaseMagicShot) {
+			flag = false;
 		}
 
 		return flag;
