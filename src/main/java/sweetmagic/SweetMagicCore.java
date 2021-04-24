@@ -25,6 +25,7 @@ import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.RecipeHandler;
 import sweetmagic.handlers.RegistryHandler;
 import sweetmagic.handlers.SMGuiHandler;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.proxy.CommonProxy;
 import sweetmagic.recipe.RecipeManager;
 import sweetmagic.util.SMChunkLoader;
@@ -61,7 +62,7 @@ public class SweetMagicCore {
     	this.logger = event.getModLog();
 
     	// tileの登録
-    	RegistryHandler.tileHandler(MODID);
+    	RegistryHandler.tileHandler();
 
     	this.proxy.registerEntityRender();
     	this.proxy.loadEntity();
@@ -78,6 +79,9 @@ public class SweetMagicCore {
 
 		// チャンクローダー
 		SMChunkLoader.getInstance().preInit();
+
+		// 進捗読み込み
+		AdvancedInit.register();
 
     }
 
