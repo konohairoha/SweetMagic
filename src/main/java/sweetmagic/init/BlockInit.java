@@ -174,7 +174,7 @@ public class BlockInit {
 	public static Block obmagia_top, obmagia_bottom;
 	public static Block pedestal_creat;
 	public static Block mffisher, flyishforer;
-	public static Block mffurnace_on, mffurnace_off;
+	public static Block mffurnace_on, mffurnace_off, advanced_mffurnace_on, advanced_mffurnace_off;
 	public static Block aether_furnace_top, aether_furnace_bottom, advanced_aether_furnace_top, advanced_aether_furnace_bottom;
 	public static Block parallel_interfere, stardust_wish;
 	public static Block mfpot, twilightalstroemeria_pot, turkey_balloonflower_pot, snowdrop_pot, ultramarine_rose_pot;
@@ -239,7 +239,7 @@ public class BlockInit {
 	public static Block whitenet_plant, corn_plant, sweetpotato_plant;
 	public static Block tomato_plant, egg_plant,  j_radish_plant, lettuce_plant, cabbage_plant;
 	public static Block azuki_plant, onion_plant, raspberry_plant, glowflower_plant, cotton_plant;
-	public static Block banana_plant;
+	public static Block banana_plant, coffee_plant;
 
 	// 街頭
 	public static Block pole_down, pole, lantern, lantern_side1, lantern_side2;
@@ -250,12 +250,16 @@ public class BlockInit {
 	public static Block moden_rack, moden_rack_brown;
 	public static Block moden_wallrack, moden_wallrack_l, moden_wallrack_b;
 	public static Block moden_stair, plate, magicbook;
+	public static Block cafe_chair, cafe_table;
+
 	public static Block rattan_chair_y, rattan_chair_b, rattan_chair_d;
 	public static Block rattan_basket_y, rattan_basket_b, rattan_basket_d;
+
 	public static Block prism_woodchest, estor_woodchest;
 	public static Block rattan_chest_y, rattan_chest_b;
 	public static Block treasure_chest;
 	public static Block wallboard, wallboard_black, corkboard, shopboard;
+	public static Block cafe_kitchen_table, cafe_kitchen_sink, cafe_wallrack;
 
 	// 草
 	public static Block goldcrest;
@@ -403,6 +407,7 @@ public class BlockInit {
 		freezer_top = new BlockFreezer("freezer_top", true, noTabList);
 		freezer_bottom = new BlockFreezer("freezer_bottom", false, blockList);
 		matured_bottle = new BlockFermenter("matured_bottle", blockList);
+		plate = new BlockModenRack("plate", 2);
 
 		// 花
 		twilight_alstroemeria = new BlockAlstroemeria("twilight_alstroemeria");
@@ -473,8 +478,10 @@ public class BlockInit {
 		carnation_crayola_pot = new MFPot("carnation_crayola_pot", 8);
 
 		// MFブロック(その他)
-		mffurnace_off = new MFFurnace("mffurnace_off", magicList);
-		mffurnace_on = new MFFurnace("mffurnace_on", noTabList);
+		mffurnace_off = new MFFurnace("mffurnace_off", 0, magicList);
+		mffurnace_on = new MFFurnace("mffurnace_on", 0, noTabList);
+		advanced_mffurnace_off = new MFFurnace("advanced_mffurnace_off", 1, magicList);
+		advanced_mffurnace_on = new MFFurnace("advanced_mffurnace_on", 1, noTabList);
 		mffisher = new MFFisher("mffisher", 0);
 		flyishforer = new MFFisher("flyishforer", 1);
 		aether_furnace_top = new AetherFurnace("aether_furnace_top", noTabList, true, false);
@@ -634,6 +641,7 @@ public class BlockInit {
 		olive_plant = new SweetCrops_STAGE5("olive_plant", 1, 1, 5.6F);
 		vannila_plant = new SweetCrops_STAGE5("vannila_plant",2 ,0, 6.3F);
 		onion_plant = new SweetCrops_STAGE5("onion_plant", 3, 0, 5.6F);
+		coffee_plant = new SweetCrops_STAGE5("coffee_plant", 5, 0, 5.6F);
 		raspberry_plant = new SweetCrops_STAGE6("raspberry_plant",0, 1, 6.0F);
 		chestnut_plant = new BlockChestnut("chestnut_plant", 0);
 		coconut_plant = new BlockChestnut("coconut_plant", 1);
@@ -677,13 +685,15 @@ public class BlockInit {
 		smtable_lace = new SMTable("smtable_lace");
 		smtable_dot = new SMTableDot("smtable_dot");
 
+		cafe_table = new SMTableDot("cafe_table");
+		cafe_chair = new SMChair("cafe_chair", 3);
+
 		// チェスト系
 		moden_rack = new BlockModenRack("moden_rack", 0);
 		moden_rack_brown = new BlockModenRack("moden_rack_brown", 0);
 		moden_wallrack = new BlockModenRack("moden_wallrack", 1);
 		moden_wallrack_b = new BlockModenRack("moden_wallrack_b", 1);
 		moden_wallrack_l = new BlockModenRack("moden_wallrack_l", 1);
-		plate = new BlockModenRack("plate", 2);
 		moden_stair = new BlockModenStair("moden_stair");
 		magicbook = new MagicBook("magicbook");
 		prism_woodchest = new BlockWoodChest("prism_woodchest", 0);
@@ -693,6 +703,9 @@ public class BlockInit {
 		treasure_chest = new BlockWoodChest("treasure_chest", 1);
 		parallel_interfere = new BlockParallelInterfere("parallel_interfere", 0);
 		stardust_wish = new BlockParallelInterfere("stardust_wish", 1);
+		cafe_kitchen_table = new BlockWoodChest("cafe_kitchen_table", 2);
+		cafe_kitchen_sink = new BlockWoodChest("cafe_kitchen_sink", 2);
+		cafe_wallrack = new BlockModenRack("cafe_wallrack", 1);
 
 		// ラタンシリーズ
 		rattan_chair_y = new SMChair("rattan_chair_y", 2);

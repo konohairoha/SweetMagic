@@ -5,6 +5,7 @@ import java.util.List;
 
 import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
+import sweetmagic.init.potion.PotionCyclone;
 import sweetmagic.init.potion.PotionFrost;
 import sweetmagic.init.potion.PotionSM;
 
@@ -21,6 +22,7 @@ public class PotionInit {
 	public static Potion refresh_effect;
 	public static Potion babule, regene;
 	public static Potion breakblock;
+	public static Potion mf_down;
 
 	public static List<Potion> buffList = new ArrayList<>();		// バフリスト
 	public static List<Potion> deBuffList = new ArrayList<>();	// デバフリスト
@@ -30,7 +32,7 @@ public class PotionInit {
 		frosty = new PotionFrost(true, 0, "frosted", "textures/items/magic_frost.png");
 		gravity = new PotionSM(true, 0, "gravity", "textures/items/grav_powder.png", true);
 		gravity_accele = new PotionSM(false, 0, "gravity_accele", "textures/items/magic_gravity.png", true);
-		cyclone = new PotionSM(false, 0, "cyclon", "textures/items/magic_cyclon.png", true);
+		cyclone = new PotionCyclone(false, 0, "cyclon", "textures/items/magic_avoid.png");
 		shadow = new PotionSM(false, 0, "shadow", "textures/items/magic_shadow.png", false);
 		aether_barrier = new PotionSM(false, 0, "aether_barrier", "textures/items/magic_barrier.png", false);
 		deadly_poison = new PotionSM(true, 0, "deadly_poison", "textures/items/poison_bottle.png", false);
@@ -43,6 +45,7 @@ public class PotionInit {
 		babule = new PotionSM(true, 0, "babule", "textures/particle/magic_bubble.png", true);
 		regene = new PotionSM(false, 0, "regene", "textures/items/magic_heal.png", true);
 		breakblock = new PotionSM(false, 0, "breakblock", "textures/items/magic_dig.png", true);
+		mf_down = new PotionSM(false, 0, "mf_down", "textures/items/mystical_page.png", true);
 	}
 
 	// リストを設定

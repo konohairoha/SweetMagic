@@ -48,6 +48,7 @@ import sweetmagic.init.item.sm.sweetmagic.SMGuidBook;
 import sweetmagic.init.item.sm.sweetmagic.SMHoe;
 import sweetmagic.init.item.sm.sweetmagic.SMIDoor;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
+import sweetmagic.init.item.sm.sweetmagic.SMLootBag;
 import sweetmagic.init.item.sm.sweetmagic.SMPick;
 import sweetmagic.init.item.sm.sweetmagic.SMShears;
 import sweetmagic.init.item.sm.sweetmagic.SMShovel;
@@ -76,6 +77,9 @@ public class ItemInit {
 	public static Item alt_axe, alt_pick, alt_shovel, alt_hoe, alt_shears, alt_sword, alt_sickle;
 	public static Item alt_bucket, alt_bucket_water, alt_bucket_lava;
 	public static Item knife_of_thief, machete;
+
+	// 袋
+	public static Item seedbag;
 
     // 花びら、種
 	public static Item magicmeal, clero_petal, clerodendrum_seed, prizmium;
@@ -137,6 +141,7 @@ public class ItemInit {
 	public static Item magic_bubleprison, magic_scumefang, magic_regene_shield;
 	public static Item magic_deadly_poison, magic_earth_destruction, magic_magia_protection;
 	public static Item magic_foamy_hell, magic_shining_flare, magic_growth_verre;
+	public static Item magic_bleb_burst, magic_avoid, magic_avoid_2, magic_avoid_3;
 
     // 簡易魔法
 	public static Item card_normal, card_heal;
@@ -145,7 +150,7 @@ public class ItemInit {
 	public static Item plant_chips;
 
 	// 食べ物(作物)
-	public static Item lemon, orange, chestnut, coconut, whitenet;
+	public static Item lemon, orange, chestnut, coconut, whitenet, coffee_seed;
 
 	// 種
 	public static Item sugarbell_seed, whitenet_seed, corn_seed, eggplant_seed;
@@ -171,12 +176,16 @@ public class ItemInit {
 	public static Item banana, yaki_banana, banana_smoothy, mixed_juice, soy_soup, pork_soup;
 	public static Item saba_miso, fluit_mix, pizza, gratin, estor_apple, applepie, yaki_apple;
 	public static Item choko_cornet, cream_filled_roll, cream_brulee, apple_muffin;
+	public static Item donut_choco, donut_plane, donut_strawberrychoco, german_tree_cake, raspberrypie, waffle;
+	public static Item salad_mixcorn, salad_mixoil, salad_coleslaw, salad_caprese, salad_potate;
+	public static Item coffee, cafe_latte, dry_seaweed, riceball_salmon, riceball_salt, fried_rice, salmondon;
+	public static Item talttatan, applecandy;
 
 	// 飲み物
 	public static Item corn_soup, berryorange_juice, strawberrymilk, coconut_juice, milk_pack;
 
 	//　調味料
-	public static Item vannila_pods, olive, miso;
+	public static Item vannila_pods, olive, miso, salad_dressing, mayonnaise, vinegar, seaweed;
 
 	// 防具
 	public static Item magicians_robe, wizard_robe, feary_robe, windine_robe, ifrite_robe;
@@ -235,13 +244,15 @@ public class ItemInit {
         knife_of_thief = new SMSword("knife_of_thief", 1, 256, 8.5F, 1, 8, 1.4D, 1);
         machete = new SMSword("machete", 1, 512, 1F, -3, 0, 0D, 2);
 
+        seedbag = new SMLootBag("seedbag", 0);
+
         // 花びら、種
 		magicmeal = new MagicMeal("magicmeal");
 		sugarbell = new SMElementItem("sugarbell", SMElement.EARTH);
         sugarbell_seed = new SMSeed("sugarbell_seed", BlockInit.sugarbell_plant, 1);
 		clero_petal = new MFTeleport("clero_petal", true);
 		clerodendrum_seed = new SMSeed("clerodendrum_seed", BlockInit.clerodendrum, 1);
-		fire_powder = new SMItem("fire_powder", magicList);
+		fire_powder = new SMFuel("fire_powder", 800, magicList);
 		fire_nasturtium_petal = new MFWeather("fire_nasturtium_petal", 1600, SMElement.FLAME, 0);
         fire_nasturtium_seed = new SMSeed("fire_nasturtium_seed",BlockInit.fire_nasturtium_plant, 1);
 		sticky_stuff_petal = new SMItem("sticky_stuff_petal", magicList);
@@ -363,6 +374,10 @@ public class ItemInit {
 		cocoapowder = new SMFoodItem("cocoapowder");
 		custard = new SMFoodItem("custard");
 		miso = new SMFoodItem("miso");
+		salad_dressing = new SMFoodItem("salad_dressing");
+		mayonnaise = new SMFoodItem("mayonnaise");
+		vinegar = new SMFoodItem("vinegar");
+		seaweed = new SMFoodItem("seaweed");
 
 		// 魔法 (アイテム名、必要経験値量、データ値、属性、tier、クールタイム、必要MF量)
         magic_fire = new ShotMagic("magic_fire", 0, SMElement.FLAME, 1, 40, 30);
@@ -380,9 +395,10 @@ public class ItemInit {
         magic_heal = new AirMagic("magic_heal", 0, SMElement.WATER, 2, 800, 200);
         magic_healingwish  = new AirMagic("magic_healingwish", 8, SMElement.WATER, 3, 1600, 400, "magic_heal");
 
-        magic_bubleprison = new ShotMagic("magic_bubleprison", 20, SMElement.WATER, 1, 200, 80);
-        magic_scumefang = new ShotMagic("magic_scumefang", 21, SMElement.WATER, 2, 280, 150, "magic_bubleprison");
-        magic_foamy_hell = new ShotMagic("magic_foamy_hell", 24, SMElement.WATER, 3, 300, 300, "magic_bubleprison");
+        magic_bubleprison = new ShotMagic("magic_bubleprison", 20, SMElement.WATER, 1, 180, 80);
+        magic_scumefang = new ShotMagic("magic_scumefang", 21, SMElement.WATER, 2, 220, 150, "magic_bubleprison");
+        magic_foamy_hell = new ShotMagic("magic_foamy_hell", 24, SMElement.WATER, 3, 260, 300, "magic_bubleprison");
+        magic_bleb_burst = new ShotMagic("magic_bleb_burst", 26, SMElement.WATER, 4, 100, 500, "magic_bubleprison", SMElement.BLAST);
 
         magic_elecarmor = new AirMagic("magic_elecarmor", 6, SMElement.LIGHTNING, 1, 1400, 100, "magic_thunder");
         magic_lightningbolt = new ChargeMagic("magic_lightningbolt", 3, SMElement.LIGHTNING, 2, 300, 200, "magic_thunder");
@@ -414,7 +430,11 @@ public class ItemInit {
 
         magic_tornado = new ShotMagic("magic_tornado", 5, SMElement.CYCLON, 1, 50, 30, "magic_cyclon");
         magic_storm = new ShotMagic("magic_storm", 12, SMElement.CYCLON, 2, 100, 160, "magic_cyclon");
-        magic_cyclon = new ShotMagic("magic_cyclon", 18, SMElement.CYCLON, 3, 133, 300);
+        magic_cyclon = new ShotMagic("magic_cyclon", 18, SMElement.CYCLON, 3, 160, 300);
+
+        magic_avoid = new AirMagic("magic_avoid", 17, SMElement.CYCLON, 1, 1200, 300);
+        magic_avoid_2 = new AirMagic("magic_avoid_2", 18, SMElement.CYCLON, 2, 1800, 400, "magic_avoid");
+        magic_avoid_3 = new AirMagic("magic_avoid_3", 19, SMElement.CYCLON, 3, 2400, 500, "magic_avoid");
 
         magic_dig = new ShotMagic("magic_dig", 3, SMElement.EARTH, 1, 10, 10);
         magic_rangebreaker = new ShotMagic("magic_rangebreaker", 8, SMElement.EARTH, 2, 30, 20, "magic_dig");
@@ -427,7 +447,7 @@ public class ItemInit {
 
         magic_burst = new ShotMagic("magic_burst", 15, SMElement.BLAST, 1, 160, 100, "magic_tamagotti");
         magic_blast = new ShotMagic("magic_tamagotti", 4, SMElement.BLAST, 2, 120, 200);
-        magic_magia_destroy = new ShotMagic("magic_magia_destroy", 17, SMElement.BLAST, 3, 80, 300, "magic_tamagotti");
+        magic_magia_destroy = new ShotMagic("magic_magia_destroy", 17, SMElement.BLAST, 3, 160, 300, "magic_tamagotti");
 
         magic_slowtime = new ChargeMagic("magic_slowtime", 4, SMElement.TIME, 1, 1500, 100);
         magic_deusora = new AirMagic("magic_deusora", 13, SMElement.TIME, 2, 3600, 200, "magic_slowtime");
@@ -437,7 +457,7 @@ public class ItemInit {
         card_normal = new CardMagic("card_normal", 50, 0);
         card_heal = new CardHeal("card_heal", 32);
 
-        magickey = new SMItem("magickey");
+        magickey = new SMItem("magickey", magicList);
 
 		// 食べ物 アイテム名　=new (満腹度回復、隠し満腹度(乗算)、"アイテム名", ポーション効果の整数)
 		lemon = new SMFood(3, 0.3F, "lemon", 0);
@@ -445,10 +465,11 @@ public class ItemInit {
 		estor_apple = new SMFood(3, 0.5F, "estor_apple", 0);
 		chestnut = new SMFood(4, 0.8F, "chestnut", 0);
 		coconut = new SMFood(3, 1F, "coconut", 0);
-		banana = new SMFood(2, 1.5F, "banana",0);
-		cheese = new SMFood(4, 0.3F, "cheese",0);
-		whitenet = new SMFood(4, 0.45F, "whitenet",0);
+		banana = new SMFood(2, 1.5F, "banana", 0);
+		cheese = new SMFood(4, 0.3F, "cheese", 0);
+		whitenet = new SMFood(4, 0.45F, "whitenet", 0);
 		rice = new SMFood(4, 0.3F, "rice", 0);
+		dry_seaweed = new SMFood(1, 0.5F, "dry_seaweed", 1);
 		edamame = new SMFood(2, 0.3F, "edamame", 1);
 		cake_dough = new SMFood(4, 0.45F, "cake_dough", 0);
 		corn = new SMFood(3, 0.3F, "corn", 0);
@@ -460,6 +481,7 @@ public class ItemInit {
 		sweet_potato = new SMFood (6, 0.75F, "sweet_potato", 0);
 		yaki_banana = new SMFood(6, 0.4F, "yaki_banana", 1);
 		yaki_apple = new SMFood(4, 0.55F, "yaki_apple", 0);
+		applecandy = new SMFood(5, 0.6F, "applecandy", 0);
 		itigo_daihuku = new SMFood(5, 0.5F, "itigo_daihuku", 0);
 		cooked_corn = new SMFood(8, 0.25F, "cooked_corn", 0);
 		potatobutter = new SMFood(7, 0.5F, "potatobutter", 1);
@@ -472,10 +494,19 @@ public class ItemInit {
 		choko_cornet = new SMFood(8, 0.4F, "choko_cornet", 0);
 		cream_filled_roll = new SMFood(5, 0.75F, "cream_filled_roll", 0);
 		egg_sandwitch = new SMFood(6, 0.75F, "egg_sandwitch", 0);
+		riceball_salt = new SMFood(4, 0.5F, "riceball_salt", 1);
+		riceball_salmon = new SMFood(5, 0.6F, "riceball_salmon", 1);
 		butadon = new SMFood(8, 0.8F, "butadon", 0);
 		gyuudon = new SMFood(10, 0.5F, "gyuudon", 0);
 		cheegyu = new SMFood(13, 0.45F, "cheegyu", 0);
+		fried_rice = new SMFood(10, 0.625F, "fried_rice", 0);
+		salmondon = new SMFood(8, 0.5F, "salmondon", 0);
 		nikujaga = new SMFood(16, 0.45F, "nikujaga", 0);
+		salad_mixoil = new SMFood(12, 0.5F, "salad_mixoil", 0);
+		salad_mixcorn = new SMFood(8, 0.285F, "salad_mixcorn", 1);
+		salad_coleslaw = new SMFood(7, 0.285F, "salad_coleslaw", 1);
+		salad_caprese = new SMFood(6, 0.333F, "salad_caprese", 1);
+		salad_potate = new SMFood(7, 0.4285F, "salad_potate", 1);
 		yakinasu = new SMFood (5, 0.3F, "yakinasu", 0);
 		tamagoyaki = new SMFood (6, 0.5F, "tamagoyaki", 0);
 		buridaikon = new SMFood (8, 0.4F, "buridaikon", 0);
@@ -488,7 +519,7 @@ public class ItemInit {
 		stew = new SMFood (9, 0.95F, "stew", 0);
 		sukiyaki = new SMFood (11, 0.5F, "sukiyaki", 3);
 		sauteed_mushrooms = new SMFood (7, 0.6F, "sauteed_mushrooms", 0);
-		medamayaki = new SMFood (6, 0.75F, "medamayaki", 0);
+		medamayaki = new SMFood (6, 0.25F, "medamayaki", 0);
 		kurikinton = new SMFood (7, 0.55F, "kurikinton", 0);
 		pumpkin_nituke = new SMFood (7, 0.6F, "pumpkin_nituke", 0);
 		strawberry_jelly = new SMFood (4, 0.75F, "strawberry_jelly", 2);
@@ -496,7 +527,7 @@ public class ItemInit {
 		kakigori_lemon = new SMFood (8, 0F, "kakigori_lemon", 2);
 		kakigori_strawberry = new SMFood (6, 0.2F, "kakigori_strawberry", 2);
 		kakigori_milk = new SMFood (7, 0.1F, "kakigori_milk", 2);
-		chocolate = new SMFood (8, 0.25F, "chocolate", 0);
+		chocolate = new SMFood (4, 1F, "chocolate", 0);
 		white_chocolate = new SMFood (4, 1F, "white_chocolate", 0);
 		choco_pie = new SMFood (6, 0.5F, "choco_pie", 1);
 		pudding = new SMFood (7, 0.65F, "pudding", 0);
@@ -509,15 +540,22 @@ public class ItemInit {
 		fruit_crepe = new SMFood (8, 0.25F, "fruit_crepe", 0);
 		youkan = new SMFood (4, 1.5F, "youkan", 0);
 		scone = new SMFood (5, 0.6F, "scone", 1);
+		waffle = new SMFood (4, 0.8F, "waffle", 1);
 		blueberry_muffin = new SMFood(7, 0.5F, "blueberry_muffin", 1);
 		chocolate_muffin = new SMFood(8, 0.35F, "chocolate_muffin", 1);
-		apple_muffin = new SMFood(5, 0.825F, "apple_muffin", 1);
+		apple_muffin = new SMFood(5, 0.8F, "apple_muffin", 1);
+		donut_plane = new SMFood(5, 0.7F, "donut_plane", 0);
+		donut_choco = new SMFood(6, 0.65F, "donut_choco", 0);
+		donut_strawberrychoco = new SMFood(7, 0.55F, "donut_strawberrychoco", 0);
 		cream_puff = new SMFood (8, 0.65F, "cream_puff", 0);
 		short_cake = new SMFood (6, 1.0F, "short_cake", 0);
 		cheese_cake = new SMFood (4, 1.5F, "cheese_cake", 0);
 		chocolate_cake = new SMFood (5, 1.1F, "chocolate_cake", 0);
 		cake_roll = new SMFood (5, 1.2F, "cake_roll", 0);
 		applepie = new SMFood(7, 0.65F, "applepie", 0);
+		raspberrypie = new SMFood(5, 0.7F, "raspberrypie", 0);
+		talttatan = new SMFood(6, 0.75F, "talttatan", 0);
+		german_tree_cake = new SMFood(8, 0.5F, "german_tree_cake", 0);
 		eclair = new SMFood (6, 0.6F, "eclair", 0);
 		cream_brulee = new SMFood (8, 0.4F, "cream_brulee", 0);
 		marshmallow = new SMFood (4, 0.5F, "marshmallow", 1);
@@ -537,6 +575,8 @@ public class ItemInit {
 		milk_pack = new SMDrink(1, 0.5F,"milk_pack", 1);
 		soy_soup = new SMDrink(6, 0.3F,"soy_soup", 1);
 		pork_soup = new SMDrink(7, 0.6F,"pork_soup", 0);
+		coffee = new SMDrink(5, 0F,"coffee", 2);
+		cafe_latte = new SMDrink(5, 0.1F,"cafe_latte", 1);
 
 		// 種 アイテム名　=new アイテムシードフードクラス(アイテム名、植える作物ブロック、満腹度、隠し満腹度(乗算)、狼が食べるか)
         whitenet_seed = new SMSeed("whitenet_seed",BlockInit.whitenet_plant, 2);
@@ -549,6 +589,7 @@ public class ItemInit {
         lettuce_seed = new SMSeed("lettuce_seed", BlockInit.lettuce_plant, 0);
         cabbage_seed = new SMSeed("cabbage_seed", BlockInit.cabbage_plant, 0);
         azuki_seed = new SMSeed("azuki_seed", BlockInit.azuki_plant, 0);
+        coffee_seed = new SMSeed("coffee_seed", BlockInit.coffee_plant, 1);
 
         // 作物種
 		blueberry = new SMSeedFood("blueberry", BlockInit.blueberry_plant, 3, 0.4F, true);
