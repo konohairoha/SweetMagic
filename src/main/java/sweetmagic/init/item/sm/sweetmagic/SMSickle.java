@@ -121,12 +121,12 @@ public class SMSickle extends ItemHoe {
 	}
 
 	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
+	public boolean canHarvestBlock(IBlockState state) {
 		return true;
 	}
 
 	@Override
-	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float par8, float par9, float par10) {
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing face, float par8, float par9, float par10) {
 
 		if (world.isRemote) {
 			return EnumActionResult.FAIL;

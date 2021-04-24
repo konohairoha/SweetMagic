@@ -63,9 +63,18 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 		if (player.capabilities.isFlying || this.getMF(stack) <= 0) { return; }
 
 		// MFが１以上かつジャンプしてるなら
-		if (SweetMagicCore.proxy.isJumpPressed() && !player.isPotionActive(PotionInit.breakblock)) {
-			player.motionY += 0.2F;
-			this.tickTime++;
+		if (SweetMagicCore.proxy.isJumpPressed()) {
+
+			if (player.isPotionActive(PotionInit.breakblock)) {
+				if (!player.capabilities.isFlying) {
+					player.motionY += 0.035F;
+				}
+			}
+
+			else {
+				player.motionY += 0.2F;
+				this.tickTime++;
+			}
 		}
 
 		// スニークしてないなら

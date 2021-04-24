@@ -2,6 +2,7 @@ package sweetmagic.init.item.sm.seed;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFarmland;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,23 +46,23 @@ public class SMSeed extends SMFoodItem implements IPlantable {
 
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
-			Material material = state.getMaterial();
+			Material m = state.getMaterial();
 
 			switch (this.data) {
 			case 0:
 				if( !(block instanceof BlockFarmland) && !block.canSustainPlant(state, world, pos, facing, this)) { return EnumActionResult.PASS; }
 
-				this.setBlock(world, player, stack, material, pos);
+				this.setBlock(world, player, stack, m, pos);
 				return EnumActionResult.SUCCESS;
 			case 1:
-				if(material == Material.GROUND || material == Material.GRASS || block.canSustainPlant(state, world, pos, facing, this)) {
-					this.setBlock(world, player, stack, material, pos);
+				if(m == Material.GROUND || m == Material.GRASS || block.canSustainPlant(state, world, pos, facing, this)) {
+					this.setBlock(world, player, stack, m, pos);
 					return EnumActionResult.SUCCESS;
 				}
 				return EnumActionResult.PASS;
 			case 2:
-				if(material == Material.ROCK || material == Material.GROUND) {
-					this.setBlock(world, player, stack, material, pos);
+				if((m == Material.ROCK || m == Material.GROUND || block instanceof BlockLog) && block.isFullBlock(state)) {
+					this.setBlock(world, player, stack, m, pos);
 					return EnumActionResult.SUCCESS;
 				}
 				return EnumActionResult.PASS;

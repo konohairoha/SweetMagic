@@ -79,6 +79,7 @@ public class ShotMagic extends MFSlotItem {
 	 * 23 = 5範囲dig魔法
 	 * 24 = 泡窒息リジェネ解除魔法
 	 * 25 = 炎/光魔法
+	 * 26 = 泡/爆発魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -167,6 +168,9 @@ public class ShotMagic extends MFSlotItem {
 			break;
 		case 25:
 			toolTip.add("tip.magic_shining_flare.name");
+			break;
+		case 26:
+			toolTip.add("tip.magic_bleb_burst.name");
 			break;
 		}
 
@@ -292,6 +296,11 @@ public class ShotMagic extends MFSlotItem {
 				entity = new EntityShinigFlare(world, player, stack);
 				entity.setDamage(5);
 				break;
+			case 26:
+				entity = new EntityBabuleMagic(world, player, stack, 3);
+				entity.isHitDead = true;
+				entity.setDamage(3);
+				break;
 			}
 
 			// ダメージを与える場合
@@ -310,7 +319,7 @@ public class ShotMagic extends MFSlotItem {
 			}
 
 			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
-			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power, 3), 0);	// 射撃速度
+			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power * 0.5F, 4F), 0);	// 射撃速度
 			world.spawnEntity(entity);
 
 			if (tripleShot) {
@@ -353,12 +362,12 @@ public class ShotMagic extends MFSlotItem {
 			switch (this.data) {
 			case 7:
 				entity = new EntityLightMagic(world, player, stack);
-				entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + (power >= 3 ? 3 : power), 16);	// 射撃速度
+				entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power * 0.5F, 4F), 16);	// 射撃速度
 				entity.setDamage(3);
 				break;
 			case 12:
 				entity = new EntityCyclonMagic(world, player, stack);
-				entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + (power >= 3 ? 3 : power), 2);	// 射撃速度
+				entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power * 0.5F, 4F), 2);	// 射撃速度
 				entity.setDamage(entity.getDamage() + power);
 				break;
 			}
@@ -386,13 +395,13 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 18:
 				entity = new EntityCyclonMagic(world, player, stack);
-				entity.setDamage( (entity.getDamage() + power ) / 2 );
+				entity.setDamage( (entity.getDamage() + power ) * 0.25D );
 				entity.isHit = true;
 				break;
 			}
 
 			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 2.5F, 2.5F, 2.5F);	//　弾の初期弾速と弾のばらつき
-			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + (power >= 3 ? 3 : power), 20);	// 射撃速度
+			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power * 0.5F, 4F), 20);	// 射撃速度
 			world.spawnEntity(entity);
 			entity.plusTick = -100;
 		}

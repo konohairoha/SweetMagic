@@ -1,7 +1,5 @@
 package sweetmagic.init.item.sm.seed;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -18,18 +16,16 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IElementItem;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
-import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class MagicMeal extends SMItem implements IElementItem {
 
 	public SMElement ele;
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("witch_house");
-	public static List<ItemStack> loot = new ArrayList<>();
 
 	public MagicMeal(String name) {
-		super(name);
+		super(name, ItemInit.magicList);
 		this.setElement(SMElement.BLAST);
 	}
 

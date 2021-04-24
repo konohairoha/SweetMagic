@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -21,6 +22,11 @@ public class SMFuel extends SMItem {
 		super(name);
 		this.time = fuel;
     }
+
+	public SMFuel(String name, int fuel, List<Item> list) {
+		super(name, list);
+		this.time = fuel;
+	}
 
 	@Override
 	public int getItemBurnTime(ItemStack stack){

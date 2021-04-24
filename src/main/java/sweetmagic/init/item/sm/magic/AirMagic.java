@@ -61,6 +61,9 @@ public class AirMagic extends MFSlotItem {
 	 * 14 = 敵スタン + 反撃魔法
 	 * 15 = 持続回復 + バリア魔法
 	 * 16 = 持続回復Ⅲ + バリア魔法
+	 * 17 = 回避魔法1
+	 * 18 = 回避魔法2
+	 * 19 = 回避魔法3
 	 */
 
 	// テクスチャのリソースを取得
@@ -123,6 +126,11 @@ public class AirMagic extends MFSlotItem {
 		case 16:
 			toolTip.add("tip.magic_magia_protection.name");
 			break;
+		case 17:
+		case 18:
+		case 19:
+			toolTip.add("tip.magic_avoid.name");
+			break;
 		}
 
 		return toolTip;
@@ -177,19 +185,19 @@ public class AirMagic extends MFSlotItem {
 			break;
 		case 10:
 			// 氷雨魔法
-			flag = 	this.frostRain(world, player, stack, tags);
+			flag = this.frostRain(world, player, stack, tags);
 			break;
 		case 11:
 			// ジャンプ力アップバフ魔法
-			flag = 	this.jumpBoost(world, player, stack, tags);
+			flag = this.jumpBoost(world, player, stack, tags);
 			break;
 		case 12:
 			// 弾ベクトル無効化魔法
-			flag = 	this.vectorHaltenMagic(world, player, stack, tags);
+			flag = this.vectorHaltenMagic(world, player, stack, tags);
 			break;
 		case 13:
 			// 敵スタン
-			flag = 	this.deusOraMagic(world, player, stack, tags);
+			flag = this.deusOraMagic(world, player, stack, tags);
 			break;
 		case 14:
 			// 敵スタン + 反撃魔法
@@ -199,6 +207,12 @@ public class AirMagic extends MFSlotItem {
 		case 16:
 			// 持続回復Ⅲ + バリア魔法
 			flag = this.regeneBarrierAction(world, player, stack, tags);
+			break;
+		case 17:
+		case 18:
+		case 19:
+			// 回避魔法
+			flag = this.rangeAvoid(world, player, stack, tags);
 			break;
 		}
 
@@ -353,7 +367,7 @@ public class AirMagic extends MFSlotItem {
 			entity.plusTick = -400;
 	        world.spawnEntity(entity);
 		}
-		return false;
+		return true;
 	}
 
 	// 氷雨魔法
@@ -373,11 +387,12 @@ public class AirMagic extends MFSlotItem {
 			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
 			entity.shoot(0, entity.motionY, 0, 0, 0);									// 射撃速度
 			entity.motionY -= 16;
+			entity.isHitDead = true;
 	        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + vec3d.y + 10, player.posZ + vec3d.z);
 			entity.setPosition(pos.getX(), pos.getY() + 10, pos.getZ());
 	        world.spawnEntity(entity);
 		}
-		return false;
+		return true;
 	}
 
 	// ジャンプ力アップバフ魔法
@@ -446,6 +461,40 @@ public class AirMagic extends MFSlotItem {
 		this.addPotion(player, PotionInit.regene, this.effectTime(level), potionLevel, false);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 		player.getActivePotionEffects();
+
+		return true;
+	}
+
+	// 回避魔法
+	public boolean rangeAvoid (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+		int potionLevel = 0;
+
+		switch (this.data) {
+		case 17:
+			potionLevel = 0;
+			break;
+		case 18:
+			potionLevel = 1;
+			break;
+		case 19:
+			potionLevel = 2;
+			break;
+		}
+
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(7D, 7D, 7D);
+		List<EntityPlayer> playerList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+
+		for (EntityPlayer p : playerList) {
+
+			if (p.isPotionActive(PotionInit.cyclone)) { continue; }
+
+			this.addPotion(p, PotionInit.cyclone, this.effectTime(level), potionLevel, false);
+			this.playSound(world, player, SMSoundEvent.CYCLON, 0.5F, 1F);
+		}
 
 		return true;
 	}

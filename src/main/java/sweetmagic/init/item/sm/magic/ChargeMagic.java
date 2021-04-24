@@ -301,8 +301,21 @@ public class ChargeMagic extends MFSlotItem {
 		if(world.isRemote) { return false; }
 
 		boolean isGrow = false;
+		int underRange = 2;
 
-		for (BlockPos pos : BlockPos.getAllInBoxMutable(range.add(-level, -2, -level), range.add(level, 2, level))) {
+		switch (this.data) {
+		case 5:
+			underRange = 3;
+			break;
+		case 6:
+			underRange = 2;
+			break;
+		case 7:
+			underRange = 5;
+			break;
+		}
+
+		for (BlockPos pos : BlockPos.getAllInBoxMutable(range.add(-level, -underRange, -level), range.add(level, underRange, level))) {
 
 			//ブロックを取得するための定義
 			IBlockState state = world.getBlockState(pos);
