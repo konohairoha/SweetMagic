@@ -41,17 +41,20 @@ import sweetmagic.util.SoundHelper;
 
 public class WarpBlock extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.95D, 1D);
 
 	public WarpBlock (String name, int data, List<Block> list) {
 		super(Material.GLASS, name);
 		this.data = data;
+		setHardness(0.5F);
+		setResistance(1024F);
 		list.add(this);
 	}
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return new AxisAlignedBB(0D, 0D, 0D, 1D, 0.95D, 1D);
+		return AABB;
 	}
 
     @Override

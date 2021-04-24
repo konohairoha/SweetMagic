@@ -11,16 +11,18 @@ import sweetmagic.init.base.BaseFaceBlock;
 
 public class BlockCafeBoard extends BaseFaceBlock {
 
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.25D, 0D, 0.25D, 0.75D, 0.65D, 0.75D);
+
 	public BlockCafeBoard (String name) {
 		super(Material.WOOD, name);
         setHardness(0.4F);
-        setResistance(64F);
+        setResistance(1024F);
 		this.setSoundType(SoundType.WOOD);
 		BlockInit.blockList.add(this);
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.65, 0.75);
+		return AABB;
 	}
 }

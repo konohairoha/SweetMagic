@@ -45,8 +45,9 @@ import sweetmagic.util.SweetState;
 
 public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISMCrop {
 
-	Random srand = new Random();
-	public static float toGrowValue = 10.0F;	//成長乱数（小さいほど早く成長しやすい）
+	private static final Random srand = new Random();
+	private static float toGrowValue = 10.0F;	//成長乱数（小さいほど早く成長しやすい）
+	private final int data;
 
 	/**
 	*　　BlockState総取っ替え
@@ -57,12 +58,11 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 	//=====================記述変更開始==============================
 
-	public final int data;
-
 	public FruitLeaves(String name, int data) {
 		this.setGrowValue(8.5F);
 		this.setTickRandomly(true);
-		this.setHardness(0.0F);
+		this.setHardness(0F);
+        setResistance(1024F);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
 		this.setUnlocalizedName(name);
@@ -94,6 +94,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	public boolean isShearable(ItemStack item, IBlockAccess world, BlockPos pos) {
         return true;
     }
+
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
         return Arrays.asList(new ItemStack(this, 1, 0));
     }
@@ -161,7 +162,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		return SweetState.getInt(state, getSweetState());
 	}
 
-	/* IPlantable */
+	// IPlantable
 	@Override
 	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
 		return EnumPlantType.Crop;
@@ -180,6 +181,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	//自然成長に必須。　ランダムTick更新処理の書き直しをするときはここをオーバーライドすること
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+
 		super.updateTick(world, pos, state, rand);
 		if (!world.isAreaLoaded(pos, 1) || world.getLightFromNeighbors(pos.up()) < 9) { return; }
 
@@ -234,14 +236,13 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 	//ドロップする作物
 	protected Item getCrop() {
+
 		switch (this.data) {
-		case 0:
-			return ItemInit.lemon;
-		case 1:
-			return ItemInit.orange;
-		case 2:
-			return ItemInit.estor_apple;
+		case 0:	return ItemInit.lemon;
+		case 1:	return ItemInit.orange;
+		case 2:	return ItemInit.estor_apple;
 		}
+
 		return null;
 	}
 
@@ -266,7 +267,18 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 		if (world.isRemote) { return true; }
 
-        int age = getNowStateMeta(state);
+		ItemStack stack = player.getHeldItem(hand);
+
+		if (!this.isSickle(world, player, pos, stack)) {
+			this.onRicghtClick(world, player, state, pos, stack);
+		}
+		return true;
+	}
+
+	// 右クリック
+	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
+
+		int age = this.getNowStateMeta(state);
 
         if(age >= this.getMaxBlockState()) {
     		Random rand = new Random();
@@ -274,16 +286,18 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
             world.spawnEntity(drop);
             world.setBlockState(pos, this.withStage(world, state, 0), 2);        //作物の成長段階を2下げる
             world.playSound((EntityPlayer)null, pos,SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
-        } else {
-    		ItemStack stackA = player.getHeldItem(hand);
+			this.playCropSound(world, rand, pos);
+        }
+
+        else {
+
             ItemStack stackB = new ItemStack(Items.DYE,1,15);
-            if(ItemStack.areItemsEqual(stackA, stackB)) {
+            if(ItemStack.areItemsEqual(stack, stackB)) {
             	ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-            	if (!PlayerHelper.isCleative(player)) { stackA.shrink(1); }
+            	if (!PlayerHelper.isCleative(player)) { stack.shrink(1); }
                 world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
             }
         }
-        return true;
 	}
 
 	//土、草、耕地に置いても壊れないようにする

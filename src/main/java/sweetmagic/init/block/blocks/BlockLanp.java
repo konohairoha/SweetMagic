@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 
 public class BlockLanp extends BlockEncPower {
 
-	protected static final AxisAlignedBB CANDLE_AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
+	private static final AxisAlignedBB CANDLE_AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
 
 	public BlockLanp(String name, float hardness, float resistance, int harvestLevel, float light, float encPower, SoundType sType, List<Block> list) {
 		super(name, hardness, resistance, harvestLevel, light, encPower, sType);

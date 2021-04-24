@@ -34,6 +34,7 @@ import sweetmagic.init.tile.cook.TileFreezer;
 public class BlockFreezer extends BaseFaceBlock {
 
 	public final boolean isTop;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D);
 
 	public BlockFreezer(String name, boolean isTop, List<Block> list) {
 		super(Material.IRON, name);
@@ -74,8 +75,7 @@ public class BlockFreezer extends BaseFaceBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-	}
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) { }
 
 	//右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
@@ -137,7 +137,7 @@ public class BlockFreezer extends BaseFaceBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+		return AABB;
 	}
 
 	// アイテムをドロップ

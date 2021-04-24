@@ -22,8 +22,8 @@ import sweetmagic.init.base.BaseModelBlock;
 public class BlockPole extends BaseModelBlock {
 
 	public final int data;
-	public final AxisAlignedBB POLE = new AxisAlignedBB(0.4, 0, 0.4, 0.6, 1, 0.6);
-	public final AxisAlignedBB LANTERN = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.65, 0.75);
+	public static final AxisAlignedBB POLE = new AxisAlignedBB(0.4, 0, 0.4, 0.6, 1, 0.6);
+	public static final AxisAlignedBB LANTERN = new AxisAlignedBB(0.25, 0, 0.25, 0.75, 0.65, 0.75);
 
 	public BlockPole (String name, List<Block> list, int data) {
 		super(Material.WOOD, name);

@@ -19,7 +19,8 @@ import sweetmagic.util.PlayerHelper;
 
 public class TrapBlock extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.95D, 1D);
 
 	public TrapBlock (String name, int data) {
 		super(Material.ROCK, name);
@@ -31,7 +32,7 @@ public class TrapBlock extends BaseModelBlock {
 
 	@Override
 	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return new AxisAlignedBB(0D, 0D, 0D, 1D, 0.95D, 1D);
+		return AABB;
 	}
 
 	// ブロックの上にいたら

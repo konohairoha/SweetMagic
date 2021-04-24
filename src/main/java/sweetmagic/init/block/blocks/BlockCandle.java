@@ -10,6 +10,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -20,13 +21,13 @@ import sweetmagic.init.base.BaseModelBlock;
 public class BlockCandle extends BaseModelBlock {
 
 	// 向きをいれておく変数として FACING を宣言
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
-	protected static final AxisAlignedBB CANDLE_AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
+	private static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+	private static final AxisAlignedBB CANDLE_AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
 
 	public BlockCandle(String name) {
 		super(Material.WOOD, name);
-		setHardness(1.0F);
-        setResistance(1024F);
+		setHardness(0.33F);
+		setResistance(1024F);
         setLightLevel(1F);
 		setSoundType(SoundType.WOOD);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.DOWN));
@@ -66,5 +67,10 @@ public class BlockCandle extends BaseModelBlock {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, FACING);
+	}
+
+	// 向き変更対応
+	public IBlockState withRotation(IBlockState state, Rotation rot) {
+		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
 	}
 }

@@ -29,18 +29,17 @@ public class BlockModenStair extends BaseFaceBlock {
 
 	public BlockModenStair(String name) {
 		super(Material.WOOD, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.5F);
+		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		BlockInit.blockList.add(this);
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox,
-			List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, @Nullable Entity entity, boolean isActualState) {
 		EnumFacing facing = state.getValue(FACING);
-		Block.addCollisionBoxToList(pos, entityBox, collidingBoxes, BOTTOM[facing.getHorizontalIndex()]);
-		Block.addCollisionBoxToList(pos, entityBox, collidingBoxes, TOP[facing.getHorizontalIndex()]);
+		Block.addCollisionBoxToList(pos, aabb, aabbList, BOTTOM[facing.getHorizontalIndex()]);
+		Block.addCollisionBoxToList(pos, aabb, aabbList, TOP[facing.getHorizontalIndex()]);
 	}
 
 	protected List<AxisAlignedBB> getCollisionBoxList(IBlockState state, World world, BlockPos pos) {
@@ -52,24 +51,26 @@ public class BlockModenStair extends BaseFaceBlock {
 	}
 
 	@Override
-	public RayTraceResult collisionRayTrace(IBlockState blockState, World world, BlockPos pos, Vec3d start, Vec3d end) {
+	public RayTraceResult collisionRayTrace(IBlockState state, World world, BlockPos pos, Vec3d start, Vec3d end) {
+
 		List<RayTraceResult> list = Lists.newArrayList();
 
-		for (AxisAlignedBB axisalignedbb : getCollisionBoxList(blockState, world, pos)) {
-			list.add(this.rayTrace(pos, start, end, axisalignedbb));
+		for (AxisAlignedBB aabb : getCollisionBoxList(state, world, pos)) {
+			list.add(this.rayTrace(pos, start, end, aabb));
 		}
 
 		RayTraceResult result = null;
-		double d1 = 0.0D;
+		double d1 = 0D;
 
-		for (RayTraceResult raytraceresult : list) {
-			if (raytraceresult != null) {
-				double d0 = raytraceresult.hitVec.squareDistanceTo(end);
-				if (d0 > d1) {
-					result = raytraceresult;
-					d1 = d0;
-				}
-			}
+		for (RayTraceResult ray : list) {
+
+			if (ray == null) { continue; }
+
+			double d0 = ray.hitVec.squareDistanceTo(end);
+			if (d0 <= d1) { continue; }
+
+			result = ray;
+			d1 = d0;
 		}
 
 		return result;

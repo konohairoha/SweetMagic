@@ -26,13 +26,13 @@ import sweetmagic.init.BlockInit;
 
 public class SMLeaves extends BlockLeaves {
 
-	public final int data;
+	private final int data;
 
 	public SMLeaves(String name, int data) {
 		setRegistryName(name);
 		setUnlocalizedName(name);
 		setHardness(0F);
-		setResistance(1F);
+		setResistance(1024F);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(CHECK_DECAY, true).withProperty(DECAYABLE, true));
 		this.data = data;
 		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
@@ -80,14 +80,10 @@ public class SMLeaves extends BlockLeaves {
 	//ドロップする作物
 	protected Block getCrop() {
 		switch (this.data) {
-		case 0:
-			return BlockInit.chestnut_sapling;
-		case 1:
-			return BlockInit.coconut_sapling;
-		case 2:
-			return BlockInit.prism_sapling;
-		case 3:
-			return BlockInit.banana_sapling;
+		case 0: return BlockInit.chestnut_sapling;
+		case 1: return BlockInit.coconut_sapling;
+		case 2: return BlockInit.prism_sapling;
+		case 3: return BlockInit.banana_sapling;
 		}
 		return null;
 	}
@@ -151,6 +147,7 @@ public class SMLeaves extends BlockLeaves {
 	//テクスチャが透明で、重ねて表示したい場合
 	@SideOnly(Side.CLIENT)
 	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+
 		AxisAlignedBB aabb = state.getBoundingBox(access, pos);
 
 		switch (side) {

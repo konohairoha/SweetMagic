@@ -23,6 +23,7 @@ import net.minecraft.world.World;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.obmagia.ObMagiaRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
 import sweetmagic.util.ParticleHelper;
@@ -31,13 +32,13 @@ import sweetmagic.util.RecipeUtil;
 
 public class ObMagia extends BaseFaceBlock {
 
-	public static final AxisAlignedBB TOP = new AxisAlignedBB(0, 0, 0, 1, 0.25, 1);
-    public static final AxisAlignedBB BOTTOM = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+	private static final AxisAlignedBB TOP = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.25D, 1D);
+	private static final AxisAlignedBB BOTTOM = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D);
 
 	public ObMagia(String name, List<Block> list) {
 		super(Material.WOOD, name);
-        setHardness(0.65F);
-        setResistance(64F);
+        setHardness(0.5F);
+        setResistance(1024F);
 		this.setSoundType(SoundType.STONE);
 		list.add(this);
 	}
@@ -60,8 +61,7 @@ public class ObMagia extends BaseFaceBlock {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-	}
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) { }
 
 	//右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
@@ -75,6 +75,7 @@ public class ObMagia extends BaseFaceBlock {
 		if (!recipeInfo.canComplete) { return false; }
 
 		RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
+		AdvancedInit.magic_craft.triggerFor(player);
 
 		for (ItemStack result : recipeUtil.getResult()) {
 			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, result));

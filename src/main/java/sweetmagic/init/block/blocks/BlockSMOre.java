@@ -36,12 +36,9 @@ public class BlockSMOre extends SMIron {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		switch(this.data) {
-		case 0:
-			return ItemInit.aether_crystal;
-		case 1:
-			return ItemInit.cosmic_crystal_shard;
-		default:
-			return ItemInit.aether_crystal;
+		case 0:	return ItemInit.aether_crystal;
+		case 1:	return ItemInit.cosmic_crystal_shard;
+		default:	return ItemInit.aether_crystal;
 		}
 	}
 
@@ -49,24 +46,23 @@ public class BlockSMOre extends SMIron {
 	@Override
 	public int quantityDropped(Random random) {
 		switch(this.data) {
-		case 0:
-			return random.nextInt(2) + 1;
-		case 1:
-			return 1;
-		default:
-			return 1;
+		case 0:	  return random.nextInt(2) + 1;
+		case 1:	  return 1;
+		default: return 1;
 		}
 	}
 
 	//幸運のエンチャントによる加算
 	@Override
 	public int quantityDroppedWithBonus(int fortune, Random rand) {
-    	if (fortune > 0 &&
-    			Item.getItemFromBlock(this) != this.getItemDropped((IBlockState)this.getBlockState().getValidStates().iterator().next(), rand, fortune)) {
+
+    	if (fortune > 0 && Item.getItemFromBlock(this) != this.getItemDropped((IBlockState)this.getBlockState().getValidStates().iterator().next(), rand, fortune)) {
     		int i = rand.nextInt(fortune + 2) - 1;
 			if (i < 0) { i = 0; }
 			return this.quantityDropped(rand) * (i + 1);
-		} else {
+		}
+
+    	else {
 			return this.quantityDropped(rand);
 		}
     }
@@ -74,8 +70,7 @@ public class BlockSMOre extends SMIron {
     //経験値ドロップ
     @Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
-		Random rand = world instanceof World ? ((World) world).rand : new Random();
-    	return MathHelper.getInt(rand, 3, 6);
+    	return MathHelper.getInt(world instanceof World ? ((World) world).rand : new Random(), 3, 6);
     }
 
     @Override

@@ -16,12 +16,12 @@ import sweetmagic.init.BlockInit;
 public class BlockStendGlass extends SMIron {
 
 	public final boolean isOn;
-	public final int data;
+	private final int data;
 
     public BlockStendGlass(String name, boolean isOn, int data, List<Block> list) {
     	super(Material.REDSTONE_LIGHT, name);
         setHardness(0.7F);
-        setResistance(64F);
+        setResistance(1024F);
         setSoundType(SoundType.METAL);
         if (isOn) {
             setLightLevel(1F);

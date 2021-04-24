@@ -6,7 +6,7 @@ import net.minecraft.item.ItemStack;
 
 public class SMBlockItem extends ItemBlock {
 
-	public final int amount;
+	private final int amount;
 
 	public SMBlockItem (Block block, int amount) {
 		super(block);

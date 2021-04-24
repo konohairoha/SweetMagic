@@ -26,10 +26,10 @@ import sweetmagic.init.BlockInit;
 
 public class WoodPaneGlass extends BlockGlass {
 
-	public final int data;
-	public boolean isPass;
-	public static final PropertyBool TOP = PropertyBool.create("top");
-	public static final PropertyBool BOT = PropertyBool.create("bot");
+	private final int data;
+	private boolean isPass;
+	private static final PropertyBool TOP = PropertyBool.create("top");
+	private static final PropertyBool BOT = PropertyBool.create("bot");
 
 	public WoodPaneGlass(String name, int data, boolean shading, boolean isPass) {
 		super(Material.GLASS, false);
@@ -37,7 +37,7 @@ public class WoodPaneGlass extends BlockGlass {
         setRegistryName(name);
         setSoundType(SoundType.GLASS);
         setHardness(0.2F);
-		setResistance(256.0F);
+		setResistance(1024F);
 		this.data = data;
 		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
 		this.setLightOpacity(shading ? 255 : 0);

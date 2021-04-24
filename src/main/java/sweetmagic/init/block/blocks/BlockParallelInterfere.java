@@ -34,11 +34,12 @@ import sweetmagic.init.tile.magic.TileStardustWish;
 public class BlockParallelInterfere extends BaseFaceBlock {
 
 	public final int data;
+	public final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.75D, 1D);
 
 	public BlockParallelInterfere(String name, int data) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.5F);
+		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		disableStats();
 		this.data = data;
@@ -47,7 +48,7 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0, 0, 0, 1, 0.75, 1);
+		return AABB;
 	}
 
 	@Override
@@ -105,10 +106,10 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		//xx_xx.langファイルから文字を取得する方法
-		TextComponentTranslation text1 = new TextComponentTranslation("tip.parallelinterfere_title.name", new Object[0]);
-		TextComponentTranslation text2 = new TextComponentTranslation("tip.parallelinterfere_text.name", new Object[0]);
-		tooltip.add(I18n.format(TextFormatting.GOLD + text1.getFormattedText()));
-		tooltip.add(I18n.format(TextFormatting.GREEN + text2.getFormattedText()));
+		String text1 = new TextComponentTranslation("tip.parallelinterfere_title.name", new Object[0]).getFormattedText();
+		String text2 = new TextComponentTranslation("tip.parallelinterfere_text.name", new Object[0]).getFormattedText();
+		tooltip.add(I18n.format(TextFormatting.GOLD + text1));
+		tooltip.add(I18n.format(TextFormatting.GREEN + text2));
 	}
 
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {

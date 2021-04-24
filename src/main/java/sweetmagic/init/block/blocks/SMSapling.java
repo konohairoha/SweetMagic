@@ -23,8 +23,8 @@ import sweetmagic.worldgen.gen.WorldGenPrsmTree;
 
 public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 
-	protected static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.099D, 0.0D, 0.099D, 0.89D, 0.8D, 0.89D);
-	public final int data;
+	private static final AxisAlignedBB SAPLING_AABB = new AxisAlignedBB(0.09D, 0D, 0.09D, 0.9D, 0.8D, 0.9D);
+	private final int data;
 
 	public SMSapling(String name, int data) {
         super(Material.PLANTS);

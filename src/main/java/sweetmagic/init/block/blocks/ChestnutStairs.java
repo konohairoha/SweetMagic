@@ -8,8 +8,6 @@ import sweetmagic.init.BlockInit;
 
 public class ChestnutStairs extends BlockStairs{
 
-//	private boolean isFragile = false;
-
 	public ChestnutStairs(String name, IBlockState state) {
 		super(state);
 		this.setRegistryName(name);

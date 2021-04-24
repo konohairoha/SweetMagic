@@ -10,7 +10,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -26,11 +25,16 @@ import sweetmagic.init.tile.cook.TilePlate;
 public class BlockModenRack extends BaseFaceBlock {
 
 	public final int data;
+	private final static AxisAlignedBB NORTH = new AxisAlignedBB(0D, 0.9375D, 0.38D, 1D, 1D, 1D);
+	private final static AxisAlignedBB SOUTH = new AxisAlignedBB(0D, 0.9375D, 0D, 1D, 1D, 0.62D);
+	private final static AxisAlignedBB EAST = new AxisAlignedBB(0D, 0.9375D, 0D, 0.62D, 1D, 1D);
+	private final static AxisAlignedBB WEST = new AxisAlignedBB(0.38D, 0.9375D, 0D, 1D, 1D, 1D);
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0D, 0.125D, 0.875D, 0.1D, 0.875D);
 
 	public BlockModenRack(String name, int data) {
 		super(Material.WOOD, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.5F);
+		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
 		BlockInit.blockList.add(this);
@@ -51,12 +55,9 @@ public class BlockModenRack extends BaseFaceBlock {
 	public TileEntity createTileEntity(World world, IBlockState state) {
 
 		switch (this.data) {
-		case 0:
-			return new TileModenRack();
-		case 1:
-			return new TileModenWallRack();
-		case 2:
-			return new TilePlate();
+		case 0:	return new TileModenRack();
+		case 1:	return new TileModenWallRack();
+		case 2:	return new TilePlate();
 		}
 
 		return null;
@@ -69,19 +70,15 @@ public class BlockModenRack extends BaseFaceBlock {
 		case 0:
 			return FULL_BLOCK_AABB;
 		case 1:
-
-			EnumFacing face = state.getValue(FACING);
-			if (face == EnumFacing.NORTH) {
-				return new AxisAlignedBB(0, 0.9375, 0.38, 1, 1, 1);
-			} else if (face == EnumFacing.SOUTH) {
-				return new AxisAlignedBB(0, 0.9375, 0, 1, 1, 0.62);
-			} else if (face == EnumFacing.EAST) {
-				return new AxisAlignedBB(0, 0.9375, 0, 0.62, 1, 1);
-			} else if (face == EnumFacing.WEST) {
-				return new AxisAlignedBB(0.38, 0.9375, 0, 1, 1, 1);
+			switch (state.getValue(FACING)) {
+			case NORTH: return NORTH;
+			case SOUTH: return SOUTH;
+			case EAST:  return EAST;
+			case WEST:	 return WEST;
 			}
+
 		case 2:
-			return new AxisAlignedBB(0.125, 0, 0.125, 0.875, 0.1, 0.875);
+			return AABB;
 		}
 
 		return FULL_BLOCK_AABB;

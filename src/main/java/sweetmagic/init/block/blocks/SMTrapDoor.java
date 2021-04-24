@@ -7,7 +7,7 @@ import sweetmagic.init.BlockInit;
 
 public class SMTrapDoor extends BlockTrapDoor {
 
-	public final int data;
+	private final int data;
 
 	public SMTrapDoor (String name, int data, Material material) {
 		super(material);

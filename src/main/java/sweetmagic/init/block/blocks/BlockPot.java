@@ -35,7 +35,8 @@ import sweetmagic.util.RecipeUtil;
 public class BlockPot extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.19D, 0.38D, 0.19D, 0.81D, 0.0D, 0.81D);
 
 	public BlockPot(String name, float light, int data, List<Block> list) {
 		super(Material.IRON, name);
@@ -49,7 +50,7 @@ public class BlockPot extends BaseFaceBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.19D, 0.38D, 0.19D, 0.81D, 0.0D, 0.81D);
+		return AABB;
 	}
 
 	@Override
@@ -61,12 +62,6 @@ public class BlockPot extends BaseFaceBlock {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		return new TilePot();//TileEntityは処理自体ほぼ同じなため製粉機を指定
-	}
-
-	//Tick更新処理が必要なブロックには必ず入れること
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
 	}
 
 	//右クリックの処理
@@ -197,7 +192,6 @@ public class BlockPot extends BaseFaceBlock {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)

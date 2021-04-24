@@ -43,6 +43,15 @@ import sweetmagic.util.SoundHelper;
 public class WandPedal extends BaseFaceBlock {
 
 	public final int data;
+	private final static AxisAlignedBB PEDAL = new AxisAlignedBB(0.1D, 0D, 0.1D, 0.9D, 0.6D, 0.9D);
+	private final static AxisAlignedBB WALL_NORTH = new AxisAlignedBB(0.0625D, 0.0625D, 0.9375D, 0.9375D, 0.9375D, 1D);
+	private final static AxisAlignedBB WALL_SOUTH = new AxisAlignedBB(0.0625D, 0.0625D, 0D, 0.9375D, 0.9375D, 0.0625D);
+	private final static AxisAlignedBB WALL_EAST = new AxisAlignedBB(0D, 0.085D, 0.0625D, 0.0625D, 0.9375D, 0.9375D);
+	private final static AxisAlignedBB WALL_WEST = new AxisAlignedBB(0.9375D, 0.0625D, 0.0625D, 1D, 0.9375D, 0.9375D);
+	private final static AxisAlignedBB BOAD_NOSO = new AxisAlignedBB(0.435D, 0D, 0D, 0.56D, 1D, 1D);
+	private final static AxisAlignedBB BOAD_EAWE = new AxisAlignedBB(0D, 0D, 0.435D, 1D, 1D, 0.56D);
+	private final static AxisAlignedBB POT = new AxisAlignedBB(0.375D, 0D, 0.375D, 0.625D, 0.5D, 0.625D);
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.1D, 0D, 0.1D, 0.9D, 0.6D, 0.9D);
 
 	public WandPedal(String name, int data) {
 		super(Material.ROCK, name);
@@ -76,37 +85,38 @@ public class WandPedal extends BaseFaceBlock {
 		EnumFacing face = state.getValue(FACING);
 
 		switch (this.data) {
-		case 0:
-			// 杖の台座
-			return new AxisAlignedBB(0.1, 0, 0.1, 0.9, 0.6, 0.9);
+
+		// 杖の台座
+		case 0: return PEDAL;
+
+		// ウォールボード
 		case 1:
-			// ウォールボード
-			if (face == EnumFacing.NORTH) {
-				return new AxisAlignedBB(0.0625, 0.0625, 0.9375, 0.9375, 0.9375, 1);
-			} else if (face == EnumFacing.SOUTH) {
-				return new AxisAlignedBB(0.0625, 0.0625, 0, 0.9375, 0.9375, 0.0625);
-			} else if (face == EnumFacing.EAST) {
-				return new AxisAlignedBB(0, 0.085, 0.0625, 0.0625, 0.9375, 0.9375);
-			} else if (face == EnumFacing.WEST) {
-				return new AxisAlignedBB(0.9375, 0.0625, 0.0625, 1, 0.9375, 0.9375);
+
+			switch (face) {
+			case NORTH: return WALL_NORTH;
+			case SOUTH: return WALL_SOUTH;
+			case EAST:  return WALL_EAST;
+			case WEST:  return WALL_WEST;
 			}
+
+		// 看板
 		case 2:
-			// 看板
+
 			switch (face) {
 			case NORTH:
 			case SOUTH:
-				return new AxisAlignedBB(0.435, 0, 0, 0.56, 1, 1);
+				return BOAD_NOSO;
 			case EAST:
 			case WEST:
-				return new AxisAlignedBB(0, 0, 0.435, 1, 1, 0.56);
+				return BOAD_EAWE;
 			}
-		case 3:
-			// 花瓶
-			return new AxisAlignedBB(0.375, 0, 0.375, 0.625, 0.5, 0.625);
 
+		// 花瓶
+		case 3:
+			return POT;
 		}
 
-		return new AxisAlignedBB(0.1, 0, 0.1, 0.9, 0.6, 0.9);
+		return AABB;
 	}
 
 	// ブロックでのアクション

@@ -21,18 +21,18 @@ import sweetmagic.init.ItemInit;
 
 public class SMDoor extends BlockDoor {
 
-	public final int data;
-	public static final AxisAlignedBB T_SOUTH= new AxisAlignedBB(0D, 0D, 0D, 1D, 2D, 0.1875D);
-    public static final AxisAlignedBB T_NORTH = new AxisAlignedBB(0D, 0D, 0.8125D, 1D, 2D, 1D);
-    public static final AxisAlignedBB T_WEST = new AxisAlignedBB(0.8125D, 0D, 0D, 1D, 2D, 1D);
-    public static final AxisAlignedBB T_EAST = new AxisAlignedBB(0D, 0D, 0D, 0.1875D, 2D, 1D);
+	private final int data;
+	private static final AxisAlignedBB T_SOUTH= new AxisAlignedBB(0D, 0D, 0D, 1D, 2D, 0.1875D);
+	private static final AxisAlignedBB T_NORTH = new AxisAlignedBB(0D, 0D, 0.8125D, 1D, 2D, 1D);
+    private static final AxisAlignedBB T_WEST = new AxisAlignedBB(0.8125D, 0D, 0D, 1D, 2D, 1D);
+    private static final AxisAlignedBB T_EAST = new AxisAlignedBB(0D, 0D, 0D, 0.1875D, 2D, 1D);
 
 	public SMDoor(String name, int meta, Material mate, SoundType sound) {
         super(mate);
         setRegistryName(name);
         setUnlocalizedName(name);
-		setHardness(1F);
-		setResistance(16F);
+		setHardness(0.5F);
+		setResistance(1024F);
 		setSoundType(sound);
 		this.data = meta;
 		BlockInit.noTabList.add(this);

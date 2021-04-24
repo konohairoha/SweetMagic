@@ -8,8 +8,6 @@ import sweetmagic.init.BlockInit;
 
 public class AntiqueStairs extends BlockStairs {
 
-//	private boolean isFragile = false;
-
 	public AntiqueStairs(String name, IBlockState state) {
 		super(state);
 		this.setRegistryName(name);

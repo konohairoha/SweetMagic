@@ -22,16 +22,16 @@ import sweetmagic.init.BlockInit;
 
 public class SMGlass extends BlockGlass {
 
-	public final int data;
-	public boolean isPass;
+	private final int data;
+	private boolean isPass;
 
 	public SMGlass(String name, int data, boolean shading, boolean isPass) {
 		super(Material.GLASS, false);
 		setUnlocalizedName(name);
         setRegistryName(name);
         setSoundType(SoundType.GLASS);
-        setHardness(0.2F);
-		setResistance(256.0F);
+		setHardness(0.2F);
+		setResistance(1024F);
 		this.data = data;
 		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
 		this.setLightOpacity(shading ? 255 : 0);

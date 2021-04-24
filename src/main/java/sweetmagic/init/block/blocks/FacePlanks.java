@@ -14,7 +14,7 @@ import sweetmagic.init.BlockInit;
 
 public class FacePlanks extends Block {
 
-	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
+	private static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
 
 	public FacePlanks(String name) {
 		super(Material.WOOD);
@@ -28,8 +28,7 @@ public class FacePlanks extends Block {
     }
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,	float hitZ, int meta, EntityLivingBase placer) {
 		IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
 		return state.withProperty(FACING, facing);
 	}

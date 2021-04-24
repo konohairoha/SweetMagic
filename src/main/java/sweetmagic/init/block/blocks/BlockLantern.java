@@ -24,11 +24,11 @@ import sweetmagic.init.base.BaseFaceBlock;
 
 public class BlockLantern extends BaseFaceBlock {
 
-	public final int data;
+	private final int data;
 
 	public BlockLantern(String name, int data, List<Block> list) {
 		super(Material.GLASS, name);
-		setHardness(1.0F);
+		setHardness(0.5F);
         setResistance(1024F);
 		setSoundType(SoundType.METAL);
 		this.setLightLevel(1F);

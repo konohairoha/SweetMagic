@@ -16,11 +16,15 @@ import sweetmagic.util.SittableUtil;
 
 public class SMChair extends BaseFaceBlock {
 
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB CHAIR = new AxisAlignedBB(0.175D, 0.55D, 0.175D, 0.825D, 0D, 0.825D);
+	private final static AxisAlignedBB CHAIR_2 = new AxisAlignedBB(0.125D, 0.6D, 0.125D, 0.875D, 0D, 0.875D);
+	private final static AxisAlignedBB RATAN = new AxisAlignedBB(0.175D, 0.55D, 0.175D, 0.825D, 0.0D, 0.825D);
 
 	public SMChair(String name, int data) {
 		super(Material.WOOD, name);
-        setHardness(1F);
+		setHardness(0.5F);
+		setResistance(1024F);
         setSoundType(SoundType.WOOD);
         this.data = data;
 		BlockInit.blockList.add(this);
@@ -29,18 +33,18 @@ public class SMChair extends BaseFaceBlock {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 
 		switch (this.data) {
-		case 0:
-			return new AxisAlignedBB(0.175D, 0.55D, 0.175D, 0.825D, 0.0D, 0.825D);
-		case 1:
-			return new AxisAlignedBB(0.125D, 0.6D, 0.125D, 0.875D, 0.0D, 0.875D);
+		case 0: return CHAIR;
+		case 1: return CHAIR_2;
+		case 3: return CHAIR_2;
 		}
 
-		return new AxisAlignedBB(0.175D, 0.55D, 0.175D, 0.825D, 0.0D, 0.825D);
+		return RATAN;
 	}
 
 	// 以下が座れるようにするための処理
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+
 		if (!world.isRemote) {
 
 			double y = 0;
@@ -48,10 +52,16 @@ public class SMChair extends BaseFaceBlock {
 			switch (this.data) {
 			case 0:
 				y = -0.15D;
+				break;
 			case 1:
 				y = -0.075D;
+				break;
 			case 2:
 				y = -0.25D;
+				break;
+			case 3:
+				y = 0.05D;
+				break;
 			}
 
 			if (SittableUtil.sitOnBlock(world, pos.getX(), pos.getY() + y, pos.getZ(), player, 6 * 0.0625)) {

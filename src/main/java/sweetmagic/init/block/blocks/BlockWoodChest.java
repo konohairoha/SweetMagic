@@ -34,7 +34,7 @@ public class BlockWoodChest extends BaseFaceBlock {
 
 	public BlockWoodChest(String name, int data) {
 		super(Material.WOOD, name);
-		setHardness(1.0F);
+		setHardness(0.5F);
 		setResistance(1024);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
@@ -44,6 +44,7 @@ public class BlockWoodChest extends BaseFaceBlock {
 	/**
 	 * 0 = 	ウッドチェスト
 	 * 1 = トレジャーチェスト
+	 * 2 = キッチンテーブル
 	 */
 
 	@Override
@@ -59,17 +60,28 @@ public class BlockWoodChest extends BaseFaceBlock {
 	// ブロックでのアクション
 	@Override
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
+
 		if (world.isRemote) { return true; }
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.WOODCHEST, world, pos.getX(), pos.getY(), pos.getZ());
+
+		int guiId = 0;
 
 		switch (this.data) {
 		case 0:
 			this.playerSound(world, pos, SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			guiId = SMGuiHandler.WOODCHEST;
 			break;
 		case 1:
 			this.playerSound(world, pos, SoundEvents.BLOCK_IRON_DOOR_OPEN, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			guiId = SMGuiHandler.WOODCHEST;
+			break;
+		case 2:
+			this.playerSound(world, pos, SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			guiId = SMGuiHandler.KICHEN_CHEST_GUI;
 			break;
 		}
+
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+
 		return true;
 	}
 

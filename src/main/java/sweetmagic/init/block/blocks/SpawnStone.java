@@ -22,7 +22,8 @@ import sweetmagic.init.tile.magic.TileSpawnStone;
 
 public class SpawnStone extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.4D, 1D);
 
 	public SpawnStone (String name, int data) {
         super(Material.ROCK, name);
@@ -37,14 +38,13 @@ public class SpawnStone extends BaseModelBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return this.data == 0 ? new AxisAlignedBB(0, 0, 0, 1, 0.4, 1) : new AxisAlignedBB(0, 0, 0, 1, 1, 1);
+		return this.data == 0 ? AABB : FULL_BLOCK_AABB;
 	}
 
 	// 右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
 		if (this.data == 1 && player.isCreative()) {
-
 			TileSMSpaner tile = (TileSMSpaner) world.getTileEntity(pos);
 			int data = tile.data + 1;
 			tile.data = data > 6 ? 0 : data;
@@ -68,10 +68,8 @@ public class SpawnStone extends BaseModelBlock {
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 
 		switch (this.data) {
-		case 0:
-			return new TileSpawnStone();
-		case 1:
-			return new TileSMSpaner();
+		case 0: return new TileSpawnStone();
+		case 1: return new TileSMSpaner();
 		}
 
 		return new TileSMSpaner();

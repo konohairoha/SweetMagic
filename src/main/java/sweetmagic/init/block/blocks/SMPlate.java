@@ -11,8 +11,8 @@ public class SMPlate extends BlockPressurePlate {
         super(Material.WOOD, BlockPressurePlate.Sensitivity.MOBS);
         setUnlocalizedName(name);
         setRegistryName(name);
-        setHardness(0.4F);
-        setResistance(4.0F);
+        setHardness(0.3F);
+        setResistance(1024F);
         setSoundType(SoundType.WOOD);
 		BlockInit.blockList.add(this);
     }

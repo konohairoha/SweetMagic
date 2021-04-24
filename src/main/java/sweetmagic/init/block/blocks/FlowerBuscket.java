@@ -18,8 +18,9 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class FlowerBuscket extends BaseModelBlock {
 
-	public static final PropertyBool TOP = PropertyBool.create("top");
-	public static final PropertyBool BOT = PropertyBool.create("bot");
+	private static final PropertyBool TOP = PropertyBool.create("top");
+	private static final PropertyBool BOT = PropertyBool.create("bot");
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0D, 0.2D, 0.8D, 1D, 0.8D);
 
 	public FlowerBuscket (String name) {
 		super(Material.PLANTS, name);
@@ -30,7 +31,7 @@ public class FlowerBuscket extends BaseModelBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.2D, 0.0D, 0.2D, 0.8D, 1D, 0.8D);
+		return AABB;
 	}
 
 	@Override

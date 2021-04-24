@@ -22,7 +22,8 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class BlockTableLanp extends BaseModelBlock {
 
-	public final boolean isChange;
+	private final boolean isChange;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
 
 	public BlockTableLanp (String name, float lightLevel, boolean isChange, List<Block> list) {
 		super(Material.GLASS, name);
@@ -66,7 +67,7 @@ public class BlockTableLanp extends BaseModelBlock {
     }
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
+		return AABB;
 	}
 
 	@Override

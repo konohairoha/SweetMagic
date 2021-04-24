@@ -26,13 +26,14 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class GoldCrest extends BaseModelBlock {
 
-	public static final PropertyBool TOP = PropertyBool.create("top");
-	public static final PropertyBool BOT = PropertyBool.create("bot");
+	private static final PropertyBool TOP = PropertyBool.create("top");
+	private static final PropertyBool BOT = PropertyBool.create("bot");
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 1D, 0.2D, 0.8D, 0D, 0.8D);
 
 	public GoldCrest(String name) {
 		super(Material.PLANTS, name);
 		setSoundType(SoundType.PLANT);
-		setHardness(0.01F);
+		setHardness(0F);
         setResistance(1024F);
 		setDefaultState(this.blockState.getBaseState().withProperty(TOP, false).withProperty(BOT, false));
 		BlockInit.blockList.add(this);
@@ -46,16 +47,14 @@ public class GoldCrest extends BaseModelBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.2D, 1D, 0.2D, 0.8D, 0D, 0.8D);
+		return AABB;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) {
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) { }
 
-	}
-
-	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state) {
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		world.scheduleUpdate(pos, this, this.tickRate(world));
 	}
 
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
@@ -73,9 +72,7 @@ public class GoldCrest extends BaseModelBlock {
 	}
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
-
-		Block top = world.getBlockState(pos.up()).getBlock();
-		if(top == this) {
+		if(world.getBlockState(pos.up()).getBlock() == this) {
 			this.breakBlock(pos.up(), world, true);
 		}
     }
@@ -116,5 +113,4 @@ public class GoldCrest extends BaseModelBlock {
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
         return new ItemStack(this);
     }
-
 }

@@ -12,7 +12,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -23,10 +22,16 @@ import sweetmagic.init.base.BaseFaceBlock;
 
 public class BlockKanban extends BaseFaceBlock {
 
+	private final static AxisAlignedBB NORTH = new AxisAlignedBB(0D, 0D, 0.9375D, 1D, 1D, 1D);
+	private final static AxisAlignedBB SOUTH = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 0.0625D);
+	private final static AxisAlignedBB EAST = new AxisAlignedBB(0D, 0D, 0D, 0.0625D, 1D, 1D);
+	private final static AxisAlignedBB WEST = new AxisAlignedBB(1D, 0D, 0D, 0.9375D, 1D, 1D);
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 0.0625D);
+
 	public BlockKanban(String name, List<Block> list) {
 		super(Material.WOOD, name);
-        setHardness(0.65F);
-        setResistance(64F);
+        setHardness(0.4F);
+        setResistance(1024);
 		this.setSoundType(SoundType.WOOD);
 		list.add(this);
 	}
@@ -55,19 +60,14 @@ public class BlockKanban extends BaseFaceBlock {
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 
-		EnumFacing face = state.getValue(FACING);
-
-		if (face == EnumFacing.NORTH) {
-			return new AxisAlignedBB(0, 0, 0.9375, 1, 1, 1);
-		} else if (face == EnumFacing.SOUTH) {
-			return new AxisAlignedBB(0, 0, 0, 1, 1, 0.0625);
-		} else if (face == EnumFacing.EAST) {
-			return new AxisAlignedBB(0, 0, 0, 0.0625, 1, 1);
-		} else if (face == EnumFacing.WEST) {
-			return new AxisAlignedBB(1, 0, 0, 0.9375, 1, 1);
+		switch (state.getValue(FACING)) {
+		case NORTH: return NORTH;
+		case SOUTH: return SOUTH;
+		case EAST:  return EAST;
+		case WEST:  return WEST;
 		}
 
-		return new AxisAlignedBB(0, 0, 0, 1, 1, 0.0625);
+		return AABB;
 	}
 
 	// アイテムをドロップ

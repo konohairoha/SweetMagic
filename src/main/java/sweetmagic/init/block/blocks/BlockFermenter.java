@@ -29,42 +29,42 @@ import sweetmagic.util.RecipeUtil;
 
 public class BlockFermenter extends BaseFaceBlock {
 
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.8D, 0.8D, 0.8D, 0.2D, 0D, 0.2D);
+
 	public BlockFermenter(String name, List<Block> list) {
 		super(Material.GLASS, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.33F);
+		setResistance(1024F);
 		setSoundType(SoundType.GLASS);
 		disableStats();
 		list.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.8D, 0.8D, 0.8D, 0.2D, 0D, 0.2D);
+		return AABB;
 	}
 
 	//右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
-		if (world.isRemote) { return true; }
-
 		TileFermenter tile = (TileFermenter) world.getTileEntity(pos);
+		if (tile.isWorking) { return true; }
 
 		// 稼働中なら
-		if (!tile.isWorking && !tile.isFinish) {
+		if (!tile.isFinish && !world.isRemote) {
 
 			// プレイヤーのInventoryの取得
 			NonNullList<ItemStack> pInv = player.inventory.mainInventory;
 
-			// 手持ちアイテムからレシピと一致するかを検索
+			// 手持ちアイテムからレシピと一致するかを検索して失敗なら終了
 			FermenterRecipeInfo recipeInfo = SweetMagicAPI.getFermenterRecipeInfo(stack, pInv);
+			if (!recipeInfo.canComplete) { return false; }
 
 			// 入れるアイテム、完成品はItemStackリストに突っ込む
 			ItemStack handitem = recipeInfo.getHandItem();
 			List<ItemStack> inputs = new ArrayList<ItemStack>();
 			List<ItemStack> results = new ArrayList<ItemStack>();
 
-			// クラフト失敗
-			if (!recipeInfo.canComplete) { return false; }
 
 			// クラフト処理
 			RecipeUtil recipeUtil = RecipeHelper.recipeAllCraft(recipeInfo, player, stack);
@@ -77,7 +77,6 @@ public class BlockFermenter extends BaseFaceBlock {
 			tile.outPutList = results;
 			tile.isWorking = true;
 			tile.tickTime = 0;
-
 			this.playerSound(world, pos, SoundEvents.ENTITY_ITEM_PICKUP, 0.5F, 1F);
 
 			tile.markDirty();
@@ -85,15 +84,17 @@ public class BlockFermenter extends BaseFaceBlock {
 		}
 
 		// 終わってるなら
-		else if (!tile.isWorking && tile.isFinish) {
+		else if (tile.isFinish) {
 
 			// 結果アイテムのドロップ
-			this.spawnItem(world, player, tile.outPutList);
+			if (!world.isRemote) {
+				this.spawnItem(world, player, tile.outPutList);
+			}
 
 			// 初期化
 			tile.clear();
-			tile.markDirty();
             world.notifyBlockUpdate(pos, state, state, 3);
+			tile.markDirty();
 		}
 
 		return true;

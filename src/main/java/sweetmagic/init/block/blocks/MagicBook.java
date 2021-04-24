@@ -12,6 +12,8 @@ import sweetmagic.init.base.BaseFaceBlock;
 
 public class MagicBook extends BaseFaceBlock {
 
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.05D, 0D, 0.05D, 0.95D, 0.875D, 0.95D);
+
 	public MagicBook(String name) {
 		super(Material.WOOD, name);
 		setHardness(1.0F);
@@ -21,7 +23,7 @@ public class MagicBook extends BaseFaceBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.05D, 0D, 0.05D, 0.95D, 0.875D, 0.95D);
+		return AABB;
 	}
 
     @Override

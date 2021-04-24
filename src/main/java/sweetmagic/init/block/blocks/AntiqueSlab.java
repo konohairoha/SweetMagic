@@ -26,9 +26,9 @@ import sweetmagic.util.PlayerHelper;
 
 public class AntiqueSlab extends Block {
 
-    public static final PropertyEnum<EnumBlockSlab> HALF = PropertyEnum.create("half", EnumBlockSlab.class);
-    protected static final AxisAlignedBB AABB_BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    protected static final AxisAlignedBB AABB_TOP_HALF = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
+	private static final PropertyEnum<EnumBlockSlab> HALF = PropertyEnum.create("half", EnumBlockSlab.class);
+    private static final AxisAlignedBB AABB_BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
+    private static final AxisAlignedBB AABB_TOP_HALF = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
 
     public AntiqueSlab(String name) {
         super(Material.ROCK);
@@ -93,12 +93,9 @@ public class AntiqueSlab extends Block {
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         EnumBlockSlab half = state.getValue(HALF);
         switch (half) {
-            case TOP:
-                return AABB_TOP_HALF;
-            case BOTTOM:
-                return AABB_BOTTOM_HALF;
-            default:
-                return FULL_BLOCK_AABB;
+            case TOP:    return AABB_TOP_HALF;
+            case BOTTOM: return AABB_BOTTOM_HALF;
+            default:     return FULL_BLOCK_AABB;
         }
     }
 

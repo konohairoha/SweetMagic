@@ -28,12 +28,13 @@ import sweetmagic.init.tile.chest.TileRattanBasket;
 
 public class BlockRattanBasket extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.25D, 0.62D, 0.25D, 0.75D, 0D, 0.75D);
 
 	public BlockRattanBasket(String name, int data) {
 		super(Material.WOOD, name);
 		setHardness(0.1F);
-		setResistance(256F);
+		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
 		BlockInit.blockList.add(this);
@@ -44,7 +45,7 @@ public class BlockRattanBasket extends BaseModelBlock {
 	 */
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.25D, 0.62D, 0.25D, 0.75D, 0D, 0.75D);
+		return AABB;
 	}
 
 	@Override

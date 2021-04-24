@@ -18,16 +18,16 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class SMTable extends BaseModelBlock {
 
-	public static final PropertyBool BACK = PropertyBool.create("back");
-	public static final PropertyBool FORWARD = PropertyBool.create("forward");
-	public static final PropertyBool LEFT = PropertyBool.create("left");
-	public static final PropertyBool RIGHT = PropertyBool.create("right");
+	private static final PropertyBool BACK = PropertyBool.create("back");
+	private static final PropertyBool FORWARD = PropertyBool.create("forward");
+	private static final PropertyBool LEFT = PropertyBool.create("left");
+	private static final PropertyBool RIGHT = PropertyBool.create("right");
 
 	public SMTable(String name) {
 		super(Material.WOOD, name);
 		setSoundType(SoundType.WOOD);
 		setHardness(0.5F);
-        setResistance(16F);
+        setResistance(1024F);
 		setDefaultState(this.blockState.getBaseState()
 				.withProperty(BACK, false)
 				.withProperty(FORWARD, false)
@@ -37,7 +37,7 @@ public class SMTable extends BaseModelBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0D, 1D, 0D, 1D, 0D, 1D);
+		return FULL_BLOCK_AABB;
 	}
 
 	@Override
@@ -73,7 +73,6 @@ public class SMTable extends BaseModelBlock {
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { BACK, FORWARD, LEFT, RIGHT });
 	}
-
 
 	@Override
 	@SideOnly(Side.CLIENT)

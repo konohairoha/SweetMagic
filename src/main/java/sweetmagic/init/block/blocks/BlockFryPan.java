@@ -34,11 +34,12 @@ import sweetmagic.util.RecipeUtil;
 public class BlockFryPan extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.2D, 0.1D, 0.8D, 0D, 0.8D);
 
 	public BlockFryPan(String name, float light, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
-        setResistance(1024F);
+		setHardness(0.33F);
+		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);
 		disableStats();
@@ -46,7 +47,7 @@ public class BlockFryPan extends BaseFaceBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.2D, 0.2D, 0.1D, 0.8D, 0.0D, 0.8D);
+		return AABB;
 	}
 
 	@Override

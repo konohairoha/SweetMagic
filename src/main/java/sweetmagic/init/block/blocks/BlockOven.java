@@ -32,8 +32,8 @@ public class BlockOven extends BaseFaceBlock {
 
 	public BlockOven(String name, float light, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.5F);
+		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);
 		disableStats();
@@ -49,12 +49,6 @@ public class BlockOven extends BaseFaceBlock {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		return new TileFlourMill();//TileEntityは処理自体ほぼ同じなため製粉機を指定
-	}
-
-	//Tick更新処理が必要なブロックには必ず入れること
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
 	}
 
 	//右クリックの処理
@@ -106,7 +100,6 @@ public class BlockOven extends BaseFaceBlock {
 
 			// 結果アイテムのドロップ
 			this.spawnItem(world, player, tile.outPutList);
-
 			this.setState(world, pos);
 
 			// ハンドアイテムとかの初期化

@@ -9,7 +9,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,28 +27,19 @@ import sweetmagic.init.tile.cook.TileJuiceMaker;
 public class BlockJuiceMaker extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.7D, 0.2D, 0.8D, 0D, 0.8D);
 
 	public BlockJuiceMaker(String name, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
-		setResistance(16F);
+		setHardness(0.33F);
+		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.disableStats();
 		list.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.2D, 0.7D, 0.2D, 0.8D, 0D, 0.8D);
-	}
-
-	@Override
-	public boolean isFullCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
+		return AABB;
 	}
 
 	@Override
@@ -96,19 +86,6 @@ public class BlockJuiceMaker extends BaseFaceBlock {
 		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setTag("BlockEntityTag", tileTags);
-
-		// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-		for (ItemStack s : tile.inPutList) {
-			world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
-		}
-
-		if (tags != null) {
-			tags.removeTag("inPutList");
-			tags.removeTag("outPutList");
-			tags.removeTag("isCook");
-			tags.removeTag("cookTime");
-		}
-
 		stack.setTagCompound(tags);
 		spawnAsEntity(world, pos, stack);
 		world.updateComparatorOutputLevel(pos, state.getBlock());

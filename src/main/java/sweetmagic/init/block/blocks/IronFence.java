@@ -24,12 +24,28 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class IronFence extends BaseModelBlock {
 
-//	public final int data;
-	public static final PropertyBool BACK = PropertyBool.create("back");
-	public static final PropertyBool FORWARD = PropertyBool.create("forward");
-	public static final PropertyBool LEFT = PropertyBool.create("left");
-	public static final PropertyBool RIGHT = PropertyBool.create("right");
-    private static final AxisAlignedBB[] AABB_BY_INDEX = new AxisAlignedBB[]{new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5625D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.5625D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.4375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.4375D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.4375D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.5625D), new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D)};
+	private static final PropertyBool BACK = PropertyBool.create("back");
+	private static final PropertyBool FORWARD = PropertyBool.create("forward");
+	private static final PropertyBool LEFT = PropertyBool.create("left");
+	private static final PropertyBool RIGHT = PropertyBool.create("right");
+	private static final AxisAlignedBB[] AABB_BY_INDEX = new AxisAlignedBB[] {
+		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 0.5625D),
+		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 1D),
+		new AxisAlignedBB(0D, 0D, 0.4375D, 0.5625D, 1D, 0.5625D),
+		new AxisAlignedBB(0D, 0D, 0.4375D, 0.5625D, 1D, 1D),
+		new AxisAlignedBB(0.4375D, 0D, 0D, 0.5625D, 1D, 0.5625D),
+		new AxisAlignedBB(0.4375D, 0D, 0D, 0.5625D, 1D, 1D),
+		new AxisAlignedBB(0D, 0D, 0D, 0.5625D, 1D, 0.5625D),
+		new AxisAlignedBB(0D, 0D, 0D, 0.5625D, 1D, 1D),
+		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 1D, 1D, 0.5625D),
+		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 1D, 1D, 1D),
+		new AxisAlignedBB(0D, 0D, 0.4375D, 1D, 1D, 0.5625D),
+		new AxisAlignedBB(0D, 0D, 0.4375D, 1D, 1D, 1D),
+		new AxisAlignedBB(0.4375D, 0D, 0D, 1D, 1D, 0.5625D),
+		new AxisAlignedBB(0.4375D, 0D, 0D, 1D, 1D, 1D),
+		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 0.5625D),
+		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D)
+	};
 
 	public IronFence(String name/*, List<Block> list, int data*/) {
 		super(Material.IRON, name);
@@ -66,8 +82,7 @@ public class IronFence extends BaseModelBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		state = this.getActualState(state, source, pos);
-		return AABB_BY_INDEX[getBoundingBoxIndex(state)];
+		return AABB_BY_INDEX[getBoundingBoxIndex(this.getActualState(state, source, pos))];
 	}
 
 	public int getBoundingBoxIndex(EnumFacing facing) {
@@ -75,6 +90,7 @@ public class IronFence extends BaseModelBlock {
 	}
 
 	public int getBoundingBoxIndex(IBlockState state) {
+
 		int i = 0;
 
 		if (state.getValue(FORWARD)) {

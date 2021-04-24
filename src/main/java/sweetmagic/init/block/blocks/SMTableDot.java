@@ -12,7 +12,7 @@ public class SMTableDot extends BaseModelBlock {
 		super(Material.WOOD, name);
 		setSoundType(SoundType.WOOD);
 		setHardness(0.5F);
-        setResistance(16F);
+        setResistance(1024F);
 		BlockInit.blockList.add(this);
 	}
 

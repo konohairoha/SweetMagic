@@ -18,7 +18,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.EnumPlantType;
 import net.minecraftforge.common.IPlantable;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseModelBlock;
@@ -26,12 +25,11 @@ import sweetmagic.init.block.crop.MagiaFlower;
 
 public class PlantPot extends BaseModelBlock {
 
-	public final int data;
-	public static final PropertyBool BACK = PropertyBool.create("back");
-	public static final PropertyBool FORWARD = PropertyBool.create("forward");
-	public static final PropertyBool LEFT = PropertyBool.create("left");
-	public static final PropertyBool RIGHT = PropertyBool.create("right");
-
+	private final int data;
+	private static final PropertyBool BACK = PropertyBool.create("back");
+	private static final PropertyBool FORWARD = PropertyBool.create("forward");
+	private static final PropertyBool LEFT = PropertyBool.create("left");
+	private static final PropertyBool RIGHT = PropertyBool.create("right");
 
 	public PlantPot(String name, SoundType sound, int data) {
 		super(Material.GROUND, name);
@@ -107,8 +105,7 @@ public class PlantPot extends BaseModelBlock {
 	@Override
 	public boolean canSustainPlant(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing face, IPlantable plante) {
 
-        EnumPlantType type = plante.getPlantType(world, pos.offset(face));
-		switch (type) {
+		switch (plante.getPlantType(world, pos.offset(face))) {
             case Desert: return true;
             case Nether: return false;
             case Crop:   return true;
@@ -136,7 +133,9 @@ public class PlantPot extends BaseModelBlock {
 
 		if (face == EnumFacing.UP) {
 			return state.isTopSolid() || !isExceptionBlockForAttaching(block) && flag;
-		} else {
+		}
+
+		else {
 			return !isExceptBlockForAttachWithPiston(block) && flag;
 		}
 	}

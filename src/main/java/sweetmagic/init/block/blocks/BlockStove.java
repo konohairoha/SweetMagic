@@ -33,7 +33,7 @@ public class BlockStove  extends BaseFaceBlock {
 
 	public BlockStove(String name, float light, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
+		setHardness(0.5F);
         setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);
@@ -49,12 +49,6 @@ public class BlockStove  extends BaseFaceBlock {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		return new TileStove();//TileEntityは処理自体ほぼ同じなため製粉機を指定
-	}
-
-	//Tick更新処理が必要なブロックには必ず入れること
-	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
 	}
 
 	//右クリックの処理

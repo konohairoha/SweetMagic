@@ -35,12 +35,14 @@ import sweetmagic.util.TeleportUtil;
 
 public class StardustCrystal extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
 
 	public StardustCrystal (String name, int data, List<Block> list) {
         super(Material.GLASS, name);
         setSoundType(SoundType.GLASS);
         setLightLevel(0.5F);
+		setHardness(0.5F);
+		setResistance(1024F);
         this.data = data;
 		list.add(this);
 	}
@@ -108,9 +110,7 @@ public class StardustCrystal extends BaseModelBlock {
 		// まだ一度もクリックしてないなら
 		if (!tile.isNew) {
 
-//			tile.pX = pos.getX();
 			tile.nowY = pos.getY();
-//			tile.pZ = pos.getZ();
 
 			// Y座標が低いなら上に上げる
 			if (pos.getY() <= 40) {

@@ -29,8 +29,8 @@ public class BlockFlourMill extends BaseFaceBlock {
 
 	public BlockFlourMill(String name, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
-        setResistance(1024F);
+		setHardness(0.33F);
+		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		disableStats();
 		list.add(this);

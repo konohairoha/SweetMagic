@@ -24,8 +24,9 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class BlockModenLanp extends BaseModelBlock {
 
-	public static final PropertyBool TOP = PropertyBool.create("top");
-	public static final PropertyBool BOT = PropertyBool.create("bot");
+	private static final PropertyBool TOP = PropertyBool.create("top");
+	private static final PropertyBool BOT = PropertyBool.create("bot");
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.7D, 1D, 0.7D, 0.3D, 0D, 0.3D);
 
 	public BlockModenLanp(String name) {
 		super(Material.GLASS, name);
@@ -40,7 +41,7 @@ public class BlockModenLanp extends BaseModelBlock {
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.7D, 1D, 0.7D, 0.3D, 0D, 0.3D);
+		return AABB;
 	}
 
 	@Override
