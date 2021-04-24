@@ -2,44 +2,31 @@ package sweetmagic.init.render.block;
 
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBook;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
 import sweetmagic.init.tile.magic.TileStardustWish;
-import sweetmagic.util.RenderUtils;
 
 public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParallelInterfere> {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/magicbook.png");
-	public static final ResourceLocation TEX_STAR = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardustbook.png");
-	public static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
-	public final ModelBook model = new ModelBook();
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/magicbook.png");
+	private static final ResourceLocation TEX_STAR = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardustbook.png");
+	private static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
+	private static final ModelBook model = new ModelBook();
 
 	public void render(TileParallelInterfere te, double x, double y, double z, float parTick, int destroyStage, float alpha) {
-
 		GlStateManager.pushMatrix();
 		this.renderBook(te, x, y, z, parTick);
 		GlStateManager.popMatrix();
-
-//		if (te instanceof TileStardustWish) {
-//	        GlStateManager.pushMatrix();
-//	        GlStateManager.translate((float) x + 0.5F, (float) y + 1F, (float) z + 0.5F);
-//			this.renderStarDust(te, x, y, z, parTick);
-//	        GlStateManager.popMatrix();
-//		}
 	}
 
 	public void renderBook (TileParallelInterfere te, double x, double y, double z, float parTick) {
@@ -87,10 +74,10 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 		bindTexture(RUNE_TEX);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(-0.5f, 0, -0.5f).tex(0, 0).endVertex();
-		buffer.pos(0.5f, 0, -0.5f).tex(1, 0).endVertex();
-		buffer.pos(0.5f, 0, 0.5f).tex(1, 1).endVertex();
-		buffer.pos(-0.5f, 0, 0.5f).tex(0, 1).endVertex();
+		buffer.pos(-0.5F, 0F, -0.5F).tex(0, 0).endVertex();
+		buffer.pos(0.5F, 0F, -0.5F).tex(1, 0).endVertex();
+		buffer.pos(0.5F, 0F, 0.5F).tex(1, 1).endVertex();
+		buffer.pos(-0.5F, 0F, 0.5F).tex(0, 1).endVertex();
 		tessellator.draw();
 
 		GlStateManager.disableBlend();
@@ -98,44 +85,6 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 	}
 
 	public ResourceLocation getTex (TileParallelInterfere te) {
-
-		ResourceLocation tex = null;
-
-		if (te instanceof TileStardustWish) {
-			tex = TEX_STAR;
-		}
-
-		else {
-			tex = TEX;
-		}
-
-		return tex;
-	}
-
-	public void renderStarDust (TileParallelInterfere te, double x, double y, double z, float parTick) {
-
-		float rotY = (te.getTime() + parTick) / 10F;
-		float rotX = -0.125F;
-		float rotZ = 0;
-		float scale = 0.5F;
-
-		ItemStack stack = new ItemStack(ItemInit.cosmic_crystal_shard);
-		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-
-		int count = 4;
-		float pi = 180F / (float) Math.PI;
-
-		for (int i = 0; i < count; i++) {
-
-			GlStateManager.pushMatrix();
-			GlStateManager.translate(x + 0.5, y + 1.25F, z + 0.5F);
-			GlStateManager.rotate(rotZ * pi, 0F, 0F, 1F);
-			GlStateManager.rotate(rotY * pi + (i * (360 / count)), 0F, 1F, 0F);
-			GlStateManager.rotate(rotX * pi, 1F, 0F, 0F);
-			GlStateManager.scale(scale, scale, scale);
-			GlStateManager.translate(1.25F, 0F, 0F);
-			RenderUtils.renderItem(render, stack, 0, 0F, 0, 0, 0, 0, 0);
-			GlStateManager.popMatrix();
-		}
+		return te instanceof TileStardustWish ? TEX_STAR : TEX;
 	}
 }

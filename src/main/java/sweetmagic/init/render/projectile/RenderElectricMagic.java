@@ -17,8 +17,8 @@ public class RenderElectricMagic  extends RenderLightMagic {
 
 	public static final ResourceLocation TEX = new ResourceLocation("textures/entity/beacon_beam.png");
 
-	public RenderElectricMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderElectricMagic(RenderManager render) {
+		super(render);
 	}
 
 	@Override

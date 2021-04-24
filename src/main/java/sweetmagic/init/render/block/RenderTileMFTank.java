@@ -12,13 +12,13 @@ import sweetmagic.init.tile.magic.TileMFTank;
 
 public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
 
-	//マナテクスチャ
-	protected TextureAtlasSprite spriteMana = null;
+	// テクスチャ
+	protected TextureAtlasSprite sprite = null;
 
 	@Override
 	public void render(TileMFTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
         this.renderFluid(te, x, y, z);
         GlStateManager.popMatrix();
 	}
@@ -26,40 +26,40 @@ public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
 	// 液体描画
 	protected void renderFluid(TileMFTank te, double x, double y, double z) {
 
-		if (this.spriteMana == null) {
-			this.spriteMana = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/mf_water_still");
+		if (this.sprite == null) {
+			this.sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/mf_water_still");
 		}
 
-		//MFがない場合は描画しない
+		// MFがない場合は描画しない
 		if (te.getMF() == 0) { return; }
 
-        //テクスチャバインド
+        // テクスチャバインド
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
-		//GL11初期化
+		// GL11初期化
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
         GL11.glCullFace(GL11.GL_BACK);
         GL11.glDisable(GL11.GL_CULL_FACE);
 
-        //ライト設定（これをしないと描画したものが暗くなる）
+        // ライト設定（これをしないと描画したものが暗くなる）
         RenderHelper.disableStandardItemLighting();
 
-        //描画のオブジェクトを透過する（液体なので透過する必要あり）
+        // 描画のオブジェクトを透過する（液体なので透過する必要あり）
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
-        //jsonと同じように16x16で位置を設定調整する
-        // x,y,z
-        GlStateManager.translate(
-        		0.25/16F - 0.001F,
-        		0.25/16F - 0.001F,
-        		0.25/16F - 0.001);
+        // jsonと同じように16x16で位置を設定調整する
+        //  x,y,z
+		GlStateManager.translate(
+				0.25 / 16F - 0.001F,
+				0.25 / 16F - 0.001F,
+				0.25 / 16F - 0.001F);
 
         //スプライトからUVを取得
-        float minU = this.spriteMana.getMinU();
-        float maxU = this.spriteMana.getMaxU();
-        float minV = this.spriteMana.getMinV();
-        float maxV = this.spriteMana.getMaxV();
+        float minU = this.sprite.getMinU();
+        float maxU = this.sprite.getMaxU();
+        float minV = this.sprite.getMinV();
+        float maxV = this.sprite.getMaxV();
 
         //基準の高さ
         double vertX = 15.75 / 16.0;

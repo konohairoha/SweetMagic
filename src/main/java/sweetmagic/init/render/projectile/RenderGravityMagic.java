@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderGravityMagic extends RenderLightMagic {
 
-	public RenderGravityMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderGravityMagic(RenderManager render) {
+		super(render);
 	}
 }

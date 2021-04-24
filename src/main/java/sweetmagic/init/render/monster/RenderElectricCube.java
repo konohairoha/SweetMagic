@@ -10,8 +10,8 @@ public class RenderElectricCube extends RenderSlime {
 
     private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/electriccube.png");
 
-	public RenderElectricCube(RenderManager rendermanagerIn) {
-        super(rendermanagerIn);
+	public RenderElectricCube(RenderManager render) {
+        super(render);
 	}
 
 	protected ResourceLocation getEntityTexture(EntitySlime entity) {

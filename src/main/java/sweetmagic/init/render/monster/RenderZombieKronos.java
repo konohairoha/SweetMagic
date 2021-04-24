@@ -20,11 +20,11 @@ import sweetmagic.init.entity.monster.EntityZombieKronos;
 
 public class RenderZombieKronos extends RenderLiving<EntityZombieKronos> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/kronos.png");
+	private static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/kronos.png");
     private static final ResourceLocation GUARDIAN_BEAM_TEXTURE = new ResourceLocation("textures/entity/guardian_beam.png");
 
-	public RenderZombieKronos(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelHora(), 0.3F);
+	public RenderZombieKronos(RenderManager render) {
+		super(render, new ModelHora(), 0.3F);
         this.addLayer(new LayerHeldItem(this));
         this.addLayer(new LayerBipedArmor(this) {
             @Override

@@ -23,11 +23,6 @@ public class RenderWitchMadameVerre extends RenderLiving<EntityWitchMadameVerre>
 		return (ModelWitch) super.getMainModel();
 	}
 
-	public void doRender(EntityWitchMadameVerre entity, double x, double y, double z, float entityYaw, float partialTicks) {
-		((ModelWitch) this.mainModel).holdingItem = !entity.getHeldItemMainhand().isEmpty();
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
-	}
-
 	protected ResourceLocation getEntityTexture(EntityWitchMadameVerre entity) {
 		return TEX;
 	}
@@ -36,7 +31,7 @@ public class RenderWitchMadameVerre extends RenderLiving<EntityWitchMadameVerre>
 		GlStateManager.translate(0.0F, 0.1875F, 0.0F);
 	}
 
-	protected void preRenderCallback(EntityWitchMadameVerre entitylivingbaseIn, float partialTickTime) {
+	protected void preRenderCallback(EntityWitchMadameVerre entitylivingbaseIn, float parTick) {
 		float size = 0.67F;
 		GlStateManager.scale(size, size, size);
 	}

@@ -17,7 +17,7 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
 
-	float size = 0.4F;
+	private static final float size = 0.4F;
 
 	@Override
 	public void render(TileWandPedal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -53,9 +53,8 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
 
 	public void renderWandPedal (TileWandPedal te, RenderItem render, ItemStack stack) {
 
-        GlStateManager.scale(1.125F, 1.125F, 1.125F);
-
         float rot = 0;
+        GlStateManager.scale(1.125F, 1.125F, 1.125F);
 
         // ブロックの向きでアイテムの向きも変える
         switch (te.getFace()) {
@@ -96,10 +95,9 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
 
 	public void renderCorkBoard (TileWandPedal te, RenderItem render, ItemStack stack) {
 
-        GlStateManager.scale(0.8F, 0.8F, 0.8F);
-
         float rot = 0;
         float posZ = -0.5325F;
+        GlStateManager.scale(0.8F, 0.8F, 0.8F);
 
         // ブロックの向きでアイテムの向きも変える
         switch (te.getFace()) {
@@ -126,16 +124,14 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
         }
 
         GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
-
         RenderUtils.renderItem(render, stack, 0F, 0.6F, posZ, 0, 1, 0, 0);
 	}
 
 	public void renderShopBoard (TileWandPedal te, RenderItem render, ItemStack stack) {
 
-        GlStateManager.scale(0.45F, 0.45F, 0.45F);
-
         float rot = 0;
         float posZ = 0F;
+        GlStateManager.scale(0.45F, 0.45F, 0.45F);
 
         // ブロックの向きでアイテムの向きも変える
         switch (te.getFace()) {
@@ -158,11 +154,9 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
     	// 3DアイテムならY座標を低く
         if (render.shouldRenderItemIn3D(stack)) {
         	rot += 180F;
-//        	posZ *= -1;
         }
 
         GlStateManager.rotate(rot - 90F, 0.0F, 1.0F, 0.0F);
-
         RenderUtils.renderItem(render, stack, 0F, 0.9F, posZ, 0, 1, 0, 0);
 	}
 

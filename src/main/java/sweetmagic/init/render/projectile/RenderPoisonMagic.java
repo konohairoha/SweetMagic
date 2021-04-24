@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderPoisonMagic extends RenderLightMagic {
 
-	public RenderPoisonMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderPoisonMagic(RenderManager render) {
+		super(render);
 	}
 }

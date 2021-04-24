@@ -18,9 +18,9 @@ import sweetmagic.init.tile.magic.TileStardustCrystal;
 
 public class RenderStardustCrystal extends TileEntitySpecialRenderer<TileStardustCrystal> {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardust_crystal.png");
-	public static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
-	public final ModelBase model = new ModelEnderCrystal(0.0F, false);
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/stardust_crystal.png");
+	private static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
+	private static final ModelBase model = new ModelEnderCrystal(0.0F, false);
 	public Long worldTime;
 
 	@Override
@@ -33,8 +33,6 @@ public class RenderStardustCrystal extends TileEntitySpecialRenderer<TileStardus
         float rot = this.worldTime % 720;
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
         this.renderItem(te, x, -0.35, z);
-//        this.renderItem(te, x, 1.75, z);
-//        this.renderItem(te, x, 0.05, z);
         GlStateManager.popMatrix();
 	}
 

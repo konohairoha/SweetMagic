@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderCardNormal extends RenderLightMagic {
 
-	public RenderCardNormal(RenderManager renderManager) {
-		super(renderManager);
+	public RenderCardNormal(RenderManager render) {
+		super(render);
 	}
 }

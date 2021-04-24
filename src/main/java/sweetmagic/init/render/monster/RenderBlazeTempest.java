@@ -15,7 +15,7 @@ import sweetmagic.init.entity.monster.EntityBlazeTempest;
 @SideOnly(Side.CLIENT)
 public class RenderBlazeTempest extends RenderLiving<EntityBlazeTempest> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/blazetempest.png");
+	private static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/blazetempest.png");
 
 	public RenderBlazeTempest(RenderManager render) {
 		super(render, new ModelBlaze(), 0.3F);

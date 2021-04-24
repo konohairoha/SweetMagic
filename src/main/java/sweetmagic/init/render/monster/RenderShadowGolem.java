@@ -5,7 +5,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 
 public class RenderShadowGolem extends RenderIronGolem {
 
-	public RenderShadowGolem(RenderManager renderManager) {
-		super(renderManager);
+	public RenderShadowGolem(RenderManager render) {
+		super(render);
 	}
 }

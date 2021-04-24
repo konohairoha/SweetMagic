@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderShinigFlare extends RenderLightMagic {
 
-	public RenderShinigFlare(RenderManager renderManager) {
-		super(renderManager);
+	public RenderShinigFlare(RenderManager render) {
+		super(render);
 	}
 }

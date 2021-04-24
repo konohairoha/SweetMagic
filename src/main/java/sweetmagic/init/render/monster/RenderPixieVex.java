@@ -29,7 +29,7 @@ public class RenderPixieVex extends RenderLiving<EntityPixieVex> {
 		return VEX_TEXTURE;
 	}
 
-	public void doRender(EntityPixieVex entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityPixieVex entity, double x, double y, double z, float entityYaw, float parTick) {
 
 		int i = ((ModelPixelVex) this.mainModel).getModelVersion();
 
@@ -38,12 +38,12 @@ public class RenderPixieVex extends RenderLiving<EntityPixieVex> {
 			this.modelVersion = i;
 		}
 
-		super.doRender(entity, x, y, z, entityYaw, partialTicks);
+		super.doRender(entity, x, y, z, entityYaw, parTick);
 
 		EntityLivingBase target = entity.targetEntity;
 
 		if (target != null && entity.canEntityBeSeen(target) && entity.getDistance(target) <= 24D) {
-			float f = entity.getAttackAnimationScale(partialTicks);
+			float f = entity.getAttackAnimationScale(parTick);
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buf = tessellator.getBuffer();
 			this.bindTexture(GUARDIAN_BEAM_TEXTURE);
@@ -56,13 +56,13 @@ public class RenderPixieVex extends RenderLiving<EntityPixieVex> {
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240.0F, 240.0F);
 			GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE,
 					GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-			float f2 = (float) entity.world.getTotalWorldTime() + partialTicks;
+			float f2 = (float) entity.world.getTotalWorldTime() + parTick;
 			float f3 = f2 * 0.5F % 1.0F;
 			float f4 = entity.getEyeHeight();
 			GlStateManager.pushMatrix();
 			GlStateManager.translate((float) x, (float) y + f4, (float) z);
-			Vec3d vec3d = this.getPosition(target, (double) target.height * 0.5D, partialTicks);
-			Vec3d vec3d1 = this.getPosition(entity, (double) f4, partialTicks);
+			Vec3d vec3d = this.getPosition(target, (double) target.height * 0.5D, parTick);
+			Vec3d vec3d1 = this.getPosition(entity, (double) f4, parTick);
 			Vec3d vec3d2 = vec3d.subtract(vec3d1);
 			double d0 = vec3d2.lengthVector() + 1.0D;
 			vec3d2 = vec3d2.normalize();

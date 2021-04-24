@@ -16,10 +16,6 @@ public class RenderIfritVerre extends RenderLiving<EntityIfritVerre> {
 		super(render, new ModelAoi(0.0F), 0.5F);
 	}
 
-	public void doRender(EntityIfritVerre entity, double x, double y, double z, float entityYaw, float parTick) {
-		super.doRender(entity, x, y, z, entityYaw, parTick);
-	}
-
 	protected ResourceLocation getEntityTexture(EntityIfritVerre entity) {
 		return TEX;
 	}

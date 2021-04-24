@@ -15,10 +15,9 @@ public class RenderEnderShadow extends RenderLiving<EntityEnderShadow> {
 
     private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/ender_shadow.png");
 
-	public RenderEnderShadow(RenderManager rendermanagerIn) {
-        super(rendermanagerIn, new ModelEnderman(0.0F), 0.5F);
+	public RenderEnderShadow(RenderManager render) {
+        super(render, new ModelEnderman(0.0F), 0.5F);
         this.addLayer(new LayerManHandItem(this));
-//        this.addLayer(new LayerEndermanEyes(new Render));
 	}
 
 	@Override

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderTamagottiMagic extends RenderLightMagic {
 
-	public RenderTamagottiMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderTamagottiMagic(RenderManager render) {
+		super(render);
 	}
 }

@@ -24,9 +24,9 @@ public class RenderPot extends TileEntitySpecialRenderer<TilePot> {
 
 		if (block == BlockInit.pot_re || block == BlockInit.frypan_on || block == BlockInit.frypan_re) {
 	        GlStateManager.pushMatrix();
-	        GlStateManager.color(1f, 1f, 1f, 1f);
+	        GlStateManager.color(1F, 1F, 1F, 1F);
 	        GlStateManager.translate(x + 0.5F, y + 0.3F, z + 0.5F);
-	        GlStateManager.rotate(RenderUtils.getFacingAngle(state) + 180f, 0f, 1f, 0f);
+	        GlStateManager.rotate(RenderUtils.getFacingAngle(state) + 180F, 0F, 1F, 0F);
 	        this.renderItem(te, block, x, y - 0.5, z, partialTicks);
 	        GlStateManager.popMatrix();
 		}
@@ -57,7 +57,7 @@ public class RenderPot extends TileEntitySpecialRenderer<TilePot> {
         	pos = count != 0 ? pos *= -1 : pos;
         	pos = count % 2 == 1 ? pos + 0.175F : pos;
 
-			RenderUtils.renderItem(itemRenderer, s, 0, 0, pos, 0, 1, 0, 0f);
+			RenderUtils.renderItem(itemRenderer, s, 0, 0, pos, 0, 1, 0, 0F);
 			count++;
         }
 	}

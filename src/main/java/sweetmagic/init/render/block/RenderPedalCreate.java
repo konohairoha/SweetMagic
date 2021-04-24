@@ -11,13 +11,13 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderPedalCreate extends TileEntitySpecialRenderer<TilePedalCreate> {
 
-	private final float size = 0.5F;
+	private static final float size = 0.5F;
 
 	@Override
 	public void render(TilePedalCreate te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.enableLighting();
-        GlStateManager.color(1f, 1f, 1f, 1f);
+        GlStateManager.color(1F, 1F, 1F, 1F);
         GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
         this.renderItem(te, x, y + 0.5, z, partialTicks);
         GlStateManager.popMatrix();

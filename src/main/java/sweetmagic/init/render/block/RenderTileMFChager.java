@@ -12,15 +12,15 @@ import sweetmagic.init.tile.magic.TileMFChanger;
 
 public class RenderTileMFChager extends TileEntitySpecialRenderer<TileMFChanger> {
 
-	//MFテクスチャ
+	// MFテクスチャ
 	protected TextureAtlasSprite sprite_1 = null;
 	protected TextureAtlasSprite sprite_2 = null;
 	protected TextureAtlasSprite sprite_3 = null;
 
 	@Override
 	public void render(TileMFChanger te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float)x, (float)y, (float)z);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
         this.renderFluid(te, x, y, z);
         GlStateManager.popMatrix();
 	}
@@ -34,11 +34,15 @@ public class RenderTileMFChager extends TileEntitySpecialRenderer<TileMFChanger>
 			this.sprite_3 = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/smstone_top_3");
 			this.sprite_2 = null;
 			this.sprite_1 = null;
-		} else if (get >= 7000) {
+		}
+
+		else if (get >= 7000) {
 			this.sprite_2 = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/smstone_top_2");
 			this.sprite_3 = null;
 			this.sprite_1 = null;
-		} else if (get >= 3000) {
+		}
+
+		else if (get >= 3000) {
 			this.sprite_1 = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/smstone_top_1");
 			this.sprite_3 = null;
 			this.sprite_2 = null;
@@ -77,17 +81,23 @@ public class RenderTileMFChager extends TileEntitySpecialRenderer<TileMFChanger>
             maxU = this.sprite_3.getMaxU();
             minV = this.sprite_3.getMinV();
             maxV = this.sprite_3.getMaxV();
-        } else if (this.sprite_1 != null) {
+        }
+
+        else if (this.sprite_1 != null) {
             minU = this.sprite_1.getMinU();
             maxU = this.sprite_1.getMaxU();
             minV = this.sprite_1.getMinV();
             maxV = this.sprite_1.getMaxV();
-        }  else if (this.sprite_2 != null) {
+        }
+
+        else if (this.sprite_2 != null) {
             minU = this.sprite_2.getMinU();
             maxU = this.sprite_2.getMaxU();
             minV = this.sprite_2.getMinV();
             maxV = this.sprite_2.getMaxV();
-        } else {
+        }
+
+        else {
         	return;
         }
 

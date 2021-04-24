@@ -12,7 +12,8 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderMagiaWrite extends TileEntitySpecialRenderer<TileMagiaWrite> {
 
-	private final float size = 0.35F;
+	private static final float size = 0.35F;
+	private static final ItemStack stack = new ItemStack(ItemInit.aether_crystal_shard);
 
 	@Override
 	public void render(TileMagiaWrite te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -55,7 +56,6 @@ public class RenderMagiaWrite extends TileEntitySpecialRenderer<TileMagiaWrite> 
 
 	        GlStateManager.popMatrix();
 		}
-
 	}
 
 	// 柱の周りのかけらの描画
@@ -65,15 +65,11 @@ public class RenderMagiaWrite extends TileEntitySpecialRenderer<TileMagiaWrite> 
 		float rotX = -0.125F;
 		float rotZ = 0;
 		float scale = 0.25F;
-
-		ItemStack stack = new ItemStack(ItemInit.aether_crystal_shard);
-		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-
 		int count = 4;
 		float pi = 180F / (float) Math.PI;
+		RenderItem render = Minecraft.getMinecraft().getRenderItem();
 
 		for (int i = 0; i < count; i++) {
-
 			GlStateManager.pushMatrix();
 			GlStateManager.translate(x, y, z);
 			GlStateManager.rotate(rotZ * pi, 0F, 0F, 1F);
@@ -81,7 +77,7 @@ public class RenderMagiaWrite extends TileEntitySpecialRenderer<TileMagiaWrite> 
 			GlStateManager.rotate(rotX * pi, 1F, 0F, 0F);
 			GlStateManager.scale(scale, -scale, scale);
 			GlStateManager.translate(0.75F, 0F, 0F);
-			RenderUtils.renderItem(render, stack, 0, 1.6F, 0, 0, 0, 0, 0);
+			RenderUtils.renderItem(render, this.stack, 0, 1.6F, 0, 0, 0, 0, 0);
 			GlStateManager.popMatrix();
 		}
 	}

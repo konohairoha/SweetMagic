@@ -18,7 +18,7 @@ public class RenderRockBlast extends RenderLightMagic {
 		super(render);
 	}
 
-	public void renderAnimetion (EntityBaseMagicShot entity, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void renderAnimetion (EntityBaseMagicShot entity, double x, double y, double z, float entityYaw, float parTick) {
 
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);

@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderFrostMagic extends RenderLightMagic{
 
-	public RenderFrostMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderFrostMagic(RenderManager render) {
+		super(render);
 	}
 }

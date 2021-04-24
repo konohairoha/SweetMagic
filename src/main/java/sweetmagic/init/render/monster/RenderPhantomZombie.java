@@ -11,7 +11,7 @@ import sweetmagic.SweetMagicCore;
 @SideOnly(Side.CLIENT)
 public class RenderPhantomZombie extends RenderZombie {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/phantom_zombie.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/phantom_zombie.png");
 
 	public RenderPhantomZombie(RenderManager render) {
 		super(render);

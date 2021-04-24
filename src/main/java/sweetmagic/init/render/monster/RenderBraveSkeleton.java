@@ -12,7 +12,7 @@ import sweetmagic.SweetMagicCore;
 @SideOnly(Side.CLIENT)
 public class RenderBraveSkeleton extends RenderSkeleton {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/brave_skeleton.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/brave_skeleton.png");
 
 	public RenderBraveSkeleton(RenderManager render) {
 		super(render);

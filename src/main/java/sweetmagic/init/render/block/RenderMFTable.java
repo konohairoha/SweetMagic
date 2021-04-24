@@ -13,7 +13,7 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 
-	private final float size = 0.5F;
+	private static final float size = 0.5F;
 
 	@Override
 	public void render(TileMFTable te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -23,13 +23,11 @@ public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 		}
 
 		else {
-
 	        GlStateManager.pushMatrix();
 	        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
 	        this.renderItem(te, x, y + 0.5, z, partialTicks);
 	        GlStateManager.popMatrix();
 		}
-
 	}
 
 	protected void renderItem(TileMFTable te, double x, double y, double z, float partialTicks) {
@@ -41,10 +39,10 @@ public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 		float rot = worldTime % 720;
 
 		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 10F) * 0.15F + 0.2F, 0);
+		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) * 0.1F) * 0.15F + 0.2F, 0);
 		GlStateManager.scale(this.size, this.size, this.size);
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
-		RenderUtils.renderItem(render, stack, 0, 2.55F, 0, 0, 1, 0, 0f);
+		RenderUtils.renderItem(render, stack, 0F, 2.55F, 0F, 0F, 1F, 0F, 0F);
 	}
 
 	public void renderAdvanced (TileMFTable te, double x, double y, double z, float partialTicks) {
@@ -52,11 +50,9 @@ public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 		Long worldTime = te.getWorld().getTotalWorldTime();
 		float rot = worldTime % 720;
 		float rotY = (te.getTileWorld().getTotalWorldTime() + partialTicks) / 90F;
-
-		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-
 		int count = te.getInvSize();
 		float pi = 180F / (float) Math.PI;
+		RenderItem render = Minecraft.getMinecraft().getRenderItem();
 
 		for (int i = 0; i < count; i++) {
 
@@ -68,7 +64,7 @@ public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 			GlStateManager.rotate(rotY * pi + (i * (360 / count)), 0F, 1F, 0F);
 	        GlStateManager.scale(0.6F, 0.6F, 0.6F);
 			GlStateManager.translate(0.75F, 0F, 0F);
-			RenderUtils.renderItem(render, stack, 0, 2.2F, 0, 0, 0, 0, 0);
+			RenderUtils.renderItem(render, stack, 0F, 2.2F, 0F, 0F, 0F, 0F, 0F);
 			GlStateManager.popMatrix();
 		}
 
@@ -79,10 +75,10 @@ public class RenderMFTable extends TileEntitySpecialRenderer<TileMFTable> {
 		RenderItem renderCrystal = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 10F) * 0.15F + 0.2F, 0);
+		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) * 0.1F) * 0.15F + 0.2F, 0);
 		GlStateManager.scale(0.4F, 0.4F, 0.4F);
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
-		RenderUtils.renderItem(renderCrystal, stack, 0, 3F, 0, 0, 1, 0, 0f);
+		RenderUtils.renderItem(renderCrystal, stack, 0F, 3F, 0F, 0F, 1F, 0F, 0F);
         GlStateManager.popMatrix();
 	}
 }

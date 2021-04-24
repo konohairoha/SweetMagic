@@ -12,7 +12,7 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 
-	float size = 0.4F;
+	private static final float size = 0.4F;
 
 	@Override
 	public void render(TileModenRack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -26,7 +26,6 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 
 		RenderItem render = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.translate(0, 0, 0);
-
         int data = te.getRackData();
 
         if (data != 2) {
@@ -93,7 +92,7 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
             	posY -= 0.15F;
             }
 
-            RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0f);
+            RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0);
         }
 	}
 
@@ -115,7 +114,7 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
             	posY -= 0.15F;
             }
 
-            RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0f);
+            RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0);
         }
 	}
 
@@ -151,6 +150,5 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         else {
             RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0);
         }
-
 	}
 }

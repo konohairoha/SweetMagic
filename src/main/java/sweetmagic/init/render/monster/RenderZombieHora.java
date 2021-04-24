@@ -23,11 +23,11 @@ import sweetmagic.init.entity.monster.EntityZombieHora;
 @SideOnly(Side.CLIENT)
 public class RenderZombieHora extends RenderLiving<EntityZombieHora> {
 
-	public static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/hora.png");
+	private static final ResourceLocation TEXTURES = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/hora.png");
     private static final ResourceLocation GUARDIAN_BEAM_TEXTURE = new ResourceLocation("textures/entity/guardian_beam.png");
 
-	public RenderZombieHora(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelHora(), 0.3F);
+	public RenderZombieHora(RenderManager render) {
+		super(render, new ModelHora(), 0.3F);
         this.addLayer(new LayerHeldItem(this));
         this.addLayer(new LayerBipedArmor(this) {
             @Override

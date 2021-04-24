@@ -11,7 +11,7 @@ import sweetmagic.SweetMagicCore;
 @SideOnly(Side.CLIENT)
 public class RenderCreeperCal extends RenderCreeper {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/creepercal.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/creepercal.png");
 
 	public RenderCreeperCal(RenderManager render) {
 		super(render);

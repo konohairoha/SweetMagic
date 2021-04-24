@@ -7,7 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class RenderFrostRain extends RenderLightMagic {
 
-	public RenderFrostRain(RenderManager renderManager) {
-		super(renderManager);
+	public RenderFrostRain(RenderManager render) {
+		super(render);
 	}
 }

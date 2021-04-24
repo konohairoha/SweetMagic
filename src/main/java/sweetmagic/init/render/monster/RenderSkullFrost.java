@@ -15,10 +15,10 @@ import sweetmagic.SweetMagicCore;
 @SideOnly(Side.CLIENT)
 public class RenderSkullFrost extends RenderLiving<EntitySkeleton> {
 
-	public static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/skullflost.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/skullflost.png");
 
-	public RenderSkullFrost(RenderManager rendermanagerIn) {
-		super(rendermanagerIn, new ModelSkeleton(), 0.3F);
+	public RenderSkullFrost(RenderManager render) {
+		super(render, new ModelSkeleton(), 0.3F);
         this.addLayer(new LayerHeldItem(this));
         this.addLayer(new LayerBipedArmor(this) {
             protected void initArmor() {

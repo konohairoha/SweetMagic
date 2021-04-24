@@ -22,7 +22,9 @@ import sweetmagic.util.RenderUtils;
 public class RenderMFFisher extends TileEntitySpecialRenderer<TileMFFisher> {
 
 	private static final ResourceLocation RUNE_TEXTURE = new ResourceLocation(SweetMagicCore.MODID, "textures/block/mahoujin.png");
-	float size = 0.5F;
+	private static final ItemStack FISH = new ItemStack(Items.FISHING_ROD);
+	private static final ItemStack MACH = new ItemStack(ItemInit.machete);
+	private static final float size = 0.5F;
 
 	@Override
 	public void render(TileMFFisher te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -45,11 +47,11 @@ public class RenderMFFisher extends TileEntitySpecialRenderer<TileMFFisher> {
         float rot = worldTime % 720;
 
 		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-        GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 10.0F) * 0.15F + 0.2F, 0);
+        GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) * 0.1F) * 0.15F + 0.2F, 0);
         GlStateManager.scale(this.size, this.size, this.size);
         GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
 
-        ItemStack stack = new ItemStack(te.isFisher() ? Items.FISHING_ROD : ItemInit.machete);
+        ItemStack stack = te.isFisher() ? FISH : MACH;
         RenderUtils.renderItem(render, stack, 0, 0.55F, 0, 0, 1, 0, 0);
 	}
 
@@ -71,10 +73,10 @@ public class RenderMFFisher extends TileEntitySpecialRenderer<TileMFFisher> {
 		bindTexture(RUNE_TEXTURE);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-		buffer.pos(-0.5f, 0, -0.5f).tex(0, 0).endVertex();
-		buffer.pos(0.5f, 0, -0.5f).tex(1, 0).endVertex();
-		buffer.pos(0.5f, 0, 0.5f).tex(1, 1).endVertex();
-		buffer.pos(-0.5f, 0, 0.5f).tex(0, 1).endVertex();
+		buffer.pos(-0.5F, 0F, -0.5F).tex(0D, 0D).endVertex();
+		buffer.pos(0.5F, 0F, -0.5F).tex(1D, 0D).endVertex();
+		buffer.pos(0.5F, 0F, 0.5F).tex(1D, 1D).endVertex();
+		buffer.pos(-0.5F, 0F, 0.5F).tex(0D, 1D).endVertex();
 		tessellator.draw();
 
 		GlStateManager.disableBlend();

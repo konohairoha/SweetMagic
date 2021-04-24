@@ -18,8 +18,8 @@ public class RenderLightMagic<T extends Entity> extends Render<T> {
 
 	private static final ResourceLocation tex = new ResourceLocation(SweetMagicCore.MODID, "textures/particle/notex.png");
 
-	public RenderLightMagic(RenderManager renderManager) {
-		super(renderManager);
+	public RenderLightMagic(RenderManager render) {
+		super(render);
 	}
 
 	public void renderBullet(T entity, double x, double y, double z, float entityYaw, float partialTicks) {

@@ -12,7 +12,8 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderToolRepair extends TileEntitySpecialRenderer<TileToolRepair> {
 
-	private final float size = 0.25F;
+	private static final float size = 0.25F;
+	private static final ItemStack stack = new ItemStack(ItemInit.aether_crystal);
 
 	@Override
 	public void render(TileToolRepair te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -40,7 +41,7 @@ public class RenderToolRepair extends TileEntitySpecialRenderer<TileToolRepair> 
 		RenderItem render = Minecraft.getMinecraft().getRenderItem();
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 10F) * 0.1F + 0.2F, 0);
+		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) * 0.1F) * 0.1F + 0.2F, 0);
 		GlStateManager.scale(this.size, this.size, this.size);
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
 		RenderUtils.renderItem(render, stack, 0, 2.55F, 0, 0, 1, 0, 0);
@@ -49,7 +50,6 @@ public class RenderToolRepair extends TileEntitySpecialRenderer<TileToolRepair> 
 
 	protected void renderAether(TileToolRepair te, double x, double y, double z, float partialTicks) {
 
-		ItemStack stack = new ItemStack(ItemInit.aether_crystal);
 		Long worldTime = te.getWorld().getTotalWorldTime();
 		float rot = worldTime % 360;
 
@@ -59,7 +59,7 @@ public class RenderToolRepair extends TileEntitySpecialRenderer<TileToolRepair> 
 		GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 8F) * 0.05F + 0.1F, 0);
 		GlStateManager.scale(0.2F, 0.2F, 0.2F);
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
-		RenderUtils.renderItem(render, stack, 0, 2.55F, 0, 0, 1, 0, 0);
+		RenderUtils.renderItem(render, this.stack, 0, 2.55F, 0, 0, 1, 0, 0);
         GlStateManager.popMatrix();
 	}
 }
