@@ -153,7 +153,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 
 	public float getHealValue () {
-		return this.isUnique() ? this.getMaxHealth() * 0.225F : this.getMaxHealth() / 2;
+		return this.isUnique() ? this.getMaxHealth() * 0.25F : this.getMaxHealth() / 2;
 	}
 
 	// モブスポーン条件
@@ -402,7 +402,7 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 	// 二つ名かどうか
     public boolean isUnique () {
-    	return this.getMaxHealth() >= 128F;
+    	return this.getMaxHealth() >= 256F;
     }
 
 	// 体力半分かどうか

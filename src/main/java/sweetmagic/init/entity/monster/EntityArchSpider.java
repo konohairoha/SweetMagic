@@ -26,18 +26,28 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 	protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.35D);
+        this.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.3D);
         this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
         this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
-        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(48.0D);
+        this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(4.0D);
     }
 
 	public boolean attackEntityAsMob(Entity entity) {
 		if (super.attackEntityAsMob(entity) && entity instanceof EntityLivingBase) {
+
 			EntityLivingBase living = (EntityLivingBase) entity;
-			int time = this.isUnique() ? 300: 200;
-			int level = this.isUnique() ? 1: 0;
-			living.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, time, level));
+
+			// リフレッシュエフェクトが付いてるなら
+			if (living.isPotionActive(PotionInit.refresh_effect)) {
+				entity.attackEntityFrom(DamageSource.MAGIC, 4F);
+				entity.hurtResistantTime = 0;
+			}
+
+			else {
+				int time = this.isUnique() ? 300: 100;
+				int level = this.isUnique() ? 1: 0;
+				living.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, time, level));
+			}
 		}
 		return true;
 	}

@@ -20,6 +20,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.client.particle.ParticleMagicDig;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.EventUtil;
 import sweetmagic.util.PlayerHelper;
@@ -67,7 +68,7 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 			if (this.data == 0) {
 
 				// 破壊可能なブロックかどうか
-				if (this.canBreakBlock(state, material)) { return; }
+				if (this.canBreakBlock(state.getBlock(), material)) { return; }
 				this.breakBlock(pos, nearDrop);
 			}
 
@@ -100,7 +101,7 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 				for (BlockPos p : BlockPos.getAllInBox(pos.add(-area + xa, -area + ya, -area + za), pos.add(area + xa, area + ya, area + za))) {
 					IBlockState target = world.getBlockState(p);
 					Material mate2 = state.getMaterial();
-					if (this.canBreakBlock(target, mate2)) { continue; }
+					if (this.canBreakBlock(target.getBlock(), mate2)) { continue; }
 					this.breakBlock(p, nearDrop);
 				}
 			}
@@ -162,7 +163,7 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 					if (block == Blocks.AIR || block.hasTileEntity(target)) { continue; }
 
 					Material mate2 = state.getMaterial();
-					if (this.canBreakBlock(target, mate2)) { continue; }
+					if (this.canBreakBlock(target.getBlock(), mate2)) { continue; }
 					this.breakBlock(p, nearDrop);
 				}
 
@@ -181,8 +182,8 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	}
 
 	// 破壊可能なブロックかどうか
-	public boolean canBreakBlock (IBlockState state, Material material) {
-		return material == Material.WATER || material == Material.LAVA || state.getBlock() == Blocks.BEDROCK;
+	public boolean canBreakBlock (Block block, Material material) {
+		return material == Material.WATER || material == Material.LAVA || block == Blocks.BEDROCK || block == BlockInit.spawn_stone;
 	}
 
 	// パーティクルスポーン
@@ -200,7 +201,9 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 
 		if (this.isPlayer(living)) {
 			living.addPotionEffect(new PotionEffect(MobEffects.HASTE, 100 * level, 0));
-		} else {
+		}
+
+		else {
 			living.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 100 * level, 0));
 		}
 

@@ -52,7 +52,7 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 		int count = this.isHitDead ? 12 : 6;
 
 		for (int i = 0; i < count; i++) {
-			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
+			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i * 0.25F);
 			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
 			Particle effect = new ParticleBabule.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
@@ -70,7 +70,13 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 		// 経験値追加処理
 		this.addExp();
 		this.playSound(living, SoundEvents.ENTITY_PLAYER_SPLASH, 0.5F, 1.25F);
-		living.addPotionEffect(new PotionEffect(PotionInit.babule, 10 * level, this.potionnLevel));
+		int time = 10 * level;
+
+		if (this.potionnLevel > 3) {
+			time = Math.min(100, time);
+		}
+
+		living.addPotionEffect(new PotionEffect(PotionInit.babule, time, this.potionnLevel));
 		living.hurtResistantTime = 0;
 
 		if (this.potionnLevel >= 2 && living.isPotionActive(PotionInit.refresh_effect)) {

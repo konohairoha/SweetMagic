@@ -321,7 +321,7 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
 	// 二つ名かどうか
     public boolean isUnique () {
-    	return this.getMaxHealth() >= 200F;
+    	return this.getMaxHealth() >= 256F;
     }
 
 	// 体力半分かどうか

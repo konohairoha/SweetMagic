@@ -96,8 +96,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		}
 	}
 
-	protected void entityInit() {
-	}
+	protected void entityInit() { }
 
 	@Override
 	@SideOnly(Side.CLIENT)
@@ -200,11 +199,10 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				result = new RayTraceResult(entity);
 			}
 
-			if (result != null && result.entityHit != null
-					&& result.entityHit instanceof EntityPlayer) {
+			if (result != null && result.entityHit != null && result.entityHit instanceof EntityPlayer) {
+
 				EntityPlayer entityplayer = (EntityPlayer) result.entityHit;
-				if (this.getThrower() instanceof EntityPlayer
-						&& !((EntityPlayer) this.getThrower()).canAttackPlayer(entityplayer)) {
+				if (this.getThrower() instanceof EntityPlayer && !((EntityPlayer) this.getThrower()).canAttackPlayer(entityplayer)) {
 					result = null;
 				}
 			}
@@ -250,9 +248,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				this.spawnParticle();
 			}
 
-			else {
-
-			}
+			else { }
 
 			if (this.isWet()) {
 				this.extinguish();
@@ -439,13 +435,13 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	protected Entity findEntityOnPath(Vec3d start, Vec3d end) {
 
 		Entity entity = null;
+		if (this.world.isRemote) { return entity; }
+
 		List<Entity> list = this.world.getEntitiesWithinAABBExcludingEntity(this,
 				this.getEntityBoundingBox().expand(this.motionX, this.motionY, this.motionZ).grow(1.0D));
 		double d0 = 0.0D;
 		Entity entity1;
 		double d1;
-
-		if (this.world.isRemote) { return entity; }
 
 		for (int k = 0; k < list.size(); ++k) {
 
@@ -503,11 +499,9 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		tags.setInteger("level", this.level);
 		tags.setInteger("plusTick", this.plusTick);
 		tags.setInteger("data", this.data);
-//		System.out.println("====ID" + (this.throwerId != null));
 		if (this.throwerId != null) {
 			tags.setUniqueId("throwerId", this.throwerId);
 		}
-//		System.out.println("====TAG" + tags.hasKey("throwerId"));
 	}
 
 	@Override

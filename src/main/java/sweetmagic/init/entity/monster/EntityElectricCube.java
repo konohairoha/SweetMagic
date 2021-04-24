@@ -77,10 +77,10 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 			health = 8D;
 			break;
 		case 4:
-			health = 16D;
+			health = 12D;
 			break;
 		case 8:
-			health = 30D;
+			health = 20D;
 			break;
 		}
 		return health;
@@ -117,10 +117,10 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 			damage = 2;
 			break;
 		case 4:
-			damage = 4;
+			damage = 3;
 			break;
 		case 8:
-			damage = 6;
+			damage = 4;
 			break;
 		}
 		return damage;

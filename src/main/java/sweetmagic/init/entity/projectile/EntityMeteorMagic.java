@@ -46,8 +46,8 @@ public class EntityMeteorMagic extends EntityFireMagic {
 
 		super.entityHit(living);
 		this.playSound(living, SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 1F);
-		double range = 10D;
-		float dame = (float) this.getDamage() * 1.25F;
+		double range = 16D;
+		float dame = (float) this.getDamage() * 1.5F;
 
 		// 範囲攻撃
 		this.rangeAttack(range, dame);
@@ -58,8 +58,8 @@ public class EntityMeteorMagic extends EntityFireMagic {
 	protected void inGround(RayTraceResult result) {
 
 		this.playSound(this, SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 1F);
-		double range = 7.5D;
-		float dame = (float) this.getDamage();
+		double range = 10D;
+		float dame = (float) this.getDamage() * 1.125F;
 
 		// 範囲攻撃
 		this.rangeAttack(range, dame);
@@ -72,7 +72,7 @@ public class EntityMeteorMagic extends EntityFireMagic {
 
 			Random rand = this.world.rand;
 
-			for (int i = 0; i < 64; i++) {
+			for (int i = 0; i < 16; i++) {
 				this.world.spawnParticle(EnumParticleTypes.FLAME,
 						this.posX + rand.nextFloat() - 0.5F,
 						this.posY,
@@ -87,13 +87,14 @@ public class EntityMeteorMagic extends EntityFireMagic {
 							this.posY,
 							this.posZ + rand.nextFloat() - 0.5F + z,
 							(rand.nextDouble() - 0.5D) * 1.0D, rand.nextDouble() / 4D, (rand.nextDouble() - 0.5D) * 1.0D);
-					this.world.spawnParticle(EnumParticleTypes.CLOUD,
-							this.posX + rand.nextFloat() - 0.5F + x,
-							this.posY,
-							this.posZ + rand.nextFloat() - 0.5F + z,
-							(rand.nextDouble() - 0.5D) * 1.0D, rand.nextDouble() / 4D, (rand.nextDouble() - 0.5D) * 1.0D);
 				}
 			}
+
+			this.world.spawnParticle(EnumParticleTypes.CLOUD,
+					this.posX + rand.nextFloat() - 0.5F,
+					this.posY,
+					this.posZ + rand.nextFloat() - 0.5F,
+					(rand.nextDouble() - 0.5D) * 1.0D, rand.nextDouble() / 4D, (rand.nextDouble() - 0.5D) * 1.0D);
 		}
 
 		// 経験値追加処理
@@ -108,6 +109,7 @@ public class EntityMeteorMagic extends EntityFireMagic {
 		List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
+
 			if (!(entity instanceof IMob)) { continue; }
 
 			// プレイヤーが攻撃した時
@@ -121,8 +123,8 @@ public class EntityMeteorMagic extends EntityFireMagic {
 				entity.attackEntityFrom(DamageSource.causeMobDamage(this.getThrower()), dame);
 			}
 
-			entity.setFire(5 * (this.level + 1));
-			entity.addPotionEffect(new PotionEffect(PotionInit.flame, 40 * (this.level + 1), 1));
+			entity.setFire(8 * (this.level + 1));
+			entity.addPotionEffect(new PotionEffect(PotionInit.flame, 50 * (this.level + 1), 2));
 			entity.hurtResistantTime = 0;
 		}
 	}

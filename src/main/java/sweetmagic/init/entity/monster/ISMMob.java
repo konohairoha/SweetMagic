@@ -20,7 +20,6 @@ public interface ISMMob {
 		else {
 			return this.isSMDamage(src) ? dame * 2 : dame;
 		}
-
 	}
 
 	// 魔法によるダメージか？

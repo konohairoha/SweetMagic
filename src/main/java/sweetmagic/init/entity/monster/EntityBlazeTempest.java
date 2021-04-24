@@ -164,6 +164,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			if (!(entity instanceof IMob) && entity instanceof EntityLivingBase) {
 
 				entity.attackEntityFrom(DamageSource.MAGIC, dame);
+				entity.hurtResistantTime = 0;
 
 				// パーティクルスポーン
 				if (this.world.isRemote) {

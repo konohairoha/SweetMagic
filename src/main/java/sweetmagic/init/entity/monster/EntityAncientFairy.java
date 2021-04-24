@@ -236,7 +236,6 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 				target.attackEntityFrom(DamageSource.MAGIC, 3F);
 			}
-
 		}
 	}
 
@@ -248,7 +247,6 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
     			EntityLivingBase entity = (EntityLivingBase) src.getImmediateSource();
     			entity.attackEntityFrom(DamageSource.MAGIC, amount);
     		}
-
 
     		return false;
 		}
@@ -491,5 +489,4 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 			}
 		}
 	}
-
 }

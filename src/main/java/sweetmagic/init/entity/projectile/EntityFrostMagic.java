@@ -1,5 +1,7 @@
 package sweetmagic.init.entity.projectile;
 
+import java.util.List;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -31,6 +33,11 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 	// 地面についたときの処理
 	@Override
 	protected void inGround(RayTraceResult result) {
+
+		if (this.motionX == 0 || this.motionZ == 0) {
+			this.rangeAttack(1.5D);
+		}
+
 		this.setEntityDead();
 	}
 
@@ -77,5 +84,25 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 		this.playSound(living, SMSoundEvent.FROST, 0.25F, 1F);
 		living.addPotionEffect(new PotionEffect(PotionInit.frosty, 40 * (level + 1 + addTime), this.isHitDead ? 3 : 2));
 		living.hurtResistantTime = 0;
+
+		if (this.motionX == 0 || this.motionZ == 0) {
+			this.rangeAttack(0.75D);
+		}
+	}
+
+	public void rangeAttack (double range) {
+
+		List<EntityLivingBase> list = this.getEntityList(range, range / 2, range);
+		float dame = (float) range;
+
+		for (EntityLivingBase entity : list ) {
+
+			if (!this.checkThrower(entity)) { continue; }
+
+			this.attackDamage(entity, dame);
+			entity.hurtResistantTime = 0;
+			this.checkShadow(entity);
+			entity.addPotionEffect(new PotionEffect(PotionInit.frosty, 100, 4));
+		}
 	}
 }

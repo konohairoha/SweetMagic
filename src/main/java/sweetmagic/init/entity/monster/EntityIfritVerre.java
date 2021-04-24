@@ -49,6 +49,7 @@ import sweetmagic.init.entity.projectile.EntityFlameNova;
 import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.util.ParticleHelper;
+import sweetmagic.util.SMUtil;
 
 public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISMMob {
 
@@ -317,7 +318,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	public EntityBaseMagicShot getShot () {
 
 		EntityBaseMagicShot entity = null;
-		int rand = this.rand.nextInt(5);
+		int rand = this.rand.nextInt(this.isUnique() ? 5 : 4);
 
 		switch (rand) {
 		case 0:
@@ -336,11 +337,17 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 			break;
 		case 4:
 			EntityBlaze blaze = new EntityBlaze(this.world);
-			if (this.isUnique()) {
-				blaze.setHealth(40F);
-				blaze.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 3, true, false));
-			}
+			blaze.setHealth(40F);
+			blaze.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 3, true, false));
+
+			double xRand = this.posX + (this.rand.nextDouble() - this.rand.nextDouble() - 0.5D) * 8D;
+			double zRand = this.posZ + (this.rand.nextDouble() - this.rand.nextDouble() - 0.5D) * 8D;
+			blaze.setLocationAndAngles(xRand, this.posY, zRand, this.rotationYaw, 0.0F);
 			this.world.spawnEntity(blaze);
+
+			// タゲをnullに書き換え
+			SMUtil.tameAIAnger((EntityLiving) blaze, this.getAttackTarget());
+			this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
 			break;
 		}
 
@@ -353,7 +360,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 	// 二つ名かどうか
     public boolean isUnique () {
-    	return this.getMaxHealth() >= 128F;
+    	return this.getMaxHealth() >= 256F;
     }
 
 	// 体力半分かどうか
