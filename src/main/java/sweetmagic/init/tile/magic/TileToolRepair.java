@@ -11,9 +11,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.client.particle.ParticleNomal;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.tile.slot.StackHandler;
-import sweetmagic.packet.TileMFBlockPKT;
 
 public class TileToolRepair extends TileMFBase {
 
@@ -85,7 +83,7 @@ public class TileToolRepair extends TileMFBase {
 			// 耐久値の回復とMFの消費
 			stack.setItemDamage(stack.getItemDamage() - 10);
 			this.setMF(this.getMF() - useMF);
-			PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+			this.sentClient();
 
 			// MFが空なら終了
 			if (this.isMfEmpty()) { break; }

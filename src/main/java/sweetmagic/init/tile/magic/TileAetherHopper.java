@@ -113,7 +113,7 @@ public class TileAetherHopper extends TileMFBase {
             	stack.setCount(insertStack.getCount());
 
             	// コスト分加算
-            	useMF += this.getCostMF(cost, insertStack, 2);
+            	useMF += this.getCostMF(cost, insertStack, 1);
             }
 		}
 
@@ -150,7 +150,7 @@ public class TileAetherHopper extends TileMFBase {
         	stack.setCount(insertStack.getCount());
 
         	// コスト分加算
-        	useMF += this.getCostMF(cost, insertStack, 2);
+        	useMF += this.getCostMF(cost, insertStack, 1);
 		}
 
 		// MFを消費するなら
@@ -192,7 +192,7 @@ public class TileAetherHopper extends TileMFBase {
         	stack.setCount(insertStack.getCount());
 
         	// コスト分加算
-        	useMF += this.getCostMF(cost, insertStack, 5);
+        	useMF += this.getCostMF(cost, insertStack, 2);
 		}
 
 		// MFを消費するなら

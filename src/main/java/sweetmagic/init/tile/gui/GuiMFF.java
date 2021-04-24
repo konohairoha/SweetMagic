@@ -7,14 +7,14 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.init.tile.container.ContainerMFFurnace;
-import sweetmagic.init.tile.magic.TileMFF;
+import sweetmagic.init.tile.magic.TileMFFurnace;
 
 public class GuiMFF extends GuiContainer {
 
 	private static final ResourceLocation texture = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/rmfurnace_8.png");
-	private final TileMFF tile;
+	private final TileMFFurnace tile;
 
-	public GuiMFF(InventoryPlayer invPlayer, TileMFF tile) {
+	public GuiMFF(InventoryPlayer invPlayer, TileMFFurnace tile) {
 		super(new ContainerMFFurnace(invPlayer, tile));
 		this.xSize = 209;
 		this.ySize = 165;
@@ -30,27 +30,24 @@ public class GuiMFF extends GuiContainer {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float var1, int var2, int var3) {
+
 		GlStateManager.color(1, 1, 1, 1);
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
-
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
-		int progress;
+//		if (this.tile.canSmelt()) {
+//			progress = this.tile.getBurnTimeRemainingScaled(12);
+//			this.drawTexturedModalRect(x + 66, y + 38 + 10 - progress, 210, 10 - progress, 21, progress + 2);
+//		}
 
-		if (this.tile.canSmelt()) {
-			progress = this.tile.getBurnTimeRemainingScaled(12);
-			this.drawTexturedModalRect(x + 66, y + 38 + 10 - progress, 210, 10 - progress, 21, progress + 2);
-		}
-
-		progress = this.tile.getCookProgressScaled(24);
+		int progress = this.tile.getSmeltTimeScaled(24);
 		this.drawTexturedModalRect(x + 88, y + 35, 210, 14, progress, 17);
 
 		//こっちではゲージ量を計算する　かまどのMFの内容ができてから？
 		if (!this.tile.isMfEmpty()) {
-			progress = this.tile.getMfProgressScaled(50);
+			progress = this.tile.getMfProgressScaled(51);
 			this.drawTexturedModalRect(x + 90, y + 11, 90, 168, progress, 5);
 		}
 	}

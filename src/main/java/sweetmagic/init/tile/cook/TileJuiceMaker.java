@@ -15,11 +15,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.juicemaker.JuiceMakerRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
-import sweetmagic.packet.TileJMPKT;
 import sweetmagic.util.ItemHelper;
 
 public class TileJuiceMaker extends TileSMBase {
@@ -29,7 +27,7 @@ public class TileJuiceMaker extends TileSMBase {
 	private int waterMaxValue = 2000;
 
 	private final ItemStackHandler waterInventory = new StackHandler(this, 1);	// 水投入スロット
-	private final ItemStackHandler handInventory = new StackHandler(this, 1);	// ハンドスロット
+	private final ItemStackHandler handInventory = new StackHandler(this, 1);		// ハンドスロット
 	private final ItemStackHandler inputInventory = new StackHandler(this, 3);	// 入力スロット
 	private final ItemStackHandler outputInventory = new StackHandler(this, 4);	// 出力スロット
 
@@ -68,16 +66,13 @@ public class TileJuiceMaker extends TileSMBase {
 
 		// クッキング中なら時間を足す
 		if (this.isCooking) {
-			this.cookTime++;
 
-			// 100を超えても調理できないならちょっと減らす
-			if (this.cookTime > 100) {
-				this.cookTime = 90;
-			}
+			this.cookTime++;
 
 			if (this.cookTime % 10 == 0) {
 				this.playSound(this.pos, SMSoundEvent.JMON, 0.1F, 1F);
 			}
+
 		}
 
 		// 1秒経つ
@@ -99,7 +94,7 @@ public class TileJuiceMaker extends TileSMBase {
 			}
 
 			// 作成中から5秒経ったら
-			else if (this.isCooking && this.cookTime % 100 == 0) {
+			else if (this.isCooking && this.cookTime >= 100) {
 				this.finishCook();
 			}
 		}
@@ -147,10 +142,8 @@ public class TileJuiceMaker extends TileSMBase {
 			inputs.add(this.getInputItem(i));
 		}
 
-		//手持ちアイテムからレシピと一致するかを検索
+		//手持ちアイテムからレシピと一致するかを検索して失敗なら終了
 		JuiceMakerRecipeInfo recipeInfo = SweetMagicAPI.getJuiceMakerRecipeInfo(stack, inputs);
-
-		// canComplete = Falseの場合レシピ処理をしない
 		if (!recipeInfo.canComplete) { return; }
 
 		//入れるアイテム、完成品はItemStackリストに突っ込む
@@ -158,17 +151,10 @@ public class TileJuiceMaker extends TileSMBase {
 		List<ItemStack> results = new ArrayList<ItemStack>();
 
 		//減らしたい個数を取得
-		int iShrink = 1;
+		int iShrink = recipeInfo.getHandList().get(0).getCount();
 		handitem.setCount(iShrink);
 
-		/**
-		 * ※注意※　単純にItemStack.setCountなどをすると、同じオブジェクトに対して変換を行ってしまう
-		 * 例：recipeInfo.getOutputItems()して取得したアイテムに対してsetCountをすると、レシピ内の参照となってしまうため中が書き換わってしまう
-		 * 一度使用するアイテムのコピーを作成してから使用しましょう。
-		 * このメソッド内ではレシピアイテム、完成品のそれぞれでその状態になってしまったので
-		 * 対策としてコピーしたアイテムをsendとして別インスタンスに変更しています。
-		 */
-
+		// 取り出したアイテムをリストにセットする
 		for (ItemStack s : inputs) {
 			ItemStack copy = s.copy();
 			copy.setCount(1);
@@ -176,12 +162,23 @@ public class TileJuiceMaker extends TileSMBase {
 		}
 
 		ItemStack copy = this.getHandItem().copy();
-		copy.setCount(1);
+		copy.setCount(iShrink);
 		this.inPutList.add(copy);
+		this.getHandItem().shrink(iShrink);
 
-		this.getHandItem().shrink(1);
-		for (ItemStack s : inputs) {
-			s.shrink(1);
+		for (Object[] recipe : recipeInfo.getinputs()) {
+
+			// ItemStackの取得して個数設定 + リスト追加
+			ItemStack send = ((ItemStack) recipe[1]).copy();
+			send.setCount((int) recipe[2]);
+
+			for (ItemStack s : inputs) {
+
+				if (send.getItem() != s.getItem() || send.getCount() > s.getCount()) { continue; }
+
+				s.shrink(send.getCount());
+				break;
+			}
 		}
 
 		// 水を消費させる
@@ -231,22 +228,27 @@ public class TileJuiceMaker extends TileSMBase {
 		this.isCooking = false;
 		BlockJuiceMaker.setState(this.world, this.pos);
 		this.playSound(this.pos, SMSoundEvent.JMFIN, 0.2F, 1F);
-
-		// サーバーに送信
-		PacketHandler.sendToClient(new TileJMPKT(this.pos, this.tickTime, this.cookTime, this.isCooking));
+		this.markDirty();
 	}
 
 	// ゲージ計算用
 	public int getMfProgressScaled(int value) {
+
 		if (!this.isEmptyWater()) {
 			return (int) (value * this.getWaterValue() / this.getWaterMaxValue());
 		}
+
 		return 0;
     }
 
 	// 調理ゲージ計算用
 	public int getCookProgress (int value) {
-		return this.cookTime >= 100 ? value : (int) (value * this.cookTime / 100);
+
+		if (this.isCooking && this.cookTime > 0) {
+			return Math.min(value, (int) (value * ( (float) this.cookTime ) * 0.01F ) );
+		}
+
+		return 0;
 	}
 
 	// 水が空なら

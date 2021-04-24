@@ -16,12 +16,11 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
-import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.util.ItemHelper;
 
 public class TileAetherFurnace extends TileMFBase {
@@ -49,7 +48,7 @@ public class TileAetherFurnace extends TileMFBase {
 			this.createCrystal();
 		}
 
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+		this.sentClient();
 		ItemHelper.compactInventory(this.inputInventory);
 		ItemHelper.compactInventory(this.crystaleInventory);
 		this.markDirty();
@@ -62,7 +61,7 @@ public class TileAetherFurnace extends TileMFBase {
 
 			// スロットが空なら終了
 			ItemStack stack = this.getInputItem(i);
-			if (stack.isEmpty()) { continue; }
+			if (stack.isEmpty() || !SlotPredicates.isMFItem(stack)) { continue; }
 
 			// 1アイテムのMF量の取得
 			int mfValue = this.getItemMF(stack.getItem());
@@ -80,7 +79,7 @@ public class TileAetherFurnace extends TileMFBase {
 			stack.shrink(value);
 		}
 
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+		this.sentClient();
 	}
 
 	// クリスタル生成
@@ -176,6 +175,7 @@ public class TileAetherFurnace extends TileMFBase {
 
 	@Override
 	public List<ItemStack> getList() {
+
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < 5; i++) {

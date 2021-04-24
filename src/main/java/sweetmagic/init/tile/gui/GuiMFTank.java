@@ -33,17 +33,13 @@ public class GuiMFTank extends GuiContainer {
 
 		GlStateManager.color(1, 1, 1, 1);
 		Minecraft.getMinecraft().renderEngine.bindTexture(texture);
-
 		int x = (this.width - this.xSize) / 2;
 		int y = (this.height - this.ySize) / 2;
-
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
-
-		int progress;
 
 		//こっちではゲージ量を計算する
 		if (!this.tile.isMfEmpty()) {
-			progress = this.tile.getMfProgressScaled(50);
+			int progress = this.tile.getMfProgressScaled(50);
 			this.drawTexturedModalRect(x + 15, y + 68 - progress, 180, 50 - progress, 5, progress + 1);
 		}
 	}

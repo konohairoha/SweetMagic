@@ -59,6 +59,8 @@ public class TileParallelInterfere extends TileSMBase {
 			if (this.world.isRemote && this.getTime() % 12 == 0) {
 				this.spawnParticl();
 			}
+
+			this.playSound();
 		}
 
 		else {
@@ -114,6 +116,9 @@ public class TileParallelInterfere extends TileSMBase {
 
 		Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, 0, z);
 		FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+	}
+
+	public void playSound () {
 	}
 
 	private final IItemHandlerModifiable autoInput = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.IN) {

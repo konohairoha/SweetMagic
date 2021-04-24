@@ -51,7 +51,6 @@ public class TileMFMMTable extends TileMFTable {
 		super.writeNBT(tags);
 		tags.setTag("wand", this.wandInventory.serializeNBT());
 		tags.setTag("Input", this.inputInventory.serializeNBT());
-		tags.setInteger("magiaFlux", this.magiaFlux);
 		return tags;
 	}
 
@@ -60,7 +59,6 @@ public class TileMFMMTable extends TileMFTable {
 		super.readNBT(tags);
 		this.wandInventory.deserializeNBT(tags.getCompoundTag("wand"));
 		this.inputInventory.deserializeNBT(tags.getCompoundTag("Input"));
-		this.setMF(tags.getInteger("magiaFlux"));
 	}
 
 	// 杖に入れるMF量の取得

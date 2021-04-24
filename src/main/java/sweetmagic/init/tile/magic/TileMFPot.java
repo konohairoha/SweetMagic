@@ -13,15 +13,13 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeHooks;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.block.magic.MFPot;
-import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.util.ParticleHelper;
 
 public class TileMFPot extends TileMFBase {
 
 	public static final String ISDEAD = "isDead";
-	public int maxMagiaFlux = 100000;	// 最大MF量を設定
+	public int maxMagiaFlux = 200000;	// 最大MF量を設定
 
 	public TileMFPot () {
 		super(false);
@@ -74,7 +72,7 @@ public class TileMFPot extends TileMFBase {
 			long time = this.getTime();
 
 			if (time % 20 == 0) {
-				PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+				this.sentClient();
 			}
 
 			if (time % 100 == 0) {
@@ -94,7 +92,7 @@ public class TileMFPot extends TileMFBase {
 			this.setMF(this.getMF() + 8);
 
 			if (time % 20 == 0) {
-				PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+				this.sentClient();
 			}
 
 			if (time % 100 == 0) {
@@ -113,7 +111,7 @@ public class TileMFPot extends TileMFBase {
 
 			if (time % 20 == 0) {
 				this.setMF(this.getMF() + 10);
-				PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+				this.sentClient();
 			}
 
 			if (time % 100 == 0) {
@@ -145,7 +143,7 @@ public class TileMFPot extends TileMFBase {
 
 					isCharge = true;
 					this.setMF((int) (this.getMF() + power));
-					PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+					this.sentClient();
 				}
 			}
 		}
@@ -182,7 +180,7 @@ public class TileMFPot extends TileMFBase {
 
 					isCharge = true;
 					this.setMF((int) (this.getMF() + power));
-					PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+					this.sentClient();
 				}
 			}
 		}
@@ -219,7 +217,7 @@ public class TileMFPot extends TileMFBase {
 
 		if (mfValue > 0) {
 			this.setMF((this.getMF() + mfValue));
-			PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+			this.sentClient();
 			this.spawnParticles();
 		}
 	}

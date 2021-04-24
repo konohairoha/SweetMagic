@@ -69,8 +69,8 @@ public class GuiGuidBook extends GuiScreen {
 
 	@Override
 	public void updateScreen() {
-		prevEntry = currentEntry;
-		prevPageNum = currentPageNum;
+		this.prevEntry = this.currentEntry;
+		this.prevPageNum = this.currentPageNum;
 
 		if (!this.mc.player.isEntityAlive() || this.mc.player.isDead) {
 			this.mc.player.closeScreen();
@@ -80,21 +80,23 @@ public class GuiGuidBook extends GuiScreen {
 	}
 
 	public void goToPage(int pageNum) {
-		if (pageNum >= 0 && this.currentEntry.getPages().size() > pageNum && prevPageNum == currentPageNum) {
+		if (pageNum >= 0 && this.currentEntry.getPages().size() > pageNum && this.prevPageNum == this.currentPageNum) {
 			this.currentPage.onClosed(this);
 			this.currentPageNum = pageNum;
-			this.currentPage = currentEntry.getPages().get(currentPageNum);
+			this.currentPage = this.currentEntry.getPages().get(this.currentPageNum);
 			this.pageOpened();
 		}
 	}
 
 	public void goToEntry(BookEntry entry) {
-		if (entry != null && entry.getPages().size() > 0 && prevEntry == currentEntry) {
-			if (currentEntry instanceof BookEntryCategory) {
+		if (entry != null && entry.getPages().size() > 0 && this.prevEntry == this.currentEntry) {
+
+			if (this.currentEntry instanceof BookEntryCategory) {
 				if (!(entry instanceof BookEntryCategory) && entry != BookInit.categories_entry) {
 					this.backLocation = new BookLocation(this.currentEntry, this.currentPageNum);
 				}
 			}
+
 			if (entry instanceof BookEntryCategory || entry == BookInit.categories_entry) {
 				this.backLocation = null;
 			}
@@ -114,7 +116,8 @@ public class GuiGuidBook extends GuiScreen {
 	}
 
 	private void goToHistoryLocation(int index) {
-		if (index >= 0 && index < this.history.size() && prevEntry == currentEntry && prevPageNum == currentPageNum) {
+
+		if (index >= 0 && index < this.history.size() && this.prevEntry == this.currentEntry && this.prevPageNum == this.currentPageNum) {
 			BookEntry entry = this.history.get(index).getEntry();
 			int page = this.history.get(index).getPage();
 
@@ -125,7 +128,7 @@ public class GuiGuidBook extends GuiScreen {
 			this.currentPage.onClosed(this);
 			this.currentEntry = entry;
 			this.currentPageNum = page;
-			this.currentPage = currentEntry.getPages().get(currentPageNum);
+			this.currentPage = this.currentEntry.getPages().get(this.currentPageNum);
 			this.pageOpened();
 		}
 	}
@@ -133,23 +136,38 @@ public class GuiGuidBook extends GuiScreen {
 	@SideOnly(Side.CLIENT)
 	@Override
 	protected void actionPerformed(GuiButton button) throws IOException {
+
 		if (button instanceof PageTurnButton) {
+
 			if (((PageTurnButton) button).isForward()) {
-				this.goToPage(currentPageNum + 1);
-			} else {
-				this.goToPage(currentPageNum - 1);
+				this.goToPage(this.currentPageNum + 1);
 			}
-		} else if (button instanceof BackButton) {
-			if (currentEntry.getCategory() == null) {
+
+			else {
+				this.goToPage(this.currentPageNum - 1);
+			}
+		}
+
+		else if (button instanceof BackButton) {
+
+			if (this.currentEntry.getCategory() == null) {
 				this.goToEntry(BookInit.categories_entry);
-			} else if (backLocation != null) {
-				this.backLocation.goTo(this);
-			} else {
-				this.goToEntry(currentEntry.getCategory().getCategoryEntry());
 			}
-		} else if (button instanceof LastHistoryButton) {
+
+			else if (this.backLocation != null) {
+				this.backLocation.goTo(this);
+			}
+
+			else {
+				this.goToEntry(this.currentEntry.getCategory().getCategoryEntry());
+			}
+		}
+
+		else if (button instanceof LastHistoryButton) {
 			this.goToHistoryLocation(this.history.size() - 1);
-		} else {
+		}
+
+		else {
 			this.currentPage.actionPerformed(this, button);
 		}
 	}
@@ -157,22 +175,31 @@ public class GuiGuidBook extends GuiScreen {
 	@Override
 	protected void keyTyped(char c, int key) throws IOException {
 
-		currentPage.keyPressed(c, key);
+		this.currentPage.keyPressed(c, key);
 
-		if (mc.gameSettings.keyBindInventory.getKeyCode() == key) {
-			if (currentEntry == BookInit.categories_entry) {
-				mc.displayGuiScreen(null);
-				mc.setIngameFocus();
-			} else if (currentEntry.getCategory() == null) {
-				this.goToEntry(BookInit.categories_entry);
-			} else if (backLocation != null) {
-				this.backLocation.goTo(this);
-			} else {
-				this.goToEntry(currentEntry.getCategory().getCategoryEntry());
+		if (this.mc.gameSettings.keyBindInventory.getKeyCode() == key) {
+
+			if (this.currentEntry == BookInit.categories_entry) {
+				this.mc.displayGuiScreen(null);
+				this.mc.setIngameFocus();
 			}
-		} else if (1 == key) {
-			mc.displayGuiScreen(null);
-			mc.setIngameFocus();
+
+			else if (this.currentEntry.getCategory() == null) {
+				this.goToEntry(BookInit.categories_entry);
+			}
+
+			else if (this.backLocation != null) {
+				this.backLocation.goTo(this);
+			}
+
+			else {
+				this.goToEntry(this.currentEntry.getCategory().getCategoryEntry());
+			}
+		}
+
+		else if (1 == key) {
+			this.mc.displayGuiScreen(null);
+			this.mc.setIngameFocus();
 		}
 	}
 
@@ -186,21 +213,26 @@ public class GuiGuidBook extends GuiScreen {
 	}
 
 	public void addNavButtons() {
+
 		int numPages = this.currentEntry.getPages().size();
+
 		if (this.currentPageNum > 0) {
-			this.addButton(new PageTurnButton(this.buttonList.size(), guiLeft, guiTop + HEIGHT - 10, false));
+			this.addButton(new PageTurnButton(this.buttonList.size(), this.guiLeft, this.guiTop + HEIGHT, false));
 		}
+
 		if (this.currentPageNum < numPages - 1) {
-			this.addButton(
-					new PageTurnButton(nextButtonID(), guiLeft + WIDTH - 18, guiTop + HEIGHT - 10, true));
+			this.addButton(new PageTurnButton(nextButtonID(), this.guiLeft + WIDTH - 18, this.guiTop + HEIGHT, true));
 		}
+
 		boolean backButton = this.currentEntry != BookInit.categories_entry;
 		boolean histButton = this.history.size() > 0 && this.currentEntry != BookInit.categories_entry;
+
 		if (backButton) {
-			this.addButton(new BackButton(nextButtonID(), (histButton) ? guiLeft + (WIDTH / 2) - (30 / 2) : guiLeft + (WIDTH / 2) - 8, guiTop + HEIGHT + 0));
+			this.addButton(new BackButton(this.nextButtonID(), (histButton) ? this.guiLeft + (WIDTH / 2) - (30 / 2) : this.guiLeft + (WIDTH / 2) - 8, this.guiTop + HEIGHT + 0));
 		}
+
 		if (histButton) {
-			this.addButton(new LastHistoryButton(nextButtonID(), (backButton) ? guiLeft + (WIDTH / 2) + (30 / 2) - 10 : guiLeft + (WIDTH / 2) - 5, guiTop + HEIGHT - 3));
+			this.addButton(new LastHistoryButton(this.nextButtonID(), (backButton) ? this.guiLeft + (WIDTH / 2) + (30 / 2) - 10 : this.guiLeft + (WIDTH / 2) - 5, this.guiTop + HEIGHT - 3));
 		}
 	}
 
@@ -293,14 +325,13 @@ public class GuiGuidBook extends GuiScreen {
 		public boolean isForward() {
 			return this.isForward;
 		}
-
 	}
 
 	@SideOnly(Side.CLIENT)
 	public class BackButton extends GuiButton {
 
 		public BackButton(int buttonId, int x, int y) {
-			super(buttonId, x, y, 16, 10, "book.rustic.button.back");
+			super(buttonId, x, y, 16, 10, "book.sm.button.back");
 		}
 
 		@Override
@@ -327,7 +358,7 @@ public class GuiGuidBook extends GuiScreen {
 	public class LastHistoryButton extends GuiButton {
 
 		public LastHistoryButton(int buttonId, int x, int y) {
-			super(buttonId, x, y, 10, 16, "book.rustic.button.last_history");
+			super(buttonId, x, y, 10, 16, "book.sm.button.last_history");
 		}
 
 		@Override

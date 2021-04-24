@@ -21,6 +21,7 @@ import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.magic.MFPot;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
@@ -125,7 +126,7 @@ public class TileMFFisher extends TileMFBase {
 	public boolean onFishing () {
 
 		this.setMF(this.getMF() - this.getNeedMF());
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+		this.sentClient();
 
 		if (!this.world.isRemote) {
 			LootContext.Builder lootcontext = new LootContext.Builder((WorldServer) this.world);
@@ -137,6 +138,11 @@ public class TileMFFisher extends TileMFBase {
 			// アイテムをスポーン
 			for (ItemStack stack : items) {
 				ItemHandlerHelper.insertItemStacked(this.outputInv, stack, false);
+			}
+
+			// 確率で海藻を追加
+			if (this.world.rand.nextFloat() <= 0.3F) {
+				ItemHandlerHelper.insertItemStacked(this.outputInv, new ItemStack(ItemInit.seaweed), false);
 			}
 		}
 

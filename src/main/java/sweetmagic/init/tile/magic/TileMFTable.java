@@ -11,9 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.iitem.IMFTool;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.tile.slot.StackHandler;
-import sweetmagic.packet.TileMFBlockPKT;
 
 public class TileMFTable extends TileMFBase {
 
@@ -74,8 +72,7 @@ public class TileMFTable extends TileMFBase {
 		// 燃焼アイテムのMFを取得してMFに加算する
 		this.setMF(this.getMF() + this.getItemBurnTime(stack));
 		stack.shrink(1);
-
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
+		this.sentClient();
 
 		return true;
 	}
@@ -156,8 +153,13 @@ public class TileMFTable extends TileMFBase {
 
 	@Override
 	public List<ItemStack> getList() {
+
 		List<ItemStack> stackList = new ArrayList<>();
-		stackList.add(this.getWandItem(0));
+
+		for (int i = 0; i < this.getInvSize(); i++) {
+			stackList.add(this.getWandItem(i));
+		}
+
 		stackList.add(this.getInputItem());
 		return stackList;
 	}

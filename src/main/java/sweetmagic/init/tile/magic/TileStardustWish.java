@@ -1,7 +1,5 @@
 package sweetmagic.init.tile.magic;
 
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -18,12 +16,14 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.items.wrapper.CombinedInvWrapper;
 import sweetmagic.client.particle.ParticleNomal;
-import sweetmagic.init.tile.magic.TilePedalCreate.RGB;
+import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
 
 public class TileStardustWish extends TileParallelInterfere {
+
+	public int randTime = 0;
 
 	// チェストスロット
 	public final ItemStackHandler chestInv = new StackHandler(this, this.getInvSize());
@@ -52,22 +52,20 @@ public class TileStardustWish extends TileParallelInterfere {
 		this.page = page;
 	}
 
+	public void playSound () {
+		if (this.randTime <= 0) {
+			this.randTime = 20 + this.world.rand.nextInt(40) + 1;
+		}
+
+		if (this.getTime() % this.randTime != 0) { return; }
+
+		this.randTime = 20 + this.world.rand.nextInt(40) + 1;
+		this.playSound(this.pos, SMSoundEvent.STARDUST, 0.3F, 1F + this.world.rand.nextFloat() * 0.15F);
+	}
+
 	public void spawnParticl () {
 
-//		float posX = this.pos.getX() + 0.5F;
-//		float posY = this.pos.getY() + 0.5F;
-//		float posZ = this.pos.getZ() + 0.5F;
 		Random rand = this.world.rand;
-
-//		for(int k = 0; k <= 1; k++) {
-//
-//			float f4 = (float) posX - 0.5F + rand.nextFloat();
-//			float f5 = posY + 0.75F + rand.nextFloat() * 0.75F;
-//			float f6 = (float) posZ - 0.5F + rand.nextFloat();
-//			List<Integer> color = this.getRGB(rand);
-//			Particle particle = new ParticleLay.Factory().createParticle(0, this.world, f4, f5, f6, 0, 0, 0, color.get(0), color.get(1), color.get(2));
-//			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
-//		}
 
 		for(int k = 0; k <= 2; k++) {
 			float randX = rand.nextFloat() - rand.nextFloat();
@@ -84,40 +82,6 @@ public class TileStardustWish extends TileParallelInterfere {
 			Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
 		}
-
-	}
-
-	public List<Integer> getRGB (Random rand) {
-
-		RGB color = null;
-
-		switch (rand.nextInt(7)) {
-		case 0:
-			color = RGB.RED;
-			break;
-		case 1:
-			color = RGB.B;
-			break;
-		case 2:
-			color = RGB.C;
-			break;
-		case 3:
-			color = RGB.D;
-			break;
-		case 4:
-			color = RGB.E;
-			break;
-		case 5:
-			color = RGB.F;
-			break;
-		case 6:
-			color = RGB.G;
-			break;
-
-		}
-
-		return Arrays.asList(color.r, color.g, color.b);
-
 	}
 
 	public final IItemHandlerModifiable autoInput = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.IN) {

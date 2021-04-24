@@ -278,7 +278,7 @@ public class TileSpawnStone extends TileSMBase {
 		entity.setLocationAndAngles(x, y, z, 0, 0F);
 		SMUtil.tameAIAnger((EntityLiving) entity, this.player);
 
-		// バフあ
+		// バフ
 		if (isBuff) {
 			entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(256D);
 			entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.33D);

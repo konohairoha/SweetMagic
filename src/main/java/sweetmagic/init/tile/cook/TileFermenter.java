@@ -51,6 +51,7 @@ public class TileFermenter extends TileSMBase {
 		}
 
 		if (this.tickTime % 100 == 0) {
+
 			this.isWorking = false;
 			this.isFinish = true;
 			this.playSound(this.pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F);

@@ -2,7 +2,7 @@ package sweetmagic.init.tile.magic;
 
 public class TileMFMMTank extends TileMFTank {
 
-	public int maxMagiaFlux = 60000000;	// 最大MF量を設定
+	public int maxMagiaFlux = 100000000;	// 最大MF量を設定
 
 	// 最大MF量を設定
 	@Override

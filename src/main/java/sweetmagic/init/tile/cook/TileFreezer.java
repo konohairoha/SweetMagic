@@ -15,12 +15,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.freezer.FreezerRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
-import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.block.blocks.BlockFreezer;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
-import sweetmagic.packet.TileJMPKT;
 import sweetmagic.util.ItemHelper;
 
 public class TileFreezer extends TileSMBase {
@@ -86,6 +84,7 @@ public class TileFreezer extends TileSMBase {
 
 		// 下のブロックなら終了
 		if (!this.isTop()) { return; }
+
 		this.tickTime++;
 
 		// クッキング中なら時間を足す
@@ -102,7 +101,6 @@ public class TileFreezer extends TileSMBase {
 		if (this.tickTime % 20 == 0) {
 
 			this.tickTime = 0;
-			ItemHelper.compactInventory(this.inputInventory);
 			ItemHelper.compactInventory(this.outputInventory);
 			this.markDirty();
 
@@ -174,7 +172,6 @@ public class TileFreezer extends TileSMBase {
 		if (!stack1.isEmpty()) { return; }
 
 		ItemHandlerHelper.insertItemStacked(this.iceInventory, stack, false);
-		ItemHelper.compactInventory(this.iceInventory);
 
 		// 水を消費させる
 		this.setWaterValue(this.getWaterValue() - this.getCostWater());
@@ -191,10 +188,8 @@ public class TileFreezer extends TileSMBase {
 			inputs.add(this.getInputItem(i));
 		}
 
-		//手持ちアイテムからレシピと一致するかを検索
+		//手持ちアイテムからレシピと一致するかを検索してしっぱしたら終了
 		FreezerRecipeInfo recipeInfo = SweetMagicAPI.getFreezRecipeInfo(stack, inputs);
-
-		// canComplete = Falseの場合レシピ処理をしない
 		if (!recipeInfo.canComplete) { return; }
 
 		//入れるアイテム、完成品はItemStackリストに突っ込む
@@ -202,7 +197,7 @@ public class TileFreezer extends TileSMBase {
 		List<ItemStack> results = new ArrayList<ItemStack>();
 
 		//減らしたい個数を取得
-		int iShrink = 1;
+		int iShrink = recipeInfo.getHandList().get(0).getCount();
 		handitem.setCount(iShrink);
 
 		// 取り出したアイテムをリストにセットする
@@ -213,19 +208,30 @@ public class TileFreezer extends TileSMBase {
 		}
 
 		ItemStack copy = this.getHandItem().copy();
-		copy.setCount(1);
+		copy.setCount(iShrink);
 		this.inPutList.add(copy);
+		this.getHandItem().shrink(iShrink);
 
-		this.getHandItem().shrink(1);
-		for (ItemStack s : inputs) {
-			s.shrink(1);
+		for (Object[] recipe : recipeInfo.getinputs()) {
+
+			// ItemStackの取得して個数設定 + リスト追加
+			ItemStack send = ((ItemStack) recipe[1]).copy();
+			send.setCount((int) recipe[2]);
+
+			for (ItemStack s : inputs) {
+
+				if (send.getItem() != s.getItem() || send.getCount() > s.getCount()) { continue; }
+
+				s.shrink(send.getCount());
+				break;
+			}
 		}
 
 		// Output
 		for (Object st : recipeInfo.getOutputItems()) {
 			ItemStack ret = (ItemStack) st;
 			ItemStack send = ret.copy();
-			send.setCount(iShrink * send.getCount());
+			send.setCount(send.getCount());
 			results.add(send);
 		}
 
@@ -263,9 +269,6 @@ public class TileFreezer extends TileSMBase {
 		this.cookTime = 0;
 		this.isCooking = false;
 		BlockJuiceMaker.setState(this.world, this.pos);
-
-		// クライアントに送信
-		PacketHandler.sendToClient(new TileJMPKT(this.pos, this.tickTime, this.cookTime, this.isCooking));
 	}
 
 	// ゲージ計算用

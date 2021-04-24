@@ -57,7 +57,7 @@ public class TileMFChanger extends TileMFBase {
 
 			// スロットが空なら終了
 			ItemStack stack = this.getInputItem(i);
-			if (stack.isEmpty()) { continue; }
+			if (stack.isEmpty() || !SlotPredicates.isMFItem(stack)) { continue; }
 
 			// 1アイテムのMF量の取得
 			int mfValue = this.getItemMF(stack.getItem());

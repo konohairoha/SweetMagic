@@ -27,7 +27,7 @@ public class TileMFTank extends TileMFBase {
 
 	private final ItemStackHandler inputInventory = new StackHandler(this, this.getInvSize());
 	private final ItemStackHandler outputInventory = new StackHandler(this, this.getInvSize());
-	public int maxMagiaFlux = 200000;	// 最大MF量を設定
+	public int maxMagiaFlux = 500000;	// 最大MF量を設定
 
 	public TileMFTank () { }
 
@@ -91,7 +91,6 @@ public class TileMFTank extends TileMFBase {
 	public boolean canSmelt() {
 
 		ItemStack toSmelt = this.inputInventory.getStackInSlot(0);
-
 		if (toSmelt.isEmpty()) { return false; }
 
 		// 鉄ならtoSmeltを書き換え
@@ -171,16 +170,6 @@ public class TileMFTank extends TileMFBase {
     // 送信するMF量
 	@Override
     public int getUseMF () {
-
-		switch (this.getMaxMF()) {
-		case 200000:
-			return 1000;
-		case 3000000:
-			return 5000;
-		case 60000000:
-			return 50000;
-		}
-
 		return 1000;
     }
 

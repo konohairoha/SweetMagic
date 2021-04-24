@@ -46,10 +46,7 @@ public class GuiJuiceMaker extends GuiContainer {
 		if (!this.tile.isEmptyWater()) {
 
 			// ゲージ描画数
-			int progress;
-
-			// ゲージの値を設定
-			progress = this.tile.getMfProgressScaled(76);
+			int progress = this.tile.getMfProgressScaled(74);
 
 			// (X開始位置、Y開始位置、ゲージの左下X、ゲージの左下Y、ゲージのXサイズ、ゲージのYサイズ)
 			this.drawTexturedModalRect(x + 29, y + 95 - progress, 191, 77 - progress, 15, progress);
@@ -61,7 +58,7 @@ public class GuiJuiceMaker extends GuiContainer {
 			int progress = this.tile.getCookProgress(22);
 
 			// (X開始位置、Y開始位置、ゲージの左下X、ゲージの左下Y、ゲージのXサイズ、ゲージのYサイズ)
-			this.drawTexturedModalRect(x + 96, y + 35, 211 , 14, 2 +progress, 16);
+			this.drawTexturedModalRect(x + 96, y + 35, 211 , 14, 2 + progress, 16);
 		}
 	}
 
