@@ -13,20 +13,23 @@ public class PedalRecipeInfo extends NormalRecipeInfo {
 		this.inputItems = null;
 		this.outputs = null;
 		this.canComplete = false;
+		this.keepTag = false;
 	}
 
 	// アイテム情報セット用初期化
-	public PedalRecipeInfo(List<ItemStack> hand, List<Object[]> input, List<Object> outs) {
+	public PedalRecipeInfo(List<ItemStack> hand, List<Object[]> input, List<Object> outs, boolean keepTag) {
 		this.handList = hand;
 		this.inputItems = input;
 		this.outputs = outs;
+		this.keepTag = keepTag;
 	}
 
 	// 指定したアイテム情報、リザルトアイテムをこのクラスにセットする
-	public PedalRecipeInfo setRecipeInfo(List<ItemStack> hand, List<Object[]> input, List<Object> outs) {
+	public PedalRecipeInfo setRecipeInfo(List<ItemStack> hand, List<Object[]> input, List<Object> outs, boolean keepTag) {
 		this.handList = hand;
 		this.inputItems = input;
 		this.outputs = outs;
+		this.keepTag = keepTag;
 		return this;
 	}
 

@@ -28,15 +28,6 @@ public class MFTableRecipeInfo extends NormalRecipeInfo {
 		this.handList = hand;
 		this.inputItems = input;
 		this.outputs = outs;
-
-//		List<ItemStack> stackList = new ArrayList<ItemStack>();
-//
-//		for (ItemStack stack : stackList) {
-//			stackList.add(stack);
-//		}
-//
-//		this.outputItems = stackList;
-
 		return this;
 	}
 

@@ -17,8 +17,8 @@ public class JuiceMakerRecipePlugin implements IJuiceMakerRecipePlugin {
 		// コーンスープ
 		recipe.addRecipe(new JuiceMakerRecipes(
 			new ItemStack(ItemInit.corn),
-			new Object[] { "dustSalt", "bucketMilk", "cropOnion"},
-			new ItemStack[] { new ItemStack(ItemInit.corn_soup, 3)}
+			new Object[] { "dustSalt", "bucketMilk", "cropOnion" },
+			new ItemStack[] { new ItemStack(ItemInit.corn_soup, 3) }
 		));
 
 		// ベリーオレンジジュース
@@ -31,28 +31,28 @@ public class JuiceMakerRecipePlugin implements IJuiceMakerRecipePlugin {
 		// イチゴミルク
 		recipe.addRecipe(new JuiceMakerRecipes(
 			"cropStrawberry",
-			new Object[] { "cropStrawberry", "bucketMilk", "dustSugar" },
-			new ItemStack[] { new ItemStack(ItemInit.strawberrymilk, 3)}
+			new Object[] { "cropStrawberry", "bucketMilk", "dustSugar"  },
+			new ItemStack[] { new ItemStack(ItemInit.strawberrymilk, 3) }
 		));
 
 		// ココナッツジュース
 		recipe.addRecipe(new JuiceMakerRecipes(
 			new ItemStack(ItemInit.coconut),
-			new Object[] { "cropLemon", "cropMelon", "dustSalt"},
-			new ItemStack[] { new ItemStack(ItemInit.coconut_juice, 3)}
+			new Object[] { "cropLemon", "cropMelon", "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.coconut_juice, 3) }
 		));
 
 		// ココア
 		recipe.addRecipe(new JuiceMakerRecipes(
 			new ItemStack(ItemInit.cocoapowder),
 			new Object[] { new ItemStack(ItemInit.cocoamass), "bucketMilk", "dustSugar" },
-			new ItemStack[] { new ItemStack(ItemInit.cocoa, 3)}
+			new ItemStack[] { new ItemStack(ItemInit.cocoa, 3) }
 		));
 
 		// パンプキンスープ
 		recipe.addRecipe(new JuiceMakerRecipes(
 			new ItemStack(Blocks.PUMPKIN),
-			new Object[] { "cropOnion", "bucketMilk", "foodCream"},
+			new Object[] { "cropOnion", "bucketMilk", "foodCream" },
 			new ItemStack[] { new ItemStack(ItemInit.pumpkin_soup, 3) }
 		));
 
@@ -63,11 +63,25 @@ public class JuiceMakerRecipePlugin implements IJuiceMakerRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.banana_smoothy, 3) }
 		));
 
-		// バナナすむーじ
+		// ミックスジュース
 		recipe.addRecipe(new JuiceMakerRecipes(
 			new ItemStack(ItemInit.banana),
 			new Object[] { "listAllfruit", "bucketMilk", new ItemStack(Blocks.ICE) },
 			new ItemStack[] { new ItemStack(ItemInit.mixed_juice, 4) }
+		));
+
+		// コーヒー
+		recipe.addRecipe(new JuiceMakerRecipes(
+			new ItemStack(ItemInit.coffee_seed),
+			new Object[] { new ItemStack(ItemInit.coffee_seed, 9), "waterBucket", "dustSugar" },
+			new ItemStack[] { new ItemStack(ItemInit.coffee) }
+		));
+
+		// カフェラテ
+		recipe.addRecipe(new JuiceMakerRecipes(
+			new ItemStack(ItemInit.coffee_seed),
+			new Object[] { new ItemStack(ItemInit.coffee_seed, 9), "bucketMilk", "dustSugar" },
+			new ItemStack[] { new ItemStack(ItemInit.cafe_latte, 1) }
 		));
 
 	}

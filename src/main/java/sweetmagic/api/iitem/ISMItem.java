@@ -92,4 +92,12 @@ public interface ISMItem {
 	default List<EntityLivingBase> getEntityList (World world, BlockPos pos1, BlockPos pos2) {
 		return world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos1, pos2));
 	}
+
+	// サブ属性の取得
+	default SMElement getSubElement() {
+		return null;
+	}
+
+	// サブ属性の設定
+	default void setSubElement (SMElement ele) { }
 }

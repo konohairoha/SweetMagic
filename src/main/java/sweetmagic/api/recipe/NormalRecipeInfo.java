@@ -18,6 +18,7 @@ public class NormalRecipeInfo {
 	public List<Object> outputs;
 	public List<ItemStack> outputItems;
 	public boolean canComplete;
+	public boolean keepTag;
 
 	// 鉱石辞書対応用メインアイテムリスト
 	public List<ItemStack> handList;
@@ -37,19 +38,6 @@ public class NormalRecipeInfo {
 	public List<Object> getOutputItems() {
 		return this.outputs;
 	}
-
-	// アイテム情報セット用初期化
-//	public NormalRecipeInfo(List<Object[]> inputs, ItemStack[] outputs) {
-//		this.inputItems = inputs;
-//		this.outputItems = outputs;
-//	}
-
-	// 指定したアイテム情報、リザルトアイテムをこのクラスにセット
-//	public NormalRecipeInfo setRecipeInfo(List<Object[]> inputs, ItemStack[] outputs) {
-//		this.inputItems = inputs;
-//		this.outputItems = outputs;
-//		return this;
-//	}
 
 	public List<Object[]> getinputs() {
 		List<Object[]> ipts = new ArrayList<Object[]>(this.inputItems);

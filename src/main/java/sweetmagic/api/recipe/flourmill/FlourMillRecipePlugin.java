@@ -115,5 +115,17 @@ public class FlourMillRecipePlugin implements IFlourMillRecipePlugin {
 			new ItemStack(Blocks.LEAVES),
 			new ItemStack[] { new ItemStack(Items.DYE, 2, 3), new ItemStack(Blocks.SAPLING, 1, 3)
 		}));
+
+		// コーヒー豆
+		recipe.addRecipe(new FlourMillRecipes(
+			new ItemStack(Blocks.TALLGRASS, 1, 1),
+			new ItemStack[] { new ItemStack(ItemInit.coffee_seed), new ItemStack(ItemInit.coffee_seed)
+		}));
+
+		// 火炎の粉
+		recipe.addRecipe(new FlourMillRecipes(
+			new ItemStack(ItemInit.fire_nasturtium_petal, 1),
+			new ItemStack[] { new ItemStack(ItemInit.fire_powder, 2), new ItemStack(ItemInit.fire_powder)
+		}));
 	}
 }

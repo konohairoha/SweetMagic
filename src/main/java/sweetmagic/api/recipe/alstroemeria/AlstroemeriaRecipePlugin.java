@@ -202,50 +202,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(Items.BLAZE_ROD) }
 		));
 
-		// 改良型MFテーブル
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.mftable),
-			new Object[] { new ItemStack(ItemInit.mysterious_page, 8), new ItemStack(ItemInit.sannyflower_petal, 16), new ItemStack(ItemInit.moonblossom_petal, 16),
-					new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.witch_tears) },
-			new ItemStack[] { new ItemStack(BlockInit.advanced_mftable) }
-		));
-
-		// 改良型MFチェンジャー
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.mfchanger),
-			new Object[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.magicmeal, 16), new ItemStack(Items.ENDER_PEARL, 4), new ItemStack(ItemInit.witch_tears)},
-			new ItemStack[] { new ItemStack(BlockInit.advanced_mfchanger) }
-		));
-
-		// 改良型MFタンク
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.mftank),
-			new Object[] { new ItemStack(BlockInit.sugarglass, 64), new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.witch_tears)},
-			new ItemStack[] { new ItemStack(BlockInit.advanced_mftank) }
-		));
-
-		// 改良型エーテル炉
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.aether_furnace_bottom),
-			new Object[] { new ItemStack(BlockInit.glow_lamp, 4), new ItemStack(ItemInit.pure_crystal, 4), new ItemStack(Items.GOLD_INGOT, 12)
-					, new ItemStack(Blocks.IRON_BARS, 16), new ItemStack(ItemInit.witch_tears)},
-			new ItemStack[] { new ItemStack(BlockInit.advanced_aether_furnace_bottom) }
-		));
-
-		// マスターマギアタンク
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.advanced_mftank),
-			new Object[] { new ItemStack(BlockInit.sugarglass, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2)},
-			new ItemStack[] { new ItemStack(BlockInit.mm_tank) }
-		));
-
-		// マスターマギアテーブル
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.advanced_mftable),
-			new Object[] { new ItemStack(BlockInit.prism_log, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2) },
-			new ItemStack[] { new ItemStack(BlockInit.mm_table) }
-		));
-
 		// 黄昏の明かり
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new OreItems("glowstone", 4),
@@ -328,6 +284,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(BlockInit.estor_log, 4),
 			new Object[] { new OreItems("chestWood", 4) },
 			new ItemStack[] { new ItemStack(BlockInit.estor_woodchest) }
+		));
+
+		// カフェキッチンテーブル
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("chestWood", 4),
+			new Object[] { new OreItems("smLog", 4) },
+			new ItemStack[] { new ItemStack(BlockInit.cafe_kitchen_table) }
 		));
 
 		// 黄色のラックチェスト
@@ -447,6 +410,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(ItemInit.cotton),
 			new Object[] { new ItemStack(Items.STRING, 4) },
 			new ItemStack[] { new ItemStack(Items.FEATHER, 2) }
+		));
+
+		// 種袋
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.cotton_cloth, 4),
+			new Object[] { new ItemStack(Items.STRING), new OreItems("listAllseed", 5) },
+			new ItemStack[] { new ItemStack(ItemInit.seedbag) }
 		));
 
 		// ブロック、ハーフ、階段をリストに突っ込む

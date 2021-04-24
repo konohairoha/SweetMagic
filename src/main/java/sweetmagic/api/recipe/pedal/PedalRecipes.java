@@ -12,6 +12,7 @@ public class PedalRecipes {
 	public ArrayList<ItemStack> handList = new ArrayList<ItemStack>();
     public List<List<ItemStack>> inputList = new ArrayList<List<ItemStack>>();
 	public ArrayList<Object> resultItems = new ArrayList<Object>();
+	public boolean keepTag = false;
 
     // メインアイテムリスト
 	public List<ItemStack> getHandList () {
@@ -23,6 +24,10 @@ public class PedalRecipes {
     }
 
     public PedalRecipes(Object hand , Object[] inputs ,Object[] outputs) {
+    	this(hand, inputs, outputs, false);
+    }
+
+    public PedalRecipes(Object hand , Object[] inputs ,Object[] outputs, boolean keepTag) {
 
         this.clear();
         this.handList = SMUtil.getOreList(hand);
@@ -54,6 +59,7 @@ public class PedalRecipes {
 			else throw new IllegalArgumentException("Not a itemStack");
         }
 
+    	this.keepTag = keepTag;
     }
 
     // 初期化
@@ -79,6 +85,10 @@ public class PedalRecipes {
 
     public List<List<ItemStack>> getInputList() {
         return this.inputList;
+    }
+
+    public boolean getKeepTag () {
+    	return this.keepTag;
     }
 
     //レシピ登録

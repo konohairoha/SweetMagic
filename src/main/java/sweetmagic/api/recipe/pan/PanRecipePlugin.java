@@ -91,5 +91,26 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 			new Object[] { new ItemStack(ItemInit.miso, 2), "bucketWater", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.saba_miso, 4) }
 		));
+
+		// ワッフル
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("dustSugar", 3),
+			new Object[] { new OreItems("dustFlour", 4), new OreItems("egg", 4), new OreItems("foodButter", 4), "dustSalt", "foodOil" },
+			new ItemStack[] { new ItemStack(ItemInit.waffle, 10) }
+		));
+
+		// 野菜炒め
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("cropCabbage", 3),
+			new Object[] { new OreItems("listAllporkraw", 2), new OreItems("cropOnion", 4), new OreItems("cropCarrot", 3), new OreItems("foodOil", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.salad_mixoil, 3) }
+		));
+
+		// チャーハン
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("foodRice", 8),
+			new Object[] { new OreItems("cropOnion", 4), new OreItems("cropCarrot", 4), new ItemStack(Items.COOKED_PORKCHOP), new OreItems("egg", 8), "foodOil", "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.fried_rice, 8) }
+		));
 	}
 }

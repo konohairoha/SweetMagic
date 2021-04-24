@@ -175,6 +175,28 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_cyclon) }
 		));
 
+		// 回避1魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.tiny_feather, 4),
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.clero_petal, 4),
+					new ItemStack(ItemInit.mystical_page), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_avoid) }
+		));
+
+		// 回避2魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_avoid),
+			new ItemStack[] { new ItemStack(ItemInit.tiny_feather, 8), new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.mystical_page, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_avoid_2) }
+		));
+
+		// 回避3魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_avoid_2),
+			new ItemStack[] { new ItemStack(ItemInit.tiny_feather, 16), new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.mystical_page, 3) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_avoid_3) }
+		));
+
 		// 時間低速化魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.clero_petal, 8),
@@ -366,6 +388,14 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack(ItemInit.magic_scumefang),
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.dm_flower, 32), new ItemStack(ItemInit.mystical_page, 3) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_foamy_hell) }
+		));
+
+
+		// 泡爆発撃魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_foamy_hell),
+			new ItemStack[] { new ItemStack(ItemInit.magic_blast), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_bleb_burst) }
 		));
 
 		// 毒魔法

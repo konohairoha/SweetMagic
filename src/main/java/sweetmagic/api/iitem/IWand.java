@@ -20,24 +20,24 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.SMGuiHandler;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
+import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.init.tile.inventory.InventorySMWand;
-import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.packet.PlayerSoundPKT;
-import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.util.SoundHelper;
 
-public interface IWand {
+public interface IWand extends IMFTool {
 
 	// NBT用の変数
 	public static final String SLOT = "slot";				// 選択中のスロット
 	public static final String SLOTCOUNT = "slotCount";	// スロットの数
 	public static final String EXP = "exp";				// 経験値
 	public static final String LEVEL = "level";			// レベル
-	public static final String MF = "mf";					// MF
 	public static final String ELEMENT = "element";		// 属性
 	public static final String FAVFLAG = "favoriteFlag";	// お気に入り切り替え用フラグ
 	public static final String FAV1 = "favorite_1";		// お気に入り1
@@ -61,14 +61,6 @@ public interface IWand {
 	//右クリックチャージをやめたときに矢を消費せずに矢を射る
 	void onPlayerStoppedUsing(ItemStack stack, World world, EntityLivingBase living, int timeLeft);
 
-
-	/*
-	 * =========================================================
-	 * 				アクション処理　Start
-	 * =========================================================
-	 */
-
-
 	/*
 	 * =========================================================
 	 * 				アクション登録　End
@@ -78,60 +70,7 @@ public interface IWand {
 
 	/*
 	 * =========================================================
-	 * 				デフォルトアクション登録　Start
-	 * =========================================================
-	 */
-
-//	default ActionResult<ItemStack> onItemRightClickWand(World world, EntityPlayer player, EnumHand hand) {
-//
-//		// アイテムスタックを取得
-//		ItemStack stack = player.getHeldItem(hand);
-//
-//		if (hand == EnumHand.OFF_HAND || stack.isEmpty()) {
-//			return new ActionResult(EnumActionResult.PASS, stack);
-//		}
-//
-//		// nbtを取得
-//		NBTTagCompound tags = this.getNBT(stack);
-//
-//		// 選択中のアイテムを取得
-//		ItemStack slotItem = this.getSlotItem(player, stack, tags);
-//
-//		if (slotItem.isEmpty() || !(slotItem.getItem() instanceof ISMItem)) { return new ActionResult(EnumActionResult.PASS, stack); }
-//
-//		ISMItem item = (ISMItem) slotItem.getItem();
-//		this.slotItem = item;
-//
-//		// 射撃タイプで分別
-//		switch (item.getType()) {
-//
-//		// 射撃タイプ
-//		case SHOTTER:
-//
-//			// 射撃処理
-//			this.shotterActived(world, player, stack, slotItem, tags);
-//			break;
-//
-//		// 空中タイプ
-//		case AIR:
-//
-//			// 空中処理
-//			this.airActived(world, player, stack, slotItem, tags);
-//			break;
-//		case CHARGE:
-//			player.setActiveHand(hand);
-//			break;
-//		default:
-//			return new ActionResult(EnumActionResult.PASS, stack);
-//
-//		}
-//
-//		return new ActionResult(EnumActionResult.SUCCESS, stack);
-//	}
-
-	/*
-	 * =========================================================
-	 * 				デフォルトアクション登録　End
+	 * 				アクション処理　Start
 	 * =========================================================
 	 */
 
@@ -331,7 +270,7 @@ public interface IWand {
 
 	/*
 	 * =========================================================
-	 * 				魔法発動中処理　End
+	 * 				魔法発動中処理　Start
 	 * =========================================================
 	 */
 
@@ -346,6 +285,7 @@ public interface IWand {
 
 		tags.setInteger(LEVEL, (level + enchaLevel));
 		flag = smItem.onItemAction(world, player, stack, item);
+		AdvancedInit.active_magic.triggerFor(player);
 
 		// レベルを戻す
 		tags.setInteger(LEVEL, level);
@@ -385,7 +325,7 @@ public interface IWand {
 
 			// actionFlagがtrueならレベルアップチェック
 			if (actionFlag && !world.isRemote) {
-				this.levelUpCheck(world, player, stack, Math.max((int) smItem.getUseMF() / 10, 0));
+				this.levelUpCheck(world, player, stack, this.getAddExp(player, smItem));
 			}
 		}
 	}
@@ -397,8 +337,7 @@ public interface IWand {
 
 	// MFを設定
 	default int setMF (EntityPlayer player, ItemStack stack, ISMItem smItem) {
-		int mf = this.getMF(stack) - this.getCostMF(player, stack, smItem.getUseMF());
-		return mf;
+		return this.getMF(stack) - this.getCostMF(player, stack, smItem.getUseMF());
 	}
 
 	// 消費MF量取得
@@ -411,9 +350,7 @@ public interface IWand {
 		}
 
 		// MF消費量の減少
-		useMF *= this.addCostDown(player, stack);
-
-		return useMF;
+		return useMF *= this.addCostDown(player, stack);
 	}
 
 	// クールタイムの取得
@@ -427,9 +364,7 @@ public interface IWand {
 		}
 
 		// クール時間の減少
-		coolTime *= this.addCoolTimeDown(player, stack);
-
-		return coolTime;
+		return coolTime *= this.addCoolTimeDown(player, stack);
 	}
 
 	// エンチャレベル取得
@@ -478,28 +413,33 @@ public interface IWand {
 	default float addCoolTimeDown (EntityPlayer player, ItemStack stack) {
 
 		// 杖自体のクールタイム取得と装飾品のクールタイム取得
-		float coolTimeDown = 1F;
 		int downTime = this.getCoolTimeDown() + this.acceCoolTime(player);
 
-		if (downTime > 0) {
-			coolTimeDown = (100 - downTime) / 100F;
+		// クールタイム減少が0以外なら
+		if (downTime != 0) {
+			return (100 - downTime) * 0.01F;
 		}
 
-		return coolTimeDown;
+		return 1F;
 	}
 
 	// downTimeの大きさでMF消費量を減らす
 	default float addCostDown (EntityPlayer player, ItemStack stack) {
 
-		// 杖自体のクールタイム取得と装飾品のクールタイム取得
-		float costDown = 1F;
-		int downTime = this.getCoolTimeDown();
+		// 杖自体のコスト取得と装飾品のコスト取得
+		int downValue = this.getCoolTimeDown() + this.acceCostDown(player);
 
-		if (downTime > 0) {
-			costDown = (100 - downTime) / 100F;
+		// MF消費ダウンバフがかかってるなら
+		if (player.isPotionActive(PotionInit.mf_down)) {
+			downValue += 10;
 		}
 
-		return costDown;
+		// コスト変化量が0以外なら
+		if (downValue != 0) {
+			return (100 - downValue) * 0.01F;
+		}
+
+		return 1F;
 	}
 
 	// クールタイム減少時間の値
@@ -517,6 +457,7 @@ public interface IWand {
 		// インベントリを取得
 		InventoryPouch neo = new InventoryPouch(player);
 		IItemHandlerModifiable inv = neo.inventory;
+		boolean isScroll = false;
 
 		// インベントリの分だけ回す
 		for (int i = 0; i < inv.getSlots(); i++) {
@@ -525,13 +466,53 @@ public interface IWand {
 			ItemStack st = inv.getStackInSlot(i);
 			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
 
-			// ウィッチスクロールなら10%を返す
-			if (st.getItem() == ItemInit.witch_scroll) {
-				return 10;
+			// ウィッチスクロールなら10%減少を返す
+			if (st.getItem() == ItemInit.witch_scroll && !isScroll) {
+				isScroll = true;
+				coolTime += 10;
+			}
+
+			// 魔術師のグローブなら10%増加を返す
+			else if (st.getItem() == ItemInit.magicians_grobe) {
+				coolTime -= 10;
 			}
 		}
 
 		return coolTime;
+	}
+
+	// 装備品の消費タイム取得
+	default int acceCostDown (EntityPlayer player) {
+		int costValue = 0;
+		return costValue;
+	}
+
+	// 装備品の経験値追加
+	default int getAddExp (EntityPlayer player, ISMItem smItem) {
+
+		int exp = Math.max((int) smItem.getUseMF() / 10, 0);
+
+		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return exp; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+		float addPower = 1F;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			if (st.getItem() == ItemInit.magicians_grobe) {
+				addPower += 0.2F;
+			}
+		}
+
+		return exp *= addPower;
 	}
 
 	// レベルアップできるかどうか
@@ -601,7 +582,7 @@ public interface IWand {
 			}
 		}
 
-		return exp;
+		return Math.min(exp, 600000);
 	}
 
 	/*
@@ -691,16 +672,6 @@ public interface IWand {
   		this.getNBT(stack).setInteger(EXP, expValue);
   	}
 
-  	// MFを取得
-	default int getMF (ItemStack stack) {
-    	return this.getNBT(stack).getInteger(MF);
-  	}
-
-  	// MFを設定
-	default void setMF (ItemStack stack, int expValue) {
-  		this.getNBT(stack).setInteger(MF, expValue);
-  	}
-
 	// スロットの取得
 	default int getSlot (ItemStack stack) {
 		return this.getNBT(stack).getInteger(SLOTCOUNT);
@@ -721,11 +692,6 @@ public interface IWand {
 	 * 				NBT用メソッド　End
 	 * =========================================================
 	 */
-
-	// ゲージ計算取得用
-	default int getMfProgressScaled(ItemStack stack, int value) {
-		return Math.min(value, (int) (value * this.getMF(stack) / this.getMaxMF(stack)));
-	}
 
 	// 選択しているアイテムを取得
 	default ItemStack getSlotItem (EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
@@ -764,53 +730,6 @@ public interface IWand {
 		}
 	}
 
-	// MFが最大かどうか
-	default boolean isMaxMF (ItemStack stack) {
-		return this.getMF(stack) >= this.getMaxMF(stack);
-	}
-
-	// MFブロックからMFを入れるときの処理
-	default void insetMF (ItemStack stack, TileMFTable tile) {
-
-		int mf = this.getMF(stack);
-		int useMF = tile.useMF > tile.getMF() ? tile.getMF() : tile.useMF;
-		int sumMF = mf + useMF;
-
-		// 合計MFが最大値より少ない場合
-		if (sumMF <= this.getMaxMF(stack)) {
-			this.setMF(stack, sumMF);
-			tile.setMF(tile.getMF() - useMF);
-		}
-
-		// 合計MFが最大値を超える場合
-		else {
-
-			int insertMF = this.getMaxMF(stack) - mf;
-			this.setMF(stack, mf + insertMF);
-			tile.setMF(tile.getMF() - insertMF);
-		}
-
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, tile.getMF(), tile.getTilePos()));
-	}
-
-	default void insetMF (ItemStack stack, int insertMF) {
-
-		int mf = this.getMF(stack);
-		int sumMF = insertMF + mf;
-
-		// 合計MFが最大値より少ない場合
-		if (sumMF <= this.getMaxMF(stack)) {
-			this.setMF(stack, sumMF);
-		}
-
-		// 合計MFが最大値を超える場合
-		else {
-
-			int setMF = this.getMaxMF(stack) - mf;
-			this.setMF(stack, mf + setMF);
-		}
-	}
-
 	// クリエパワーを取得
 	default float getCreativePower () {
 		return 40F;
@@ -818,14 +737,19 @@ public interface IWand {
 
 	//右クリックでチャージした量で射程を伸ばす
 	default float getArrowVelocity(int charge, float maxTick) {
-		float f = (float) charge / 20.0F;
-		f = (f * f + f * 2.0F) / 3.0F;
+		float f = (float) charge / 20F;
+		f = (f * f + f * 2F) / 3F;
 		return Math.min(f, maxTick);
 	}
 
 	// デフォルトの座標設定
 	default BlockPos getWandPos () {
 		return new BlockPos(0, 0, 0);
+	}
+
+	// 属性が空以外かつtier5以上なら
+	default boolean isNotElement () {
+		return this.getWandElement() != null && this.getTier() >= 5;
 	}
 
 	/*
@@ -860,6 +784,11 @@ public interface IWand {
 
 	// 溜め時間の設定
 	void setChargeTick(float chargeTick);
+
+	// 杖の属性
+	default SMElement getWandElement () {
+		return null;
+	}
 
 	/*
 	 * =========================================================
@@ -920,6 +849,5 @@ public interface IWand {
 	 * 				レンダーメソッド　Start
 	 * =========================================================
 	 */
-
 
 }
