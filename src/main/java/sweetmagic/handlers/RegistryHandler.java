@@ -3,6 +3,7 @@ package sweetmagic.handlers;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.biome.BiomeEnd;
@@ -14,8 +15,10 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.config.SMConfig;
 import sweetmagic.event.BlockBreakEvent;
+import sweetmagic.event.EntityItemTossEvent;
 import sweetmagic.event.HasItemEvent;
 import sweetmagic.event.LivingDamageEvent;
 import sweetmagic.event.LivingDethEvent;
@@ -60,8 +63,9 @@ import sweetmagic.init.tile.magic.TileAetherHopper;
 import sweetmagic.init.tile.magic.TileFlyishForer;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
-import sweetmagic.init.tile.magic.TileMFF;
 import sweetmagic.init.tile.magic.TileMFFisher;
+import sweetmagic.init.tile.magic.TileMFFurnace;
+import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
 import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFMMTank;
 import sweetmagic.init.tile.magic.TileMFPot;
@@ -117,6 +121,8 @@ import sweetmagic.worldgen.gen.WitchHouseGen;
 import sweetmagic.worldgen.gen.WorldVillageGen;
 
 public class RegistryHandler {
+
+	public static final String MODID = SweetMagicCore.MODID;
 
 	public static void Common(FMLPreInitializationEvent event) {
 
@@ -189,50 +195,55 @@ public class RegistryHandler {
 		MapGenStructureIO.registerStructure(MapWitchHouse.Start.class, "witchhouse_main");
 		WitchHousePiece.registerIdoPiece();
 
+//		MapGenStructureIO.registerStructure(MapGenVillager.Start.class, "villager");
+//		VillagerPiece.registerIdoPiece();
+
 	}
 
 	// tileの登録
-	public static void tileHandler (String MODID) {
-		GameRegistry.registerTileEntity(TileSannyFlower.class, new ResourceLocation(MODID, "ParticleFrower"));
-		GameRegistry.registerTileEntity(TileCleroLanp.class, new ResourceLocation(MODID, "CleroLanp"));
-		GameRegistry.registerTileEntity(TileAlstroemeria.class, new ResourceLocation(MODID, "Twilight_Alstroemeria"));
-		GameRegistry.registerTileEntity(TileFlourMill.class, new ResourceLocation(MODID, "FlourMill"));
-		GameRegistry.registerTileEntity(TileMFChanger.class, new ResourceLocation(MODID, "MFChanger"));
-		GameRegistry.registerTileEntity(TileMFTank.class, new ResourceLocation(MODID, "MFTank"));
-		GameRegistry.registerTileEntity(TileMFF.class, new ResourceLocation(MODID, "MFFurnace"));
-		GameRegistry.registerTileEntity(TileMFPot.class, new ResourceLocation(MODID, "MFDM"));
-		GameRegistry.registerTileEntity(TileMFFisher.class, new ResourceLocation(MODID, "MFFisher"));
-		GameRegistry.registerTileEntity(TileStove.class, new ResourceLocation(MODID, "Stove"));
-		GameRegistry.registerTileEntity(TilePot.class, new ResourceLocation(MODID, "Pot"));
-		GameRegistry.registerTileEntity(TileMFTable.class, new ResourceLocation(MODID, "MFTable"));
-		GameRegistry.registerTileEntity(TileFermenter.class, new ResourceLocation(MODID, "fermenter"));
-		GameRegistry.registerTileEntity(TileSpawnStone.class, new ResourceLocation(MODID, "spawnstone"));
-		GameRegistry.registerTileEntity(TileJuiceMaker.class, new ResourceLocation(MODID, "juicemaker"));
-		GameRegistry.registerTileEntity(TileFreezer.class, new ResourceLocation(MODID, "Freezer"));
-		GameRegistry.registerTileEntity(TilePedalCreate.class, new ResourceLocation(MODID, "Pedal"));
-		GameRegistry.registerTileEntity(TileAetherFurnace.class, new ResourceLocation(MODID, "AetherFurnace"));
-		GameRegistry.registerTileEntity(TileParallelInterfere.class, new ResourceLocation(MODID, "ParallelInterfere"));
-		GameRegistry.registerTileEntity(TileMFTableAdvanced.class, new ResourceLocation(MODID, "MFTableAdvanced"));
-		GameRegistry.registerTileEntity(TileMFChangerAdvanced.class, new ResourceLocation(MODID, "MFChangerAdvanced"));
-		GameRegistry.registerTileEntity(TileMFTankAdvanced.class, new ResourceLocation(MODID, "MFTankAdvanced"));
-		GameRegistry.registerTileEntity(TileModenRack.class, new ResourceLocation(MODID, "ModenRack"));
-		GameRegistry.registerTileEntity(TileModenWallRack.class, new ResourceLocation(MODID, "ModenWallRack"));
-		GameRegistry.registerTileEntity(TilePlate.class, new ResourceLocation(MODID, "PlateRack"));
-		GameRegistry.registerTileEntity(TileFlyishForer.class, new ResourceLocation(MODID, "FlyishForer"));
-		GameRegistry.registerTileEntity(TileStardustCrystal.class, new ResourceLocation(MODID, "StardustCrystal"));
-		GameRegistry.registerTileEntity(TileSMSpaner.class, new ResourceLocation(MODID, "SMSpaner"));
-		GameRegistry.registerTileEntity(TileRattanBasket.class, new ResourceLocation(MODID, "RattanBasket"));
-		GameRegistry.registerTileEntity(TileWoodChest.class, new ResourceLocation(MODID, "WoodChest"));
-		GameRegistry.registerTileEntity(TileMagicBarrier.class, new ResourceLocation(MODID, "Magicbarrier"));
-		GameRegistry.registerTileEntity(TileWarpBlock.class, new ResourceLocation(MODID, "WarpBlock"));
-		GameRegistry.registerTileEntity(TileWandPedal.class, new ResourceLocation(MODID, "WandPedal"));
-		GameRegistry.registerTileEntity(TileMFMMTank.class, new ResourceLocation(MODID, "MFTankMasterMagia"));
-		GameRegistry.registerTileEntity(TileToolRepair.class, new ResourceLocation(MODID, "ToolRepair"));
-		GameRegistry.registerTileEntity(TileGravityChest.class, new ResourceLocation(MODID, "GravityChest"));
-		GameRegistry.registerTileEntity(TileMagiaWrite.class, new ResourceLocation(MODID, "MagiaWrite"));
-		GameRegistry.registerTileEntity(TileAetherHopper.class, new ResourceLocation(MODID, "AetherHopper"));
-		GameRegistry.registerTileEntity(TileMFMMTable.class, new ResourceLocation(MODID, "MMTable"));
-		GameRegistry.registerTileEntity(TileStardustWish.class, new ResourceLocation(MODID, "StardustWish"));
+	public static void tileHandler () {
+		registerTile(TileSannyFlower.class, "ParticleFrower");
+		registerTile(TileCleroLanp.class, "CleroLanp");
+		registerTile(TileAlstroemeria.class, "Twilight_Alstroemeria");
+		registerTile(TileFlourMill.class, "FlourMill");
+		registerTile(TileMFChanger.class, "MFChanger");
+		registerTile(TileMFTank.class, "MFTank");
+		registerTile(TileMFFurnace.class, "MFFurnace");
+		registerTile(TileMFPot.class, "MFDM");
+		registerTile(TileMFFisher.class, "MFFisher");
+		registerTile(TileStove.class, "Stove");
+		registerTile(TilePot.class, "Pot");
+		registerTile(TileMFTable.class, "MFTable");
+		registerTile(TileFermenter.class, "fermenter");
+		registerTile(TileSpawnStone.class, "spawnstone");
+		registerTile(TileJuiceMaker.class, "juicemaker");
+		registerTile(TileFreezer.class, "Freezer");
+		registerTile(TilePedalCreate.class, "Pedal");
+		registerTile(TileAetherFurnace.class, "AetherFurnace");
+		registerTile(TileParallelInterfere.class, "ParallelInterfere");
+		registerTile(TileMFChangerAdvanced.class, "MFChangerAdvanced");
+		registerTile(TileMFTableAdvanced.class, "MFTableAdvanced");
+		registerTile(TileMFTankAdvanced.class, "MFTankAdvanced");
+		registerTile(TileModenRack.class, "ModenRack");
+		registerTile(TileWandPedal.class, "WandPedal");
+		registerTile(TileModenWallRack.class, "ModenWallRack");
+		registerTile(TilePlate.class, "PlateRack");
+		registerTile(TileFlyishForer.class, "FlyishForer");
+		registerTile(TileStardustCrystal.class, "StardustCrystal");
+		registerTile(TileWoodChest.class, "WoodChest");
+		registerTile(TileSMSpaner.class, "SMSpaner");
+		registerTile(TileRattanBasket.class, "RattanBasket");
+		registerTile(TileMagicBarrier.class, "Magicbarrier");
+		registerTile(TileWarpBlock.class, "WarpBlock");
+		registerTile(TileWandPedal.class, "WandPedal");
+		registerTile(TileMFMMTank.class, "MFTankMasterMagia");
+		registerTile(TileToolRepair.class, "ToolRepair");
+		registerTile(TileGravityChest.class, "GravityChest");
+		registerTile(TileMagiaWrite.class, "MagiaWrite");
+		registerTile(TileAetherHopper.class, "AetherHopper");
+		registerTile(TileMFMMTable.class, "MMTable");
+		registerTile(TileStardustWish.class, "StardustWish");
+		registerTile(TileMFFurnaceAdvanced.class, "MFFurnaceAdvanced");
 	}
 
 	// 草から種の追加
@@ -261,6 +272,7 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new LivingDethEvent());
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
 		MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
+		MinecraftForge.EVENT_BUS.register(new EntityItemTossEvent());
 	}
 
 	// レイヤー登録
@@ -312,5 +324,9 @@ public class RegistryHandler {
 	public static boolean checkBiome (Biome bio) {
 		return bio == Biomes.MUSHROOM_ISLAND || bio == Biomes.MUSHROOM_ISLAND_SHORE ||
 				bio == Biomes.HELL || bio == Biomes.VOID || bio instanceof BiomeEnd;
+	}
+
+	public static void registerTile (Class<? extends TileEntity> tileClass, String name) {
+		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(MODID, name));
 	}
 }

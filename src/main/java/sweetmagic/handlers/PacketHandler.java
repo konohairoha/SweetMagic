@@ -14,7 +14,6 @@ import sweetmagic.packet.MouseSclorPKT;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.packet.RemovePotion;
 import sweetmagic.packet.ScrollPagePKT;
-import sweetmagic.packet.TileJMPKT;
 import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.packet.WandLeftClickPKT;
 
@@ -28,7 +27,6 @@ public class PacketHandler {
 		HANDLER.registerMessage(PlayerSoundPKT.Handler.class, PlayerSoundPKT.class, disc++, Side.CLIENT);
 		HANDLER.registerMessage(TileMFBlockPKT.Handler.class, TileMFBlockPKT.class, disc++, Side.CLIENT);
 		HANDLER.registerMessage(RemovePotion.Handler.class, RemovePotion.class, disc++, Side.CLIENT);
-		HANDLER.registerMessage(TileJMPKT.Handler.class, TileJMPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(MouseSclorPKT.Handler.class, MouseSclorPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(ScrollPagePKT.Handler.class, ScrollPagePKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(LeftClickPKT.Handler.class, LeftClickPKT.class, disc++, Side.SERVER);

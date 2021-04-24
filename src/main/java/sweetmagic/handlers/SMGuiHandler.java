@@ -1,6 +1,7 @@
 package sweetmagic.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +17,7 @@ import sweetmagic.init.tile.container.ContainerAetherHopper;
 import sweetmagic.init.tile.container.ContainerFreezer;
 import sweetmagic.init.tile.container.ContainerGravityChest;
 import sweetmagic.init.tile.container.ContainerJuiceMaker;
+import sweetmagic.init.tile.container.ContainerKichenChest;
 import sweetmagic.init.tile.container.ContainerMFChanger;
 import sweetmagic.init.tile.container.ContainerMFFisher;
 import sweetmagic.init.tile.container.ContainerMFFurnace;
@@ -41,6 +43,7 @@ import sweetmagic.init.tile.gui.GuiFreezer;
 import sweetmagic.init.tile.gui.GuiGravityChest;
 import sweetmagic.init.tile.gui.GuiGuidBook;
 import sweetmagic.init.tile.gui.GuiJuiceMaker;
+import sweetmagic.init.tile.gui.GuiKichenChest;
 import sweetmagic.init.tile.gui.GuiMFChanger;
 import sweetmagic.init.tile.gui.GuiMFF;
 import sweetmagic.init.tile.gui.GuiMFFisher;
@@ -63,8 +66,9 @@ import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherHopper;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
-import sweetmagic.init.tile.magic.TileMFF;
 import sweetmagic.init.tile.magic.TileMFFisher;
+import sweetmagic.init.tile.magic.TileMFFurnace;
+import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
 import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
@@ -102,132 +106,148 @@ public class SMGuiHandler implements IGuiHandler {
 	public static final int AETHERHOPPER = 24;
 	public static final int MMTABLE = 25;
 	public static final int STARDUSTWISH = 26;
+	public static final int MFF_ADVANCED_GUI = 27;
+	public static final int KICHEN_CHEST_GUI = 28;
 
 	///サーバ側の処理
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+
 		TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
-//		EnumHand hand = ITEM_IDS.contains(ID) ? (x == 1 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND) : null;
 		EnumHand hand = EnumHand.MAIN_HAND;
+		InventoryPlayer inv = player.inventory;
 
 		//IDで判断する
-		if(ID == SMGuiHandler.SMBOOK_GUI) {
-			return new BookContainer(player.inventory);
-		} else if(ID == SMGuiHandler.MFF_GUI) {
-			return new ContainerMFFurnace(player.inventory, (TileMFF) tile);
-		} else if(ID == SMGuiHandler.MFTANK_GUI) {
-			return new ContainerMFTank(player.inventory, (TileMFTank) tile);
-		} else if(ID == SMGuiHandler.MFFISHER_GUI) {
-			return new ContainerMFFisher(player.inventory, (TileMFFisher) tile);
-		} else if(ID == SMGuiHandler.STOVE_GUI) {
-			return new ContainerStove(player.inventory, (TileStove) tile);
-		} else if(ID == SMGuiHandler.SMWAND_GUI) {
-			return new ContainerSMWand(player.inventory, new InventorySMWand(player.getHeldItem(hand), player));
-		} else if(ID == SMGuiHandler.MFTABLE_GUI) {
-			return new ContainerMFTable(player.inventory, (TileMFTable) tile);
-		} else if(ID == SMGuiHandler.MAKER_GUI) {
-			return new ContainerJuiceMaker(player.inventory, (TileJuiceMaker) tile);
-		} else if(ID == SMGuiHandler.MFCHANGER_GUI) {
-			return new ContainerMFChanger(player.inventory, (TileMFChanger) tile);
-		} else if(ID == SMGuiHandler.FREEZER_GUI) {
-			return new ContainerFreezer(player.inventory, (TileFreezer) tile);
-		} else if(ID == SMGuiHandler.AETHER_GUI) {
-			return new ContainerAetherFurnace(player.inventory, (TileAetherFurnace) tile);
-		} else if(ID == SMGuiHandler.MFROBE_GUI) {
-			return new ContainerRobe(player.inventory, new InventoryRobe(player));
-		} else if(ID == SMGuiHandler.MFPOUCH_GUI) {
-			return new ContainerPouch(player.inventory, new InventoryPouch(player));
-		} else if(ID == SMGuiHandler.PARALLELINTERFERE_GUI) {
-			return new ContainerParallelInterfere(player.inventory, (TileParallelInterfere) tile);
-		} else if(ID == SMGuiHandler.MFTABLE_ADVANCED_GUI) {
-			return new ContainerMFTable(player.inventory, (TileMFTableAdvanced) tile);
-		} else if(ID == SMGuiHandler.MFCHANGER_ADVANCED_GUI) {
-			return new ContainerMFChanger(player.inventory, (TileMFChangerAdvanced) tile);
-		} else if(ID == SMGuiHandler.MODENRACK_GUI) {
-			return new ContainerModenRack(player.inventory, (TileModenRack) tile);
-		} else if(ID == SMGuiHandler.RATTAMBASKET) {
-			return new ContainerRattanBasket(player.inventory, (TileRattanBasket) tile);
-		} else if(ID == SMGuiHandler.WOODCHEST) {
-			return new ContainerWoodChest(player.inventory, (TileWoodChest) tile);
-		} else if(ID == SMGuiHandler.TOOLREPAIR) {
-			return new ContainerToolRepair(player.inventory, (TileToolRepair) tile);
-		} else if(ID == SMGuiHandler.GRAVITYCHEST) {
-			return new ContainerGravityChest(player.inventory, (TileGravityChest) tile);
-		} else if(ID == SMGuiHandler.MAGIAWRITE) {
-			return new ContainerMagiaWrite(player.inventory, (TileMagiaWrite) tile);
-		} else if(ID == SMGuiHandler.AETHERHOPPER) {
-			return new ContainerAetherHopper(player.inventory, (TileAetherHopper) tile);
-		} else if(ID == SMGuiHandler.MMTABLE) {
-			return new ContainerMFTable(player.inventory, (TileMFMMTable) tile);
-		} else if(ID == SMGuiHandler.STARDUSTWISH) {
-			return new ContainerParallelInterfere(player.inventory, (TileStardustWish) tile);
+		switch (ID) {
+		case SMBOOK_GUI:
+			return new BookContainer(inv);
+		case MFF_GUI:
+			return new ContainerMFFurnace(inv, (TileMFFurnace) tile);
+		case MFTANK_GUI:
+			return new ContainerMFTank(inv, (TileMFTank) tile);
+		case MFFISHER_GUI:
+			return new ContainerMFFisher(inv, (TileMFFisher) tile);
+		case STOVE_GUI:
+			return new ContainerStove(inv, (TileStove) tile);
+		case SMWAND_GUI:
+			return new ContainerSMWand(inv, new InventorySMWand(player.getHeldItem(hand), player));
+		case MFTABLE_GUI:
+			return new ContainerMFTable(inv, (TileMFTable) tile);
+		case MAKER_GUI:
+			return new ContainerJuiceMaker(inv, (TileJuiceMaker) tile);
+		case MFCHANGER_GUI:
+			return new ContainerMFChanger(inv, (TileMFChanger) tile);
+		case FREEZER_GUI:
+			return new ContainerFreezer(inv, (TileFreezer) tile);
+		case AETHER_GUI:
+			return new ContainerAetherFurnace(inv, (TileAetherFurnace) tile);
+		case MFROBE_GUI:
+			return new ContainerRobe(inv, new InventoryRobe(player));
+		case MFPOUCH_GUI:
+			return new ContainerPouch(inv, new InventoryPouch(player));
+		case PARALLELINTERFERE_GUI:
+			return new ContainerParallelInterfere(inv, (TileParallelInterfere) tile);
+		case MFTABLE_ADVANCED_GUI:
+			return new ContainerMFTable(inv, (TileMFTableAdvanced) tile);
+		case MFCHANGER_ADVANCED_GUI:
+			return new ContainerMFChanger(inv, (TileMFChangerAdvanced) tile);
+		case MODENRACK_GUI:
+			return new ContainerModenRack(inv, (TileModenRack) tile);
+		case RATTAMBASKET:
+			return new ContainerRattanBasket(inv, (TileRattanBasket) tile);
+		case WOODCHEST:
+			return new ContainerWoodChest(inv, (TileWoodChest) tile);
+		case TOOLREPAIR:
+			return new ContainerToolRepair(inv, (TileToolRepair) tile);
+		case GRAVITYCHEST:
+			return new ContainerGravityChest(inv, (TileGravityChest) tile);
+		case MAGIAWRITE:
+			return new ContainerMagiaWrite(inv, (TileMagiaWrite) tile);
+		case AETHERHOPPER:
+			return new ContainerAetherHopper(inv, (TileAetherHopper) tile);
+		case MMTABLE:
+			return new ContainerMFTable(inv, (TileMFMMTable) tile);
+		case STARDUSTWISH:
+			return new ContainerParallelInterfere(inv, (TileStardustWish) tile);
+		case MFF_ADVANCED_GUI:
+			return new ContainerMFFurnace(inv, (TileMFFurnaceAdvanced) tile);
+		case KICHEN_CHEST_GUI:
+			return new ContainerKichenChest(inv, (TileWoodChest) tile);
 		}
+
 		return null;
 	}
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+
 		BlockPos pos = new BlockPos(x, y, z);
-		if (!world.isBlockLoaded(new BlockPos(x, y, z))) { return null; }
+		if (!world.isBlockLoaded(pos)) { return null; }
+
 		TileEntity tile = world.getTileEntity(pos);
-//		EnumHand hand = ITEM_IDS.contains(ID) ? (x == 1 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND) : null;
 		EnumHand hand = EnumHand.MAIN_HAND;
+		InventoryPlayer inv = player.inventory;
 
 		//IDで判断する
-		//TileEntityを取得する
-		if(ID == SMGuiHandler.SMBOOK_GUI) {
-			return new GuiBook(player.inventory);
-		} else if(ID == SMGuiHandler.MFF_GUI) {
-			return new GuiMFF(player.inventory, (TileMFF) tile);
-		} else if(ID == SMGuiHandler.MFTANK_GUI) {
-			return new GuiMFTank(player.inventory, (TileMFTank) tile);
-		} else if(ID == SMGuiHandler.MFFISHER_GUI) {
-			return new GuiMFFisher(player.inventory, (TileMFFisher) tile);
-		} else if(ID == SMGuiHandler.STOVE_GUI) {
-			return new GuiStove(player.inventory, (TileStove) tile);
-		} else if(ID == SMGuiHandler.SMWAND_GUI) {
-			return new GuiSMWand(player.inventory, new InventorySMWand(player.getHeldItem(hand), player));
-		} else if(ID == SMGuiHandler.MFTABLE_GUI) {
-			return new GuiMFTable(player.inventory, (TileMFTable) tile);
-		} else if(ID == SMGuiHandler.MAKER_GUI) {
-			return new GuiJuiceMaker(player.inventory, (TileJuiceMaker) tile);
-		} else if(ID == SMGuiHandler.MFCHANGER_GUI) {
-			return new GuiMFChanger(player.inventory, (TileMFChanger) tile);
-		} else if(ID == SMGuiHandler.FREEZER_GUI) {
-			return new GuiFreezer(player.inventory, (TileFreezer) tile);
-		} else if(ID == SMGuiHandler.AETHER_GUI) {
-			return new GuiAetherFurnace(player.inventory, (TileAetherFurnace) tile);
-		} else if(ID == SMGuiHandler.MFROBE_GUI) {
-			return new GuiRobe(player.inventory, new InventoryRobe(player));
-		} else if(ID == SMGuiHandler.MFPOUCH_GUI) {
-			return new GuiPouch(player.inventory, new InventoryPouch(player));
-		} else if(ID == SMGuiHandler.PARALLELINTERFERE_GUI) {
-			return new GuiParallelInterfere(player.inventory, (TileParallelInterfere) tile);
-		} else if(ID == SMGuiHandler.MFTABLE_ADVANCED_GUI) {
-			return new GuiMFTable(player.inventory, (TileMFTableAdvanced) tile);
-		} else if(ID == SMGuiHandler.MFCHANGER_ADVANCED_GUI) {
-			return new GuiMFChanger(player.inventory, (TileMFChangerAdvanced) tile);
-		} else if(ID == SMGuiHandler.MODENRACK_GUI) {
-			return new GuiModenRack(player.inventory, (TileModenRack) tile);
-		} else if (ID == SMGuiHandler.GUIDBOOK) {
+		switch (ID) {
+		case SMBOOK_GUI:
+			return new GuiBook(inv);
+		case MFF_GUI:
+			return new GuiMFF(inv, (TileMFFurnace) tile);
+		case MFTANK_GUI:
+			return new GuiMFTank(inv, (TileMFTank) tile);
+		case MFFISHER_GUI:
+			return new GuiMFFisher(inv, (TileMFFisher) tile);
+		case STOVE_GUI:
+			return new GuiStove(inv, (TileStove) tile);
+		case SMWAND_GUI:
+			return new GuiSMWand(inv, new InventorySMWand(player.getHeldItem(hand), player));
+		case MFTABLE_GUI:
+			return new GuiMFTable(inv, (TileMFTable) tile);
+		case MAKER_GUI:
+			return new GuiJuiceMaker(inv, (TileJuiceMaker) tile);
+		case MFCHANGER_GUI:
+			return new GuiMFChanger(inv, (TileMFChanger) tile);
+		case FREEZER_GUI:
+			return new GuiFreezer(inv, (TileFreezer) tile);
+		case AETHER_GUI:
+			return new GuiAetherFurnace(inv, (TileAetherFurnace) tile);
+		case MFROBE_GUI:
+			return new GuiRobe(inv, new InventoryRobe(player));
+		case MFPOUCH_GUI:
+			return new GuiPouch(inv, new InventoryPouch(player));
+		case PARALLELINTERFERE_GUI:
+			return new GuiParallelInterfere(inv, (TileParallelInterfere) tile);
+		case MFTABLE_ADVANCED_GUI:
+			return new GuiMFTable(inv, (TileMFTableAdvanced) tile);
+		case MFCHANGER_ADVANCED_GUI:
+			return new GuiMFChanger(inv, (TileMFChangerAdvanced) tile);
+		case MODENRACK_GUI:
+			return new GuiModenRack(inv, (TileModenRack) tile);
+		case GUIDBOOK:
 			return new GuiGuidBook();
-		} else if(ID == SMGuiHandler.RATTAMBASKET) {
-			return new GuiRattanBasket(player.inventory, (TileRattanBasket) tile);
-		} else if(ID == SMGuiHandler.WOODCHEST) {
-			return new GuiWoodChest(player.inventory, (TileWoodChest) tile);
-		} else if(ID == SMGuiHandler.TOOLREPAIR) {
-			return new GuiToolRepair(player.inventory, (TileToolRepair) tile);
-		} else if(ID == SMGuiHandler.GRAVITYCHEST) {
-			return new GuiGravityChest(player.inventory, (TileGravityChest) tile);
-		} else if(ID == SMGuiHandler.MAGIAWRITE) {
-			return new GuiMagiaWrite(player.inventory, (TileMagiaWrite) tile);
-		} else if(ID == SMGuiHandler.AETHERHOPPER) {
-			return new GuiAetherHopper(player.inventory, (TileAetherHopper) tile);
-		} else if(ID == SMGuiHandler.MMTABLE) {
-			return new GuiMFTable(player.inventory, (TileMFMMTable) tile);
-		} else if(ID == SMGuiHandler.STARDUSTWISH) {
-			return new GuiParallelInterfere(player.inventory, (TileStardustWish) tile);
+		case RATTAMBASKET:
+			return new GuiRattanBasket(inv, (TileRattanBasket) tile);
+		case WOODCHEST:
+			return new GuiWoodChest(inv, (TileWoodChest) tile);
+		case TOOLREPAIR:
+			return new GuiToolRepair(inv, (TileToolRepair) tile);
+		case GRAVITYCHEST:
+			return new GuiGravityChest(inv, (TileGravityChest) tile);
+		case MAGIAWRITE:
+			return new GuiMagiaWrite(inv, (TileMagiaWrite) tile);
+		case AETHERHOPPER:
+			return new GuiAetherHopper(inv, (TileAetherHopper) tile);
+		case MMTABLE:
+			return new GuiMFTable(inv, (TileMFMMTable) tile);
+		case STARDUSTWISH:
+			return new GuiParallelInterfere(inv, (TileStardustWish) tile);
+		case MFF_ADVANCED_GUI:
+			return new GuiMFF(inv, (TileMFFurnaceAdvanced) tile);
+		case KICHEN_CHEST_GUI:
+			return new GuiKichenChest(inv, (TileWoodChest) tile);
 		}
+
 		return null;
 	}
 }

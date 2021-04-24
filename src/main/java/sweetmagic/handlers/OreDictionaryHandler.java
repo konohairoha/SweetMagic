@@ -30,10 +30,6 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("slabWood", BlockInit.coconut_slab);
         OreDictionary.registerOre("treeLeaves",BlockInit.coconut_leaves);
         OreDictionary.registerOre("treeSapling",BlockInit.coconut_sapling);
-		OreDictionary.registerOre("plankWood", BlockInit.coconut_planks);
-		OreDictionary.registerOre("logWood", BlockInit.coconut_log);
-        OreDictionary.registerOre("treeLeaves",BlockInit.coconut_leaves);
-        OreDictionary.registerOre("treeSapling",BlockInit.coconut_sapling);
 		OreDictionary.registerOre("logWood", BlockInit.prism_log);
         OreDictionary.registerOre("treeLeaves",BlockInit.prism_leaves);
         OreDictionary.registerOre("treeSapling",BlockInit.prism_sapling);
@@ -61,6 +57,22 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("smLog", BlockInit.prism_log);
 		OreDictionary.registerOre("smLog", BlockInit.estor_log);
 
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_huti1);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_huti3);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_mossy);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_w);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_w_huti1);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_w_huti3);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_wdamage);
+		OreDictionary.registerOre("smPlanks", BlockInit.orange_planks_wmossy);
+		OreDictionary.registerOre("smPlanks", BlockInit.chestnut_planks);
+		OreDictionary.registerOre("smPlanks", BlockInit.lemon_planks);
+		OreDictionary.registerOre("smPlanks", BlockInit.coconut_planks);
+		OreDictionary.registerOre("smPlanks", BlockInit.prism_planks);
+		OreDictionary.registerOre("smPlanks", BlockInit.estor_planks);
+
+
 		OreDictionary.registerOre("dyeBlue", BlockInit.cornflower);
 		OreDictionary.registerOre("dyeWhite", BlockInit.lily_valley);
 		OreDictionary.registerOre("dyeBlack", BlockInit.blackrose);
@@ -78,11 +90,12 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("dyePurple", BlockInit.campanula);
 		OreDictionary.registerOre("dyeGreen", ItemInit.vannila_pods);
 		OreDictionary.registerOre("dyeGreen", BlockInit.christmas_rose);
-		OreDictionary.registerOre("dyeLime", BlockInit.white_clover);
-		OreDictionary.registerOre("dyeLightGray", BlockInit.foxtail_grass);
+		OreDictionary.registerOre("dyeLightGray", BlockInit.white_clover);
+		OreDictionary.registerOre("dyeLime", BlockInit.foxtail_grass);
 		OreDictionary.registerOre("dyeGray", BlockInit.snowdrop);
-		OreDictionary.registerOre("dyeLightBlue", BlockInit.ultramarine_rose);
+		OreDictionary.registerOre("dyeCyan", BlockInit.ultramarine_rose);
 		OreDictionary.registerOre("dyeMagenta", BlockInit.zinnia);
+		OreDictionary.registerOre("dyeMagenta", BlockInit.turkey_balloonflower);
 		OreDictionary.registerOre("dyeLightBlue", BlockInit.hydrangea);
 
 		OreDictionary.registerOre("dye", BlockInit.cornflower);
@@ -186,6 +199,9 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("magicians_grobe", ItemInit.wizard_robe);
 		OreDictionary.registerOre("magicians_grobe", ItemInit.feary_robe);
 
+		OreDictionary.registerOre("mffurnace", BlockInit.mffurnace_off);
+		OreDictionary.registerOre("mffurnace", BlockInit.mffurnace_on);
+
 		OreDictionary.registerOre("magicAccessori", ItemInit.warrior_bracelet);
 		OreDictionary.registerOre("magicAccessori", ItemInit.witch_scroll);
 		OreDictionary.registerOre("magicAccessori", ItemInit.scorching_jewel);
@@ -272,6 +288,7 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("foodButter", ItemInit.butter);
 		OreDictionary.registerOre("seedRice", ItemInit.rice_seed);
 		OreDictionary.registerOre("cropRice", ItemInit.rice);
+		OreDictionary.registerOre("foodRice", ItemInit.rice);
 		OreDictionary.registerOre("cropLemon", ItemInit.lemon);
 		OreDictionary.registerOre("cropTomato", ItemInit.tomato);
 		OreDictionary.registerOre("cropOnion", ItemInit.onion);
@@ -297,6 +314,8 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("listAllberry", ItemInit.raspberry);
 		OreDictionary.registerOre("foodDough", ItemInit.cake_dough);
 		OreDictionary.registerOre("foodCustard", ItemInit.custard);
+		OreDictionary.registerOre("foodChocolate", ItemInit.chocolate);
+		OreDictionary.registerOre("foodChocolate", ItemInit.white_chocolate);
 		OreDictionary.registerOre("listAllsuggar", ItemInit.vannila_essence);
 		OreDictionary.registerOre("foodGelatine", ItemInit.gelatin);
 		OreDictionary.registerOre("foodMarshmellows", ItemInit.marshmallow);
@@ -346,6 +365,7 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("listAllseed", ItemInit.lettuce_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.cabbage_seed);
 		OreDictionary.registerOre("listAllseed", ItemInit.azuki_seed);
+		OreDictionary.registerOre("listAllseed", ItemInit.coffee_seed);
 		OreDictionary.registerOre("listAllseed", Items.WHEAT_SEEDS);
 	}
 }
