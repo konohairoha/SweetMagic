@@ -37,10 +37,4 @@ public class ParticleHelper {
 	public static ParticleManager spawnParticl () {
 		return FMLClientHandler.instance().getClient().effectRenderer;
 	}
-
-//	public static void spawnParticle (World world, Particle.Factory par, float f1, float f2, float f3, float x, float y, float z) {
-//		if (world instanceof WorldServer) {
-//			FMLClientHandler.instance().getClient().effectRenderer.addEffect(par.createParticle(0, (WorldServer) world, f1, f2, f3, x, y, z));
-//		}
-//	}
 }

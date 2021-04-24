@@ -241,6 +241,7 @@ public class SMUtil {
 	}
 
 	public static boolean isSameItem(ItemStack i1, ItemStack i2, boolean nullable) {
+
 		if (isEmpty(i1) || isEmpty(i2)) { return nullable; }
 
 		if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {

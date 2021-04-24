@@ -131,7 +131,7 @@ public class RecipeHelper {
 					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
 					// 数が揃ったら中分類から抜け出す
-					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack(), recipe.keepTag);
 					recipeInfo.canComplete = true;
 					return;
 
@@ -304,7 +304,7 @@ public class RecipeHelper {
 					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
 					// 数が揃ったら中分類から抜け出す
-					recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
 					recipeInfo.canComplete = true;
 					return;
 
@@ -356,7 +356,7 @@ public class RecipeHelper {
 					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
 					// 数が揃ったら中分類から抜け出す
-					recipeInfo.setRecipeInfo(recipe.getHandList(), recipe.getOutputItemStack());
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack());
 					recipeInfo.canComplete = true;
 					return;
 

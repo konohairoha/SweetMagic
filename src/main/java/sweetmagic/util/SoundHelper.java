@@ -38,6 +38,7 @@ public class SoundHelper {
 
 	// クライアント対象プレイヤーに音声を再生させる処理
 	public static void PlaySoundToPlayer(int sound, float pitch, float volume) {
+		
 		SoundEvent play_Sound = null;
 
 		switch (sound) {

@@ -14,11 +14,13 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumDifficulty;
@@ -206,6 +208,27 @@ public class WorldHelper {
 			ent.setItem(drop);
 			world.spawnEntity(ent);
 		}
+	}
+
+	public static void magicExplo (World world, EntityLivingBase living, float range, float explo) {
+
+		// えんちちーのリスト作成
+		AxisAlignedBB aabb = living.getEntityBoundingBox().grow(range);
+		List<EntityLiving> entityList = world.getEntitiesWithinAABB(EntityLiving.class, aabb);
+		DamageSource src = SMDamage.exploDamage;
+		living.attackEntityFrom(src, explo);
+
+		// えんちちーにダメージを与える
+		for (EntityLivingBase entity : entityList ) {
+			float dame = explo;
+			double distance = 2 - entity.getDistance(living.posX, living.posY, living.posZ) / dame;
+			dame *= distance * 1.825F;
+			entity.attackEntityFrom(src, dame);
+			entity.hurtResistantTime = 0;
+		}
+
+		world.playSound(null, new BlockPos(living), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 3F, 1F / (world.rand.nextFloat() * 0.2F + 0.9F));
+		ParticleHelper.spawnBoneMeal(world, new BlockPos(living.posX, living.posY + 0.5, living.posZ), EnumParticleTypes.EXPLOSION_HUGE);
 	}
 
 	// ピースフルか

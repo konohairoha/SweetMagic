@@ -9,7 +9,6 @@ public class EnchantUtil {
     public static int calculateNewEnchCost (Enchantment enchant, int level) {
 
         int cost = 45 * Math.max(11 - enchant.getRarity().getWeight(), 1) * level;
-
 		cost *= 1.5F;
 
 		if (enchant.isCurse()) {

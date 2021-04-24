@@ -10,15 +10,15 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class DrawHeleper {
 
-	public static void drawTexturedRect(int x, int y, int width, int height){
+	public static void drawTexturedRect(int x, int y, int width, int height) {
 		drawTexturedRect(x, y, 0, 0, width, height, width, height);
 	}
 
-	public static void drawTexturedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight){
+	public static void drawTexturedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight) {
 		DrawHeleper.drawTexturedFlippedRect(x, y, u, v, width, height, texWidth, texHeight, false, false);
 	}
 
-	public static void drawTexturedFlippedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight, boolean flipX, boolean flipY){
+	public static void drawTexturedFlippedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight, boolean flipX, boolean flipY) {
 
 		float f = 1F / (float)texWidth;
 		float f1 = 1F / (float)texHeight;
