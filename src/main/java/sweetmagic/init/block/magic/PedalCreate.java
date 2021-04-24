@@ -1,9 +1,14 @@
 package sweetmagic.init.block.magic;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -12,14 +17,19 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseMFBlock;
 import sweetmagic.init.tile.magic.TilePedalCreate;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
 
 public class PedalCreate extends BaseMFBlock {
+
+	public static final String MF = "mf";
+	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.7D, 0.925D);
 
     public PedalCreate(String name) {
 		super(name);
@@ -46,14 +56,30 @@ public class PedalCreate extends BaseMFBlock {
 
 			// 入れるアイテム、完成品はItemStackリストに突っ込む
 			RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
-
 			ItemHandlerHelper.insertItemStacked(tile.handInv, copy, false);
 
 			for (ItemStack input : recipeUtil.getInput()) {
 				ItemHandlerHelper.insertItemStacked(tile.inputInv, input, false);
 			}
 
+			// NBTを取得
+			NBTTagCompound tags = copy.getTagCompound();
+
 			for (ItemStack result : recipeUtil.getResult()) {
+
+				// NBTを保持するなら
+				if (recipeInfo.keepTag && copy.hasTagCompound()) {
+
+					// ブロックにMFを持ってたら
+					if (tags != null && tags.hasKey(MF) && !(copy.getItem() instanceof IMFTool)) {
+						this.blockItemSpawn(world, player, tags, result);
+					}
+
+					else if (copy.getItem() instanceof IMFTool) {
+			    		result.setTagCompound(copy.getTagCompound());
+					}
+				}
+
 				ItemHandlerHelper.insertItemStacked(tile.outPutInv, result, false);
 			}
 
@@ -63,6 +89,61 @@ public class PedalCreate extends BaseMFBlock {
 		}
 	}
 
+	// アイテムスポーン
+	public void blockItemSpawn (World world, EntityPlayer player, NBTTagCompound tags, ItemStack result) {
+
+		List<ItemStack> stackList = new ArrayList<>();
+		stackList.addAll(this.getItemList(tags, "ItemList"));
+
+		int crystalCount = tags.getInteger(MF) / 600;
+		if (crystalCount > 0) {
+			stackList.add(new ItemStack(ItemInit.aether_crystal, crystalCount));
+		}
+
+		for (ItemStack s : stackList) {
+			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
+		}
+
+		NBTTagCompound nbt = (NBTTagCompound) tags.getTag("BlockEntityTag");
+		nbt.removeTag("Input");
+		nbt.removeTag(MF);
+		this.removeTags(nbt);
+		tags.setTag("BlockEntityTag", nbt);
+	}
+
+	// 特定のNBTを除去
+	public void removeTags (NBTTagCompound tags) {
+
+		if (tags.hasKey("wand")) {
+			tags.removeTag("wand");
+		}
+
+		if (tags.hasKey("Output")) {
+			tags.removeTag("Output");
+		}
+
+		if (tags.hasKey("Crystal")) {
+			tags.removeTag("Crystal");
+		}
+	}
+
+	// アイテムリストを取得
+	public List<ItemStack> getItemList(NBTTagCompound tags, String name) {
+
+		NBTTagList nbtList = tags.getTagList(name, 10);
+		List<ItemStack> list = new ArrayList<ItemStack>();
+
+		for (int i = 0; i < nbtList.tagCount(); ++i) {
+			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
+			ItemStack stack = new ItemStack(nbt);
+			list.add(stack);
+		}
+
+		tags.removeTag(name);
+
+		return list;
+	}
+
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TilePedalCreate();
@@ -70,7 +151,7 @@ public class PedalCreate extends BaseMFBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.075, 0, 0.075, 0.925, 0.7, 0.925);
+		return AABB;
 	}
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
@@ -91,7 +172,6 @@ public class PedalCreate extends BaseMFBlock {
 		}
 
 		tile.isCharge = false;
-
 		spawnAsEntity(world, pos, new ItemStack(this));
     }
 }

@@ -44,8 +44,7 @@ public class GravityChest extends BaseMFFace {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		switch (this.data) {
-		case 0:
-			return new TileGravityChest();
+		case 0: return new TileGravityChest();
 		}
 		return null;
 	}

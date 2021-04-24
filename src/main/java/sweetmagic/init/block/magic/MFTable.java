@@ -82,7 +82,6 @@ public class MFTable extends BaseMFBlock {
 
 		//レシピアイテム情報からアイテムを取得し、減らしたい個数に変換してinputsリストに追加する
 		for (Object[] recipe : recipeInfo.getinputs()) {
-
 			Integer invPos = (Integer) recipe[0];
 			int shrinkCnt = (int) recipe[2];
 			SMUtil.decrPInvMin(player, shrinkCnt, invPos);
@@ -121,14 +120,12 @@ public class MFTable extends BaseMFBlock {
 		// スロットの数を増やす
 		tagNew.setInteger("slotCount", ((IWand) newStack.getItem()).getSlot());
 		wandStack.shrink(1);
-
 		ItemHandlerHelper.insertItemStacked(tile.getWand(), newStack, false);
 		tile.markDirty();
 
 		// 変換時の音
 		world.playSound(null, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, SoundCategory.VOICE,
 				0.5F, 1F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
-//		}
 
 		this.openGui(world, player, pos);
 	}
@@ -155,14 +152,13 @@ public class MFTable extends BaseMFBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
+
 		switch (this.data) {
-		case 0:
-			return new TileMFTable();
-		case 1:
-			return new TileMFTableAdvanced();
-		case 2:
-			return new TileMFMMTable();
+		case 0:	return new TileMFTable();
+		case 1:	return new TileMFTableAdvanced();
+		case 2:	return new TileMFMMTable();
 		}
+
 		return null;
 	}
 }

@@ -11,14 +11,12 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -35,14 +33,15 @@ import sweetmagic.util.SweetState;
 public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	public final int data;
-	Random srand = new Random();
+	private static final Random srand = new Random();
 	public static boolean flagDaytime = false;
 
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.3125D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D) };
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.3125D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D)
+	};
 
 	public MagiaFlower(String name, int meta) {
 		this.setUnlocalizedName(name);
@@ -94,8 +93,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		int i = meta & 3; //ビット演算子（AND演算）
-		return this.getDefaultState().withProperty(SweetState.STAGE4, i);
+		return this.getDefaultState().withProperty(SweetState.STAGE4, meta & 3);
 	}
 
 	@Override
@@ -129,30 +127,26 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 	@Override
 	protected Item getSeed() {
 
-		if (this.data == 0) {
-			return ItemInit.sannyflower_seed;
-		} else if (this.data == 1) {
-			return ItemInit.moonblossom_seed;
-		} else if (this.data == 2) {
-			return ItemInit.dm_seed;
-		} else {
-			return null;
+		switch (this.data) {
+		case 0: return ItemInit.sannyflower_seed;
+		case 1: return ItemInit.moonblossom_seed;
+		case 2: return ItemInit.dm_seed;
 		}
+
+		return null;
 	}
 
 	//ドロップする作物
 	@Override
 	protected Item getCrop() {
 
-		if (this.data == 0) {
-			return ItemInit.sannyflower_petal;
-		} else if (this.data == 1) {
-			return ItemInit.moonblossom_petal;
-		} else if (this.data == 2) {
-			return ItemInit.dm_flower;
-		} else {
-			return null;
+		switch (this.data) {
+		case 0: return ItemInit.sannyflower_petal;
+		case 1: return ItemInit.moonblossom_petal;
+		case 2: return ItemInit.dm_flower;
 		}
+
+		return null;
 	}
 
 	@Override
@@ -308,7 +302,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
             world.spawnEntity(drop);
             world.setBlockState(pos, this.withStage(world, state, 1), 2);        //成長段階を2下げる
             //EntityPlayerでキャストし、Nullを返さないとマルチでホストプレイヤーに対し音がなるので注意
-            world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playCropSound(world, rand, pos);
         }
 	}
 

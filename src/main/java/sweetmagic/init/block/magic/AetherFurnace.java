@@ -40,10 +40,10 @@ import sweetmagic.init.tile.magic.TileMFBase;
 
 public class AetherFurnace extends BaseMFBlock {
 
-    public static final AxisAlignedBB TOP = new AxisAlignedBB(0.2, 0, 0.2, 0.8, 1, 0.8);
-	public static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
-	public final boolean isTop;
-	public final boolean isAdvanced;
+	private static final AxisAlignedBB TOP = new AxisAlignedBB(0.2, 0, 0.2, 0.8, 1, 0.8);
+	private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
+	private final boolean isTop;
+	private final boolean isAdvanced;
 
     public AetherFurnace(String name, List<Block> list, boolean isTop, boolean isAdvanced) {
         super(name);
@@ -104,8 +104,6 @@ public class AetherFurnace extends BaseMFBlock {
 			world.setBlockState(pos.up(), block.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
 		}
 
-
-
 		TileMFBase tile = (TileMFBase) world.getTileEntity(pos);
 		NBTTagCompound tag = stack.getTagCompound();
 		if (tag != null) {
@@ -118,13 +116,11 @@ public class AetherFurnace extends BaseMFBlock {
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.breakBlock(!this.isTop ? pos.up() : pos.down(), world, true);
-		pos = !this.isTop ? pos.up() : pos.down();
-        world.removeTileEntity(pos);
+        world.removeTileEntity(!this.isTop ? pos.up() : pos.down());
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
-	}
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) { }
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -138,9 +134,9 @@ public class AetherFurnace extends BaseMFBlock {
 
 	// ブロック破壊処理
 	public boolean breakBlock(BlockPos pos, World world, boolean dropBlock) {
+
 		IBlockState state = world.getBlockState(pos);
 		Block block = state.getBlock();
-
 		if (block.isAir(state, world, pos)) { return false; }
 
 		world.playEvent(2001, pos, Block.getStateId(state));
@@ -154,25 +150,21 @@ public class AetherFurnace extends BaseMFBlock {
 
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
-		if (this.isTop) {
-			return;
-		}
+		if (this.isTop) { return; }
 
-		ItemStack stack = new ItemStack(this);
-		TileAetherFurnace tile = (TileAetherFurnace) world.getTileEntity(pos);
-		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
-		NBTTagCompound tags = new NBTTagCompound();
-		if (tileTags.hasKey(tile.POST)) { tileTags.removeTag(tile.POST); }
-		tags.setTag("BlockEntityTag", tileTags);
-		stack.setTagCompound(tags);
-		world.updateComparatorOutputLevel(pos, state.getBlock());
-		spawnAsEntity(world, pos, stack);
-
-		BlockPos botPos = !this.isTop ? pos.up() : pos;
-		BlockPos topPos = this.isTop ? pos.down() : pos;
-
-        super.breakBlock(world, botPos, world.getBlockState(botPos));
-        super.breakBlock(world, topPos, world.getBlockState(topPos));
+		super.breakBlock(world, pos, state);
+//		ItemStack stack = new ItemStack(this);
+//		TileAetherFurnace tile = (TileAetherFurnace) world.getTileEntity(pos);
+//		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
+//		NBTTagCompound tags = new NBTTagCompound();
+//		if (tileTags.hasKey(tile.POST)) { tileTags.removeTag(tile.POST); }
+//		tags.setTag("BlockEntityTag", tileTags);
+//		System.out.println("==========" + tile.getList());
+//		this.saveStackList(tags, tile.getList(), "ItemList");
+//		stack.setTagCompound(tags);
+//		world.updateComparatorOutputLevel(pos, state.getBlock());
+//		spawnAsEntity(world, pos, stack);
+//        world.removeTileEntity(pos);
 	}
 
 	@Override
@@ -224,17 +216,19 @@ public class AetherFurnace extends BaseMFBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 
 		String tip = "";
 
 		if (this.isAdvanced) {
 			tip = "tip.advanced_aether_furnace.name";
-		} else {
+		}
+
+		else {
 			tip = "tip.aether_furnace.name";
 		}
 
 		tooltip.add(I18n.format(TextFormatting.GREEN + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));
-		super.addInformation(stack, playerIn, tooltip, advanced);
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

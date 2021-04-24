@@ -1,7 +1,5 @@
 package sweetmagic.init.block.crop;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
@@ -21,8 +19,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -40,6 +36,7 @@ import net.minecraftforge.common.EnumPlantType;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.alstroemeria.AlstroemeriaRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
@@ -54,7 +51,7 @@ import sweetmagic.util.SweetState;
 
 public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 
-	public static final String MF = "mf";
+	private static final String MF = "mf";
 
 	/**
 	*　　BlockState総取っ替え
@@ -66,12 +63,14 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 	//=====================記述変更開始==============================
 
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.25D, 0.0D, 0.25D, 0.75D, 0.5D, 0.75D),
-			new AxisAlignedBB(0.125D, 0.0D, 0.125D, 0.875D, 0.6D, 0.875D) };
+		new AxisAlignedBB(0.25D, 0D, 0.25D, 0.75D, 0.5D, 0.75D),
+		new AxisAlignedBB(0.125D, 0D, 0.125D, 0.875D, 0.6D, 0.875D)
+	};
 
 	public BlockAlstroemeria(String name) {
 		this.setTickRandomly(true);
-		this.setHardness(0.0F);
+		this.setHardness(0F);
+        this.setResistance(1024F);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
 		this.setUnlocalizedName(name);
@@ -79,7 +78,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		this.setLightLevel(0.6f);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SweetState.STAGE2, 0));
 		this.setCreativeTab(null);
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
 	}
 
 	// 当たり判定
@@ -155,15 +154,8 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		return state.getBlock() != this ? this.getDefaultState() : state;
 	}
 
-	// 自然成長に必須。　ランダムTick更新処理の書き直しをするときはここをオーバーライドすること
-	@Override
-	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(world, pos, state, rand);
-	}
-
 	// Crop系必須メソッド
-	public void grow(World world, Random rand, BlockPos pos, IBlockState state) {
-	}
+	public void grow(World world, Random rand, BlockPos pos, IBlockState state) { }
 
 	// 超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	// このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。いじらなくてもよい
@@ -180,8 +172,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 	// 右クリックの処理
 	@Nonnull
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
 
 		if (!world.isRemote) {
 
@@ -236,7 +227,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 
 			// 時間操作時の音
 			if (tmFlg) {
-				world.playSound(null, pos, SMSoundEvent.CHANGETIME, SoundCategory.VOICE, 0.5F, 1.0F);
+				world.playSound(null, pos, SMSoundEvent.CHANGETIME, SoundCategory.VOICE, 0.5F, 1F);
 			}
 		}
 		return true;
@@ -250,7 +241,8 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		Object[] objSun = SMUtil.getStackFromPInv(pInv, ItemInit.sannyflower_petal, (byte) 1),
 				objMoon = SMUtil.getStackFromPInv(pInv, ItemInit.moonblossom_petal, (byte) 1),
 				objMyosotis = SMUtil.getStackFromPInv(pInv, ItemInit.dm_flower, (byte) 1),
-				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1);
+				obFire = SMUtil.getStackFromPInv(pInv, ItemInit.fire_nasturtium_petal, (byte) 1
+		);
 
 		Container container = player.inventoryContainer;
 
@@ -282,17 +274,21 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 				this.setTime(world, 11000);
 				SMUtil.decrPInvMin(player, 1, objSun[0], objMoon[0]);
 				tmFlg = true;
+			}
 
 			// 朝に設定
-			} else {
+			else {
 				this.setTime(world, this.getMFTime(SMUtil.getItem(objSun[1])).getTime());
 				SMUtil.decrPInvMin(player, 1, objSun[0]);
 				tmFlg = true;
 			}
+
 			container.detectAndSendChanges();
 
+		}
+
 		// 夜に設定
-		} else if (objMoon != null) {
+		else if (objMoon != null) {
 			this.setTime(world, this.getMFTime(SMUtil.getItem(objMoon[1])).getTime());
 			SMUtil.decrPInvMin(player, 1, objMoon[0]);
 			container.detectAndSendChanges();
@@ -327,16 +323,10 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		if (!recipeInfo.canComplete) { return; }
 
 		// NBTを取得
-		NBTTagCompound tags = stack.getTagCompound();
 		RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
+		AdvancedInit.astral_craft.triggerFor(player);
 
 		for (ItemStack result : recipeUtil.getResult()) {
-
-			// ブロックにMFを持ってたら
-			if (tags != null && tags.hasKey(MF)) {
-				this.blockItemSpawn(world, player, tags);
-			}
-
 			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, result));
 			ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.LAVA);
 		}
@@ -345,62 +335,9 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		this.playerSound(world, pos);
 	}
 
-	// アイテムスポーン
-	public void blockItemSpawn (World world, EntityPlayer player, NBTTagCompound tags) {
-
-		List<ItemStack> stackList = new ArrayList<>();
-		stackList.addAll(this.getItemList(tags, "ItemList"));
-
-		int crystalCount = tags.getInteger(MF) / 600;
-		if (crystalCount > 0) {
-			stackList.add(new ItemStack(ItemInit.aether_crystal, crystalCount));
-		}
-
-		for (ItemStack s : stackList) {
-			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
-		}
-
-		tags.removeTag("Input");
-		this.removeTags(tags);
-
-	}
-
-	// アイテムリストを取得
-	public List<ItemStack> getItemList(NBTTagCompound tags, String name) {
-
-		NBTTagList nbtList = tags.getTagList(name, 10);
-		List<ItemStack> list = new ArrayList<ItemStack>();
-
-		for (int i = 0; i < nbtList.tagCount(); ++i) {
-
-			NBTTagCompound nbt = nbtList.getCompoundTagAt(i);
-			ItemStack stack = new ItemStack(nbt);
-			list.add(stack);
-		}
-
-		return list;
-	}
-
-	// 特定のNBTを除去
-	public void removeTags (NBTTagCompound tags) {
-
-		if (tags.hasKey("wand")) {
-			tags.removeTag("wand");
-		}
-
-		if (tags.hasKey("Output")) {
-			tags.removeTag("Output");
-		}
-
-		if (tags.hasKey("Crystal")) {
-			tags.removeTag("Crystal");
-		}
-	}
-
-
 	public void playerSound (World world, BlockPos pos) {
 		world.playSound(null, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, SoundCategory.VOICE,
-				0.5F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+				0.5F, 1F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 	}
 
 	// 骨粉が使用できるかどうか

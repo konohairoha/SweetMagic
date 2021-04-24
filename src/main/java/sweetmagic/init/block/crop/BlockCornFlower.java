@@ -12,13 +12,12 @@ import sweetmagic.init.BlockInit;
 
 public class BlockCornFlower extends BlockBush {
 
-	public int data;
+	private final int data;
 
 	public BlockCornFlower(String name, int meta) {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
-		this.setHardness(0.0F);
-		this.setTickRandomly(true);
+		this.setHardness(0F);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
 		this.setCreativeTab(null);

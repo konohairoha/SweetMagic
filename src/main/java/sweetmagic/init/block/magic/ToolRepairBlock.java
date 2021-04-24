@@ -28,6 +28,8 @@ import sweetmagic.init.tile.magic.TileToolRepair;
 public class ToolRepairBlock extends BaseMFFace {
 
 	public final int data;
+	public static final AxisAlignedBB TOOL = new AxisAlignedBB(0.2D, 0D, 0.2D, 0.8D, 0.65D, 0.8D);
+	public static final AxisAlignedBB WRITE = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.875D, 0.925D);
 
     public ToolRepairBlock(String name, int data) {
 		super(name);
@@ -62,10 +64,8 @@ public class ToolRepairBlock extends BaseMFFace {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		switch (this.data) {
-		case 0:
-			return new TileToolRepair();
-		case 1:
-			return new TileMagiaWrite();
+		case 0:	return new TileToolRepair();
+		case 1:	return new TileMagiaWrite();
 		}
 		return null;
 	}
@@ -74,10 +74,8 @@ public class ToolRepairBlock extends BaseMFFace {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 
 		switch (this.data) {
-		case 0:
-			return new AxisAlignedBB(0.2, 0, 0.2, 0.8, 0.65, 0.8);
-		case 1:
-			return new AxisAlignedBB(0.075, 0, 0.075, 0.925, 0.875, 0.925);
+		case 0:	return TOOL;
+		case 1:	return WRITE;
 		}
 
 		return FULL_BLOCK_AABB;

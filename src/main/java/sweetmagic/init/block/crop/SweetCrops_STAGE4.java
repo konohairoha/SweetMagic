@@ -13,14 +13,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -46,10 +44,11 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	 // 当たり判定関連
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.3125D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D) };
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.3125D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D)
+	};
 
 	//  当たり判定
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -127,55 +126,39 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	// ドロップする種
 	protected Item getSeed() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.sugarbell_seed;
-		case 1:
-			return ItemInit.strawberry;
-		case 2:
-			return ItemInit.sweetpotato;
-		case 3:
-			return ItemInit.j_radish_seed;
-		case 4:
-			return ItemInit.lettuce_seed;
-		case 5:
-			return ItemInit.cabbage_seed;
-		case 6:
-			return ItemInit.glowflower_seed;
-		case 7:
-			return ItemInit.clerodendrum_seed;
-		case 8:
-			return ItemInit.cotton_seed;
-		case 9:
-			return ItemInit.fire_nasturtium_seed;
+		case 0:	return ItemInit.sugarbell_seed;
+		case 1:	return ItemInit.strawberry;
+		case 2:	return ItemInit.sweetpotato;
+		case 3:	return ItemInit.j_radish_seed;
+		case 4:	return ItemInit.lettuce_seed;
+		case 5:	return ItemInit.cabbage_seed;
+		case 6:	return ItemInit.glowflower_seed;
+		case 7:	return ItemInit.clerodendrum_seed;
+		case 8:	return ItemInit.cotton_seed;
+		case 9:	return ItemInit.fire_nasturtium_seed;
 		}
+
 		return null;
 	}
 
 	// ドロップする作物
 	protected Item getCrop() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.sugarbell;
-		case 1:
-			return ItemInit.strawberry;
-		case 2:
-			return ItemInit.sweetpotato;
-		case 3:
-			return ItemInit.j_radish;
-		case 4:
-			return ItemInit.lettuce;
-		case 5:
-			return ItemInit.cabbage;
-		case 6:
-			return Items.GLOWSTONE_DUST;
-		case 7:
-			return ItemInit.clero_petal;
-		case 8:
-			return ItemInit.cotton;
-		case 9:
-			return ItemInit.fire_nasturtium_petal;
+		case 0:	return ItemInit.sugarbell;
+		case 1:	return ItemInit.strawberry;
+		case 2:	return ItemInit.sweetpotato;
+		case 3:	return ItemInit.j_radish;
+		case 4:	return ItemInit.lettuce;
+		case 5:	return ItemInit.cabbage;
+		case 6:	return Items.GLOWSTONE_DUST;
+		case 7:	return ItemInit.clero_petal;
+		case 8:	return ItemInit.cotton;
+		case 9:	return ItemInit.fire_nasturtium_petal;
 		}
+
 		return null;
 	}
 
@@ -281,13 +264,18 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
 		int age = this.getNowStateMeta(state);
+
 		if (age >= this.getMaxBlockState()) {
 			drops.add(new ItemStack(this.getCrop(), 3 + fortune, 0));
 			for (int i = this.srand.nextInt(4) + 1; i > 0; i--) {
 				drops.add(new ItemStack(this.getSeed(), 1, 0));
 			}
-		} else { //最大成長Ageではない場合、種を落とすようにするための処理
+		}
+
+		// 最大成長Ageではない場合、種を落とすようにするための処理
+		else {
 			drops.add(new ItemStack(this.getSeed(), 1, 0));
 		}
 	}
@@ -310,14 +298,14 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		int age = this.getNowStateMeta(state);
 
 		if (age >= this.getMaxBlockState()) {
-
 			Random rand = new Random();
 			EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
-			world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playCropSound(world, rand, pos);
+		}
 
-		} else {
+		else {
 
 			ItemStack stackB = this.metaCrop != 9 ? new ItemStack(Items.DYE, 1, 15) : new ItemStack(Items.FLINT);
 			if (ItemStack.areItemsEqual(stack, stackB)) {

@@ -2,7 +2,6 @@ package sweetmagic.init.block.crop;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -14,14 +13,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -38,9 +35,9 @@ import sweetmagic.util.SweetState;
 
 public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 
-	Random srand = new Random();
-	public static float toGrowValue = 10.0F;	//成長乱数（小さいほど早く成長しやすい）
-	public final int data;
+	private static final Random srand = new Random();
+	private static float toGrowValue = 10F;	//成長乱数（小さいほど早く成長しやすい）
+	private final int data;
 
 	/**
 	*　　BlockState総取っ替え
@@ -51,15 +48,16 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 	//=====================記述変更開始==============================
 
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.1D, 0.0D, 0.0D, 0.9D, 1D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.0D, 0.9D, 1D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.0D, 0.9D, 1D, 0.9D) };
+		new AxisAlignedBB(0.1D, 0D, 0D, 0.9D, 1D, 0.9D),
+		new AxisAlignedBB(0.1D, 0D, 0D, 0.9D, 1D, 0.9D),
+		new AxisAlignedBB(0.1D, 0D, 0D, 0.9D, 1D, 0.9D)
+	};
 
 	public BlockChestnut(String name, int data) {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setGrowValue(8.5F);
-		this.setHardness(0.0F);
+		this.setHardness(0F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -180,12 +178,9 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 	//ドロップする作物
 	protected Item getCrop() {
 		switch (this.data) {
-		case 0:
-			return ItemInit.chestnut;
-		case 1:
-			return ItemInit.coconut;
-		case 2:
-			return ItemInit.banana;
+		case 0: return ItemInit.chestnut;
+		case 1: return ItemInit.coconut;
+		case 2: return ItemInit.banana;
 		}
 		return null;
 	}
@@ -193,13 +188,18 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
 		int age = getNowStateMeta(state);
+
 		if (age >= this.getMaxBlockState()) {
 	    	drops.add(new ItemStack(this.getCrop(), 3 + fortune, 0));
 	    	for(int i = srand.nextInt(4)+1; i > 0; i--) {
 	    		drops.add(new ItemStack(this.getSeed(), 1, 0));
 	    	}
-	    } else {		//最大成長Ageではない場合、種を落とすようにするための処理
+	    }
+
+		// 最大成長Ageではない場合、種を落とすようにするための処理
+		else {
 	    	drops.add(new ItemStack(this.getSeed(), 1, 0));
 	    }
 	}
@@ -226,7 +226,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
             EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, 0), 2); //作物の成長段階を2下げる
-			world.playSound( null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playCropSound(world, rand, pos);
 		}
 
 		else {
@@ -244,8 +244,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 	//土、草、耕地に置いても壊れないようにする
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
-		Block block = world.getBlockState(pos.up()).getBlock();
-		return block instanceof SMLeaves;
+		return world.getBlockState(pos.up()).getBlock() instanceof SMLeaves;
 	}
 
 	//骨粉が使用できるかどうか

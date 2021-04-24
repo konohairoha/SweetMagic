@@ -26,7 +26,7 @@ import sweetmagic.init.tile.magic.TileMagicBarrier;
 
 public class MagicBarrier extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
 
     public MagicBarrier(String name, int data) {
 		super(Material.GLASS, name);
@@ -34,7 +34,7 @@ public class MagicBarrier extends BaseModelBlock {
 		setResistance(999999F);
 		setSoundType(SoundType.GLASS);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
     }
 
     /**
@@ -47,12 +47,6 @@ public class MagicBarrier extends BaseModelBlock {
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
 		if (world.isRemote || this.data == 1 || stack.getItem() != ItemInit.magickey) { return false; }
-
-//		if (world.isRemote) {
-//			player.playSound(SoundEvents.BLOCK_IRON_DOOR_OPEN, 1F, 1F);
-//			return true;
-//		}
-//		player.playSound(SoundEvents.BLOCK_IRON_DOOR_OPEN, 1F, 1F);
 
 		world.playEvent(2001, pos, Block.getStateId(state));
 		world.setBlockState(pos, BlockInit.magicbarrier_off.getDefaultState(), 2);

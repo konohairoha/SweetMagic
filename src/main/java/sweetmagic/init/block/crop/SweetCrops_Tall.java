@@ -10,13 +10,11 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -28,11 +26,11 @@ import sweetmagic.util.ParticleHelper;
 public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.25D, 0.3D, 0.25D, 0.75D, 0.0D, 0.75D),
-			new AxisAlignedBB(0.25D, 0.55D, 0.25D, 0.75D, 0.0D, 0.75D),
-			new AxisAlignedBB(0.2D, 0.85D, 0.2D, 0.8D, 0.0D, 0.8D),
-			new AxisAlignedBB(0.175D, 1.0D, 0.175D, 0.825D, 0.0D, 0.825D),
-			new AxisAlignedBB(0.15D, 1.0D, 0.15D, 0.85D, 0.0D, 0.85D)
+		new AxisAlignedBB(0.25D, 0.3D, 0.25D, 0.75D, 0.0D, 0.75D),
+		new AxisAlignedBB(0.25D, 0.55D, 0.25D, 0.75D, 0.0D, 0.75D),
+		new AxisAlignedBB(0.2D, 0.85D, 0.2D, 0.8D, 0.0D, 0.8D),
+		new AxisAlignedBB(0.175D, 1.0D, 0.175D, 0.825D, 0.0D, 0.825D),
+		new AxisAlignedBB(0.15D, 1.0D, 0.15D, 0.85D, 0.0D, 0.85D)
 	};
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -92,11 +90,10 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 			if (!this.checkTopBlock(world, pos)) {
 				this.breakBlock(world, pos2.up(), true);
 				world.setBlockState(pos2, this.growStage(world, state2, this.RC_SetStage), 2);
-				//	System.out.println("★★上★★");
+			}
 
-				// 下のブロックの処理
-			} else {
-				//	System.out.println("★★下★★");
+			// 下のブロックの処理
+			else {
 				world.setBlockState(pos2, this.growStage(world, state2, this.RC_SetStage), 2);
 				this.breakBlock(world, pos2, true);
 			}
@@ -131,7 +128,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
     	world.spawnEntity(drop);
 
 		// 音を鳴らす
-		world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+		this.playCropSound(world, rand, pos);
 	}
 
 
@@ -157,15 +154,20 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 	//土、草、耕地に置いても壊れないようにする
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
+
 		IBlockState state2 = world.getBlockState(pos.down());
 		Block block = state2.getBlock();
-		if ( (this.getNowStateMeta(state2) <= 1 && block == this) || block instanceof PlantPot || block instanceof BlockFarmland) {
-			return true;
-		} else if (this.stayGrnd == 1 && this.canSustainBush(state2) && block != this) {
-			return false;
-		} else {
+
+		if ( (this.getNowStateMeta(state2) > 1 && block == this) || block instanceof PlantPot || block instanceof BlockFarmland) {
 			return true;
 		}
+
+		else if (this.stayGrnd == 1 && this.canSustainBush(state2) && block != this) {
+			return false;
+		}
+
+        IBlockState soil = world.getBlockState(pos.down());
+        return (world.getLight(pos) >= 8 || world.canSeeSky(pos)) && soil.getBlock().canSustainPlant(soil, world, pos.down(), EnumFacing.UP, this);
 	}
 
 	public boolean canSustainBush(IBlockState state) {
@@ -189,36 +191,32 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 	//ドロップする種
 	@Override
 	protected Item getSeed() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.corn_seed;
-		case 1:
-			return ItemInit.tomato;
-		case 2:
-			return ItemInit.eggplant_seed;
+		case 0:	return ItemInit.corn_seed;
+		case 1:	return ItemInit.tomato;
+		case 2:	return ItemInit.eggplant_seed;
 		}
+
 		return null;
 	}
 
 	//ドロップする作物
 	@Override
 	protected Item getCrop() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.corn;
-		case 1:
-			return ItemInit.tomato;
-		case 2:
-			return ItemInit.eggplant;
+		case 0:	return ItemInit.corn;
+		case 1:	return ItemInit.tomato;
+		case 2:	return ItemInit.eggplant;
 		}
+
 		return null;
 	}
 
 	// 上のブロックかどうかをチェックするメソッド
 	public boolean checkTopBlock (World world, BlockPos pos) {
-		//ブロックを取得するための定義
-		Block block = world.getBlockState(pos.down()).getBlock();
-		return !(block instanceof SweetCrops_Tall);
+		return !(world.getBlockState(pos.down()).getBlock() instanceof SweetCrops_Tall);
 	}
 
 	//自然成長に必須。　ランダムTick更新処理の書き直しをするときはここをオーバーライドすること

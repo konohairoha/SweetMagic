@@ -20,8 +20,9 @@ import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
 
 public class MFChange extends BaseMFBlock {
 
-	public static final PropertyInteger LEVEL = PropertyInteger.create("level", 0, 3);
-	public final int data;
+	private static final PropertyInteger LEVEL = PropertyInteger.create("level", 0, 3);
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.5D, 1D);
+	private final int data;
 
 	public MFChange (String name, int data) {
 		super(name);
@@ -32,32 +33,37 @@ public class MFChange extends BaseMFBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0, 0, 0, 1, 0.5, 1);
+		return AABB;
 	}
 
 	// ブロックでのアクション
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+
 		if (world.isRemote) { return; }
+
+		int guiId = 0;
 
 		switch (this.data) {
 		case 0:
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFCHANGER_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+			guiId = SMGuiHandler.MFCHANGER_GUI;
 			break;
 		case 1:
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFCHANGER_ADVANCED_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+			guiId = SMGuiHandler.MFCHANGER_ADVANCED_GUI;
 			break;
 		}
+
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
+
 		switch (this.data) {
-		case 0:
-			return new TileMFChanger();
-		case 1:
-			return new TileMFChangerAdvanced();
+		case 0:	return new TileMFChanger();
+		case 1:	return new TileMFChangerAdvanced();
 		}
+
     	return null;
 	}
 

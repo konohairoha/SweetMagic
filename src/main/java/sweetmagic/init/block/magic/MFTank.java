@@ -33,14 +33,13 @@ public class MFTank extends BaseMFBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
+
 		switch (this.data) {
-		case 0:
-			return new TileMFTank();
-		case 1:
-			return new TileMFTankAdvanced();
-		case 2:
-			return new TileMFMMTank();
+		case 0:	return new TileMFTank();
+		case 1:	return new TileMFTankAdvanced();
+		case 2:	return new TileMFMMTank();
 		}
+
 		return null;
 	}
 }

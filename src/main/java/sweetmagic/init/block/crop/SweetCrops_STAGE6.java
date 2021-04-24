@@ -13,14 +13,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -35,20 +33,21 @@ import sweetmagic.util.SweetState;
 
 public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 
-	public Random srand = new Random();
-	public int stage = 4;
-	public final int metaCrop;		//作物種別
-	public final int stayGrnd;		//作物がその場に留まる条件
-	public final float growValue;	//成長のしやすさ(少ないほど育ちやすい)
-	public int RC_SetStage = 1;	//右クリック回収時セットする成長段階(0～)
+	private Random srand = new Random();
+	private int stage = 4;
+	private final int metaCrop;		//作物種別
+	private final int stayGrnd;		//作物がその場に留まる条件
+	private final float growValue;	//成長のしやすさ(少ないほど育ちやすい)
+	private int RC_SetStage = 1;	//右クリック回収時セットする成長段階(0～)
 
 	private static final AxisAlignedBB[] CROPS_AABB = new AxisAlignedBB[] {
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.2D, 0.9D, 0.3125D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D),
-			new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D) };
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.0625D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.2D, 0.9D, 0.3125D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.4375D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D),
+		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D)
+	};
 
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         return CROPS_AABB[this.getNowStateMeta(state)];
@@ -118,31 +117,27 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 
 	//ドロップする種
 	protected Item getSeed() {
+
 		switch(this.metaCrop) {
-		case 0:
-			return ItemInit.raspberry;
-		case 1:
-			return ItemInit.rice_seed;
-		case 2:
-			return ItemInit.soybean;
-		case 3:
-			return ItemInit.azuki_seed;
+		case 0:	return ItemInit.raspberry;
+		case 1:	return ItemInit.rice_seed;
+		case 2:	return ItemInit.soybean;
+		case 3:	return ItemInit.azuki_seed;
 		}
+
 		return null;
 	}
 
 	//ドロップする作物
 	protected Item getCrop() {
+
 		switch(this.metaCrop) {
-		case 0:
-			return ItemInit.raspberry;
-		case 1:
-			return ItemInit.ine;
-		case 2:
-			return ItemInit.soybean;
-		case 3:
-			return ItemInit.azuki_seed;
+		case 0:	return ItemInit.raspberry;
+		case 1:	return ItemInit.ine;
+		case 2:	return ItemInit.soybean;
+		case 3:		return ItemInit.azuki_seed;
 		}
+
 		return null;
 	}
 	// 終わり
@@ -247,6 +242,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
 		int age = getNowStateMeta(state);
 
 		// 大豆だけ特別処理(枝豆回収)
@@ -259,7 +255,10 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 			for (int i = this.srand.nextInt(4) + 1; i > 0; i--) {
 				drops.add(new ItemStack(this.getSeed(), 1, 0));
 			}
-		} else { //最大成長Ageではない場合、種を落とすようにするための処理
+		}
+
+		// 最大成長Ageではない場合、種を落とすようにするための処理
+		else {
 			drops.add(new ItemStack(this.getSeed(), 1, 0));
 		}
 	}
@@ -287,19 +286,24 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 	    	EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
-			world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playCropSound(world, rand, pos);
 
-		} else {
+		}
+
+		else {
 
 			ItemStack stackB = new ItemStack(Items.DYE, 1, 15);
+
 			if (ItemStack.areItemsEqual(stack, stackB)) {
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
 				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
-			} else if (this.metaCrop == 2 && age == 4) {
+			}
+
+			else if (this.metaCrop == 2 && age == 4) {
 				EntityItem drop = new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemInit.edamame, rand.nextInt(2) + 1));
 				world.spawnEntity(drop);
-				world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+				this.playCropSound(world, rand, pos);
 				world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
 			}
 		}

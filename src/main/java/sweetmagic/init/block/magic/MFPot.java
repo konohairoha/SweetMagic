@@ -51,6 +51,7 @@ public class MFPot extends BaseMFBlock {
 	public final int data;
     private Map<Enchantment, Integer> initEnchant;
     public final int expCost = 1000;
+	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.5D, 0.6D);
 
     public MFPot(String name, int data) {
         super(name);
@@ -100,7 +101,7 @@ public class MFPot extends BaseMFBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.5D, 0.6D);
+		return AABB;
 	}
 
 	@Override
@@ -129,6 +130,7 @@ public class MFPot extends BaseMFBlock {
 
 		// コスト分をMFに変換
 		if (cost > 0) {
+
 			TileMFPot tile = (TileMFPot) world.getTileEntity(pos);
 			tile.setMF(tile.getMF() + cost);
 			PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, tile.getMF(), tile.getTilePos()));
@@ -291,5 +293,4 @@ public class MFPot extends BaseMFBlock {
 			}
 		}
 	}
-
 }

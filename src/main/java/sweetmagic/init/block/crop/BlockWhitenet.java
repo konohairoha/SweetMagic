@@ -7,13 +7,11 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -26,8 +24,6 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 
 	public BlockWhitenet(String name, int n1, int n2, float f1) {
 		super(name, n1, n2, f1);
-		this.setHardness(0.0F);
-		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
 		//必ずメソッド含めすべてのBlockStateの上書きをすること。SweetStateのプロパティ入りBlockStateであるSTAGE(任意の数字)を使う。
@@ -51,12 +47,12 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
 		super.updateTick(world, pos, state, rand);
-		if (!world.isAreaLoaded(pos, 1) || world.getLightFromNeighbors(pos.up()) > 9) { return; }
+		if (!world.isAreaLoaded(pos, 1)) { return; }
 
 		int i = this.getNowStateMeta(state);
 		if (i < this.getMaxBlockState()) {
 			float f = SMUtil.getGrowthChance(this, world, pos, 2F);
-			if (ForgeHooks.onCropsGrowPre(world, pos, state, rand.nextInt((int) (growValue / f) + 1) == 0)) {
+			if (ForgeHooks.onCropsGrowPre(world, pos, state, rand.nextInt((int) (this.growValue / f) + 1) == 0)) {
 				world.setBlockState(pos, this.withStage(world, state, i + 1), 2);
 				ForgeHooks.onCropsGrowPost(world, pos, state, world.getBlockState(pos));
 			}
@@ -66,14 +62,13 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 	//土、草、耕地に置いても壊れないようにする
 	@Override
 	public boolean canBlockStay(World world, BlockPos pos, IBlockState state) {
-		Material m = world.getBlockState(pos.down()).getMaterial();
-		return m == Material.ROCK || m == Material.GROUND;
+		return this.canPlaceBlockAt(world, pos);
 	}
 
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		Material m = world.getBlockState(pos.down()).getMaterial();
-		return m == Material.ROCK || m == Material.GROUND;
+		return m == Material.ROCK || m == Material.GROUND || m == Material.WOOD;
 	}
 
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
@@ -98,9 +93,10 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 			Random rand = new Random();
 			world.spawnEntity(this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(2) + 1));
 			world.setBlockState(pos, this.withStage(world, state, 0), 1); //スティッキースタッフの成長段階を3下げる
-			world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F,
-					1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
-		} else {
+			this.playCropSound(world, rand, pos);
+		}
+
+		else {
 
 			ItemStack stackB = new ItemStack(Items.DYE, 1, 15);
 			if (ItemStack.areItemsEqual(stack, stackB)) {

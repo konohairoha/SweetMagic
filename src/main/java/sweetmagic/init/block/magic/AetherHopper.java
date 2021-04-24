@@ -32,7 +32,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 
 	// 向きをいれておく変数として FACING を宣言
 	public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class);
-	public final int data;
+	private final int data;
 
     public AetherHopper(String name, int data) {
 		super(name);
@@ -50,9 +50,9 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
+
 		switch (this.data) {
-		case 0:
-			return new TileAetherHopper();
+		case 0: return new TileAetherHopper();
 		}
 		return null;
 	}
@@ -65,6 +65,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
 		super.breakBlock(world, pos, state);
 
 		// チャンクのローダーを削除
@@ -89,8 +90,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY,
-			float hitZ, int meta, EntityLivingBase placer) {
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
 		IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
 		return state.withProperty(FACING, facing);
 	}

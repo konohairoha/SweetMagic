@@ -28,7 +28,9 @@ import sweetmagic.init.base.BaseModelBlock;
 
 public class MagicLight extends BaseModelBlock {
 
-	public final int data;
+	private final int data;
+	private static final AxisAlignedBB MAGIC = new AxisAlignedBB(0.2D, 0.8D, 0.2D, 0.8D, 0.2D, 0.8D);
+	private static final AxisAlignedBB TWILIGHT = new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
 
 	public MagicLight(String name, int data, List<Block> list) {
 		super(Material.GLASS, name);
@@ -46,7 +48,7 @@ public class MagicLight extends BaseModelBlock {
 
 	// 光魔法を持ってると当たり判定を出る
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return HasItemEvent.hasThisItem || this.data == 1 ? new AxisAlignedBB(0.2D, 0.8D, 0.2D, 0.8D, 0.2D, 0.8D) : new AxisAlignedBB(0D, 0D, 0D, 0D, 0D, 0D);
+		return ( HasItemEvent.hasThisItem || this.data == 1 ) ? MAGIC : TWILIGHT;
 	}
 
 	@Nullable

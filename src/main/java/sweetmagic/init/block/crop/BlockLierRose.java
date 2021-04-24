@@ -13,13 +13,10 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -46,7 +43,7 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setHardness(0.0F);
-		this.setLightLevel(0.6f);
+		this.setLightLevel(0.6F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -57,7 +54,7 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 
 	// 当たり判定
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.6250D, 1.0D);
+		return new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.625D, 1.0D);
 	}
 
 	@Override
@@ -129,14 +126,13 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 	}
 
 	//自然成長に必須。　ランダムTick更新処理の書き直しをするときはここをオーバーライドすること
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
-	}
+//	@Override
+//	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
+//		super.updateTick(worldIn, pos, state, rand);
+//	}
 
 	//Crop系必須メソッド
-	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) {
-	}
+	public void grow(World worldIn, Random rand, BlockPos pos, IBlockState state) { }
 
 	//超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	//このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。いじらなくてもよい
@@ -162,12 +158,12 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 		}
 	}
 
-	//右クリックの処理
-	@Nonnull
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		return true;
-	}
+//	//右クリックの処理
+//	@Nonnull
+//	@Override
+//	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+//		return true;
+//	}
 
 	//土、草、耕地に置いても壊れないようにする
 	@Override

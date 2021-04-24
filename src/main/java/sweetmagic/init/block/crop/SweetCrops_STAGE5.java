@@ -13,14 +13,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -115,39 +113,37 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 	 * 2 = バニラ
 	 * 3 = 玉ねぎ
 	 * 4 = スッテキー
+	 * 5 = コーヒー豆
 	 */
 	protected Item getSeed() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.blueberry;
-		case 1:
-			return ItemInit.olive;
-		case 2:
-			return ItemInit.vannila_pods;
-		case 3:
-			return ItemInit.onion;
-		case 4:
-			return ItemInit.sticky_stuff_seed;
+		case 0:	return ItemInit.blueberry;
+		case 1:	return ItemInit.olive;
+		case 2:	return ItemInit.vannila_pods;
+		case 3:	return ItemInit.onion;
+		case 4:	return ItemInit.sticky_stuff_seed;
+		case 5:	return ItemInit.coffee_seed;
 		}
+
 		return null;
 	}
 
 	// ドロップする作物
 	protected Item getCrop() {
+
 		switch (this.metaCrop) {
-		case 0:
-			return ItemInit.blueberry;
-		case 1:
-			return ItemInit.olive;
-		case 2:
-			return ItemInit.vannila_pods;
-		case 3:
-			return ItemInit.onion;
-		case 4:
-			return ItemInit.sticky_stuff_petal;
+		case 0:	return ItemInit.blueberry;
+		case 1:	return ItemInit.olive;
+		case 2:	return ItemInit.vannila_pods;
+		case 3:	return ItemInit.onion;
+		case 4:	return ItemInit.sticky_stuff_petal;
+		case 5:	return ItemInit.coffee_seed;
 		}
+
 		return null;
 	}
+
 	// 終わり
 
 	//最重要メソッド　ワールド読み込みなどで呼ばれるやつ。
@@ -250,13 +246,17 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
 		int age = getNowStateMeta(state);
 		if (age >= this.getMaxBlockState()) {
 			drops.add(new ItemStack(this.getCrop(), 3 + fortune, 0));
-			for (int i = srand.nextInt(4) + 1; i > 0; i--) {
+			for (int i = this.srand.nextInt(4) + 1; i > 0; i--) {
 				drops.add(new ItemStack(this.getSeed(), 1, 0));
 			}
-		} else { //最大成長Ageではない場合、種を落とすようにするための処理
+		}
+
+		// 最大成長Ageではない場合、種を落とすようにするための処理
+		else {
 			drops.add(new ItemStack(this.getSeed(), 1, 0));
 		}
 	}
@@ -279,14 +279,14 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		int age = this.getNowStateMeta(state);
 
 		if(age >= this.getMaxBlockState()) {
-
 			Random rand = new Random();
 	    	EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2);        //指定の成長段階まで下げる
-			world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+			this.playCropSound(world, rand, pos);
+		}
 
-		} else {
+		else {
 
 			ItemStack stackB = new ItemStack(Items.DYE,1,15);
 			if(ItemStack.areItemsEqual(stack, stackB)) {

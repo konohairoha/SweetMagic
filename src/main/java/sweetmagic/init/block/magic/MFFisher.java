@@ -49,14 +49,10 @@ public class MFFisher extends BaseMFBlock {
 
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
-
 		switch (this.data) {
-		case 0:
-			return new TileMFFisher();
-		case 1:
-			return new TileFlyishForer();
-		default:
-			return null;
+		case 0:	  return new TileMFFisher();
+		case 1:	  return new TileFlyishForer();
+		default: return null;
 		}
 	}
 

@@ -20,26 +20,47 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.base.BaseMFFace;
-import sweetmagic.init.tile.magic.TileMFF;
+import sweetmagic.init.tile.magic.TileMFFurnace;
+import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
 
 public class MFFurnace extends BaseMFFace {
 
 	public static boolean setBlock = false;
+	private final int data;
 
-    public MFFurnace(String name, List<Block> list) {
+    public MFFurnace(String name, int data, List<Block> list) {
         super(name);
+        this.data = data;
 		list.add(this);
     }
 
 	// ブロックでのアクション
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFF_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+
+		int guiId = 0;
+
+		switch (this.data) {
+		case 0:
+			guiId = SMGuiHandler.MFF_GUI;
+			break;
+		case 1:
+			guiId = SMGuiHandler.MFF_ADVANCED_GUI;
+			break;
+		}
+
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileMFF();
+
+		switch (this.data) {
+		case 0: return new TileMFFurnace();
+		case 1: return new TileMFFurnaceAdvanced();
+		}
+
+		return null;
 	}
 
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
