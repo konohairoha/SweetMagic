@@ -2,8 +2,8 @@
     "parent": "sweetmagic:block/basewood",
     "textures": {
         "top": "#top",
-        "particle": "sweetmagic:block/smbrick",
-        "side": "sweetmagic:block/smbrick"
+        "side": "#side",
+        "particle": "#side"
     },
     "elements": [
         {
