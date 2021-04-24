@@ -14,9 +14,11 @@ public class BlockBreakEvent {
 	@SubscribeEvent
 	public void onBlockBreakEvent(BlockEvent.BreakEvent event) {
 
+		// クリエか破壊無効がついてないなら終了
 		EntityPlayer player =  event.getPlayer();
 		if (!player.isPotionActive(PotionInit.breakblock) || player.isCreative()) { return; }
 
+		// FullCubeかつ採掘速度が1以上の場合はキャンセル
 		World world = event.getWorld();
 		BlockPos pos = event.getPos();
 		IBlockState state = event.getState();

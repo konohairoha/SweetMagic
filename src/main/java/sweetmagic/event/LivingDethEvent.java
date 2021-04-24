@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -18,8 +19,6 @@ import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerLoggedOutEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.PlayerRespawnEvent;
-import sweetmagic.api.iitem.ISMArmor;
-import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.ParticleHelper;
@@ -46,7 +45,6 @@ public class LivingDethEvent {
 		if (!isCanel && living instanceof EntityPlayer) {
 			this.keepInv(event, living);
 		}
-
 	}
 
 	// リフレッシュエフェクト
@@ -78,6 +76,7 @@ public class LivingDethEvent {
 		return true;
 	}
 
+	// インベントリをキープ
 	public boolean keepInv (LivingDeathEvent event, EntityLivingBase living) {
 
 		EntityPlayer player = (EntityPlayer) living;
@@ -86,18 +85,15 @@ public class LivingDethEvent {
 		InventoryPlayer keepInv= new InventoryPlayer(null);
 		UUID pID = player.getUniqueID();
 		boolean isKeep = false;
+		NonNullList<ItemStack> armorInv = pInv.armorInventory;
+		NonNullList<ItemStack> offHandInv = pInv.offHandInventory;
 
 		// プレイヤーのインベントリ分回す
 		for (int inv = 0; inv < mainInv; inv++) {
 
-			// 杖じゃないなら次へ
+			// エーテルチャームが付いてないなら次へ
 			ItemStack stack = pInv.getStackInSlot(inv);
-			if (!(stack.getItem() instanceof IWand)) { continue; }
-
-			// ワンドチャームが付いてないなら次へ
-			IWand wand = (IWand) stack.getItem();
-			int level = wand.getEnchantLevel(EnchantInit.aetherCharm, stack);
-			if (level <= 0) { continue; }
+			if (!this.checkEnchant(stack)) { continue; }
 
 			// コピーをインベントに入れて本物を消す
 			keepInv.mainInventory.set(inv, stack.copy());
@@ -105,19 +101,12 @@ public class LivingDethEvent {
 			isKeep = true;
 		}
 
-		NonNullList<ItemStack> armorInv = pInv.armorInventory;
-
 		// アーマー分回す
 		for (int i = 0; i < armorInv.size(); i++) {
 
-			// SMArmorじゃないなら次へ
+			// エーテルチャームが付いてないなら次へ
 			ItemStack stack = armorInv.get(i);
-			if (!(stack.getItem() instanceof ISMArmor)) { continue; }
-
-			// ワンドチャームが付いてないなら次へ
-			ISMArmor armor = (ISMArmor) stack.getItem();
-			int level = armor.getEnchantLevel(EnchantInit.aetherCharm, stack);
-			if (level <= 0) { continue; }
+			if (!this.checkEnchant(stack)) { continue; }
 
 			// keepInvに入れる
 			keepInv.armorInventory.set(i, stack.copy());
@@ -125,19 +114,12 @@ public class LivingDethEvent {
 			isKeep = true;
 		}
 
-		NonNullList<ItemStack> offHandInv = pInv.offHandInventory;
-
 		// オフハンド分回す
 		for (int i = 0; i < offHandInv.size(); i++) {
 
-			// 杖じゃないなら次へ
+			// エーテルチャームが付いてないなら次へ
 			ItemStack stack = offHandInv.get(i);
-			if (!(stack.getItem() instanceof IWand)) { continue; }
-
-			// ワンドチャームが付いてないなら次へ
-			IWand wand = (IWand) stack.getItem();
-			int level = wand.getEnchantLevel(EnchantInit.aetherCharm, stack);
-			if (level <= 0) { continue; }
+			if (!this.checkEnchant(stack)) { continue; }
 
 			keepInv.offHandInventory.set(i, stack.copy());
 			offHandInv.set(i, ItemStack.EMPTY);
@@ -148,7 +130,6 @@ public class LivingDethEvent {
 		if (isKeep) {
 			playerKeepsMap.put(pID, keepInv);
 		}
-
 
 		return isKeep;
 	}
@@ -213,5 +194,10 @@ public class LivingDethEvent {
 
 		keepInv.player = player;
 		keepInv.dropAllItems();
+	}
+
+	// エンチャントチェック
+	public boolean checkEnchant (ItemStack stack) {
+		return EnchantmentHelper.getEnchantmentLevel(EnchantInit.aetherCharm, stack) > 0;
 	}
 }

@@ -64,8 +64,9 @@ public class SMLoottableEvent {
 			pool.addEntry(new LootEntryItem(ItemInit.dm_seed, 20, 8, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":dm_seed"));
 			pool.addEntry(new LootEntryItem(ItemInit.fortune_ring, 8, 2, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":fortune_ring"));
 		}
+
 		// 廃鉱のチェスト
-		if (src.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)) {
+		else if (src.equals(LootTableList.CHESTS_ABANDONED_MINESHAFT)) {
 			pool.addEntry(new LootEntryItem(ItemInit.mysterious_page, 4, 2,new LootFunction[] {
 					new SetMetadata(new LootCondition[0], new RandomValueRange(0,0)),	//メタデータ
 					new SetCount(new LootCondition[0], new RandomValueRange(1, 3))			//数　Range…(min,max)
@@ -109,6 +110,11 @@ public class SMLoottableEvent {
 			}, new LootCondition[0], SweetMagicCore.MODID + ":pure_crystal"));
 			pool.addEntry(new LootEntryItem(ItemInit.emelald_pias, 2, 1, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":emelald_pias"));
 			pool.addEntry(new LootEntryItem(ItemInit.blood_sucking_ring, 2, 1, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":blood_sucking_ring"));
+		}
+
+		// 釣り
+		else  if (src.equals(LootTableList.GAMEPLAY_FISHING_FISH)) {
+			pool.addEntry(new LootEntryItem(ItemInit.seaweed, 10, 3, new LootFunction[0], new LootCondition[0], SweetMagicCore.MODID + ":seaweed"));
 		}
 	}
 }

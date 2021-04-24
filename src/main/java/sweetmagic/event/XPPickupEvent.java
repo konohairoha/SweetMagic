@@ -2,6 +2,7 @@ package sweetmagic.event;
 
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -28,12 +29,14 @@ public class XPPickupEvent {
 		// プレイヤーじゃなかったら
 		if (event.getEntityPlayer() == null || !(event.getEntityPlayer() instanceof EntityPlayer)) { return; }
 
+		EntityXPOrb xp = event.getOrb();
+
 		// ローブの修繕イベント呼び出し
-		this.armorRepair(event.getEntityPlayer(), event.getOrb().getXpValue());
+		this.armorRepair(event.getEntityPlayer(), xp, xp.getXpValue());
 	}
 
 	// ローブの修繕イベント
-	public void armorRepair (EntityPlayer player, int value) {
+	public void armorRepair (EntityPlayer player, EntityXPOrb xp, int value) {
 
 		for (EntityEquipmentSlot slot : ARMORSLOT) {
 
@@ -50,13 +53,13 @@ public class XPPickupEvent {
 
 			// ポーチなら
 			else if (item instanceof IPouch) {
-				this.emelaldPiasEffect(player, stack, value);
+				this.emelaldPiasEffect(player, stack, xp, value);
 			}
 		}
 	}
 
 	// 経験値増加
-	public void emelaldPiasEffect (EntityPlayer player, ItemStack stack, int value) {
+	public void emelaldPiasEffect (EntityPlayer player, ItemStack stack, EntityXPOrb xp, int value) {
 
 		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		if (!(leg.getItem() instanceof IPouch)) { return; }
@@ -64,6 +67,7 @@ public class XPPickupEvent {
 		// インベントリを取得
 		InventoryPouch neo = new InventoryPouch(player);
 		IItemHandlerModifiable inv = neo.inventory;
+		float addXP = 0;
 
 		// インベントリの分だけ回す
 		for (int i = 0; i < inv.getSlots(); i++) {
@@ -77,12 +81,15 @@ public class XPPickupEvent {
 
 			// エメラルドピアスを持ってるなら経験値増加
 			if (item == ItemInit.emelald_pias) {
-				player.experience += value * 0.01F;
+//				player.experience += value * 0.01F;
+				addXP += value * 0.25F;
 
 				// 重複不可なら終了
-				if (!acce.isDuplication()) { return; }
+				if (!acce.isDuplication()) { break; }
 			}
 		}
+
+		xp.xpValue += addXP;
 	}
 
 	public boolean healRepair (EntityPlayer player, ItemStack stack, int value) {

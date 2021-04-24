@@ -60,22 +60,36 @@ public class LivingDamageEvent {
 
 			EntityLivingBase attacker = (EntityLivingBase) src.getTrueSource();
 
-			// 未来視レベル2以上なら
-			if (target.isPotionActive(PotionInit.timestop) && target.getActivePotionEffect(PotionInit.timestop).getAmplifier() >= 1) {
-				this.futureVision(event, src, target, attacker, newDam);
+			// 回避魔法
+			if (target.isPotionActive(PotionInit.cyclone)) {
+
+				this.avoidAtttack(event, target, target.getActivePotionEffect(PotionInit.cyclone).getAmplifier() + 1);
+
+				// 攻撃を無効化されたら終了
+				if (event.isCanceled()) { return; }
 			}
 
-			// 燃焼なら
+
+			// 未来視レベル2以上なら
+			if (target.isPotionActive(PotionInit.timestop) && target.getActivePotionEffect(PotionInit.timestop).getAmplifier() >= 1) {
+
+				this.futureVision(event, src, target, attacker, newDam);
+
+				// 攻撃を無効化されたら終了
+				if (event.isCanceled()) { return; }
+			}
+
+			// 攻撃者が燃焼状態なら攻撃力ダウン
 			if (attacker.isPotionActive(PotionInit.flame)) {
 				newDam *= 0.75;
 			}
 
-			// 火力上昇なら
+			// 火力上昇ならダメージアップ
 			if (attacker.isPotionActive(PotionInit.shadow)) {
 				newDam = this.lunaticAdd(attacker, newDam);
 			}
 
-			// 攻撃されたのがプレイヤーの場合
+			// 攻撃されたのがえんちちーかつエレキアーマーかつボスでないなら
 			if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker.isNonBoss()) {
 				newDam = this.getElecArmor(target, attacker, newDam);
 			}
@@ -91,39 +105,12 @@ public class LivingDamageEvent {
 			newDam = this.barrierCut(target, newDam);
 		}
 
-		ItemStack chest =target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+		ItemStack chest = target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		Item chestItem = chest.getItem();
 
 		// ローブを着ていたら
 		if (chestItem instanceof IRobe) {
-
-			IRobe robe = (IRobe) chestItem;
-			Entity attacker = src.getTrueSource();
-			boolean canDMCut = true;
-
-			if (chestItem instanceof IMFTool) {
-				IMFTool tool = (IMFTool) chestItem;
-				canDMCut = !tool.isEmpty(chest);
-
-				if (canDMCut) {
-					tool.setMF(chest, (int) (tool.getMF(chest) - newDam));
-				}
-			}
-
-			// SMMobの攻撃ならダメージカット
-			if (attacker instanceof ISMMob && canDMCut) {
-				newDam *= robe.getSMMobDamageCut();
-			}
-
-			// プレイヤーによる攻撃ならダメージを固定
-			else if (attacker instanceof EntityPlayer && canDMCut) {
-				newDam = 0.1F;
-			}
-
-			// 魔法ダメージならダメージカット
-			if ( (src.getImmediateSource() instanceof EntityBaseMagicShot || src == DamageSource.MAGIC ) && canDMCut) {
-				newDam *= robe.getMagicDamageCut();
-			}
+			newDam = this.robwDamageCut(src, target, newDam, chest, chestItem);
 		}
 
 		// それ以外が攻撃した場合
@@ -143,8 +130,10 @@ public class LivingDamageEvent {
 				this.activeFutureVision(entity, (EntityLiving) target);
 			}
 
-			// 猛毒追加ダメージ
-			newDam = this.addPoisonDamage(target, newDam);
+			// 猛毒が付いてたらダメージ増加
+			if (target.isPotionActive(PotionInit.deadly_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
+				newDam = this.addPoisonDamage(target, newDam);
+			}
 		}
 
 		// ダメージが0以下なら攻撃無効
@@ -155,12 +144,36 @@ public class LivingDamageEvent {
 		// ダメージ無効フラグがtrueなら
 		if (cancelFlag) {
 			this.cancelDamage(event, (EntityPlayer) target);
-		} else {
+		}
+
+		else {
 			event.setAmount(newDam);
 		}
 
 		// モブドロップ
 		this.addDrop(event, target, src);
+	}
+
+	// 回避魔法
+	public void avoidAtttack (LivingHurtEvent event, EntityLivingBase entity, int level) {
+
+		float chance = 0F;
+
+		switch (level) {
+		case 1:
+			chance = 0.01F;
+			break;
+		case 2:
+			chance = 0.03F;
+			break;
+		case 3:
+			chance = 0.05F;
+			break;
+		}
+
+		if (chance < entity.world.rand.nextFloat()) { return; }
+
+		event.setCanceled(true);
 	}
 
 	// エレキアーマー
@@ -218,7 +231,8 @@ public class LivingDamageEvent {
 
 			// エメラルドピアスを持ってるならダメージ増加
 			if (item == ItemInit.emelald_pias) {
-				dame++;
+
+				dame += 0.5F;
 
 				// 重複不可なら終了
 				if (!acce.isDuplication()) { return dame; }
@@ -294,13 +308,38 @@ public class LivingDamageEvent {
 
 	// 猛毒追加ダメージ
 	public float addPoisonDamage (EntityLivingBase living, float dame) {
+		return dame += living.getActivePotionEffect(PotionInit.deadly_poison).getAmplifier() + 2;
+	}
 
-		// 猛毒が付いてたらダメージ増加
-		if (living.isPotionActive(PotionInit.deadly_poison) && !living.isPotionActive(PotionInit.grant_poison)) {
+	// ローブダメージ軽減
+	public float robwDamageCut (DamageSource src, EntityLivingBase living, float dame, ItemStack chest, Item chestItem) {
 
-			// ポーションの取得
-			PotionEffect effect = living.getActivePotionEffect(PotionInit.deadly_poison);
-			dame += effect.getAmplifier() + 2;
+		IRobe robe = (IRobe) chestItem;
+		Entity attacker = src.getTrueSource();
+		boolean canDMCut = true;
+
+		if (chestItem instanceof IMFTool) {
+			IMFTool tool = (IMFTool) chestItem;
+			canDMCut = !tool.isEmpty(chest);
+
+			if (canDMCut) {
+				tool.setMF(chest, (int) (tool.getMF(chest) - dame));
+			}
+		}
+
+		// SMMobの攻撃ならダメージカット
+		if (attacker instanceof ISMMob && canDMCut) {
+			dame *= robe.getSMMobDamageCut();
+		}
+
+		// プレイヤーによる攻撃ならダメージを固定
+		else if (attacker instanceof EntityPlayer && canDMCut) {
+			dame = 0.1F;
+		}
+
+		// 魔法ダメージならダメージカット
+		if ( (src.getImmediateSource() instanceof EntityBaseMagicShot || src == DamageSource.MAGIC ) && canDMCut) {
+			dame *= robe.getMagicDamageCut();
 		}
 
 		return dame;
