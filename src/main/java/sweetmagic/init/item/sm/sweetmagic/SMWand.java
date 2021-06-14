@@ -1,10 +1,15 @@
 package sweetmagic.init.item.sm.sweetmagic;
 
+import com.google.common.collect.Multimap;
+
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +18,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -21,8 +28,11 @@ import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.enchant.EnchantWand;
 import sweetmagic.init.item.sm.eitem.SMType;
+import sweetmagic.util.ParticleHelper;
+import sweetmagic.util.SMUtil;
 
 public class SMWand extends SMItem implements IWand {
 
@@ -33,6 +43,7 @@ public class SMWand extends SMItem implements IWand {
 	public int level;
 	public ISMItem slotItem;
 	public float chargeTick = 0;
+	public EntityLivingBase entity;
 	public BlockPos wandPos = new BlockPos(0, 0, 0);
 
 	public SMWand (String name, int tier, int maxMF, int slot) {
@@ -42,6 +53,36 @@ public class SMWand extends SMItem implements IWand {
 		this.setSlot(slot);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(9999);
+	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
+        Multimap<String, AttributeModifier> map = super.getItemAttributeModifiers(slot);
+		if (slot == EntityEquipmentSlot.MAINHAND) {
+			String dameName = SharedMonsterAttributes.ATTACK_DAMAGE.getName();
+			String weapon = "modifier";
+			double dama = (double) this.tier * 0.5D;
+			map.removeAll(dameName);
+			map.put(dameName, new AttributeModifier(ATTACK_SPEED_MODIFIER, weapon, dama, 0));
+			map.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(SMUtil.TOOL_REACH, weapon, dama * 2, 0));
+		}
+        return map;
+    }
+
+	// 敵に攻撃したらノックバック
+	@Override
+	public boolean hitEntity(ItemStack stack, EntityLivingBase target, EntityLivingBase attacker) {
+
+		// 吹き飛ばし耐性付いてるならノックバックしない
+		if (target.isPotionActive(PotionInit.resistance_blow)) { return true; }
+
+		// 魔法火力アップ分ノックバック距離増加
+        Vec3d r = attacker.getLookVec().normalize().scale(4);
+		double d = Math.min(0.1 + (double) this.getEnchantLevel(EnchantInit.wandAddPower, stack) * 0.075D, 0.5D);
+		target.motionX += r.x * d;
+		target.motionZ += r.z * d;
+		ParticleHelper.spawnBoneMeal(target.world, target.getPosition().up(), EnumParticleTypes.CRIT);
+		return true;
 	}
 
 	/*
@@ -122,7 +163,7 @@ public class SMWand extends SMItem implements IWand {
 
 		// モブタイプ
 		case MOB:
-			this.mobActived(player.world, player, stack, slotItem, tags);
+			this.mobActived(player.world, player, entity, stack, slotItem, tags);
 			break;
 		default:
 			return false;
@@ -263,6 +304,18 @@ public class SMWand extends SMItem implements IWand {
 	@Override
 	public void setChargeTick(float chargeTick) {
 		this.chargeTick = chargeTick;
+	}
+
+	// えんちちーの取得
+	@Override
+	public EntityLivingBase getTouchEntity() {
+		return this.entity == null ? null : this.entity;
+	}
+
+	// えんちちーの設定
+	@Override
+	public void setTouchEntity(EntityLivingBase entity) {
+		this.entity = entity;
 	}
 
 	// 最大１分間出来るように

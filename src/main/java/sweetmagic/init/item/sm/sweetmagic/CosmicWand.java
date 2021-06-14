@@ -34,7 +34,6 @@ public class CosmicWand extends SMWand {
 			enchaLevel += 2;
 		}
 
-
 		tags.setInteger(LEVEL, (level + this.getTier() - 2 + enchaLevel));
 		flag = smItem.onItemAction(world, player, stack, item);
 
@@ -52,7 +51,7 @@ public class CosmicWand extends SMWand {
 		if (!this.isCreativeWand()) {
 
 			// 杖と魔法の属性一致してるなら
-			if (this.isNotElement() && smItem.getElement() == this.getWandElement()) {
+			if (this.isNotElement() && this.isElementEqual(smItem)) {
 				this.downTime = 15;
 			}
 

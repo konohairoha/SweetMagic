@@ -1,12 +1,18 @@
 package sweetmagic.init.item.sm.armor;
 
+import java.util.List;
+
 import net.minecraft.client.model.ModelBiped;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -37,7 +43,11 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 
 	/**
 	 * 0 = エーテルローブ
-	 * 1 = 強化ローブ
+	 * 1 = クロノスローブ
+	 * 2 = フェアリーローブ
+	 * 3 = ウィンディーネローブ
+	 * 4 = イフリートローブ
+	 * 5 = サンドリヨンローブ
 	 */
 
 	// 特定のアイテムで修復可能に
@@ -68,13 +78,13 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	// SMモブのダメージカット率（1だとダメージカット無し）
 	@Override
 	public float getSMMobDamageCut () {
-		return this.data == 1 ? 0.65F : 0.75F;
+		return this.data != 0 ? 0.65F : 0.75F;
 	}
 
 	// 魔法ダメージカット率（1だとダメージカット無し）
 	@Override
 	public float getMagicDamageCut () {
-		return this.data == 1 ? 0.65F : 0.75F;
+		return this.data != 0 ? 0.65F : 0.75F;
 	}
 
 	// エンチャントエフェクト描画
@@ -106,5 +116,15 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	@Override
 	public void setMaxMF(int maxMF) {
 		this.maxMF = maxMF;
+	}
+
+	// ツールチップの表示
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
+
+		if (this.data != 5) { return; }
+
+		String tip = new TextComponentTranslation("tip.sandryon_robe.name", new Object[0]).getFormattedText();
+		tooltip.add(I18n.format(TextFormatting.GREEN  + tip));
 	}
 }

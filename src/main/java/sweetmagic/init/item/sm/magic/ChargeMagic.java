@@ -11,6 +11,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +23,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
@@ -42,13 +44,13 @@ public class ChargeMagic extends MFSlotItem {
 	public ChargeMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.CHARGE, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + name + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + name + ".png");
     }
 
 	public ChargeMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir) {
 		super(name, SMType.CHARGE, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
     }
 
 	/**
@@ -60,6 +62,8 @@ public class ChargeMagic extends MFSlotItem {
 	 * 5 = 範囲作物成長魔法
 	 * 6 = 小範囲作物成長魔法
 	 * 7 = 作物広範囲魔法
+	 * 8 = 無敵魔法
+	 * 9 = 無敵魔法Ⅱ
 	 */
 
 	// テクスチャのリソースを取得
@@ -94,6 +98,12 @@ public class ChargeMagic extends MFSlotItem {
 			break;
 		case 7:
 			toolTip.add("tip.magic_growth_verre.name");
+			break;
+		case 8:
+			toolTip.add("tip.magic_aether_shield.name");
+			break;
+		case 9:
+			toolTip.add("tip.magic_aether_shield2.name");
 			break;
 		}
 
@@ -138,6 +148,11 @@ public class ChargeMagic extends MFSlotItem {
 		case 7:
 			// 作物広範囲魔法
 			flag = this.growthVerre(world, player, stack, tags);
+			break;
+		case 8:
+		case 9:
+			// 無敵魔法
+			flag = this.aetherShield(world, player, stack, tags);
 			break;
 		}
 
@@ -209,7 +224,6 @@ public class ChargeMagic extends MFSlotItem {
 
 		return false;
 	}
-
 
 	// 単体雷魔法
 	public boolean singleElecAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
@@ -352,8 +366,26 @@ public class ChargeMagic extends MFSlotItem {
 		return this.rangeGrow(world, new BlockPos(player), level);
 	}
 
+
+	// 無敵魔法
+	public boolean aetherShield (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		int maxTime = this.data == 8 ? 300 : 500;
+		int time = (int) (maxTime * IWand.getWand(stack).getChargeTick());
+		this.addPotion(player, PotionInit.aether_shield, time, this.data == 8 ? 0 : 1);
+		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+		player.getCooldownTracker().setCooldown(stack.getItem(), time);
+
+		return true;
+	}
+
 	@Override
 	public boolean canItemMagic (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		if (this.data == 8 || this.data == 9) {
+			return true;
+		}
+
 		return IWand.getWand(stack).getChargeTick() >= 1;
 	}
 

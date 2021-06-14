@@ -2,6 +2,7 @@ package sweetmagic.init.item.sm.magic;
 
 import java.util.List;
 
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -17,6 +18,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
@@ -24,6 +26,7 @@ import sweetmagic.init.entity.projectile.EntityFrostRain;
 import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
+import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
 public class AirMagic extends MFSlotItem {
@@ -34,13 +37,13 @@ public class AirMagic extends MFSlotItem {
 	public AirMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.AIR, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + name + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + name + ".png");
     }
 
 	public AirMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir) {
 		super(name, SMType.AIR, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
     }
 
 	/**
@@ -64,6 +67,9 @@ public class AirMagic extends MFSlotItem {
 	 * 17 = 回避魔法1
 	 * 18 = 回避魔法2
 	 * 19 = 回避魔法3
+	 * 20 = 持続デバフ解除 + 全回復魔法 + 衝撃吸収
+	 * 21 = レベルアップ用
+	 * 22 = 透明化魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -131,6 +137,15 @@ public class AirMagic extends MFSlotItem {
 		case 19:
 			toolTip.add("tip.magic_avoid.name");
 			break;
+		case 20:
+			toolTip.add("tip.magic_healing_hightlow.name");
+			break;
+		case 21:
+			toolTip.add("tip.magic_creative.name");
+			break;
+		case 22:
+			toolTip.add("tip.magic_invisible.name");
+			break;
 		}
 
 		return toolTip;
@@ -176,6 +191,7 @@ public class AirMagic extends MFSlotItem {
 			flag = this.refreshAction(world, player, stack, tags);
 			break;
 		case 8:
+		case 20:
 			// 持続デバフ解除+全回復魔法
 			flag = this.healingWish(world, player, stack, tags);
 			break;
@@ -214,6 +230,13 @@ public class AirMagic extends MFSlotItem {
 			// 回避魔法
 			flag = this.rangeAvoid(world, player, stack, tags);
 			break;
+		case 21:
+			// レベルアップ魔法
+			flag = this.creativeAction(world, player, stack, tags);
+			break;
+		case 22:
+			// 透明化魔法
+			flag = this.invisibleAction(world, player, stack, tags);
 		}
 
 		return flag;
@@ -235,7 +258,7 @@ public class AirMagic extends MFSlotItem {
 
 		// 幻影を与える
 		this.addPotion(player, PotionInit.shadow, this.effectTime(level), level, true);
-		this.playSound(world, player, SMSoundEvent.MAGICSTART, 1.25F, 1F);
+		this.playSound(world, player, SMSoundEvent.MAGICSTART, 0.75F, 1F);
 
 		long worldTime = world.getWorldTime() % 24000;
 		boolean isNight = worldTime >= 12000;
@@ -271,10 +294,8 @@ public class AirMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
-
 		this.addPotion(player, PotionInit.aether_barrier, this.effectTime(level), --level, false);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
-
 		return true;
 	}
 
@@ -342,6 +363,12 @@ public class AirMagic extends MFSlotItem {
 		WorldHelper.PlayerHeal(world, aabb, player, stack, true);
 		WorldHelper.addEffect(world, aabb, PotionInit.refresh_effect, (int) (this.effectTime(level) * 1.25), 1, EnumParticleTypes.WATER_SPLASH);
 		this.playSound(world, player, SMSoundEvent.HEAL, 0.175F, 1F);
+
+		if (this.data == 20) {
+			this.addPotion(player, MobEffects.ABSORPTION, (int) (this.effectTime(level) * 1.25), 2, true);
+			WorldHelper.addEffect(world, aabb, MobEffects.ABSORPTION, this.effectTime(level), 2, null);
+		}
+
 		return true;
 	}
 
@@ -489,12 +516,46 @@ public class AirMagic extends MFSlotItem {
 		List<EntityPlayer> playerList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
 
 		for (EntityPlayer p : playerList) {
-
-			if (p.isPotionActive(PotionInit.cyclone)) { continue; }
-
 			this.addPotion(p, PotionInit.cyclone, this.effectTime(level), potionLevel, false);
 			this.playSound(world, player, SMSoundEvent.CYCLON, 0.5F, 1F);
 		}
+
+		return true;
+	}
+
+	// レベルアップ魔法
+	public boolean creativeAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack) + 1;
+		int needExp = wand.needExp(wand.getMaxLevel(), level, stack);
+
+		tags.setInteger(wand.LEVEL, level);
+		tags.setInteger(wand.EXP, needExp);
+		this.playSound(world, player, SMSoundEvent.LEVELUP, 0.2F, 1F);
+
+		return true;
+	}
+
+	// 透明化魔法
+	public boolean invisibleAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(64D, 64D, 64D);
+		List<EntityLiving> entityList = world.getEntitiesWithinAABB(EntityLiving.class, aabb);
+
+		for (EntityLiving entity : entityList) {
+
+			if (player != entity.getAttackTarget() || !entity.isNonBoss()) { continue; }
+
+			SMUtil.tameAIAnger(entity, null);
+		}
+
+		this.addPotion(player, MobEffects.INVISIBILITY, this.effectTime(level), 0, false);
+		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 
 		return true;
 	}
@@ -507,7 +568,10 @@ public class AirMagic extends MFSlotItem {
 		case 9:
 	        // 空が見えるなら打てる
 	        return world.canSeeSky(new BlockPos(player));
-
+		case 21:
+			// 杖の取得
+			IWand wand = IWand.getWand(stack);
+			return wand.getLevel(stack) < wand.getMaxLevel();
 		}
 		return true;
 	}

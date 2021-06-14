@@ -11,6 +11,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
@@ -22,18 +23,17 @@ public class GrandMagic extends MFSlotItem {
 
 	private final int data;
 	ResourceLocation icon;
-	public static final String SUMMONWOLF = "summonWolf";
 
 	public GrandMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.GROUND, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + name + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + name + ".png");
     }
 
 	public GrandMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir) {
 		super(name, SMType.GROUND, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
     }
 
 	// テクスチャのリソースを取得
@@ -126,31 +126,6 @@ public class GrandMagic extends MFSlotItem {
 
 	@Override
 	public boolean canItemMagic (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
-
-		switch (this.data) {
-		// 幻影オオカミ召喚魔法
-		case 0:
-
-			NBTTagCompound data = player.getEntityData();
-
-			// NBTを持ってなかったら
-			if (!data.hasKey(SUMMONWOLF)) {
-				data.setInteger(SUMMONWOLF, 1);
-			}
-
-			// NBTを持っていたら
-			else {
-
-				int count = data.getInteger(SUMMONWOLF) + 1;
-
-				// 召喚数が4以上なら失敗
-				if (count >= 4) { return false; }
-
-				// 召喚
-				data.setInteger(SUMMONWOLF, count);
-			}
-			return true;
-		}
 		return true;
 	}
 }

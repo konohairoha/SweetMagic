@@ -13,7 +13,8 @@ public enum SMElement {
 	GRAVITY,	// 重力
 	BLAST,		// 爆発
 	TOXIC,		// 毒
-	TIME;		// 時間
+	TIME,		// 時間
+	ALL;		// 全属性
 
 	SMElement() {}
 
@@ -58,6 +59,9 @@ public enum SMElement {
 			break;
 		case "TIME":
 			element = TIME;
+			break;
+		case "ALL":
+			element = ALL;
 			break;
 		}
 

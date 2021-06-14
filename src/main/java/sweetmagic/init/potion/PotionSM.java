@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IProjectile;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -29,6 +30,7 @@ import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.SMDamage;
+import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
 public class PotionSM extends PotionBase {
@@ -92,8 +94,13 @@ public class PotionSM extends PotionBase {
 			entity.motionY -= 0.1F + amplifier * 0.1F;
 		}
 
+		// マインドコントロール
+		else if (this == PotionInit.mind_control) {
+			this.mindContorol(world, entity, amplifier);
+		}
+
 		// 泡状態
-		if (this == PotionInit.babule) {
+		else if (this == PotionInit.babule) {
 
 			entity.motionY = 0.0814125F;
 			entity.motionX *= 0.67;
@@ -124,7 +131,7 @@ public class PotionSM extends PotionBase {
 		}
 
 		// リジェネ
-		if (this == PotionInit.regene && entity.getActivePotionEffect(PotionInit.regene).getDuration() % 60 == 0) {
+		else if (this == PotionInit.regene && entity.getActivePotionEffect(PotionInit.regene).getDuration() % 60 == 0) {
 
 			// 体力が最大以上なら
 			if (entity.getHealth() < entity.getMaxHealth() && entity.isEntityAlive()) {
@@ -134,7 +141,7 @@ public class PotionSM extends PotionBase {
 		}
 
 		// 猛毒状態なら
-		if (this == PotionInit.deadly_poison && !entity.isPotionActive(PotionInit.grant_poison)) {
+		else if (this == PotionInit.deadly_poison && !entity.isPotionActive(PotionInit.grant_poison)) {
 
 			if (entity.getHealth() > 1F) {
 				entity.setHealth(entity.getHealth() - 1);
@@ -148,10 +155,14 @@ public class PotionSM extends PotionBase {
 		}
 
 		// 燃焼状態
-		if (this == PotionInit.flame) {
+		else if (this == PotionInit.flame) {
 			DamageSource src = SMDamage.flameDamage;
 			entity.attackEntityFrom(src, 1F);
 			entity.hurtResistantTime = 0;
+		}
+
+		else if (this == PotionInit.aether_shield && entity.getHealth() < entity.getMaxHealth()) {
+			entity.setHealth(entity.getHealth() + 1.5F);
 		}
 	}
 
@@ -161,6 +172,10 @@ public class PotionSM extends PotionBase {
 			int j = 32 >> amplifier;
 			return j > 0 ? duration % j == 0 : true;
         }
+
+		if (this == PotionInit.aether_shield && amplifier > 0 && duration % 20 == 0) {
+			return true;
+		}
 
 		return this.isActive;
 	}
@@ -255,6 +270,39 @@ public class PotionSM extends PotionBase {
 				e.motionY += 0.35F;
 				tags.setBoolean("isCounter", true);
 			}
+		}
+	}
+
+	public void mindContorol (World world, EntityLivingBase entity, int amplifier) {
+
+		// 敵モブ以外は終了
+		if (!(entity instanceof EntityLiving)) { return; }
+
+		// 攻撃対象が敵モブなら終了
+		EntityLiving living = (EntityLiving) entity;
+		EntityLivingBase target = living.getAttackTarget();
+		if (target instanceof IMob && target.isEntityAlive()) { return; }
+
+		// 範囲のえんちちーの取得と攻撃対象
+		EntityLivingBase attack = null;
+		float distance = 24F;
+		List<EntityLivingBase> entityList = world.getEntitiesWithinAABB(EntityLivingBase.class, entity.getEntityBoundingBox().grow(24F, 8F, 24F));
+
+		for (EntityLivingBase e : entityList) {
+
+			// エンティティが同じなら終了
+			if (e == entity || !(e instanceof IMob) || e.isPotionActive(PotionInit.mind_control) || !e.canEntityBeSeen(entity)) { continue; }
+
+			// 距離の比較
+			if (e.getDistance(entity) < distance) {
+				distance = e.getDistance(entity);
+				attack = e;
+			}
+		}
+
+		// 攻撃対象を見つけたら
+		if (attack != null) {
+			SMUtil.tameAIAnger(living, attack);
 		}
 	}
 

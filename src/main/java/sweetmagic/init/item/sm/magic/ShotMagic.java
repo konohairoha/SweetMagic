@@ -11,9 +11,13 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.entity.projectile.EntityAbsoluteZeroMagic;
 import sweetmagic.init.entity.projectile.EntityBabuleMagic;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
+import sweetmagic.init.entity.projectile.EntityBlackHole;
+import sweetmagic.init.entity.projectile.EntityBlazeEndMagic;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
 import sweetmagic.init.entity.projectile.EntityExplosionMagic;
@@ -24,6 +28,7 @@ import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.init.entity.projectile.EntityLightMagic;
 import sweetmagic.init.entity.projectile.EntityPoisonMagic;
 import sweetmagic.init.entity.projectile.EntityShinigFlare;
+import sweetmagic.init.entity.projectile.EntitySuperNova;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 
@@ -36,19 +41,19 @@ public class ShotMagic extends MFSlotItem {
 	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + name + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + name + ".png");
     }
 
 	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir) {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
 	}
 
 	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir, SMElement subEle) {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
         this.data = meta;
-		this.icon = new ResourceLocation("sweetmagic","textures/items/" + dir + ".png");
+		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
 		this.setSubElement(subEle);
 	}
 
@@ -80,6 +85,10 @@ public class ShotMagic extends MFSlotItem {
 	 * 24 = 泡窒息リジェネ解除魔法
 	 * 25 = 炎/光魔法
 	 * 26 = 泡/爆発魔法
+	 * 27 = 絶対零度魔法
+	 * 28 = ブレイズエンド魔法
+	 * 29 = ブラックホール魔法
+	 * 30 = 連鎖爆発魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -172,6 +181,15 @@ public class ShotMagic extends MFSlotItem {
 		case 26:
 			toolTip.add("tip.magic_bleb_burst.name");
 			break;
+		case 27:
+			toolTip.add("tip.magic_absolute_zero.name");
+			break;
+		case 28:
+			toolTip.add("tip.magic_blaze_end.name");
+			break;
+		case 29:
+			toolTip.add("tip.magic_blackhole.name");
+			break;
 		}
 
 		return toolTip;
@@ -181,6 +199,7 @@ public class ShotMagic extends MFSlotItem {
 	public boolean onItemAction(World world, EntityPlayer player, ItemStack stack, Item slotItem) {
 
 		IWand wand = IWand.getWand(stack);
+		boolean flag = false;
 
 		if (!world.isRemote) {
 
@@ -301,6 +320,26 @@ public class ShotMagic extends MFSlotItem {
 				entity.isHitDead = true;
 				entity.setDamage(3);
 				break;
+			case 27:
+				entity = new EntityAbsoluteZeroMagic(world, player, stack);
+				entity.setDamage(5);
+				flag = true;
+				break;
+			case 28:
+				entity = new EntityBlazeEndMagic(world, player, stack);
+				entity.setDamage(5);
+				flag = true;
+				break;
+			case 29:
+				entity = new EntityBlackHole(world, player, stack);
+				entity.setDamage(5);
+				flag = true;
+				break;
+			case 30:
+				entity = new EntitySuperNova(world, player, stack, 3);
+				entity.setDamage(5);
+				flag = true;
+				break;
 			}
 
 			// ダメージを与える場合
@@ -318,8 +357,8 @@ public class ShotMagic extends MFSlotItem {
 				entity.setDamage(3);
 			}
 
-			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
 			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 1F + Math.min(power * 0.5F, 4F), 0);	// 射撃速度
+			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
 			world.spawnEntity(entity);
 
 			if (tripleShot) {
@@ -341,7 +380,7 @@ public class ShotMagic extends MFSlotItem {
 		world.playSound(null, new BlockPos(player), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
 
 		// falseを返してえんちちーでレベルアップ処理を呼び出す
-		return false;
+		return flag;
 	}
 
 	// 向きの取得
@@ -379,7 +418,6 @@ public class ShotMagic extends MFSlotItem {
 			world.spawnEntity(entity);
 		}
 	}
-
 
 	// 左右の矢の射撃
 	public void shotSacred(World world, EntityPlayer player, ItemStack stack, float power) {

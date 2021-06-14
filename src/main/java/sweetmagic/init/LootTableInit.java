@@ -12,4 +12,5 @@ public class LootTableInit {
 	public static final ResourceLocation MEQCHEST = new ResourceLocation(SweetMagicCore.MODID, "mekyu_chest");
 	public static final ResourceLocation BIGINERCHEST = new ResourceLocation(SweetMagicCore.MODID, "biginer_chest");
 	public static final ResourceLocation IDOCHEST = new ResourceLocation(SweetMagicCore.MODID, "ido_chest");
+	public static final ResourceLocation CASTLECHEST = new ResourceLocation(SweetMagicCore.MODID, "castle_chest");
 }

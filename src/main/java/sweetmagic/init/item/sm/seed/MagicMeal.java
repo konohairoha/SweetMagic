@@ -1,24 +1,38 @@
 package sweetmagic.init.item.sm.seed;
 
+import java.util.List;
 import java.util.Random;
+
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenerator;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.iitem.IElementItem;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.block.blocks.SMSapling;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
+import sweetmagic.util.ParticleHelper;
+import sweetmagic.worldgen.gen.WorldGenPrsmTree;
 
 public class MagicMeal extends SMItem implements IElementItem {
 
@@ -48,6 +62,17 @@ public class MagicMeal extends SMItem implements IElementItem {
 
 				this.dirtAction(world, rand, block, pos, player, stack, bloS, 0);
 			}
+
+			// プリズム、バナナ以外の苗木なら
+			else if (block instanceof SMSapling && block != BlockInit.prism_sapling&& block != BlockInit.banana_sapling) {
+
+				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+
+				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+				SMSapling sap = (SMSapling) block;
+				WorldGenerator gen = new WorldGenPrsmTree(sap.getLog(), sap.getLeave(), false);
+		    	gen.generate(world, rand, pos);
+			}
 		}
 
 		world.playSound(player, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, SoundCategory.VOICE, 0.8F,
@@ -67,16 +92,13 @@ public class MagicMeal extends SMItem implements IElementItem {
 			if (count >= 3) { return; }
 
 			Block checkAir = world.getBlockState(p).getBlock();
-
-			int setRand = rand.nextInt(2); 				//ブロック設置の乱数
-			int blockRand = rand.nextInt(bloS.length); 	//設置するブロックの乱数
-
+			int setRand = rand.nextInt(2);
 			if (setRand != 0 || checkAir != Blocks.AIR) { continue; }
 
 			Block checkDirt = world.getBlockState(p.down()).getBlock();
 			if (checkDirt instanceof BlockGrass || checkDirt instanceof BlockDirt) {
 				count++;
-				world.setBlockState(p, bloS[blockRand].getDefaultState(), 2);
+				world.setBlockState(p, bloS[rand.nextInt(bloS.length)].getDefaultState(), 2);
 			}
 		}
 	}
@@ -89,5 +111,11 @@ public class MagicMeal extends SMItem implements IElementItem {
 	@Override
 	public void setElement(SMElement ele) {
 		this.ele = ele;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		String text = new TextComponentTranslation("tip.magicmeal.name", new Object[0]).getFormattedText();
+		tooltip.add(I18n.format(TextFormatting.GOLD + text));
 	}
 }

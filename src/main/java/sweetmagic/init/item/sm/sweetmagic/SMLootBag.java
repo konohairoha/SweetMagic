@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
@@ -30,9 +31,15 @@ public class SMLootBag extends SMItem {
 
     public SMLootBag(String name, int data) {
 		super(name, ItemInit.magicList);
-        setMaxStackSize(1);
+        setMaxStackSize(64);
         this.data = data;
     }
+
+    /**
+     * 0 = 種袋
+     * 1 = 卵袋
+     * 2 = アクセ袋
+     */
 
 	//右クリックをした際の処理
 	@Override
@@ -44,24 +51,61 @@ public class SMLootBag extends SMItem {
 		world.playSound(null, pos, SMSoundEvent.ROBE, SoundCategory.PLAYERS, 0.5F, 1.075F);
 		if (world.isRemote) { return new ActionResult(EnumActionResult.SUCCESS, stack); }
 
-		// ルートテーブルをリストに入れる
-		List<ItemStack> seedList = SMUtil.getOreList("listAllseed");
 		Random rand = world.rand;
-		player.setActiveHand(hand);
 
-		for (int i = 0; i < 5; i ++) {
-			ItemStack seed = seedList.get(rand.nextInt(seedList.size()));
-			world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), seed));
+		switch (this.data) {
+		case 0:
+			// 鉱石辞書からランダムにアイテムを引っ張る
+			this.getOreLoot(world, pos, player, hand, rand, "listAllseed", 5);
+			break;
+		case 1:
+			this.spawnItem(world, pos, new ItemStack(Items.EGG , rand.nextInt(8) + 4));
+			break;
+		case 2:
+			// 鉱石辞書からランダムにアイテムを引っ張る
+			this.getOreLoot(world, pos, player, hand, rand, "magicAccessori", 1);
+			break;
 		}
 
 		return new ActionResult(EnumActionResult.SUCCESS, stack);
+	}
+
+	// 鉱石辞書からランダムにアイテムを引っ張る
+	public void getOreLoot (World world, BlockPos pos, EntityPlayer player, EnumHand hand, Random rand, String ore, int value) {
+
+		// ルートテーブルをリストに入れる
+		List<ItemStack> seedList = SMUtil.getOreList(ore);
+//		player.setActiveHand(hand);
+
+		for (int i = 0; i < value; i ++) {
+			this.spawnItem(world, pos, seedList.get(rand.nextInt(seedList.size())));
+		}
+	}
+
+	// アイテムスポーン
+	public void spawnItem (World world, BlockPos pos, ItemStack stack) {
+		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack));
 	}
 
     //ツールチップの表示
   	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-  		String text =  new TextComponentTranslation("tip.seedbag.name", new Object[0]).getFormattedText();
-  		tooltip.add(I18n.format(TextFormatting.BLUE + text));
+
+  		String text =  "";
+
+  		switch (this.data) {
+  		case 0:
+  			text = "tip.seedbag.name";
+  			break;
+  		case 1:
+  			text = "tip.eggbag.name";
+  			break;
+  		case 2:
+  			text = "tip.accebag.name";
+  			break;
+  		}
+
+  		tooltip.add(I18n.format(TextFormatting.BLUE + new TextComponentTranslation(text, new Object[0]).getFormattedText()));
   	}
 }

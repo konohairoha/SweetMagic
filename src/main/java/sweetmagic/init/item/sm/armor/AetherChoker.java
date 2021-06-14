@@ -75,13 +75,24 @@ public class AetherChoker extends ItemArmor implements IChoker, ISMArmor {
 			if (tool.isMaxMF(armor)) { continue; }
 
 			// 消費MFを取得
-			int useMF = Math.min(100, this.getMF(stack));
+			int useMF = Math.min(this.getHealValue(), this.getMF(stack));
 			tool.insetMF(armor, useMF);
 			this.setMF(stack, this.getMF(stack) - useMF);
 
 			// MFが空なら終了
 			if (this.isEmpty(stack)) { return; }
 		}
+	}
+
+	public int getHealValue () {
+
+		switch (this.data) {
+		case 0: return 100;
+		case 1: return 500;
+		case 2: return 2000;
+		}
+
+		return 0;
 	}
 
 	// エンチャントエフェクト描画

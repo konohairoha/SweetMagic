@@ -7,10 +7,14 @@ import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -19,8 +23,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IAcce;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.item.sm.eitem.SMAcceType;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
+import sweetmagic.util.ItemHelper;
+import sweetmagic.util.WorldHelper;
 
 public class SMAcce extends SMItem implements IAcce {
 
@@ -46,6 +53,8 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 5 = エメラルドピアス
 	 * 6 = フォーチュンリング
 	 * 7 = 夜の帳
+	 * 8 = 魔術師のグローブ
+	 * 9
 	 */
 
 	@Override
@@ -81,6 +90,12 @@ public class SMAcce extends SMItem implements IAcce {
 			break;
 		case 9:
 			toolTip.add("tip.magicians_grobe.name");
+			break;
+		case 10:
+			toolTip.add("tip.magician_quillpen.name");
+			break;
+		case 11:
+			toolTip.add("tip.gravity_pendant.name");
 			break;
 		}
 
@@ -130,6 +145,9 @@ public class SMAcce extends SMItem implements IAcce {
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 200, 4));
 			player.getCooldownTracker().setCooldown(stack.getItem(), 12000);
+		case 11:
+			// アブソープペンダント
+			this.gravityEffext(world, player, stack);
 		}
 	}
 
@@ -137,7 +155,12 @@ public class SMAcce extends SMItem implements IAcce {
 	public boolean scorchEffect (World world, EntityPlayer player, ItemStack stack) {
 
 		player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 201, 0, true, false));
-		player.setFire(0);
+		if (player.isBurning()) {
+			player.extinguish();
+		}
+
+		// やけど状態ならやけどを除去
+		this.checkDebuf(player, PotionInit.flame);
 
 		if (player.isInLava() ) {
 
@@ -162,6 +185,9 @@ public class SMAcce extends SMItem implements IAcce {
 	// 人魚の衣
 	public boolean mermaidEffect (World world, EntityPlayer player, ItemStack stack) {
 
+		// 泡状態なら泡を除去
+		this.checkDebuf(player, PotionInit.babule);
+
 		if (player.isInWater() ) {
 
 			player.setAir(300);
@@ -176,11 +202,43 @@ public class SMAcce extends SMItem implements IAcce {
 			if (player.moveForward < 0) {
 				player.motionX *= 0.1;
 				player.motionZ *= 0.1;
-			} else if (player.moveForward >= 0 && player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ < 2.75D) {
+			}
+
+			else if (player.moveForward >= 0 && player.motionX * player.motionX + player.motionY * player.motionY + player.motionZ * player.motionZ < 2.75D) {
 				player.motionX *= 1.175D;
 				player.motionZ *= 1.175D;
 			}
 		}
+
+		return true;
+	}
+
+	// 装備品の効果
+	public boolean gravityEffext(World world, EntityPlayer player, ItemStack stack) {
+
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(8);
+
+		// アイテム吸引
+		List<EntityItem> itemList = world.getEntitiesWithinAABB(EntityItem.class, aabb);
+
+		if (!itemList.isEmpty()) {
+			for (EntityItem item : itemList) {
+				if (ItemHelper.hasSpace(player.inventory.mainInventory, item.getItem())) {
+					WorldHelper.gravitateEntityTowards(item, player.posX, player.posY, player.posZ);
+				}
+			}
+		}
+
+		// 経験値吸引
+		List<EntityXPOrb> expList = world.getEntitiesWithinAABB(EntityXPOrb.class, aabb);
+		if (!expList.isEmpty()) {
+			for (EntityXPOrb xpOrb : expList) {
+				WorldHelper.gravitateEntityTowards(xpOrb, player.posX, player.posY, player.posZ);
+			}
+		}
+
+		// 重力状態なら重力解除
+		this.checkDebuf(player, PotionInit.gravity);
 
 		return true;
 	}
@@ -230,6 +288,9 @@ public class SMAcce extends SMItem implements IAcce {
 		case 8:
 			tipEntity = new TextComponentTranslation("entity.ancientfairy.name", new Object[0]).getFormattedText();
 			break;
+		case 10:
+			tipEntity = new TextComponentTranslation("entity.sandryon.name", new Object[0]).getFormattedText();
+			break;
 
 		}
 
@@ -242,6 +303,13 @@ public class SMAcce extends SMItem implements IAcce {
   			String tip = new TextComponentTranslation("tip.veil_darkness.name", new Object[0]).getFormattedText();
   			tooltip.add(I18n.format(TextFormatting.GREEN + tip));
   		}
+  	}
+
+  	// デバフチェック
+  	public void checkDebuf (EntityPlayer player, Potion potion) {
+		if (player.isPotionActive(potion)) {
+			player.removePotionEffect(potion);
+		}
   	}
 
 	@Override

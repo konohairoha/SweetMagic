@@ -35,10 +35,8 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 	}
 
 	/**
-	 * 0 = ヘルメット
-	 * 1 = チェストプレート
-	 * 2 = レギンス
-	 * 3 = ブーツ
+	 * 0 = マギア
+	 * 1 = マスターマギア
 	 */
 
 	// 特定のアイテムで修復可能に
@@ -96,4 +94,15 @@ public class MagiciansPouch extends ItemArmor implements IPouch {
 	//アイテムにダメージを与える処理を無効
 	@Override
 	public void setDamage(ItemStack stack, int damage) { }
+
+	// スロット数
+	public int getSlotSize () {
+
+		switch (this.data) {
+		case 0: return 8;
+		case 1: return 16;
+		}
+
+		return 8;
+	}
 }

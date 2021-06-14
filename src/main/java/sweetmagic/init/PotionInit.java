@@ -7,6 +7,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import sweetmagic.init.potion.PotionCyclone;
 import sweetmagic.init.potion.PotionFrost;
+import sweetmagic.init.potion.PotionResitanceBlow;
 import sweetmagic.init.potion.PotionSM;
 
 public class PotionInit {
@@ -23,6 +24,9 @@ public class PotionInit {
 	public static Potion babule, regene;
 	public static Potion breakblock;
 	public static Potion mf_down;
+	public static Potion mind_control;
+	public static Potion resistance_blow;
+	public static Potion aether_shield;
 
 	public static List<Potion> buffList = new ArrayList<>();		// バフリスト
 	public static List<Potion> deBuffList = new ArrayList<>();	// デバフリスト
@@ -46,6 +50,9 @@ public class PotionInit {
 		regene = new PotionSM(false, 0, "regene", "textures/items/magic_heal.png", true);
 		breakblock = new PotionSM(false, 0, "breakblock", "textures/items/magic_dig.png", true);
 		mf_down = new PotionSM(false, 0, "mf_down", "textures/items/mystical_page.png", true);
+		mind_control = new PotionSM(false, 0, "mind_control", "textures/items/stray_soul.png", true);
+		resistance_blow = new PotionResitanceBlow(false, 0, "resistance_blow", "textures/items/magic_heal.png");
+		aether_shield = new PotionSM(false, 0, "aether_shield", "textures/items/magic_aether_shield.png", false);
 	}
 
 	// リストを設定
@@ -59,6 +66,9 @@ public class PotionInit {
 		buffList.add(electric_armor);
 		buffList.add(refresh_effect);
 		buffList.add(regene);
+		buffList.add(mf_down);
+		buffList.add(resistance_blow);
+		buffList.add(aether_shield);
 		buffList.add(MobEffects.SPEED);
 		buffList.add(MobEffects.STRENGTH);
 		buffList.add(MobEffects.INSTANT_HEALTH);
@@ -82,6 +92,7 @@ public class PotionInit {
 		deBuffList.add(slow);
 		deBuffList.add(timestop);
 		deBuffList.add(babule);
+		deBuffList.add(mind_control);
 		deBuffList.add(MobEffects.HUNGER);
 		deBuffList.add(MobEffects.POISON);
 		deBuffList.add(MobEffects.WITHER);

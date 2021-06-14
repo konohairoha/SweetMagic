@@ -35,6 +35,7 @@ import sweetmagic.init.block.blocks.BlockModenStair;
 import sweetmagic.init.block.blocks.BlockOven;
 import sweetmagic.init.block.blocks.BlockParallelInterfere;
 import sweetmagic.init.block.blocks.BlockPillarStone;
+import sweetmagic.init.block.blocks.BlockPlant;
 import sweetmagic.init.block.blocks.BlockPole;
 import sweetmagic.init.block.blocks.BlockPot;
 import sweetmagic.init.block.blocks.BlockRattanBasket;
@@ -86,6 +87,7 @@ import sweetmagic.init.block.crop.SweetCrops_STAGE6;
 import sweetmagic.init.block.crop.SweetCrops_Tall;
 import sweetmagic.init.block.magic.AetherFurnace;
 import sweetmagic.init.block.magic.AetherHopper;
+import sweetmagic.init.block.magic.AetherLanp;
 import sweetmagic.init.block.magic.GravityChest;
 import sweetmagic.init.block.magic.MFChange;
 import sweetmagic.init.block.magic.MFFisher;
@@ -131,6 +133,10 @@ public class BlockInit {
 	// エストール原木
 	public static Block estor_log, estor_leaves, estor_sapling;
 	public static Block estor_planks, estor_slab, estor_stairs, estor_plate;
+
+	// 桃原木
+	public static Block peach_log, peach_leaves, peach_sapling;
+	public static Block peach_planks, peach_slab, peach_stairs, peach_plate;
 
 	// ガラス
 	public static Block sugarglass, shading_sugarglass, frosted_glass_line, frosted_glass, prismglass, shading_prismglass;
@@ -179,7 +185,8 @@ public class BlockInit {
 	public static Block parallel_interfere, stardust_wish;
 	public static Block mfpot, twilightalstroemeria_pot, turkey_balloonflower_pot, snowdrop_pot, ultramarine_rose_pot;
 	public static Block solid_star_pot, zinnia_pot, hydrangea_pot, carnation_crayola_pot;
-	public static Block tool_repair, magia_rewrite, gravity_chest, aether_hopper;
+	public static Block tool_repair, magia_rewrite, gravity_chest, aether_hopper, magia_successor;
+	public static Block aether_lanp, arcane_table;
 
 	// 光源
 	public static Block magiclight, glow_light, antique_candle, gorgeous_lamp, glow_lamp, magic_circle, twilightlight;
@@ -239,7 +246,7 @@ public class BlockInit {
 	public static Block whitenet_plant, corn_plant, sweetpotato_plant;
 	public static Block tomato_plant, egg_plant,  j_radish_plant, lettuce_plant, cabbage_plant;
 	public static Block azuki_plant, onion_plant, raspberry_plant, glowflower_plant, cotton_plant;
-	public static Block banana_plant, coffee_plant;
+	public static Block banana_plant, coffee_plant, spinach_plant;
 
 	// 街頭
 	public static Block pole_down, pole, lantern, lantern_side1, lantern_side2;
@@ -249,7 +256,7 @@ public class BlockInit {
 	public static Block smchair, antique_back_chair, smtable, smtable_lace, smtable_dot;
 	public static Block moden_rack, moden_rack_brown;
 	public static Block moden_wallrack, moden_wallrack_l, moden_wallrack_b;
-	public static Block moden_stair, plate, magicbook;
+	public static Block moden_stair, plate, wood_plate, iron_plate, magicbook;
 	public static Block cafe_chair, cafe_table;
 
 	public static Block rattan_chair_y, rattan_chair_b, rattan_chair_d;
@@ -263,6 +270,9 @@ public class BlockInit {
 
 	// 草
 	public static Block goldcrest;
+
+	// 植え込み
+	public static Block orange_planting, chestnut_planting, estor_planting, peach_planting;
 
 	public static Block white_ironfence, black_ironfence;
 	public static Block antique_brick_pot_r, orange_planks_pot, orange_planks_pot_w, estor_planks_pot, compost_drit;
@@ -363,6 +373,15 @@ public class BlockInit {
 		estor_stairs = new ChestnutStairs("estor_stairs", estor_planks.getDefaultState());
 		estor_plate = new SMPlate("estor_plate");
 
+		// 桃
+		peach_log = new SMLog("peach_log");
+		peach_leaves = new FruitLeaves("peach_leaves", 3);
+		peach_sapling = new SMSapling("peach_sapling", 7);
+		peach_planks = new ChestnutPlank("peach_planks");
+		peach_slab = new ChestnutSlab("peach_slab");
+		peach_stairs = new ChestnutStairs("peach_stairs", peach_planks.getDefaultState());
+		peach_plate = new SMPlate("peach_plate");
+
 		// ガラス
 		sugarglass = new SMGlass("sugarglass", 0, false, false);
 		shading_sugarglass = new SMGlass("shading_sugarglass", 1, true, false);
@@ -408,6 +427,8 @@ public class BlockInit {
 		freezer_bottom = new BlockFreezer("freezer_bottom", false, blockList);
 		matured_bottle = new BlockFermenter("matured_bottle", blockList);
 		plate = new BlockModenRack("plate", 2);
+		wood_plate = new BlockModenRack("wood_plate", 3);
+		iron_plate = new BlockModenRack("iron_plate", 2);
 
 		// 花
 		twilight_alstroemeria = new BlockAlstroemeria("twilight_alstroemeria");
@@ -445,6 +466,7 @@ public class BlockInit {
 		obmagia_top = new ObMagia("alt_table_top", noTabList);
 		obmagia_bottom = new ObMagia("alt_table_bottom", magicList);
 		pedestal_creat = new PedalCreate("pedestal_creat");
+		aether_lanp = new AetherLanp("aether_lanp");
 
 		// 花
 		cornflower = new BlockCornFlower("cornflower", 0);
@@ -490,6 +512,8 @@ public class BlockInit {
 		advanced_aether_furnace_bottom = new AetherFurnace("advanced_aether_furnace_bottom", magicList, false, true);
 		tool_repair = new ToolRepairBlock("tool_repair", 0);
 		magia_rewrite = new ToolRepairBlock("magia_rewrite", 1);
+		magia_successor = new ToolRepairBlock("magia_successor", 2);
+		arcane_table = new ToolRepairBlock("arcane_table", 3);
 		gravity_chest = new GravityChest("gravity_chest", 0);
 		aether_hopper = new AetherHopper("aether_hopper", 0);
 
@@ -628,6 +652,7 @@ public class BlockInit {
 		cabbage_plant = new SweetCrops_STAGE4("cabbage_plant", 5, 0, 6.8F);
 		glowflower_plant = new SweetCrops_STAGE4("glowflower_plant", 6, 1, 6.8F);
 		cotton_plant = new SweetCrops_STAGE4("cotton_plant", 8, 1, 6.8F);
+		spinach_plant = new SweetCrops_STAGE4("spinach_plant", 10, 1, 6.8F);
 		blueberry_plant = new SweetCrops_STAGE5("blueberry_plant", 0, 1, 7.5F);
 		sticky_stuff_plant = new SweetCrops_STAGE5("sticky_stuff_plant", 4, 1, 5.0F);
 		rice_plant = new SweetCrops_STAGE6("rice_plant", 1, 0, 6.0F);
@@ -717,6 +742,12 @@ public class BlockInit {
 
 		// 飾り用植物
 		goldcrest = new GoldCrest("goldcrest");
+
+		// 植え込み
+		chestnut_planting = new BlockPlant("chestnut_planting");
+		orange_planting = new BlockPlant("orange_planting");
+		estor_planting = new BlockPlant("estor_planting");
+		peach_planting = new BlockPlant("peach_planting");
 
 		// 植木鉢
 		compost_drit = new PlantPot("compost_drit", SoundType.GROUND, 3);

@@ -1,11 +1,16 @@
 package sweetmagic.init.item.sm.armor;
 
+import com.google.common.collect.Multimap;
+
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,6 +27,7 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 	public final int data;
 	public int maxMF;
 	public int tickTime = 0;
+    private static final AttributeModifier MOVESPEED = new AttributeModifier("ArmorSpeed", 0.1892D, 2);
 
 	public AngelHarness(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
 		super(material, render, slot);
@@ -29,15 +35,23 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
         setRegistryName(name);
         this.data = data;
         this.setMaxMF(maxMF);
+//        this.moveSpeed = new AttributeModifier("ArmorSpeed", 0.1892D, 2);
 		ItemInit.magicList.add(this);
 	}
 
 	/**
-	 * 0 = ヘルメット
-	 * 1 = チェストプレート
-	 * 2 = レギンス
-	 * 3 = ブーツ
+	 * 0 = エンジェルハーネス
+	 * 1 = エーテルブーツ
 	 */
+
+	@Override
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
+		Multimap<String, AttributeModifier> map = super.getItemAttributeModifiers(slot);
+		if (this.data == 1 && slot == EntityEquipmentSlot.FEET) {
+			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), MOVESPEED);
+		}
+		return map;
+	}
 
 	// 特定のアイテムで修復可能に
 	@Override
@@ -62,24 +76,32 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 		// 飛行中なら終了
 		if (player.capabilities.isFlying || this.getMF(stack) <= 0) { return; }
 
-		// MFが１以上かつジャンプしてるなら
-		if (SweetMagicCore.proxy.isJumpPressed()) {
+		// エンジェルハーネスなら
+		if (this.data == 0) {
 
-			if (player.isPotionActive(PotionInit.breakblock)) {
-				if (!player.capabilities.isFlying) {
-					player.motionY += 0.035F;
+			// MFが１以上かつジャンプしてるなら
+			if (SweetMagicCore.proxy.isJumpPressed()) {
+
+				if (player.isPotionActive(PotionInit.breakblock)) {
+					if (!player.capabilities.isFlying) {
+						player.motionY += 0.035F;
+					}
+				}
+
+				else {
+					player.motionY += 0.2F;
+					this.tickTime++;
 				}
 			}
 
-			else {
-				player.motionY += 0.2F;
-				this.tickTime++;
+			// スニークしてないなら
+			else if (!player.isSneaking()) {
+				player.motionY *= 0.825;
 			}
 		}
 
-		// スニークしてないなら
-		else if (!player.isSneaking()) {
-			player.motionY *= 0.825;
+		else {
+			player.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 201, 0));
 		}
 
 		// ダッシュボタン押してるなら

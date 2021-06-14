@@ -9,8 +9,11 @@ import net.minecraftforge.common.BiomeManager.BiomeEntry;
 import net.minecraftforge.common.BiomeManager.BiomeType;
 import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.config.SMConfig;
+import sweetmagic.worldgen.biome.BiomeBigPlate;
 import sweetmagic.worldgen.biome.BiomeCoconutDesert;
+import sweetmagic.worldgen.biome.BiomeDryFruitForest;
 import sweetmagic.worldgen.biome.BiomeFlowerGarden;
+import sweetmagic.worldgen.biome.BiomeFrozenForest;
 import sweetmagic.worldgen.biome.BiomeFruitForest;
 import sweetmagic.worldgen.biome.BiomePrismBerg;
 import sweetmagic.worldgen.biome.BiomePrismForest;
@@ -40,6 +43,14 @@ public class BiomeInit {
 
     public static Biome SLIVERBERG = new BiomeSilverBerg("SilverBerg",
     		new BiomeProperties("SilverBerg").setTemperature(1F).setBaseHeight(0.1F).setHeightVariation(1.2F).setRainfall(0.6F));
+
+    public static Biome BIGPLATE = new BiomeBigPlate();
+
+    public static Biome DRYLAND = new BiomeDryFruitForest();
+
+    public static Biome FROZENFOREST = new BiomeFrozenForest();
+    public static Biome FROZENFORESTHILL = new BiomeFrozenForest("FrozenForestHill",
+    		new BiomeProperties("FrozenForestHill").setTemperature(-0.1F).setBaseHeight(0.4F).setHeightVariation(0.9F).setRainfall(0.6F));
 
     public static void init(IForgeRegistry<Biome> registry) {
 
@@ -86,6 +97,22 @@ public class BiomeInit {
         registry.register(SLIVERBERG);
 		BiomeManager.addSpawnBiome(SLIVERBERG);
         BiomeDictionary.addTypes(SLIVERBERG, Type.MOUNTAIN);
+
+        registry.register(BIGPLATE);
+		BiomeManager.addSpawnBiome(BIGPLATE);
+        BiomeDictionary.addTypes(BIGPLATE, Type.PLAINS);
+
+        registry.register(DRYLAND);
+		BiomeManager.addSpawnBiome(DRYLAND);
+        BiomeDictionary.addTypes(DRYLAND, Type.FOREST);
+
+        registry.register(FROZENFOREST);
+		BiomeManager.addSpawnBiome(FROZENFOREST);
+        BiomeDictionary.addTypes(FROZENFOREST, Type.FOREST);
+
+        registry.register(FROZENFORESTHILL);
+		BiomeManager.addSpawnBiome(FROZENFORESTHILL);
+        BiomeDictionary.addTypes(FROZENFORESTHILL, Type.FOREST);
 
         // バイオームを生成するなら
         if (SMConfig.genBiome) {

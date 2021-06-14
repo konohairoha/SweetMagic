@@ -92,7 +92,6 @@ public class MagicianBeginnerBook extends SMItem {
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
 
 		if (player.isSneaking()) {
-
 			this.sneakAction(pos, tags);
 			return EnumActionResult.SUCCESS;
 		}
@@ -180,11 +179,7 @@ public class MagicianBeginnerBook extends SMItem {
 		}
 
         WorldGenerator gen = new WorldGenHouse("house", fa);
-//        WorldGenerator gen = new WorldGenStructure("witchhouse_main");
 		gen.generate(world, world.rand, pos);
-
-//        WorldGenerator sub = new WorldGenStructure("witchhouse_under");
-//		sub.generate(world, world.rand, pos.add(24, -9, 13));
 
 		world.playSound(null, pos, SMSoundEvent.HORAMAGIC, SoundCategory.NEUTRAL, 0.5F, 1F);
 	}
