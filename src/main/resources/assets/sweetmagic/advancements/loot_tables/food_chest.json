@@ -35,6 +35,11 @@
           "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
         },
         {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:apple_muffin",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
           "type": "item", "weight": 5,
           "name": "sweetmagic:fruit_crepe",
           "functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
@@ -73,6 +78,36 @@
           "type": "item", "weight": 4,
           "name": "sweetmagic:strawberrymilk",
           "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:donut_choco",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 6,
+          "name": "sweetmagic:donut_plane",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 12 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:donut_strawberrychoco",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:german_tree_cake",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 6,
+          "name": "sweetmagic:raspberrypie",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 7 } } ]
+        },
+        {
+          "type": "item", "weight": 7,
+          "name": "sweetmagic:waffle",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 16 } } ]
         }
       ]
     }

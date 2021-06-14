@@ -174,7 +174,7 @@ item.magic_sacredbuster.name=セイクリッド・バスター
 item.clerodendrum_seed.name=クレロデンドルムの種
 item.deus_crystal.name=デウス・クリスタル
 item.deuscrystal_wand.name=デウスクリスタル・ワンド
-item.magic_growth_aura.name=グロウス・オーラ
+item.magic_growth_aura.name=グロース・オーラ
 item.witch_tears.name=魔女の涙
 item.icebox_cookie.name=アイスボックスクッキー
 item.mont_blanc.name=モンブラン
@@ -300,6 +300,80 @@ item.aether_choker.name=エーテル・チョーカー
 item.ifrite_robe.name=イフリート・ローブ
 item.pure_choker.name=ピュアクリスタル・チョーカー
 item.apple_muffin.name=アップルマフィン
+item.magic_bleb_burst.name=ブレブ・バースト
+item.donut_choco.name=チョコドーナツ
+item.donut_plane.name=プレーンドーナツ
+item.donut_strawberrychoco.name=ストロベリーチョコドーナツ
+item.german_tree_cake.name=バームクーヘン
+item.raspberrypie.name=ラズベリーパイ
+item.waffle.name=ワッフル
+item.magic_avoid.name=エーテル・アヴォイドⅠ
+item.magic_avoid_2.name=エーテル・アヴォイドⅡ
+item.magic_avoid_3.name=エーテル・アヴォイドⅢ
+item.salad_potate.name=ポテトサラダ
+item.salad_caprese.name=カプレーゼ
+item.salad_coleslaw.name=コールスローサラダ
+item.salad_mixcorn.name=コーンサラダ
+item.salad_mixoil.name=野菜炒め
+item.coffee_seed.name=コーヒー豆
+item.salad_dressing.name=サラダドレッシング
+item.mayonnaise.name=マヨネーズ
+item.vinegar.name=お酢
+item.coffee.name=コーヒー
+item.cafe_latte.name=カフェラテ
+item.salmondon.name=鮭どんぶり
+item.fried_rice.name=チャーハン
+item.riceball_salt.name=塩おにぎり
+item.riceball_salmon.name=鮭おにぎり
+item.dry_seaweed.name=海苔
+item.seaweed.name=海藻
+item.seedbag.name=種袋
+item.talttatan.name=タルトタタン
+item.applecandy.name=りんご飴
+item.flugel_wind_wand.name=フリューゲル・ワンド
+item.peach.name=桃
+item.apple_jelly.name=リンゴゼリー
+item.peach_jelly.name=桃ゼリー
+item.kurigohan.name=栗ご飯
+item.spinach.name=ほうれん草
+item.spinach_seed.name=ほうれん草の種
+item.fruit_wine.name=果実酒
+item.soy_sauce.name=醤油
+item.salad_ohitasi.name=ほうれん草のおひたし
+item.bonito_flakes.name=かつお節
+item.steak_hamburg.name=ハンバーグステーキ
+item.sushi_salmon.name=サーモン寿司
+item.sushi_egg.name=卵焼き寿司
+item.peach_tart.name=ピーチタルト
+item.elksi_diafusola_wand.name=エルクシ・ディアフラ・ワンド
+item.magic_absolute_zero.name=アブソルート・ゼロ
+item.magic_blaze_end.name=ブレイズ・エンド
+item.magic_healing_hightlow.name=ヒーリング・ハイロー
+item.magic_absorphealth.name=アブソプション・ヘルス
+item.magic_mind_control.name=マインド・コントロール
+item.magic_creative.name=クリエイティブ・マジック
+item.sandryon_robe.name=サンドリヨン・ローブ
+item.eggbag.name=卵袋
+item.hamburger.name=ハンバーガー
+item.magician_quillpen.name=魔法使いの羽ペン
+item.master_magia_pouch.name=マスターマギア・ポーチ
+item.deus_choker.name=デウスクリスタル・チョ－カー
+item.gravity_pendant.name=アブソープ・ペンダント
+item.accebag.name=装備品袋
+item.magic_blackhole.name=ブラック・ホール
+item.aether_boot.name=エーテル・ブーツ
+item.peach_compote.name=桃のコンポート
+item.cookie_jam.name=ジャムクッキー
+item.gateau_chocolat.name=ガトーショコラ
+item.magic_invisible.name=インビジブル
+item.magic_aether_shield.name=エーテル・シールド
+item.magic_aether_shield2.name=エーテル・シールドⅡ
+item.spinach_egg.name=ほうれん草の卵とじ
+item.vienna_coffee.name=ウィンナーコーヒー
+item.sandwich_fruit.name=フルーツサンド
+item.sandwich.name=サンドイッチ
+item.aquarius_sorcerer_wand.name=アクエリアス・ソーサラー・ワンド
+item.phosphorus_wand.name=フォスフォラス・ワンド
 
 
 #-- Tile --
@@ -681,12 +755,37 @@ tile.flower_vese_y.name=黄色の花瓶
 tile.flower_vese_y.name=黄色の花瓶
 tile.pillar_stone.name=石の柱
 tile.pillar_stone_w.name=白い柱
-tile.gravity_chest.name=マギア・ドラワー
+tile.gravity_chest.name=マギア・ドロワー
 tile.tool_repair.name=エーテル・リペアラー
 tile.magia_rewrite.name=マギア・リライト
 tile.aether_hopper.name=エーテル・ホッパー
 tile.mm_table.name=マスター・マギア・テーブル
+tile.coffee_plant.name=コーヒー豆の苗木
+tile.cafe_table.name=カフェテーブル
+tile.cafe_chair.name=カフェチェア
+tile.cafe_kitchen_table.name=カフェキッチンテーブル
+tile.cafe_kitchen_sink.name=カフェキッチンシンク
+tile.advanced_mffurnace_off.name=改良型の魔法流のかまど
+tile.advanced_mffurnace_on.name=改良型の魔法流のかまど（稼働中）
+tile.cafe_wallrack.name=カフェウォールラック
 tile.stardust_wish.name=スターダスト・ウィッシュ
+tile.peach_log.name=桃の原木
+tile.peach_leaves.name=桃の葉
+tile.peach_sapling.name=桃の苗木
+tile.peach_planks.name=桃の木材
+tile.peach_slab.name=桃の半ブロック
+tile.peach_stairs.name=桃の階段
+tile.peach_plate.name=桃の感圧版
+tile.spinach_plant.name=ほうれん草の苗
+tile.chestnut_planting.name=栗の葉の植え込み
+tile.orange_planting.name=みかんの葉の植え込み
+tile.estor_planting.name=エストールウッドの葉の植え込み
+tile.peach_planting.name=桃の葉の植え込み
+tile.magia_successor.name=マギア・サクセサー
+tile.aether_lanp.name=エーテル・ランタン
+tile.wood_plate.name=木皿
+tile.iron_plate.name=鉄皿
+tile.arcane_table.name=アルカナ・テーブル
 
 
 # -- gui --
@@ -748,6 +847,7 @@ tip.love.name=愛
 tip.blast.name=爆風
 tip.toxic.name=毒
 tip.time.name=時空
+tip.all.name=全属性
 tip.empty.name=無し
 tip.requiremf.name=必要MF
 tip.shift.name=shiftキーを押して詳しく表示
@@ -854,7 +954,7 @@ tip.witch_scroll.name=魔法使用時のクールタイムを少し減らす
 tip.scorching_jewel.name=マグマの中の移動速度アップ+火炎耐性付与
 tip.mermaid_veil.name=水中の移動速度アップ+水中呼吸
 tip.blood_sucking_ring.name=射撃魔法を使用時にハートを1削り魔法火力を増やす
-tip.emelald_pias.name=被ダメージを1増えて経験値取得量が増える
+tip.emelald_pias.name=被ダメージを0.5増えて経験値取得量が増える
 tip.fortune_ring.name=幸運Ⅱを付与
 tip.smacce.name=発動条件
 tip.terms.name=条件発動
@@ -888,12 +988,34 @@ tip.gravity_chest.name=半径5ブロックのアイテムをMFを消費して吸
 tip.tool_repair.name=MFを消費してアイテムの耐久値を少しづつ回復。消費MFは耐久値の大きさによって変動
 tip.magia_rewrite.name=スイートマジックのエンチャントをレベルに応じてMF消費してエンチャントレベルを上げる(上限レベル10)
 tip.aether_hopper.name=チャンクローダー機能を持ち、MFを消費して一括でアイテムの送受信が可能。エーテルホッパーの座標を登録した魔法流の杖をスロットに入れることで登録先のエーテルホッパーにアイテムを送信。
+tip.magic_bleb_burst.name=浮遊させつつ窒息ダメージを与え、泡状態解除時に爆発を起こす
+tip.magic_avoid.name=移動速度アップと確率で攻撃回避バフを周囲のプレイヤーに付与
+tip.seedbag.name=右クリックでランダムに種を5つ入手
+tip.magia_successor.name=スロットに入れた杖のレベルを別の杖に、半分のレベルをMFを消費して継承させる
+tip.magic_absolute_zero.name=一定期間周囲の敵に氷ダメージを与えつつプレイヤーに防御アップを付与。エンティティ消滅時に周囲の敵モブに大ダメージ ＋ 氷デバフ
+tip.magic_blaze_end.name=一定期間周囲の敵に炎ダメージを与えつつプレイヤーに攻撃力アップを付与。エンティティ消滅時に周囲の敵モブに大ダメージ ＋ やけどデバフ
+tip.magic_healing_hightlow.name=範囲内のモブにデバフ解除するポーションを付加 + 体力全回復 + 衝撃吸収を付与
+tip.aether_lanp.name=周囲のMFを生産するブロックからMFを集める
+tip.magic_absorphealth.name=敵モブに右クリックで敵の体力を吸い取り自身の体力を回復する
+tip.magic_mind_control.name=敵モブに右クリックで別の敵モブに同士討ちさせる
+tip.magic_creative.name=杖レベルを1上げる
+tip.eggbag.name=卵が4～12個手に入る
+tip.magician_quillpen.name=エーテルバリアなどの被弾時に効果時間が減る量を抑える
+tip.gravity_pendant.name=周囲のアイテムと経験値を引き寄せる
+tip.accebag.name=ランダムに装備品を1つ入手可能
+tip.magic_blackhole.name=一定期間周囲の敵を引き寄せて、一定時間後にダメージを与える
+tip.magic_invisible.name=透明化バフを付与して攻撃対象の状態を解除する
+tip.magic_aether_shield.name=杖の魔法が使えない代わりに敵モブからのダメージを受けない
+tip.magic_aether_shield2.name=杖の魔法が使えない代わりに敵モブからのダメージを受けず、一定時間ごとに回復する
+tip.aether_boot.name=装備中は風魔法などによる吹き飛ばし、ノックバックを受けない
+tip.sandryon_robe.name=防具の見た目変更なし
+tip.food2.name=全デバフ除去
+tip.magicmeal.name=土に右クリックでスイートマジックの特殊な花を生成、スイートマジックの苗木に右クリックで巨木に成長する。
 
 
 #-- Potion --
 sweetmagic.effect.frosted=氷結
 sweetmagic.effect.gravity=重力
-sweetmagic.effect.cyclon=疾風
 sweetmagic.effect.shadow=ルナティック・ムーン
 sweetmagic.effect.gravity_accele=重力加速
 sweetmagic.effect.aether_barrier=エーテルバリアー
@@ -907,6 +1029,12 @@ sweetmagic.effect.timestop=未来視
 sweetmagic.effect.babule=泡
 sweetmagic.effect.regene=リジェネ
 sweetmagic.effect.breakblock=破壊無効
+sweetmagic.effect.cyclon=エーテル・アヴォイド
+sweetmagic.effect.mf_down=MF消費ダウン
+potion.effect.nausea=吐き気
+potion.effect.health_boost=体力増強
+sweetmagic.effect.resistance_blow=吹き飛ばし耐性
+sweetmagic.effect.aether_shield=エーテルシールド
 
 
 #-- Enchant --
@@ -941,6 +1069,7 @@ entity.ifrite.name=イフリート
 entity.spirit_fire_ifrite.name=炎の精霊 イフリート・ヴェール
 entity.pixievex.name=ピクシィ・ヴェックス
 entity.ancientfairy.name=蟲惑の妖精 エンシェント・フェアリー
+entity.sandryon.name=創成の魔女 サンドリヨン
 
 
 # -- KEY --
@@ -977,18 +1106,27 @@ smguid.entry.fire_nasturtium=炎の花
 smguid.entry.drizzly_mysotis=雨に咲く花
 smguid.entry.color_wand=色んな見た目の杖
 smguid.entry.ele_wand=属性を持ったtier5の杖
-
-smguid.entry.key=ダンジョン専用アイテム
-smguid.entry.flower_pot=色とりどりの花の追加
-
-smguid.entry.tier3_block=tier3の魔法ブロック
 smguid.entry.tool_repar=耐久値を回復するブロック
-smguid.entry.write=エンチャレベルアップ！
+smguid.entry.write=エンチャントレベルアップ！
 smguid.entry.drawer=吸い込み機能を持つチェスト
 smguid.entry.hopper=多機能なホッパー
-smguid.entry.robe=色んな見た目のローブ
+smguid.entry.robe=色々な見た目の新たなローブ
 smguid.entry.harness=空を飛べる靴
-smguid.entry.choker=MFを回復できる防具
+smguid.entry.choker=MFが補充できる防具
+smguid.entry.seaweed=新たな釣りアイテム
+smguid.entry.seedbag=種が入手できる袋
+smguid.entry.lantan=MFを集めるランタン
+smguid.entry.succesor=杖レベルの継承
+
+smguid.entry.key=ダンジョン専用アイテム
+smguid.entry.flower_pot=SweetMagicで見つけることのできる花
+
+smguid.entry.biome=新しいバイオーム
+smguid.entry.vil=スイートマジックの村
+smguid.entry.chest=チェスト系ブロックの機能改善
+smguid.entry.plate=新しい皿
+smguid.entry.arcana=エンチャント付与するブロック
+smguid.entry.wand_gui=杖のスロット切り替えの改善
 
 
 # -- GUIDText --
@@ -997,6 +1135,7 @@ smguid.text.sugarbell=<t><t>スイートマジックによって生成される�
 smguid.text.sannyflower=<t><t>平原に咲いている花です。<br><t><t>日中にのみ成長し、夜になると花弁が閉じる特殊な花になります。この花は様々な魔法アイテム類に要求されるアイテムなので、優先的に育てることをおすすめします。
 smguid.text.moonblossom=<t><t>森林に咲いている花です。<br><t><t>サニーフラワーとは異なり、夜中のみに成長し、日中は花弁が閉じる特殊な花になります。サニーフラワーと同様に、かなり要求されるアイテムのひとつです。
 smguid.text.alstroemeria=<t><t>主な魔術クラフトはアルストロメリアによって行われます。<br><t><t>この花は自然生成されることはなく、クラフトをすることで入手することができます。スイートマジックの魔法を使うためには、まずこのアルストロメリアを作製して下さい。<br><t><t>また、この花は黄昏時にのみ咲き、その状態時にのみクラフトが可能です。
+smguid.text.alscraft=<t><t>メインハンド、オフハンドに何も持っていない状態でサニーフラワーまたはムーンブロッサムの花弁をインベントリに入れた状態でスニーク右クリックで朝か夜の時間に変更することができます。両方を持った状態だとアルストロメリアが咲く時間に変わります。<br>ファイアナスタチウムの花弁、ドリズリィミオソチスの花の場合は天候を操作できます。
 smguid.text.pedalcreate=<t><t>魔法を使用するために必要な装備である杖を作製します。必要素材をインベントリ内に持つと作製することができます。
 smguid.text.aetherwand=<t><t>魔法を使用する際に必要になります。魔法を発動する際にマギアフラック(以下MF)を消費します。MFは魔法流の机で貯めることができます。<br><t><t>また、魔法を発動するにはオブマギアで魔法を作成する必要があります。(魔法の作成方法はオブマギアを参照して下さい。)
 smguid.text.obmagia=<t><t>魔法関連のアイテムを作製するための作業台です。必要素材をインベントリ内に持つことでクラフトができます。
@@ -1008,18 +1147,27 @@ smguid.text.fire_nasturtium=<t><t>ファイアナスタチウムは、スイー�
 smguid.text.drizzly_mysotis=<t><t>ドリズリィミオソチスは、森林に咲いている花です。<br><t><t>従来の花とは異なり、雨が降る時だけに成長し花を咲かせます。<br><t><t>ドリズリィミオソチスの花弁をインベントリに入れてアルストロメリアに右クリックをすることで雨を降らすこともできます。
 smguid.text.color_wand=<t><t>各tierの魔法の杖に色んな見た目に変えるようにしました。<br>レシピは作業台でのクラフトですが、杖の情報はすべて引き継ぐので安心してクラフトしてください。<br>ちなみに、見た目を変えると少しMF保有量が増えます。
 smguid.text.ele_wand=<t><t>tier5の杖であるコズミッククリスタルワンドをさらに強化できる杖を用意しました。<br>杖には属性を持っていて、杖と同じ属性の魔法を使うと魔法火力が上がり、クールタイムが短くなります。<br>少しづつ杖は追加する予定です。
-
-smguid.text.key=<t><t>ダンジョンでのみ手に入るアイテムとして、魔法のカギを追加しました。<br>使い方として、鍵をもってマジックバリアガラスに右クリックでガラスを壊すことができ、奥へと進むことができます。
-smguid.text.flower_pot=<t><t>沢山の花を追加しました。<br>今回追加した花は全て平原などに生成され、全て染料としても使えます。<br>スノードロップだけは雪原などの寒いバイオームのみに生成されます。<br>いくつかの花は花瓶にしてMFを生産するのに使えます。<br>花の生成が邪魔な場合はコンフィグで無効化できます。
-
-smguid.text.tier3_block=<t><t>tier3のMF関連ブロックを追加しました。<br>MFの最大保有量やMFの送受信量が増えてさらに扱いやすくなりました。
-smguid.text.tool_repar=<t><t>ツール・リペアラーはMFを消費して使うブロックです。<br>MFが安定して使うことを推奨します。<br>使い方はスロットに耐久値の減ったツールを入れて、アイテムの最大耐久値に応じて耐久値を10ずつ回復させます。
-smguid.text.write=<t><t>マギア・リライトはスイートマジックのエンチャントをした杖や防具のエンチャントレベルを上げることができるブロックです。(最大レベル10まで)<br>エンチャントレベルを上げるにはスロットにアイテムを入れて必要MF量以上のMFがあると一定時間後にレベルが上がるようになります。<br>必要MFはエンチャントのレアリティとレベルによって変化して、消費MFが多めなの為注意してください。
-smguid.text.drawer=<t><t>マギア・ドロワーは、周囲のドロップアイテムをMFを消費してチェストの中に入れることができます。<br>範囲はチェストから半径5ブロックですが、ブロックを壊しても中身は保持するため探索でも気軽使うことができますので上手く活用してみてください。
+smguid.text.tool_repar=<t><t>ツール・リペアラーはMFを消費して使うブロックです。<br>ご自身のMF保有量が安定した環境で使うことを推奨します。<br>使い方はスロットに耐久値の減ったツールを入れると、アイテムの最大耐久値に応じて耐久値を10ずつ回復させます。
+smguid.text.write=<t><t>マギア・リライトはスイートマジックのエンチャントをした杖や防具のエンチャントレベルを上げることができるブロックです。(最大レベル10まで)<br>エンチャントレベルを上げるには、スロットにアイテムを入れて必要MF量以上のMFがあると一定時間後にレベルが上がるようになります。<br>必要MFはエンチャントのレアリティとレベルによって変化します。また、消費MFが多めの為注意してください。
+smguid.text.drawer=<t><t>マギア・ドロワーは、周囲のドロップアイテムをMFを消費してチェストの中に入れることができます。<br>範囲はチェストから半径5ブロックですが、ブロックを壊しても中身は保持するため、探索でも気軽使うことができますので上手く活用してみてください。
 smguid.text.hopper=<t><t>エーテルホッパーはMFを消費してアイテムを送受信を行うチャンクローダ機能を持ったホッパーです。<br>通常のホッパーと違う点として、2秒に1度ホッパーの中身をまとめて送受信が可能な点です。<br>さらに、エーテル・ホッパーには座標登録した魔法流の杖を入れることで登録した座標にあるエーテルホッパーにアイテムを送ることができます。
-smguid.text.robe=<t><t>今まであったエーテルローブを強化して新しい見た目に変えることができるようになりました。<br>強化には装備品が必要ですが、探索をしていればいづれ集まります。<br>さらに今回から耐久値はなくなり、ローブにはMFを入れれるようになりました。MFを消費して魔法ダメージを軽減できるようになります。
+smguid.text.robe=<t><t>今まであったエーテルローブを強化して新しい見た目に変えることができるようになりました。<br>強化には装備品が必要です。<br>さらに今回から耐久値はなくなり、ローブにはMFを入れられるようになりました。新たな仕様として、MFを消費することで魔法ダメージを軽減できるようになります。
 smguid.text.harness=<t><t>エンジェル・ハーネスは、アイテムのMFを消費して空を飛ぶことができます。<br>装備中はMF消費なしで落下ダメージ軽減と落下速度が遅くなります。
-smguid.text.choker=<t><t>エーテル・チョーカーは、MFを消費してほかの防具のMFを補充したり、メインハンドに持っている時だけ杖にもMFを補充することが可能です。
+smguid.text.choker=<t><t>エーテル・チョーカーは、MFを消費してほかの防具のMFを補充します。また、メインハンドに持っている時だけ杖にもMFを補充することが可能です。
+smguid.text.seaweed=<t><t>海藻は釣りでのみ入手することができます。釣りの機能を持ったMFフィッシャーでも入手ができ、通常の釣りよりもさらに入手できるようになっているのでMFフィッシャーを使って海藻を集めることをお勧めします。
+smguid.text.seedbag=<t><t>種を中々入手しにくいことが多かったので、ランダムに種を入手することができる種袋を追加しました。鉱石辞書を使っているので他modの種も出る場合があります。
+smguid.text.lantan=<t><t>MFを生産する花瓶が沢山入手できることから、魔法流の杖でのMF送受信登録を行う操作を簡略化するために、周囲の花瓶から生産されたMFを回収する特殊なランタンを追加しました。<br>花瓶を探知する範囲は12ブロックとなっており、多数の花瓶をまとめて管理することができます。
+smguid.text.succesor=<t><t>新しい杖のレベルをある程度まで上げることができるアイテムです。<br>上がる杖レベルは継承元の杖のレベルの半分ですが、必要MF量が多いので使用には注意してください。
+
+smguid.text.key=<t><t>ダンジョン内でのみ、魔法のカギを入手することができます。<br>使い方として、鍵をもってマジックバリアガラスに右クリックでガラスを壊すことができ、奥へと進むことができます。
+smguid.text.flower_pot=<t><t>スイートマジックには沢山の花が生成されます。<br>これらの花は平原などに生成され、全て染料としても使えます。<br>スノードロップだけは雪原などの寒いバイオームのみに生成されます。<br>いくつかの花は花瓶にしてさまざまな用途に使用します。<br>花の生成が邪魔な場合はコンフィグで無効化が可能です。
+
+smguid.text.biome=<t><t>スイートマジックディメンションに新たにバイオームを4つ追加しました。<br>今までほかのバイオームに生成していたものがいくつか新しく追加したバイオームで生成されるようになりました。
+smguid.text.vil=<t><t>新しい生成物としてスイートマジックのオリジナルの村を追加しました。<br>様々な家が生成されるのでそこを拠点として使っても大丈夫なようにしてます。
+smguid.text.chest=<t><t>今までスイートマジックのチェスト系は壊してもスタックできませんでしたが、中身が入っていないチェストに関してはスタックできるようにしました。
+smguid.text.plate=<t><t>色んな見た目の皿が欲しいと思い、新たに木皿と鉄皿を追加しました。<br>色んな料理を飾ったりするために使ってください。
+smguid.text.arcana=<t><t>本来ならスイートマジックのエンチャント付けることができないアイテムにエーテルチャーム、エーテルヒールを付与できるようにしたのが、アルカナテーブルです。<br>一度に20万MFが必要ですが、ロストや壊れたりしないようになります。
+smguid.text.wand_gui=<t><t>魔法の杖のスロットを切り替える時に空スロットは飛ばすようになりました。
 
 
 # -- ADVENT --
@@ -1062,7 +1210,7 @@ smadbent.purecrystal_wand.text=ピュアクリスタルワンドの作成
 smadbent.deus_crystal.title=tier4の開放
 smadbent.deus_crystal.text=デウスクリスタルの作成
 smadbent.deuscrystal_wand.title=神の力を得た杖
-smadbent.deuscrystal_wand.text=ピュアクリスタルワンドの作成
+smadbent.deuscrystal_wand.text=デウスクリスタルワンドの作成
 smadbent.cosmic_crystal.title=tier5の開放
 smadbent.cosmic_crystal.text=コズミッククリスタルの作成
 smadbent.cosmiccrystal_wand.title=宇宙の力の杖
@@ -1070,4 +1218,28 @@ smadbent.cosmiccrystal_wand.text=コズミッククリスタルワンドの作�
 smadbent.veil_darkness.title=魔力のあるカーテン
 smadbent.veil_darkness.text=夜の帳の入手
 smadbent.sturdust_crystal.title=新たな世界への道
-smadbent.sturdust_crystal.text=逢魔が時のホーラを倒してスターダストクリスタルを手に入れる
+smadbent.sturdust_crystal.text=逢魔時のホーラを倒してスターダストクリスタルを手に入れる
+smadbent.all_foods.title=料理マスター
+smadbent.all_foods.text=スイートマジックの全ての食べ物を手に入れる
+smadbent.all_magics.title=マスターマギア
+smadbent.all_magics.text=全ての魔法を作成する
+smadbent.biginer_magician.title=ビギナーマジシャン
+smadbent.biginer_magician.text=魔法の杖から魔法を発動させる
+smadbent.astral_craft.title=アルストロメリアクラフト
+smadbent.astral_craft.text=トワイライトアルストロメリアでクラフトする
+smadbent.magic_craft.title=マジッククラフト
+smadbent.magic_craft.text=魔法をオブ・マギアで作成
+smadbent.apprentice_magician.title=見習い魔法使い
+smadbent.apprentice_magician.text=杖レベルを10にする
+smadbent.intermediate_magician.title=中級魔法使い
+smadbent.intermediate_magician.text=杖レベルを20にする
+smadbent.advanced_magician.title=上級魔法使い
+smadbent.advanced_magician.text=杖レベルを30にする
+smadbent.maestro_magician.title=マエストロ・マジシャン
+smadbent.maestro_magician.text=杖レベルを40にする
+
+
+# -- deth --
+death.attack.flame=やけどダメージでやられた!
+death.attack.flost=氷結ダメージでやられた!
+death.attack.explo=爆発ダメージでやられた!

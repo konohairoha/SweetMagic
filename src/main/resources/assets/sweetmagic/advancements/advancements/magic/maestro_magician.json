@@ -1,0 +1,24 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:sacred_meteor_wand"
+        },
+        "title": {
+            "translate": "smadbent.maestro_magician.title"
+        },
+        "description": {
+            "translate": "smadbent.maestro_magician.text"
+        },
+    	"frame": "challenge"
+    },
+    "parent": "sweetmagic:magic/advanced_magician",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:maestro_magician"
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 4000
+	}
+}

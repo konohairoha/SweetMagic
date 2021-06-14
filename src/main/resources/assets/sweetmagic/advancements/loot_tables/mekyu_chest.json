@@ -82,7 +82,12 @@
         {
           "type": "item", "weight": 1,
           "name": "sweetmagic:twilightlight",
-          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:accebag",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
         },
         {
           "type": "item", "weight": 1,

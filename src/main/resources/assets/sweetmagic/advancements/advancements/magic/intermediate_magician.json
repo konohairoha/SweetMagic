@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:purecrystal_wand_y"
+        },
+        "title": {
+            "translate": "smadbent.intermediate_magician.title"
+        },
+        "description": {
+            "translate": "smadbent.intermediate_magician.text"
+        }
+    },
+    "parent": "sweetmagic:magic/apprentice_magician",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:intermediate_magician"
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 750
+	}
+}

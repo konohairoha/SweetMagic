@@ -1,0 +1,85 @@
+{
+  "pools": [
+    {
+        "name": "smbounus",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item", "weight": 6,
+          "name": "sweetmagic:divine_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:pure_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:deus_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 2 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:mf_bottle",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:mystical_page",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:magicmeal",
+          "functions": [ { "function": "set_count", "count": { "min": 3, "max": 16 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:witch_scroll",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:scorching_jewel",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:mermaid_veil",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:varrier_pendant",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:accebag",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:mfpot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:twilightalstroemeria_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:solid_star_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:zinnia_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        }
+      ]
+    }
+  ]
+}

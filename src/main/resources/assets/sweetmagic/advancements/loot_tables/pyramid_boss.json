@@ -76,6 +76,16 @@
         },
         {
           "type": "item", "weight": 1,
+          "name": "sweetmagic:accebag",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:gravity_pendant",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
           "name": "sweetmagic:scorching_jewel",
           "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
         },

@@ -1,386 +1,440 @@
 {
     "display": {
-        "icon": {
-            "item": "sweetmagic:short_cake"
-        },
-        "title": {
-            "translate": "smadbent.all_foods.title"
-        },
-        "description": {
-            "translate": "smadbent.all_foods.text"
-        },
+		"icon": {
+		    "item": "sweetmagic:short_cake"
+		},
+		"title": {
+		    "translate": "smadbent.all_foods.title"
+		},
+		"description": {
+		    "translate": "smadbent.all_foods.text"
+		},
     	"frame": "challenge"
     },
     "parent": "sweetmagic:magic/twilight_alstroemeria",
     "criteria": {
 			"lemon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:lemon" } ] }
-        },
+		},
 			"orange": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:orange" } ] }
-        },
+		},
 			"estor_apple": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:estor_apple" } ] }
-        },
+		},
 			"chestnut": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:chestnut" } ] }
-        },
+		},
 			"coconut": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:coconut" } ] }
-        },
+		},
 			"banana": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:banana" } ] }
-        },
+		},
 			"cheese": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cheese" } ] }
-        },
+		},
 			"whitenet": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:whitenet" } ] }
-        },
+		},
 			"rice": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:rice" } ] }
-        },
+		},
 			"edamame": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:edamame" } ] }
-        },
+		},
 			"cake_dough": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cake_dough" } ] }
-        },
+		},
 			"corn": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:corn" } ] }
-        },
+		},
 			"j_radish": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:j_radish" } ] }
-        },
+		},
 			"eggplant": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:eggplant" } ] }
-        },
+		},
 			"lettuce": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:lettuce" } ] }
-        },
+		},
 			"cabbage": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cabbage" } ] }
-        },
+		},
 			"yaki_imo": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:yaki_imo" } ] }
-        },
+		},
 			"sweet_potato": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:sweet_potato" } ] }
-        },
+		},
 			"yaki_banana": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:yaki_banana" } ] }
-        },
+		},
 			"yaki_apple": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:yaki_apple" } ] }
-        },
+		},
 			"itigo_daihuku": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:itigo_daihuku" } ] }
-        },
+		},
 			"cooked_corn": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cooked_corn" } ] }
-        },
+		},
 			"potatobutter": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:potatobutter" } ] }
-        },
+		},
 			"boiled_edamame": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:boiled_edamame" } ] }
-        },
+		},
 			"toast": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:toast" } ] }
-        },
+		},
 			"ogura_toast": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:ogura_toast" } ] }
-        },
+		},
 			"butter_toast": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:butter_toast" } ] }
-        },
+		},
 			"jam_toast": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:jam_toast" } ] }
-        },
+		},
 			"french_toast": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:french_toast" } ] }
-        },
+		},
 			"choko_cornet": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:choko_cornet" } ] }
-        },
+		},
 			"cream_filled_roll": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cream_filled_roll" } ] }
-        },
+		},
 			"egg_sandwitch": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:egg_sandwitch" } ] }
-        },
+		},
 			"butadon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:butadon" } ] }
-        },
+		},
 			"gyuudon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:gyuudon" } ] }
-        },
+		},
 			"cheegyu": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cheegyu" } ] }
-        },
+		},
 			"nikujaga": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:nikujaga" } ] }
-        },
+		},
 			"yakinasu": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:yakinasu" } ] }
-        },
+		},
 			"tamagoyaki": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:tamagoyaki" } ] }
-        },
+		},
 			"buridaikon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:buridaikon" } ] }
-        },
+		},
 			"salmon_meuniere": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salmon_meuniere" } ] }
-        },
+		},
 			"saba_miso": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:saba_miso" } ] }
-        },
+		},
 			"roll_cabbage": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:roll_cabbage" } ] }
-        },
+		},
 			"pizza": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:pizza" } ] }
-        },
+		},
 			"gratin": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:gratin" } ] }
-        },
+		},
 			"beefstew": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:beefstew" } ] }
-        },
+		},
 			"stew": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:stew" } ] }
-        },
+		},
 			"sukiyaki": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:sukiyaki" } ] }
-        },
+		},
 			"sauteed_mushrooms": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:sauteed_mushrooms" } ] }
-        },
+		},
 			"medamayaki": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:medamayaki" } ] }
-        },
+		},
 			"kurikinton": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:kurikinton" } ] }
-        },
+		},
 			"pumpkin_nituke": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:pumpkin_nituke" } ] }
-        },
+		},
 			"strawberry_jelly": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:strawberry_jelly" } ] }
-        },
+		},
 			"orange_jelly": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:orange_jelly" } ] }
-        },
+		},
 			"kakigori_lemon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:kakigori_lemon" } ] }
-        },
+		},
 			"kakigori_strawberry": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:kakigori_strawberry" } ] }
-        },
+		},
 			"kakigori_milk": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:kakigori_milk" } ] }
-        },
+		},
 			"chocolate": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:chocolate" } ] }
-        },
+		},
 			"white_chocolate": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:white_chocolate" } ] }
-        },
+		},
 			"choco_pie": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:choco_pie" } ] }
-        },
+		},
 			"pudding": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:pudding" } ] }
-        },
+		},
 			"salt_popcorn": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salt_popcorn" } ] }
-        },
+		},
 			"caramel_popcorn": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:caramel_popcorn" } ] }
-        },
+		},
 			"lemon_cookie": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:lemon_cookie" } ] }
-        },
+		},
 			"icebox_cookie": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:icebox_cookie" } ] }
-        },
+		},
 			"strawberry_tart": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:strawberry_tart" } ] }
-        },
+		},
 			"mont_blanc": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:mont_blanc" } ] }
-        },
+		},
 			"fruit_crepe": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:fruit_crepe" } ] }
-        },
+		},
 			"youkan": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:youkan" } ] }
-        },
+		},
 			"scone": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:scone" } ] }
-        },
+		},
 			"blueberry_muffin": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:blueberry_muffin" } ] }
-        },
+		},
 			"chocolate_muffin": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:chocolate_muffin" } ] }
-        },
+		},
 			"apple_muffin": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:apple_muffin" } ] }
-        },
+		},
 			"cream_puff": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cream_puff" } ] }
-        },
+		},
 			"short_cake": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:short_cake" } ] }
-        },
+		},
 			"cheese_cake": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cheese_cake" } ] }
-        },
+		},
 			"chocolate_cake": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:chocolate_cake" } ] }
-        },
+		},
 			"cake_roll": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cake_roll" } ] }
-        },
+		},
 			"applepie": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:applepie" } ] }
-        },
+		},
 			"eclair": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:eclair" } ] }
-        },
+		},
 			"cream_brulee": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cream_brulee" } ] }
-        },
+		},
 			"marshmallow": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:marshmallow" } ] }
-        },
+		},
 			"yogurt": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:yogurt" } ] }
-        },
+		},
 			"croquette": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:croquette" } ] }
-        },
+		},
 			"fluit_mix": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:fluit_mix" } ] }
-        },
+		},
 			"corn_soup": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:corn_soup" } ] }
-        },
+		},
 			"berryorange_juice": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:berryorange_juice" } ] }
-        },
+		},
 			"strawberrymilk": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:strawberrymilk" } ] }
-        },
+		},
 			"coconut_juice": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:coconut_juice" } ] }
-        },
+		},
 			"cocoa": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cocoa" } ] }
-        },
+		},
 			"pumpkin_soup": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:pumpkin_soup" } ] }
-        },
+		},
 			"banana_smoothy": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:banana_smoothy" } ] }
-        },
+		},
 			"mixed_juice": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:mixed_juice" } ] }
-        },
+		},
 			"milk_pack": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:milk_pack" } ] }
-        },
+		},
 			"soy_soup": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:soy_soup" } ] }
-        },
+		},
 			"pork_soup": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:pork_soup" } ] }
-        },
+		},
 			"blueberry": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:blueberry" } ] }
-        },
+		},
 			"raspberry": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:raspberry" } ] }
-        },
+		},
 			"strawberry": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:strawberry" } ] }
-        },
+		},
 			"soybean": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:soybean" } ] }
-        },
+		},
 			"sweetpotato": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:sweetpotato" } ] }
-        },
+		},
 			"tomato": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:tomato" } ] }
-        },
+		},
 			"onion": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:onion" } ] }
-        },
-        	"german_tree_cake": { "trigger": "minecraft:inventory_changed",
+		},
+			"german_tree_cake": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:german_tree_cake" } ] }
-        },
+		},
 			"raspberrypie": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:raspberrypie" } ] }
-        },
+		},
 			"waffle": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:waffle" } ] }
-        },
+		},
 			"donut_plane": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:donut_plane" } ] }
-        },
+		},
 			"donut_choco": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:donut_choco" } ] }
-        },
+		},
 			"donut_strawberrychoco": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:donut_strawberrychoco" } ] }
-        },
+		},
 			"salad_mixoil": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salad_mixoil" } ] }
-        },
+		},
 			"salad_mixcorn": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salad_mixcorn" } ] }
-        },
+		},
 			"salad_coleslaw": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salad_coleslaw" } ] }
-        },
+		},
 			"salad_caprese": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salad_caprese" } ] }
-        },
+		},
 			"salad_potate": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salad_potate" } ] }
-        },
+		},
 			"coffee": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:coffee" } ] }
-        },
+		},
 			"cafe_latte": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:cafe_latte" } ] }
-        },
+		},
 			"dry_seaweed": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:dry_seaweed" } ] }
-        },
+		},
 			"riceball_salt": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:riceball_salt" } ] }
-        },
+		},
 			"riceball_salmon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:riceball_salmon" } ] }
-        },
+		},
 			"fried_rice": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:fried_rice" } ] }
-        },
+		},
 			"salmondon": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:salmondon" } ] }
-        },
-        	"applecandy": { "trigger": "minecraft:inventory_changed",
+		},
+			"applecandy": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:applecandy" } ] }
 		},
 			"talttatan": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:talttatan" } ] }
+		},
+			"steak_hamburg": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:steak_hamburg" } ] }
+		},
+			"salad_ohitasi": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:salad_ohitasi" } ] }
+		},
+			"kurigohan": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:kurigohan" } ] }
+		},
+			"peach": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:peach" } ] }
+		},
+			"spinach": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:spinach" } ] }
+		},
+			"apple_jelly": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:apple_jelly" } ] }
+		},
+			"peach_jelly": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:peach_jelly" } ] }
+		},
+			"fruit_wine": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:fruit_wine" } ] }
+		},
+			"sushi_egg": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:sushi_egg" } ] }
+		},
+			"peach_tart": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:peach_tart" } ] }
+		},
+			"hamburger": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:hamburger" } ] }
+		},
+			"cookie_jam": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:cookie_jam" } ] }
+		},
+			"gateau_chocolat": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:gateau_chocolat" } ] }
+		},
+			"peach_compote": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:peach_compote" } ] }
+		},
+			"sandwich": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:sandwich" } ] }
+		},
+			"sandwich_fruit": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:sandwich_fruit" } ] }
+		},
+			"vienna_coffee": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:vienna_coffee" } ] }
+		},
+			"spinach_egg": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:spinach_egg" } ] }
 		}
     },
    "rewards": {
- 		"experience": 3000
+ 		"experience": 5000
 	}
 }

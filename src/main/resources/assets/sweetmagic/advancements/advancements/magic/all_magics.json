@@ -177,9 +177,36 @@
         },
 			"magic_avoid_3": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:magic_avoid_3" } ] }
-        }
+        },
+			"magic_blaze_end": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_blaze_end" } ] }
+		},
+			"magic_absolute_zero": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_absolute_zero" } ] }
+		},
+			"magic_healing_hightlow": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_healing_hightlow" } ] }
+		},
+			"magic_absorphealth": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_absorphealth" } ] }
+		},
+			"magic_mind_control": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_mind_control" } ] }
+		},
+			"magic_blackhole": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_blackhole" } ] }
+		},
+			"magic_invisible": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_invisible" } ] }
+		},
+			"magic_aether_shield": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_aether_shield" } ] }
+		},
+			"magic_aether_shield2": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_aether_shield2" } ] }
+		}
     },
    "rewards": {
- 		"experience": 1000
+ 		"experience": 2000
 	}
 }
