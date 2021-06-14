@@ -1,7 +1,7 @@
 {   "parent": "block/thin_block",
 	"textures": {
-		"0": "sweetmagic:block/sara",
-		"particle": "sweetmagic:block/sara"
+		"0": "#0",
+		"particle": "#0"
 	},
 	"elements": [
 		{
