@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -20,7 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -35,6 +35,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
@@ -84,6 +85,13 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(4.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(15.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(64.0D);
+	}
+
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
 	}
 
 	public static void registerFixesVex(DataFixer fixer) {
@@ -164,7 +172,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 			double z = this.posZ + this.rand.nextDouble() * 4 - this.rand.nextDouble() * 4;
 
 			entity.setPosition(x, this.posY + this.rand.nextDouble() * 2, z);
-			entity.data = this.rand.nextInt(3);
+			entity.setData(this.rand.nextInt(3));
 			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 2400, 0, true, false));
 			this.world.spawnEntity(entity);
 		}
@@ -241,7 +249,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src) || !this.isSMDamage(src)) {
+    	if ( this.checkBossDamage(src) && !this.isMindControl(this) ) {
 
     		if (!this.isSMDamage(src) && src.getImmediateSource() instanceof EntityLivingBase) {
     			EntityLivingBase entity = (EntityLivingBase) src.getImmediateSource();
@@ -250,6 +258,16 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
     		return false;
 		}
+
+    	// 風魔法チェック
+    	if (this.checkMagicCyclone(src)) {
+    		amount *= 0.05F;
+    	}
+
+    	// 光魔法チェック
+    	if (this.checkMagicLight(src)) {
+    		amount *= 0.3F;
+    	}
 
     	if (this.isHalfHelth()) {
 
@@ -315,16 +333,16 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 		super.onDeath(cause);
 		this.deathTicks++;
 		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(16) + 48), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.divine_crystal, this.rand.nextInt(8) + 4), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.pure_crystal, this.rand.nextInt(7) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_sbottle, this.rand.nextInt(32) + 12), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_bottle, this.rand.nextInt(18) + 6), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.cosmic_crystal_shard, 6), 0F);
+
+			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(24) + 24);
+			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 5);
+			this.dropItem(this.world, this, ItemInit.pure_crystal, this.rand.nextInt(7) + 1);
+			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(32) + 12);
+			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
+			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 6);
 
 			if (this.rand.nextFloat() <= 0.5F) {
-				this.entityDropItem(new ItemStack(ItemInit.varrier_pendant, 1), 0F);
+				this.dropItem(this.world, this, ItemInit.varrier_pendant, 1);
 			}
 		}
     }

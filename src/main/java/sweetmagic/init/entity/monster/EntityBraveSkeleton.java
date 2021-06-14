@@ -76,7 +76,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	public EntityBraveSkeleton(World world) {
 		super(world);
         this.setSize(0.7F, 2.55F);
-		this.experienceValue = 500;
+		this.experienceValue = 600;
 		this.isImmuneToFire = true;
 	}
 
@@ -146,12 +146,14 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		this.pX = (int) this.posX;
 		this.pY = (int) this.posY;
 		this.pZ = (int) this.posZ;
+		this.setHardHealth(this);
 
     	return super.onInitialSpawn(dif, living);
 	}
 
 	@Override
 	public void onLivingUpdate() {
+
 		super.onLivingUpdate();
 
 		// 氷結状態なら氷結解除
@@ -282,7 +284,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		double y = this.pY + (double) (rand.nextInt(12) - 4);
 		double z = this.pZ + (rand.nextDouble() - 0.5) * 16;
 		this.spawnParticle();
-		return teleportTo(x, y, z);
+		return this.teleportTo(x, y, z);
 	}
 
 	// エンティティに対してテレポート
@@ -359,16 +361,16 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		super.onDeath(cause);
 		this.deathTicks++;
 		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(16) + 48), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.divine_crystal, this.rand.nextInt(8) + 4), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.pure_crystal, this.rand.nextInt(7) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_sbottle, this.rand.nextInt(32) + 12), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_bottle, this.rand.nextInt(18) + 6), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.cosmic_crystal_shard, 16), 0F);
+
+			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(24) + 24);
+			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 6);
+			this.dropItem(this.world, this, ItemInit.pure_crystal, this.rand.nextInt(7) + 1);
+			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(32) + 12);
+			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
+			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 16);
 
 			if (this.rand.nextFloat() <= 0.5F) {
-				this.entityDropItem(new ItemStack(ItemInit.warrior_bracelet, 1), 0F);
+				this.dropItem(this.world, this, ItemInit.warrior_bracelet, 1);
 			}
 		}
     }
@@ -493,9 +495,19 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src) || !this.isSMDamage(src) || this.isRiding()) {
+    	if ( ( this.checkBossDamage(src) && !this.isMindControl(this) ) || this.isRiding()) {
     		return false;
 		}
+
+    	// 風魔法チェック
+    	if (this.checkMagicCyclone(src)) {
+    		amount *= 0.1F;
+    	}
+
+    	// 光魔法チェック
+    	if (this.checkMagicLight(src)) {
+    		amount *= 0.5F;
+    	}
 
     	if (this.isHalfHelth()) {
     		amount *= 0.75;
@@ -505,6 +517,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
     		}
     	}
 
+    	amount = Math.min(amount, 20);
 		return super.attackEntityFrom(src, amount);
 	}
 

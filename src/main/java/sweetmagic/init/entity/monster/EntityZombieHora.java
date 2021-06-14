@@ -3,9 +3,12 @@ package sweetmagic.init.entity.monster;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -39,6 +42,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfo.Color;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.storage.WorldInfo;
@@ -102,6 +106,13 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(512D);
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(0D);
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(48.0D);
+	}
+
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
 	}
 
 	@Override
@@ -195,14 +206,12 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(32) + 32), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(32) + 32), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(36) + 12), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.divine_crystal, this.rand.nextInt(7) + 2), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.pure_crystal, 4), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_sbottle, this.rand.nextInt(40) + 8), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.mf_bottle, this.rand.nextInt(20) + 4), 0F);
-			this.entityDropItem(new ItemStack(BlockInit.sturdust_crystal_bot, 1), 0F);
+			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(36) + 16);
+			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(7) + 3);
+			this.dropItem(this.world, this, ItemInit.pure_crystal, 4);
+			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(40) + 8);
+			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(20) + 4);
+			this.dropItem(this.world, this, new ItemStack(BlockInit.sturdust_crystal_bot));
 		}
     }
 
@@ -290,7 +299,9 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 	@Override
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) { return false; }
+		if (this.checkBossDamage(src) && this.isMindControl(this)) {
+			return false;
+		}
 
     	// ダメージ倍処理
 		if (this.isSMDamage(src)) {
@@ -605,10 +616,9 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 
 			// 半分以上なら自身のデバフ解除
 			else {
-				for (PotionEffect effect : entity.getActivePotionEffects()) {
+				for (Potion potion : PotionInit.deBuffList) {
 
 					// デバフなら
-					Potion potion = effect.getPotion();
 					if (potion.isBadEffect()) {
 						entity.removePotionEffect(potion);
 					}

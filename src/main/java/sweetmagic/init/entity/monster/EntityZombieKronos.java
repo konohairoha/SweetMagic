@@ -287,7 +287,9 @@ public class EntityZombieKronos extends EntitySpellcasterIllager implements ISMM
 	@Override
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) { return false; }
+		if (this.checkBossDamage(src) && this.isMindControl(this)) {
+			return false;
+		}
 
     	// ダメージ倍処理
 		if (this.isSMDamage(src)) {

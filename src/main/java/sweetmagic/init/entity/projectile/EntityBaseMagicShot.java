@@ -65,6 +65,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	protected double damage;
 	public boolean isHitDead = false;
 	public ItemStack stack = ItemStack.EMPTY;
+	public ISMItem smItem = null;
 	public boolean isHit = false;
 	public double range = 0;
 	public int tickTime = 0;
@@ -72,6 +73,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public int plusTick = 0;
     public UUID throwerId;
     public int data = 0;
+    public int mobPower = 3;
 
 	public EntityBaseMagicShot(World world) {
 		super(world);
@@ -92,6 +94,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		this.throwerId = thrower.getUniqueID();
 		if (!stack.isEmpty()) {
 			this.stack = stack;
+			this.smItem = IWand.getSMItem((EntityPlayer) this.getThrower(), this.stack);
 			this.level = IWand.getLevel(IWand.getWand(this.stack), this.stack);
 		}
 	}
@@ -575,7 +578,8 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 			if (!wand.isCreativeWand()) {
 
 				// 経験値の計算
-				int addExp = this.getExp(IWand.getSMItem((EntityPlayer) this.getThrower(), this.stack));
+				int addExp = this.smItem != null ? this.getExp(this.smItem) : 10;
+				System.out.println("========" + (addExp *= this.acceValue()));
 
 				// 経験値の追加
 				wand.levelUpCheck(this.world, (EntityPlayer) this.getThrower(), this.stack, addExp *= this.acceValue());
@@ -619,7 +623,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 	// 杖レベルの取得
 	public int getWandLevel () {
-		return this.stack.isEmpty() ? 3 : IWand.getLevel(IWand.getWand(this.stack), this.stack);
+		return this.stack.isEmpty() ? this.mobPower : IWand.getLevel(IWand.getWand(this.stack), this.stack);
 	}
 
 	public void setKnockbackStrength(int knockback) {

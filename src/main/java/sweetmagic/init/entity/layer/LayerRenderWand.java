@@ -85,15 +85,12 @@ public class LayerRenderWand extends LayerEffectBase<EntityLivingBase> {
 
 		Minecraft mine = Minecraft.getMinecraft();
 		IBakedModel model = mine.getRenderItem().getItemModelWithOverrides(stack, entity.world, entity);
-
 		mine.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.pushMatrix();
-
 		IWand wand = (IWand) stack.getItem();
 		wand.renderWand(scale, entity, parTick);
-
 		mine.getRenderItem().renderItem(stack, ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false));
 		GlStateManager.popMatrix();
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(0f, 0f, 0f, 1f));
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(0F, 0F, 0F, 1F));
 	}
 }

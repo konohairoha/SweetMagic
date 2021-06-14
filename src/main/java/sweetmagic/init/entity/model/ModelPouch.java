@@ -65,7 +65,6 @@ public class ModelPouch extends ModelBiped {
 		this.pouch = new ModelRenderer(this, 16, 4);
 		this.pouch.addBox(-3.0F, 7.0F, 2.0F, 4, 2, 1, f1);
 		this.pouch.setRotationPoint(0.0F, 0.0F + f2, 0.0F);
-
 	}
 
 	@Override
@@ -98,7 +97,9 @@ public class ModelPouch extends ModelBiped {
 			this.rightLeg.render(f7);
 			this.leftLeg.render(f7);
 			this.pouch.render(f7);
-		} else {
+		}
+
+		else {
 
 			if (ent.isSneaking()) {
 				GlStateManager.translate(0.0F, 0.2F, 0.0F);

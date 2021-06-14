@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -23,9 +24,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.datasync.DataParameter;
-import net.minecraft.network.datasync.DataSerializers;
-import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -35,18 +33,19 @@ import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBlazeCyclone;
 
 public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
     private float heightOffset = 0.5F;
     private int heightOffsetUpdateTime;
-    private static final DataParameter<Byte> ON_FIRE = EntityDataManager.<Byte>createKey(EntityBlazeTempest.class, DataSerializers.BYTE);
     public int tickTime = 0;
     public int randTime = 0;
     public int fixedTime = 800;
@@ -84,9 +83,11 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(24.0D);
 	}
 
-	protected void entityInit() {
-		super.entityInit();
-		this.dataManager.register(ON_FIRE, Byte.valueOf((byte)0));
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -133,11 +134,11 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			this.tempestGun();
 		}
 
+		// パーティクルスポーン
 		if (this.world.isRemote) {
-
-			// パーティクルスポーン
 			this.spawnParticle(this, this.world, 1);
 		}
+
 		super.onLivingUpdate();
 	}
 
@@ -162,6 +163,11 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			entity.motionZ += r.z ;
 
 			if (!(entity instanceof IMob) && entity instanceof EntityLivingBase) {
+
+				// 吹き飛ばし耐性が付いていたら飛ばさない
+				if (((EntityLivingBase) entity).isPotionActive(PotionInit.resistance_blow)) {
+					continue;
+				}
 
 				entity.attackEntityFrom(DamageSource.MAGIC, dame);
 				entity.hurtResistantTime = 0;
@@ -220,7 +226,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 

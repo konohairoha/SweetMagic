@@ -65,6 +65,9 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 		if (this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty()) {
 			this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.BOW));
 		}
+
+		this.setHardHealth(this);
+
 		return livingdata;
 	}
 
@@ -201,7 +204,7 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 

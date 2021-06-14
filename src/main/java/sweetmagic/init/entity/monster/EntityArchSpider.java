@@ -67,7 +67,7 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 
@@ -91,6 +91,8 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 			this.world.spawnEntity(skell);
 			skell.startRiding(this);
 		}
+
+		this.setHardHealth(this);
 
     	return super.onInitialSpawn(difficulty, living);
 	}

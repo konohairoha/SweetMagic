@@ -90,9 +90,11 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 		List<EntityLivingBase> list = this.getEntityList(explo, explo, explo);
 		if (list.isEmpty()) { return; }
 
+		boolean isIMob = this.getThrower() instanceof IMob;
+
 		for (EntityLivingBase entity : list ) {
 
-			if (!(entity instanceof IMob)) { continue; }
+			if ( ( !isIMob && !(entity instanceof IMob) ) || ( isIMob && entity instanceof IMob ) ) { continue; }
 
 			float dame = explo;
 			double distance = 2 - entity.getDistance(this.posX, this.posY, this.posZ) / dame;

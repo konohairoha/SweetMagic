@@ -17,8 +17,7 @@ public class LayerManHandItem implements LayerRenderer<EntityLivingBase> {
 		this.render = render;
 	}
 
-	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float limbSwingAmount,
-			float partialTicks, float ageInTicks, float netHeadYaw, float headPitch, float scale) {
+	public void doRenderLayer(EntityLivingBase entity, float limbSwing, float amount, float parTick, float age, float netHeadYaw, float headPitch, float scale) {
 
 		boolean flag = entity.getPrimaryHand() == EnumHandSide.RIGHT;
 		ItemStack stack = flag ? entity.getHeldItemOffhand() : entity.getHeldItemMainhand();

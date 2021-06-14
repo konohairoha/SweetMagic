@@ -54,11 +54,11 @@ import sweetmagic.util.SoundHelper;
 public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 	public static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.<Byte> createKey(EntityPixieVex.class, DataSerializers.BYTE);
+    public static final DataParameter<Integer> DATA = EntityDataManager.<Integer>createKey(EntityPixieVex.class, DataSerializers.VARINT);
 	@Nullable
 	public BlockPos boundOrigin;
 	public EntityLivingBase targetEntity;
 	public SMElement ele;
-	public int data = 0;
 	public int tickTime = 0;
 	public int taskTIme = 0;
 	public boolean isVex = true;
@@ -73,7 +73,6 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 	public void move(MoverType type, double x, double y, double z) {
 		super.move(type, x, y, z);
-//		this.doBlockCollisions();
 	}
 
 	protected void initEntityAI() {
@@ -95,6 +94,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(VEX_FLAGS, Byte.valueOf((byte) 0));
+		this.dataManager.register(DATA, Integer.valueOf((int) 0));
 	}
 
 	public static void registerFixesVex(DataFixer fixer) {
@@ -200,7 +200,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		float y = (float) (-this.motionY / 80);
 		float z = (float) (-this.motionZ / 80);
 
-		switch (this.data) {
+		switch (this.getData()) {
 		case 0:
 			for (int i = 0; i < 3; i++) {
 				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
@@ -246,7 +246,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 
@@ -259,8 +259,9 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
     public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData living) {
 		this.setEquipmentBasedOnDifficulty(dif);
 		this.setEnchantmentBasedOnDifficulty(dif);
-		this.data = this.world.rand.nextInt(3);
+		this.setData(this.world.rand.nextInt(3));
 		this.setElement();
+		this.setHardHealth(this);
 		return super.onInitialSpawn(dif, living);
 	}
 
@@ -271,13 +272,13 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 			this.boundOrigin = new BlockPos(tags.getInteger("BoundX"), tags.getInteger("BoundY"), tags.getInteger("BoundZ"));
 		}
 
-		this.data = tags.getInteger("data");
+		this.setData(tags.getInteger("data"));
 		this.setElement();
 	}
 
 	// 属性設定
 	public void setElement () {
-		switch (this.data) {
+		switch (this.getData()) {
 		case 0:
 			this.ele = SMElement.FROST;
 			break;
@@ -299,7 +300,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 			tags.setInteger("BoundZ", this.boundOrigin.getZ());
 		}
 
-		tags.setInteger("data", this.data);
+		tags.setInteger("data", this.getData());
 	}
 
 	@Nullable
@@ -367,12 +368,16 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 	}
 
 	public int getData () {
-		return this.data;
+		return this.dataManager.get(DATA);
+	}
+
+	public void setData (int data) {
+		this.dataManager.set(DATA, data);
 	}
 
 	public void setElement(Element ele) {
 		this.ele = ele.ele;
-		this.data = ele.data;
+		this.setData(ele.data);
 	}
 
     public void fall(float dis, float dama) { }

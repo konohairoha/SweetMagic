@@ -273,7 +273,7 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	@Override
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 

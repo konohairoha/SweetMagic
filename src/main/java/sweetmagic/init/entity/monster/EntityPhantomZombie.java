@@ -2,9 +2,12 @@ package sweetmagic.init.entity.monster;
 
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -25,6 +28,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
@@ -178,6 +182,13 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
         this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2D);
     }
 
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
+	}
+
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
 		return super.getCanSpawnHere() && this.world.provider.getDimension() == DimensionInit.dimID;
@@ -203,7 +214,7 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) {
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
     		return false;
 		}
 

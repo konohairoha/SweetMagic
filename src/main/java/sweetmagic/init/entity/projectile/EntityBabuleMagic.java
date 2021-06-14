@@ -79,7 +79,7 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 		living.addPotionEffect(new PotionEffect(PotionInit.babule, time, this.potionnLevel));
 		living.hurtResistantTime = 0;
 
-		if (this.potionnLevel >= 2 && living.isPotionActive(PotionInit.refresh_effect)) {
+		if (this.potionnLevel >= 2 && living.isPotionActive(PotionInit.refresh_effect) && living.isNonBoss()) {
 			living.removePotionEffect(PotionInit.refresh_effect);
 		}
 	}

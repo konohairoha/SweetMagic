@@ -145,6 +145,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
+			this.entityDropItem(new ItemStack(ItemInit.magicmeal, this.rand.nextInt(2) + 1), 0.0F);
 			this.entityDropItem(new ItemStack(ItemInit.grav_powder, this.rand.nextInt(2) + 1), 0.0F);
 			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
 		}
@@ -152,7 +153,9 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) { return false; }
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
+    		return false;
+		}
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.world , src, amount);

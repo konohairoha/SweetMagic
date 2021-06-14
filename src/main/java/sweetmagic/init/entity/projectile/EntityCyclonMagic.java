@@ -81,7 +81,8 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 
 //			if (!this.checkThrower(entity)) { continue; }
 
-			if (!(this.getThrower() instanceof IMob) && this.getThrower() == entity) { continue; }
+			if (( !(this.getThrower() instanceof IMob) && this.getThrower() == entity ) ||
+			entity.isPotionActive(PotionInit.resistance_blow)) { continue; }
 
 			Vec3d p = new Vec3d(this.posX, this.posY, this.posZ);
 			Vec3d t = new Vec3d(entity.posX, entity.posY, entity.posZ);

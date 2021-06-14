@@ -6,6 +6,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -35,6 +36,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.event.SMSoundEvent;
@@ -78,6 +80,13 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 		this.tasks.addTask(6, new EntityAILookIdle(this));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, false, new Class[0]));
 		this.targetTasks.addTask(2, new EntityAINearestAttackableTarget(this, EntityPlayer.class, true));
+	}
+
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
 	}
 
 	@Override
@@ -222,11 +231,28 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) { return false; }
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
+    		return false;
+		}
 
 		// ダメージ倍処理
     	if (!this.isUnique()) {
     		amount = this.getDamageAmount(this.world , src, amount);
+    	}
+
+    	else {
+
+        	// 風魔法チェック
+        	if (this.checkMagicCyclone(src)) {
+        		amount *= 0.1F;
+        	}
+
+        	// 光魔法チェック
+        	if (this.checkMagicLight(src)) {
+        		amount *= 0.5F;
+        	}
+
+    		amount = Math.min(amount, 15);
     	}
 
 		if (!this.isSMDamage(src)) {
@@ -239,8 +265,9 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 	}
 
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
+
+		if (!this.world.isRemote && !this.isDethCancel(this)) {
+
 			this.entityDropItem(new ItemStack(ItemInit.mysterious_page, this.rand.nextInt(2) + 1), 0.0F);
 			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(7) + 1), 0F);
 			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(16)), 0F);
@@ -249,10 +276,10 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			this.entityDropItem(new ItemStack(ItemInit.witch_tears, this.rand.nextInt(2) + 1), 0F);
 
 			if (this.isUnique()) {
-				this.entityDropItem(new ItemStack(ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4), 0F);
+				this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4);
 
 				if (this.rand.nextBoolean()) {
-					this.entityDropItem(new ItemStack(ItemInit.witch_scroll, 1), 0F);
+					this.dropItem(this.world, this, ItemInit.witch_scroll, 1);
 				}
 			}
 
@@ -260,6 +287,8 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 				this.entityDropItem(new ItemStack(ItemInit.witch_scroll, 1), 0F);
 			}
 		}
+
+		super.onDeath(cause);
 	}
 
 	@Nullable

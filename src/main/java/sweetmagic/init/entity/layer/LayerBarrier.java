@@ -19,6 +19,8 @@ import sweetmagic.init.PotionInit;
 
 public class LayerBarrier extends LayerEffectBase<EntityLivingBase> {
 
+	private static final ItemStack STACK = new ItemStack(ItemInit.aether_crystal_shard);
+
 	public LayerBarrier(RenderLivingBase<?> renderer) {
 		super(renderer);
 	}
@@ -46,16 +48,15 @@ public class LayerBarrier extends LayerEffectBase<EntityLivingBase> {
 	private void renderEffect(float scale, EntityLivingBase entity, float parTick) {
 
 		float rotY = (entity.ticksExisted + parTick) / 8F;
-		float rotX = -0.125F;//MathHelper.sin((entity.ticksExisted + parTick) / 5F) / 4F;
-		float rotZ = 0;//MathHelper.cos((entity.ticksExisted + parTick) / 5F) / 4F;
+		float rotX = -0.125F;
+		float rotZ = 0;
 
-		ItemStack stack = new ItemStack(ItemInit.aether_crystal_shard);
 		Minecraft mine = Minecraft.getMinecraft();
-		IBakedModel model = mine.getRenderItem().getItemModelWithOverrides(stack, entity.world, entity);
+		IBakedModel model = mine.getRenderItem().getItemModelWithOverrides(STACK, entity.world, entity);
 
 		float prevX = OpenGlHelper.lastBrightnessX, prevY = OpenGlHelper.lastBrightnessY;
-		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f, 240f);
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(1f, 1f, 1f, 1f));
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(1F, 1F, 1F, 1F));
 		mine.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 		int count = 4;
@@ -69,11 +70,11 @@ public class LayerBarrier extends LayerEffectBase<EntityLivingBase> {
 			GlStateManager.rotate(rotX * pi, 1F, 0F, 0F);
 			GlStateManager.scale(scale, -scale, scale);
 			GlStateManager.translate(0F, -0.5F, 1F);
-			mine.getRenderItem().renderItem(stack, ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false));
+			mine.getRenderItem().renderItem(STACK, ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false));
 			GlStateManager.popMatrix();
 		}
 
-		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(0f, 0f, 0f, 1f));
+		GL11.glMaterial(GL11.GL_FRONT_AND_BACK, GL11.GL_EMISSION, RenderHelper.setColorBuffer(0F, 0F, 0F, 1F));
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, prevX, prevY);
 	}
 }

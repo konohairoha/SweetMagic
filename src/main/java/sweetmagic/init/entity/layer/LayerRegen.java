@@ -20,6 +20,8 @@ import sweetmagic.init.PotionInit;
 
 public class LayerRegen extends LayerEffectBase<EntityLivingBase> {
 
+	private static final ItemStack STACK = new ItemStack(ItemInit.cosmic_crystal_shard);
+
 	public LayerRegen(RenderLivingBase<?> renderer) {
 		super(renderer);
 	}
@@ -50,9 +52,8 @@ public class LayerRegen extends LayerEffectBase<EntityLivingBase> {
 		float rotX = -0.125F;
 		float rotZ = 0;
 
-		ItemStack stack = new ItemStack(ItemInit.cosmic_crystal_shard);
 		Minecraft mine = Minecraft.getMinecraft();
-		IBakedModel model = mine.getRenderItem().getItemModelWithOverrides(stack, entity.world, entity);
+		IBakedModel model = mine.getRenderItem().getItemModelWithOverrides(STACK, entity.world, entity);
 
 		float prevX = OpenGlHelper.lastBrightnessX, prevY = OpenGlHelper.lastBrightnessY;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
@@ -70,7 +71,7 @@ public class LayerRegen extends LayerEffectBase<EntityLivingBase> {
 			GlStateManager.rotate(rotX * pi, 1F, 0F, 0F);
 			GlStateManager.scale(scale, -scale, scale);
 			GlStateManager.translate(0F, MathHelper.sin((entity.ticksExisted + parTick) * 0.25F + i) * 0.15F + 1.35F, 1F);
-			mine.getRenderItem().renderItem(stack, ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false));
+			mine.getRenderItem().renderItem(STACK, ForgeHooksClient.handleCameraTransforms(model, TransformType.NONE, false));
 			GlStateManager.popMatrix();
 		}
 

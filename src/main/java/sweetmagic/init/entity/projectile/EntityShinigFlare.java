@@ -130,8 +130,10 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 			ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.END_ROD);
 
 			// バフなら
-			for (Potion potion : PotionInit.getBuffPotionList()) {
-				entity.removePotionEffect(potion);
+			if (entity.isNonBoss()) {
+				for (Potion potion : PotionInit.getBuffPotionList()) {
+					entity.removePotionEffect(potion);
+				}
 			}
 
 			entity.addPotionEffect(new PotionEffect(PotionInit.flame, 40 * (level + 1), 1));

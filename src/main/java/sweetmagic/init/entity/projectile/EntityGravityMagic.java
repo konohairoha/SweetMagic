@@ -45,18 +45,8 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 				// カラミティまたは重力加速があるなら次へ
 				if (!this.checkThrower(ent)) { continue; }
 
-				double dX = this.posX - ent.posX;
-				double dY = this.posY - ent.posY;
-				double dZ = this.posZ - ent.posZ;
-				double dist = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
-				double vel = 1D - dist / 15D;
-
-				if (vel > 0.0D) {
-					vel *= dist * vel;
-					ent.motionX += dX / vel * 0.0775;
-					ent.motionY += dY / vel * 0.135;
-					ent.motionZ += dZ / vel * 0.0775;
-				}
+				// 吸い込み
+				this.gravitySuction(ent);
 			}
 
 			// 一定時間経つとダメージ
@@ -71,6 +61,7 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 					if (PlayerHelper.isPlayer(ent)) { continue; }
 					this.attackDamage(ent, dame);
 					ent.hurtResistantTime = 0;
+					ent.addPotionEffect(new PotionEffect(PotionInit.gravity, 40 * (level + 1), 2));
 					this.checkShadow(ent);
 				}
 
@@ -82,6 +73,22 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 
 		else {
 			super.inGround(result);
+		}
+	}
+
+	public void gravitySuction (EntityLivingBase entity) {
+
+		double dX = this.posX - entity.posX;
+		double dY = this.posY - entity.posY;
+		double dZ = this.posZ - entity.posZ;
+		double dist = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+		double vel = 1D - dist / 15D;
+
+		if (vel > 0D) {
+			vel *= dist * vel;
+			entity.motionX += dX / vel * 0.0775;
+			entity.motionY += dY / vel * 0.135;
+			entity.motionZ += dZ / vel * 0.0775;
 		}
 	}
 

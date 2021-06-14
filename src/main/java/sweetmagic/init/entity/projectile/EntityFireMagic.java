@@ -53,9 +53,9 @@ public class EntityFireMagic extends EntityBaseMagicShot {
 		float z = (float) (-this.motionZ / 16);
 
 		for (int i = 0; i < 4; i++) {
-			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
-			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
-			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
+			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i * 0.25F);
+			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5F + this.motionY * i * 0.25F);
+			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i * 0.25F);
 			this.world.spawnParticle(EnumParticleTypes.FLAME, f1, f2, f3, x, y, z);
 		}
 	}

@@ -79,7 +79,7 @@ public class EntityBlazeCyclone extends EntityFireball {
 				EntityLivingBase living = (EntityLivingBase) entity;
 
 				// 疾風が付いていたら飛ばさない
-				if (living.isPotionActive(PotionInit.cyclone)) {
+				if (living.isPotionActive(PotionInit.cyclone) || living.isPotionActive(PotionInit.resistance_blow)) {
 					continue;
 				}
 			}

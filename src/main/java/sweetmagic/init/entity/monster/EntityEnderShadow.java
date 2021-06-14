@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
@@ -98,6 +99,14 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
     	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
+    	this.setChild(false);
+	}
+
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
 	}
 
 	// 死んだとき
@@ -121,7 +130,9 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	// 攻撃されたとき
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src)) { return false; }
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
+    		return false;
+		}
 
 		if (this.isShadow) {
 
@@ -174,7 +185,7 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	// 影をスポーン
 	public void spawnShadow () {
 
-		if (!this.world.isRemote && this.canSpawnShadow && this.rand.nextDouble() < 0.33D && !this.isDayElapse(this.world, 10)) {
+		if (!this.world.isRemote && this.canSpawnShadow && this.rand.nextDouble() < 0.33D && this.isSMDimension(this.world)) {
 
 			for (int i = 0; i < 2; i++) {
 

@@ -1,5 +1,6 @@
 package sweetmagic.init.entity.monster;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -17,16 +18,14 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IWand;
-import sweetmagic.init.item.sm.magic.GrandMagic;
+import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 
 public class EntityShadowWolf extends EntityWolf {
 
@@ -95,20 +94,21 @@ public class EntityShadowWolf extends EntityWolf {
 		return super.processInteract(player, hand);
 	}
 
+	public boolean attackEntityFrom(DamageSource src, float amount) {
+
+		Entity entity = src.getImmediateSource();
+
+    	if (!(entity instanceof ISMMob) && entity instanceof EntityBaseMagicShot) {
+    		return false;
+    	}
+
+		return super.attackEntityFrom(src, amount);
+	}
+
 	@Override
 	public void onDeath(DamageSource src) {
-
         this.dead = true;
         this.getCombatTracker().reset();
-		EntityPlayer player = (EntityPlayer) this.getOwner();
-		if (player == null) { return; }
-
-		NBTTagCompound data = player.getEntityData();
-		if (!data.hasKey(GrandMagic.SUMMONWOLF)) { return; }
-
-		int count = data.getInteger(GrandMagic.SUMMONWOLF) - 1;
-		count = count < 0 ? 0: count;
-		data.setInteger(GrandMagic.SUMMONWOLF, count);
 	}
 
 	@Override
@@ -137,12 +137,7 @@ public class EntityShadowWolf extends EntityWolf {
 	}
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return super.getDisplayName();
-	}
-
-	@Override
 	public boolean hasCustomName() {
-		return false;
+		return true;
 	}
 }

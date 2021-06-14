@@ -61,7 +61,6 @@ public class ModelRobe extends ModelBiped {
 		this.leftLeg.mirror = true;
 		this.leftLeg.addBox(-2.0F, 0.0F, -2.0F, 4, 12, 4, f1);
 		this.leftLeg.setRotationPoint(1.9F, 12.0F + f2, 0.0F);
-
 	}
 
 	@Override
@@ -92,7 +91,9 @@ public class ModelRobe extends ModelBiped {
 			this.leftArm.render(f7);
 			this.rightLeg.render(f7);
 			this.leftLeg.render(f7);
-		} else {
+		}
+
+		else {
 
 			if (ent.isSneaking()) {
 				GlStateManager.translate(0.0F, 0.2F, 0.0F);
@@ -111,6 +112,7 @@ public class ModelRobe extends ModelBiped {
 
 	@Override
 	public void setRotationAngles(float limbSwing, float swingAmount, float ageTick, float netHeadYaw, float pitch, float scale, Entity entity) {
+
 		super.setRotationAngles(limbSwing, swingAmount, ageTick, netHeadYaw, pitch, scale, entity);
 
 		this.setAngle(this.head, this.bipedHead);
@@ -148,6 +150,7 @@ public class ModelRobe extends ModelBiped {
 
 	@Override
 	public void setModelAttributes(ModelBase model) {
+
 		super.setModelAttributes(model);
 
 		if (model instanceof ModelBiped) {
