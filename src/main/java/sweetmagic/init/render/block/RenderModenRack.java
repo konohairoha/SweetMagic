@@ -13,6 +13,9 @@ import sweetmagic.util.RenderUtils;
 public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 
 	private static final float size = 0.4F;
+	private static final Item plate = Item.getItemFromBlock(BlockInit.plate);
+	private static final Item woodPlate = Item.getItemFromBlock(BlockInit.wood_plate);
+	private static final Item ironPlate = Item.getItemFromBlock(BlockInit.iron_plate);
 
 	@Override
 	public void render(TileModenRack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
@@ -28,7 +31,7 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         GlStateManager.translate(0, 0, 0);
         int data = te.getRackData();
 
-        if (data != 2) {
+        if (data != 2 && data != 3) {
             GlStateManager.scale(this.size, this.size, this.size);
         }
 
@@ -66,7 +69,8 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         	this.renderWallRack(te, render);
         	break;
         case 2:
-        	this.renderPlate(te, render);
+        case 3:
+        	this.renderPlate(te, render, data);
         	break;
         }
 	}
@@ -119,7 +123,7 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 	}
 
 	// 料理皿
-	public void renderPlate (TileModenRack te, RenderItem render) {
+	public void renderPlate (TileModenRack te, RenderItem render, int data) {
 
     	ItemStack stack = te.getChestItem(0);
     	if (stack.isEmpty()) { return; }
@@ -133,8 +137,10 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         	posY -= 0.2F;
         }
 
+        Item item = stack.getItem();
+
         // スロットのアイテムが皿なら
-        if (stack.getItem() == Item.getItemFromBlock(BlockInit.plate)) {
+        if (item == plate || item == woodPlate|| item == ironPlate) {
 
             GlStateManager.scale(4F, 4F, 4F);
             int amount = Math.min(9, stack.getCount());
@@ -148,6 +154,14 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         }
 
         else {
+
+        	if (data == 3) {
+            	posY -= 0.55F;
+            	posZ += 0.2F;
+                GlStateManager.rotate(270, 1F, 0F, 0.0F);
+                GlStateManager.rotate(180, 0F, 0F, 1F);
+        	}
+
             RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0);
         }
 	}

@@ -24,27 +24,27 @@ public class RenderStardustCrystal extends TileEntitySpecialRenderer<TileStardus
 	public Long worldTime;
 
 	@Override
-	public void render(TileStardustCrystal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileStardustCrystal te, double x, double y, double z, float parTick, int stage, float alpha) {
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		this.worldTime = te.getWorld().getTotalWorldTime();
-		this.renderCrystal(te, x, destroyStage, z, partialTicks);
+		this.renderCrystal(te, x, stage, z, parTick);
         float rot = this.worldTime % 720;
 		GlStateManager.rotate(rot, 0F, 1F, 0F);
         this.renderItem(te, x, -0.35, z);
         GlStateManager.popMatrix();
 	}
 
-	public void renderCrystal (TileStardustCrystal te, double x, double y, double z, float partialTicks) {
+	public void renderCrystal (TileStardustCrystal te, double x, double y, double z, float parTick) {
 
-		float f = this.worldTime + partialTicks;
+		float f = this.worldTime + parTick;
 		this.bindTexture(TEX);
 		float f1 = MathHelper.sin(f * 0.2F) / 4F + 0.75F;
 		f1 = f1 * f1 + f1;
 
 		GlStateManager.enableColorMaterial();
-		this.model.render((Entity) null, 0.0F, f * 3F, f1 * 0.2F, 0.0F, 0.0F, 0.035F);
+		this.model.render((Entity) null, 0.0F, f * 3F, f1 * 0.2F, 0F, 0F, 0.035F);
 		GlStateManager.disableOutlineMode();
 		GlStateManager.disableColorMaterial();
 	}

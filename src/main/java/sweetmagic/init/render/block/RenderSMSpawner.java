@@ -22,19 +22,20 @@ public class RenderSMSpawner extends TileEntitySpecialRenderer<TileSMSpaner> {
 		Entity entity = te.getEntity();
 		if (entity == null) { return; }
 
-		float f = 0.53125F;
+		float f = 0.75F;//;0.53125F;
 		float f1 = Math.max(entity.width, entity.height);
 
-		if ((double) f1 > 1.0D) {
+		if ((double) f1 > 1D) {
 			f /= f1;
 		}
 
 		Long worldTime = te.getWorld().getTotalWorldTime();
-        float rot = worldTime % 360;
-        GlStateManager.translate(0, MathHelper.sin((worldTime + parTick) * 0.1F) * 0.15F + 0.2F, 0);
-        GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
+        float rot = worldTime % 360 * 40;
+        GlStateManager.translate(0, MathHelper.sin((worldTime + parTick) * 0.1F) * 0.075F + 0.05F, 0);
+        GlStateManager.rotate(rot, 0F, 1F, 0F);
+        GlStateManager.rotate(-30, 1F, 0F, 0F);
 		GlStateManager.scale(f, f, f);
-		entity.setLocationAndAngles(posX, posY, posZ, 0.0F, 0.0F);
-		Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0.0D, 0.0D, 0.0D, 0.0F, parTick, false);
+		entity.setLocationAndAngles(posX, posY, posZ, 0F, 0F);
+		Minecraft.getMinecraft().getRenderManager().renderEntity(entity, 0D, 0D, 0D, 0F, parTick, false);
 	}
 }
