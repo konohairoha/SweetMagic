@@ -158,7 +158,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 		// チョコレートケーキ
 		recipe.addRecipe(new OvenRecipes(
 			"foodDough",
-			new Object[] { new ItemStack(ItemInit.chocolate, 2), new OreItems("foodCream", 2), new ItemStack(ItemInit.cocoapowder) },
+			new Object[] { new ItemStack(ItemInit.chocolate, 2), new OreItems("foodCream", 2), new ItemStack(ItemInit.cocoapowder, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.chocolate_cake, 4) }
 		));
 
@@ -223,6 +223,20 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new OreItems("cropAplle", 12),
 			new Object[] { new OreItems("dustFlour", 4), new OreItems("egg", 2), new OreItems("bucketMilk", 4), new OreItems("foodButter", 2), new OreItems("dustSugar", 2), "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.talttatan, 8) }
+		));
+
+		// ガトーショコラ
+		recipe.addRecipe(new OvenRecipes(
+			new ItemStack(ItemInit.cocoapowder, 8),
+			new Object[] { new ItemStack(ItemInit.chocolate, 2), new OreItems("foodCream", 2), new OreItems("dustFlour", 4), new OreItems("egg", 2), new OreItems("foodButter", 2), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.gateau_chocolat, 6) }
+		));
+
+		// ジャムクッキー
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("cropStrawberry", 4),
+			new Object[] { new OreItems("dustSugar", 4), "cropLemon", new OreItems("dustFlour", 3), new OreItems("egg", 2), "foodButter", "bucketMilk" },
+			new ItemStack[] { new ItemStack(ItemInit.cookie_jam, 8) }
 		));
 	}
 }

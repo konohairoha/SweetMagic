@@ -127,5 +127,17 @@ public class FlourMillRecipePlugin implements IFlourMillRecipePlugin {
 			new ItemStack(ItemInit.fire_nasturtium_petal, 1),
 			new ItemStack[] { new ItemStack(ItemInit.fire_powder, 2), new ItemStack(ItemInit.fire_powder)
 		}));
+
+		// サツマイモ
+		recipe.addRecipe(new FlourMillRecipes(
+			new ItemStack(Blocks.DIRT, 1, 2),
+			new ItemStack[] { new ItemStack(Blocks.DIRT), new ItemStack(ItemInit.sweetpotato)
+		}));
+
+		// 植物くず
+		recipe.addRecipe(new FlourMillRecipes(
+			"listAllseed",
+			new ItemStack[] { new ItemStack(ItemInit.plant_chips, 2)
+		}));
 	}
 }

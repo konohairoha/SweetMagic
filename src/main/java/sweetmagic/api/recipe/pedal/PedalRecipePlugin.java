@@ -130,6 +130,13 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.angel_harness) }
 		));
 
+		// エーテル・ブーツ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.alternative_ingot, 8),
+			new Object[] { new ItemStack(Items.IRON_INGOT, 4), new ItemStack(ItemInit.aether_crystal, 4), new ItemStack(ItemInit.cotton_cloth, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.aether_boot) }
+		));
+
 		// チョーカー
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(ItemInit.aether_crystal, 4),
@@ -289,6 +296,36 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.witch_tears, 3), new ItemStack(ItemInit.mf_bottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.pure_choker) },
 			true
+		));
+
+		// デウスクリスタルチョーカー
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.pure_choker),
+			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.mf_bottle, 8) },
+			new ItemStack[] { new ItemStack(ItemInit.deus_choker) },
+			true
+		));
+
+		// マスターマギアポーチ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.magicians_pouch),
+			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.mf_bottle, 8) },
+			new ItemStack[] { new ItemStack(ItemInit.master_magia_pouch) },
+			true
+		));
+
+		// マギア・サクセサー
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.magicbarrier_off, 8),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(Items.IRON_INGOT, 8) },
+			new ItemStack[] { new ItemStack(BlockInit.magia_successor) }
+		));
+
+		// アルカナ・テーブル
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.peach_log, 8),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.cotton_cloth, 8), new ItemStack(ItemInit.blank_page, 4), new ItemStack(Items.FEATHER, 2), new OreItems("dyeBlack", 2) },
+			new ItemStack[] { new ItemStack(BlockInit.arcane_table) }
 		));
 
 		Map<Item, String> aetherRecipe = new HashMap<>();

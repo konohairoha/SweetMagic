@@ -72,16 +72,23 @@ public class JuiceMakerRecipePlugin implements IJuiceMakerRecipePlugin {
 
 		// コーヒー
 		recipe.addRecipe(new JuiceMakerRecipes(
-			new ItemStack(ItemInit.coffee_seed),
-			new Object[] { new ItemStack(ItemInit.coffee_seed, 9), "waterBucket", "dustSugar" },
+			new ItemStack(ItemInit.coffee_seed, 4),
+			new Object[] { new ItemStack(ItemInit.coffee_seed, 4), "waterBucket", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.coffee) }
 		));
 
 		// カフェラテ
 		recipe.addRecipe(new JuiceMakerRecipes(
-			new ItemStack(ItemInit.coffee_seed),
-			new Object[] { new ItemStack(ItemInit.coffee_seed, 9), "bucketMilk", "dustSugar" },
+			new ItemStack(ItemInit.coffee_seed, 4),
+			new Object[] { new ItemStack(ItemInit.coffee_seed, 4), "bucketMilk", "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.cafe_latte, 1) }
+		));
+
+		// ウィンナーコーヒー
+		recipe.addRecipe(new JuiceMakerRecipes(
+			new ItemStack(ItemInit.coffee_seed, 8),
+			new Object[] { new ItemStack(ItemInit.cocoapowder, 2), "foodCream", "dustSugar" },
+			new ItemStack[] { new ItemStack(ItemInit.vienna_coffee, 1) }
 		));
 
 	}

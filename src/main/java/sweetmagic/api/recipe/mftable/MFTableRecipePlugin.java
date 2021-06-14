@@ -61,5 +61,37 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.snowdust_wand) },
 			1
 		));
+
+		// フリューゲルヴェントワンド
+		recipe.addRecipe(new MFTableRecipes(
+			"cosmiccrystalWand",
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.tiny_feather, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.flugel_wind_wand) },
+			1
+		));
+
+		// エルクシディアフラワンド
+		recipe.addRecipe(new MFTableRecipes(
+			"cosmiccrystalWand",
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.grav_powder, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.elksi_diafusola_wand) },
+			1
+		));
+
+		// アクエリアス・ソーサラー・ワンド
+		recipe.addRecipe(new MFTableRecipes(
+			"cosmiccrystalWand",
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.aquarius_sorcerer_wand) },
+			1
+		));
+
+		// フォスフォラスワンド
+		recipe.addRecipe(new MFTableRecipes(
+			"cosmiccrystalWand",
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.fire_nasturtium_petal, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.phosphorus_wand) },
+			1
+		));
 	}
 }

@@ -61,11 +61,15 @@ public class MagiaFluxInfo {
 
 		int i = 0;
 		boolean deleteFlg = false;
+
 		for(MagiaFluxInfo list : SweetMagicAPI.mfList) {
+
 			if(list.getItem().isItemEqual(info.getItem())) {
 				deleteFlg = true;
 				break;
-			} else {
+			}
+
+			else {
 				i++;
 			}
 		}

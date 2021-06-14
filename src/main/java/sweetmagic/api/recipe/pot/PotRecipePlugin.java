@@ -96,15 +96,15 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 
 		// 味噌汁
 		recipe.addRecipe(new PotRecipes(
-			new ItemStack(ItemInit.miso, 3),
-			new Object[] { new OreItems("cropOnion", 2), new OreItems("cropRadish", 2), new ItemStack(ItemInit.seaweed), new OreItems("bucketWater", 2) },
+			new OreItems("foodMiso", 3),
+			new Object[] { new OreItems("cropOnion", 2), new OreItems("cropRadish", 2), "cropSeaweed", new OreItems("bucketWater", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.soy_soup, 9) }
 		));
 
 		// 豚汁
 		recipe.addRecipe(new PotRecipes(
 			new OreItems("listAllporkraw"),
-			new Object[] { new ItemStack(ItemInit.miso, 3), new OreItems("cropOnion", 2), new OreItems("cropRadish", 2), "cropCarrot", new OreItems("bucketWater", 2) },
+			new Object[] { new OreItems("foodMiso", 3), new OreItems("cropOnion", 2), new OreItems("cropRadish", 2), "cropCarrot", new OreItems("bucketWater", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.pork_soup, 8)}
 		));
 
@@ -129,6 +129,44 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 			new Object[] { new OreItems("foodChocolate", 2), new OreItems("dustFlour", 3), new OreItems("foodButter", 2), new OreItems("egg", 2), new OreItems("dustSugar", 3),
 							new OreItems("bucketMilk", 2), new OreItems("foodOil", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.donut_strawberrychoco, 8) }
+		));
+
+		// 栗ご飯
+		recipe.addRecipe(new PotRecipes(
+			new ItemStack(ItemInit.chestnut, 8),
+			new Object[] { new OreItems("foodRice", 4), new OreItems("dustSalt", 2), new OreItems("bucketWater", 4), new ItemStack(ItemInit.seaweed, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.kurigohan, 4) }
+		));
+
+		// 牛丼
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("listAllbeefraw", 3),
+			new Object[] { new OreItems("foodRice", 6), new OreItems("cropOnion", 3), new OreItems("bucketWater", 3), "foodSoysauce",
+					"foodLiquor", new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.gyuudon, 6) }
+		));
+
+		// チー牛
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("foodCheese", 2),
+			new Object[] { new OreItems("listAllbeefraw", 3),new OreItems("foodRice", 6), new OreItems("cropOnion", 3), new OreItems("bucketWater", 3),
+					"foodSoysauce", "foodLiquor", new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cheegyu, 6) }
+		));
+
+		// 豚丼
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("listAllporkraw", 3),
+			new Object[] { new OreItems("foodRice", 6), new OreItems("cropOnion", 3), new OreItems("bucketWater", 3), "foodSoysauce",
+					"foodLiquor", new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.butadon, 6) }
+		));
+
+		// ほうれん草のおひたし
+		recipe.addRecipe(new PotRecipes(
+			new ItemStack(ItemInit.spinach, 6),
+			new Object[] { new ItemStack(ItemInit.bonito_flakes, 3), new OreItems("foodSoysauce", 2), new OreItems("bucketWater", 3), new OreItems("dustSalt", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.salad_ohitasi, 6) }
 		));
 	}
 }

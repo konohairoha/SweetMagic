@@ -71,6 +71,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_healingwish) }
 		));
 
+		// デバフ解除 + 全回復魔法 + 衝撃吸収
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_healingwish),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_healing_hightlow) }
+		));
+
 		// 光魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.prizmium),
@@ -127,6 +134,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_meteor_fall) }
 		));
 
+		// ブレイズエンド魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_meteor_fall),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.fire_nasturtium_petal, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_blaze_end) }
+		));
+
 		// 氷魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.unmeltable_ice, 3),
@@ -149,6 +163,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.unmeltable_ice, 16)
 					, new ItemStack(ItemInit.sugarbell, 32), new ItemStack(ItemInit.sannyflower_petal, 32), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_frostrain) }
+		));
+
+		// 絶対零度魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_frostrain),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.unmeltable_ice, 32), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_absolute_zero) }
 		));
 
 		// 風射撃魔法
@@ -281,6 +302,13 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_gravity_break) }
 		));
 
+		// ブラックホール魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_gravity_break),
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.grav_powder, 32), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_blackhole) }
+		));
+
 		// ジャンプ力アップ魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(Items.FEATHER, 4),
@@ -313,9 +341,23 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_shadowgolem) }
 		));
 
+		// 体力吸収魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.stray_soul, 2),
+			new ItemStack[] { new ItemStack(ItemInit.magicmeal, 4), new ItemStack(Items.ENDER_PEARL, 2), new ItemStack(ItemInit.blank_magic, 2), new ItemStack(ItemInit.mysterious_page, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_absorphealth) }
+		));
+
+		// マインドコントロール魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_absorphealth),
+			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(Items.ENDER_PEARL, 4), new ItemStack(ItemInit.ender_shard, 16) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_mind_control) }
+		));
+
 		// 攻撃力アップ魔法
 		recipe.addRecipe(new ObMagiaRecipes(
-			new ItemStack(ItemInit.magic_shadowgolem),
+			new ItemStack(ItemInit.magic_mind_control),
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.stray_soul, 16), new ItemStack(ItemInit.ender_shard, 32),
 			new ItemStack(ItemInit.moonblossom_petal, 32), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_shadow) }
@@ -368,6 +410,27 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_magia_protection) }
 		));
 
+		// 透明魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_barrier),
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 3), new ItemStack(ItemInit.mysterious_page, 2), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_invisible) }
+		));
+
+		// 無敵魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_invisible),
+			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.witch_tears, 2), new ItemStack(ItemInit.mystical_page, 3) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_aether_shield) }
+		));
+
+		// 無敵魔法2
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_aether_shield),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.witch_tears, 4), new ItemStack(ItemInit.mystical_page, 5) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_aether_shield2) }
+		));
+
 		// 泡射撃魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.dm_flower, 8),
@@ -389,7 +452,6 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.dm_flower, 32), new ItemStack(ItemInit.mystical_page, 3) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_foamy_hell) }
 		));
-
 
 		// 泡爆発撃魔法
 		recipe.addRecipe(new ObMagiaRecipes(

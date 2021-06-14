@@ -108,19 +108,21 @@ public interface IWand extends IMFTool {
 	}
 
 	// モブ処理
-	default void mobActived (World world, EntityPlayer player, ItemStack stack, ItemStack slotItem, NBTTagCompound tags) {
+	default void mobActived (World world, EntityPlayer player, EntityLivingBase entity, ItemStack stack, ItemStack slotItem, NBTTagCompound tags) {
 
 		Item item = slotItem.getItem();
 		ISMItem smItem = (ISMItem) item;
 
 		// クリエワンド以外で魔法が使えるか事前チェック
+		this.setTouchEntity(entity);
 		if(!this.magicActionBeforeCheck(player, stack, item, smItem)) { return; }
 
 		// アイテムの処理を実行
-		boolean actionFlag = this.onAction(world, player, stack, item, smItem, tags);
+		boolean actionFlag = this.onAction(world, player, entity, stack, item, smItem, tags);
 
 		// 魔法アクション後の処理
 		this.magicActionAfter(world, player, stack, item, smItem, tags, actionFlag);
+		this.setTouchEntity(null);
 	}
 
 	// 地面行動
@@ -171,11 +173,19 @@ public interface IWand extends IMFTool {
 	// 次のスロットへ
 	default void nextSlot (World world, EntityPlayer player, ItemStack stack) {
 
-		NBTTagCompound tags = this.getNBT(stack);	// nbtを取得
+		// nbtを取得
+		NBTTagCompound tags = this.getNBT(stack);
+		ItemStack slotItem = ItemStack.EMPTY;
 		int slotCount = tags.getInteger(SLOTCOUNT);
-		int slot = tags.getInteger(SLOT);
-		slot = slot >= slotCount - 1 ? 0 : slot + 1;
-		tags.setInteger(SLOT, slot);
+		int maxCount = 0;
+
+		while (slotItem.isEmpty() && slotCount >= maxCount) {
+			int slot = tags.getInteger(SLOT);
+			slot = slot >= slotCount - 1 ? 0 : slot + 1;
+			tags.setInteger(SLOT, slot);
+			slotItem = this.getSlotItem(player, stack, tags);
+			maxCount++;
+		}
 
 		// クライアント（プレイヤー）へ送りつける
 		PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_NEXT, 1F, 0.33F), (EntityPlayerMP) player);
@@ -184,11 +194,19 @@ public interface IWand extends IMFTool {
 	// 前のスロットへ
 	default void backSlot (World world, EntityPlayer player, ItemStack stack) {
 
-		NBTTagCompound tags = this.getNBT(stack);	// nbtを取得
+		// nbtを取得
+		NBTTagCompound tags = this.getNBT(stack);
+		ItemStack slotItem = ItemStack.EMPTY;
 		int slotCount = tags.getInteger(SLOTCOUNT);
-		int slot = tags.getInteger(SLOT);
-		slot = slot <= 0 ? slotCount - 1 : slot - 1;
-		tags.setInteger(SLOT, slot);
+		int maxCount = 0;
+
+		while (slotItem.isEmpty() && slotCount >= maxCount) {
+			int slot = tags.getInteger(SLOT);
+			slot = slot <= 0 ? slotCount - 1 : slot - 1;
+			tags.setInteger(SLOT, slot);
+			slotItem = this.getSlotItem(player, stack, tags);
+			maxCount++;
+		}
 
 		// クライアント（プレイヤー）へ送りつける
 		PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_NEXT, 1F, 0.33F), (EntityPlayerMP) player);
@@ -293,6 +311,25 @@ public interface IWand extends IMFTool {
 		return flag;
 	}
 
+	// 魔法アクション中の処理
+	default boolean onAction (World world, EntityPlayer player, EntityLivingBase entity, ItemStack stack, Item item, ISMItem smItem, NBTTagCompound tags) {
+
+		boolean flag = false;
+
+		// レベルの取得
+		int level = this.getLevel(stack);
+		int enchaLevel = this.addWandLevel(world, player, stack, smItem, EnchantInit.wandAddPower);
+
+		tags.setInteger(LEVEL, (level + enchaLevel));
+		flag = smItem.onItemAction(world, player, entity, stack, item);
+		AdvancedInit.active_magic.triggerFor(player);
+
+		// レベルを戻す
+		tags.setInteger(LEVEL, level);
+
+		return flag;
+	}
+
 	/*
 	 * =========================================================
 	 * 				魔法発動中処理　End
@@ -326,6 +363,7 @@ public interface IWand extends IMFTool {
 			// actionFlagがtrueならレベルアップチェック
 			if (actionFlag && !world.isRemote) {
 				this.levelUpCheck(world, player, stack, this.getAddExp(player, smItem));
+				this.checkAdavanced(player, stack);
 			}
 		}
 	}
@@ -548,6 +586,16 @@ public interface IWand extends IMFTool {
 		}
 	}
 
+	default void checkAdavanced(EntityPlayer player, ItemStack stack) {
+
+		// 杖レベル取得
+		int level = this.getNBT(stack).getInteger(LEVEL);
+		AdvancedInit.apprentice_magician.triggerLevel(player, 10, level);
+		AdvancedInit.intermediate_magician.triggerLevel(player, 20, level);
+		AdvancedInit.advanced_magician.triggerLevel(player, 30, level);
+		AdvancedInit.maestro_magician.triggerLevel(player, 40, level);
+	}
+
 	// 最大レベルの取得
 	default int getMaxLevel () {
 		return 40;
@@ -752,6 +800,12 @@ public interface IWand extends IMFTool {
 		return this.getWandElement() != null && this.getTier() >= 5;
 	}
 
+	// 魔法と杖の属性一致確認
+	default boolean isElementEqual (ISMItem smItem) {
+		SMElement wandElemet = this.getWandElement();
+		return smItem.getElement() == wandElemet || ( smItem.getSubElement() != null && smItem.getSubElement() == wandElemet );
+	}
+
 	/*
 	 * =========================================================
 	 * 				定義用メソッド　Start
@@ -781,6 +835,12 @@ public interface IWand extends IMFTool {
 
 	// 溜め時間の受け取り
 	float getChargeTick();
+
+	// えんちちーの受け取り
+	EntityLivingBase getTouchEntity();
+
+	// えんちちーの設定
+	void setTouchEntity(EntityLivingBase entity);
 
 	// 溜め時間の設定
 	void setChargeTick(float chargeTick);

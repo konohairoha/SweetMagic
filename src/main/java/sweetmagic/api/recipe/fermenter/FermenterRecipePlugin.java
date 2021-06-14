@@ -92,9 +92,30 @@ public class FermenterRecipePlugin implements IFermenterRecipePlugin {
 
 		// 海苔
 		recipe.addRecipe(new FermenterRecipes(
-			new ItemStack(ItemInit.seaweed),
+			"cropSeaweed",
 			new Object[] { "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.dry_seaweed, 3) }
+		));
+
+		// 醤油
+		recipe.addRecipe(new FermenterRecipes(
+			"dustFlour",
+			new Object[] { new OreItems("cropSoybean", 4), "dustSalt", "bucketWater" },
+			new ItemStack[] { new ItemStack(ItemInit.soy_sauce, 12) }
+		));
+
+		// フルーツ酒
+		recipe.addRecipe(new FermenterRecipes(
+			new OreItems("listAllfruit", 8),
+			new Object[] { new OreItems("bucketWater", 8), new OreItems("dustSugar", 8) },
+			new ItemStack[] { new ItemStack(ItemInit.fruit_wine, 16) }
+		));
+
+		// かつお節
+		recipe.addRecipe(new FermenterRecipes(
+			new ItemStack(Items.FISH, 4, 0),
+			new Object[] { new OreItems("dustSalt", 4) },
+			new ItemStack[] { new ItemStack(ItemInit.bonito_flakes, 8) }
 		));
 	}
 }

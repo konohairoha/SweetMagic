@@ -36,6 +36,7 @@ public class MagiaFluxManager {
 
 		//対象を取得する
     	for (ASMData asmData : data) {
+
     		try {
     			//アノテーション情報を取得する
     			Map<String, Object> annoList = asmData.getAnnotationInfo();
@@ -60,7 +61,9 @@ public class MagiaFluxManager {
         			mfPlug.put(priority, pluginList);
 
     			}
-    		} catch (Exception e) {
+    		}
+
+    		catch (Exception e) {
     			SweetMagicCore.logger.error("MagiaFluxList plugin load error " + asmData.getClassName());
 			}
     	}

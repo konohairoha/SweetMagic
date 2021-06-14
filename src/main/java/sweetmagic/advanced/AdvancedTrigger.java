@@ -61,4 +61,11 @@ public class AdvancedTrigger implements ICriterionTrigger<AdvancedTrigger.Instan
             this.listeners.get(advances).forEach((listener) -> listener.grantCriterion(advances));
         }
     }
+
+    public void triggerLevel(EntityPlayer player, int need, int level) {
+        if (player instanceof EntityPlayerMP && level >= need) {
+            final PlayerAdvancements advances = ((EntityPlayerMP) player).getAdvancements();
+            this.listeners.get(advances).forEach((listener) -> listener.grantCriterion(advances));
+        }
+    }
 }

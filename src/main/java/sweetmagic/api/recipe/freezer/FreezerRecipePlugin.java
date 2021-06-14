@@ -30,6 +30,20 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.strawberry_jelly, 2) }
 		));
 
+		// りんごゼリー
+		recipe.addRecipe(new FreezerRecipes(
+			"cropAplle",
+			new Object[] { "foodGelatine", "dustSugar", "bucketWater" },
+			new ItemStack[] { new ItemStack(ItemInit.apple_jelly, 2) }
+		));
+
+		// 桃ゼリー
+		recipe.addRecipe(new FreezerRecipes(
+			"cropPeach",
+			new Object[] { "foodGelatine", "dustSugar", "bucketWater" },
+			new ItemStack[] { new ItemStack(ItemInit.peach_jelly, 2) }
+		));
+
 		// レモンかき氷
 		recipe.addRecipe(new FreezerRecipes(
 			"cropLemon",
@@ -161,6 +175,55 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 			new OreItems("cropAplle", 2),
 			new Object[] { new OreItems("dustSugar", 6), new OreItems("bucketWater", 2), new OreItems("stickWood", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.applecandy, 2) }
+		));
+
+		// サーモン寿司
+		recipe.addRecipe(new FreezerRecipes(
+			new ItemStack(Items.FISH, 2, 1),
+			new Object[] { new OreItems("foodRice", 4), new ItemStack(ItemInit.vinegar, 3), new OreItems("dustSalt", 2), new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.sushi_salmon, 6) }
+		));
+
+		// 卵焼き寿司
+		recipe.addRecipe(new FreezerRecipes(
+			new ItemStack(ItemInit.tamagoyaki, 2),
+			new Object[] { new OreItems("foodRice", 4), new ItemStack(ItemInit.vinegar, 3), new OreItems("dustSalt", 2), new OreItems("dustSugar", 2), new ItemStack(ItemInit.dry_seaweed, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.sushi_egg, 8) }
+		));
+
+		// ピーチタルト
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("cropPeach", 8),
+			new Object[] { new OreItems("egg", 4), new OreItems("foodCream", 2), new OreItems("foodCustard", 3), new ItemStack(ItemInit.vannila_essence, 2), "foodLiquor", new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.peach_tart, 8) }
+		));
+
+		// 桃のコンポーネント
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("cropPeach", 6),
+			new Object[] { new OreItems("bucketWater", 6), new OreItems("dustSugar", 3), "cropLemon" },
+			new ItemStack[] { new ItemStack(ItemInit.peach_compote, 6) }
+		));
+
+		// フルーツサンド
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("listAllfruit", 3),
+			new Object[] { new OreItems("listAllfruit", 3), new OreItems("bread", 3), new OreItems("foodCream", 3), new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.sandwich_fruit, 8) }
+		));
+
+		// サンドイッチ
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("cropLettuce", 3),
+			new Object[] { new OreItems("listAllveggie", 3), new OreItems("bread", 3), new ItemStack(ItemInit.mayonnaise, 3), new OreItems("foodButter", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.sandwich, 8) }
+		));
+
+		// 卵サンド
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("egg", 3),
+			new Object[] { new OreItems("cropLettuce", 3), new OreItems("bread", 3), new OreItems("foodButter", 2), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.egg_sandwitch, 8) }
 		));
 	}
 }

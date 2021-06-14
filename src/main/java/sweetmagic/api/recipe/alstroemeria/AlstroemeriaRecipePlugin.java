@@ -23,7 +23,7 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 	@Override
 	public void registerAlstroemeriaRecipe(AlstroemeriaRecipes recipe) {
 
-		//レシピ登録方法…ItemStack(hand)、ItemStack[](Input)、ItemStack[](Output)
+		//レシピ登録方法…Object(hand)、Object[](Input)、ItemStack[](Output)
 
 		// 魔法の粉
 		recipe.addRecipe(new AlstroemeriaRecipes(
@@ -31,13 +31,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new Object[] { new ItemStack(Items.DYE, 1, 15) },
 			new ItemStack[] { new ItemStack(ItemInit.magicmeal, 2) }
 		));
-
-//		// ライアーローズ
-//		recipe.addRecipe(new AlstroemeriaRecipes(
-//			new ItemStack(ItemInit.sticky_stuff_petal),
-//			new Object[] { SMUtil.getStack(ItemInit.clero_petal), SMUtil.getStack(Items.POISONOUS_POTATO), new ItemStack(ItemInit.moonblossom_petal, 4), new ItemStack(Items.REDSTONE, 4), new ItemStack(Items.DYE, 2, 9)  },
-//			new ItemStack[] { new ItemStack(SMUtil.getItemBlock(BlockInit.lier_rose)) }
-//		));
 
 		// ガラスの瓶→空っぽの魔法流の瓶変換
 		recipe.addRecipe(new AlstroemeriaRecipes(
@@ -132,60 +125,18 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.clerolanp) }
 		));
 
-		// 栗の苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(Blocks.CARPET, 1, 12),
-			new Object[] { "treeSapling"},
-			new ItemStack[] { new ItemStack(BlockInit.chestnut_sapling) }
-		));
-
-		// オレンジの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(Blocks.CARPET, 1, 1),
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.orange_sapling) }
-		));
-
-		// レモンの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(Blocks.CARPET, 1, 4),
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.lemon_sapling) }
-		));
-
-		// ヤシの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(Blocks.CARPET, 1, 5),
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.coconut_sapling) }
-		));
-
-		// プリズムの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(ItemInit.magicmeal),
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.prism_sapling) }
-		));
-
-		// バナナの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			"dyeYellow",
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.banana_sapling) }
-		));
-
-		// エストールの苗木
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			"dyeRed",
-			new Object[] { "treeSapling" },
-			new ItemStack[] { new ItemStack(BlockInit.estor_sapling) }
-		));
-
 		// 創世の台座
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new OreItems("stone", 4),
 			new Object[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(Items.IRON_INGOT, 4), new ItemStack(ItemInit.sugarbell, 8)},
 			new ItemStack[] { new ItemStack(BlockInit.pedestal_creat) }
+		));
+
+		// エーテルランタン
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("blockGlass", 4),
+			new Object[] { new OreItems("ingotIron", 4), new OreItems("plankWood", 8) },
+			new ItemStack[] { new ItemStack(BlockInit.aether_lanp) }
 		));
 
 		// 粘土
@@ -214,41 +165,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(Blocks.BRICK_BLOCK, 4),
 			new Object[] { new OreItems("stone", 32) },
 			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0, 64) }
-		));
-
-		// 赤色のアンティークレンガ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new OreItems("antique_brick_all", 48),
-			new Object[] { new OreItems("dyeRed", 1) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0, 64) }
-		));
-
-		// 白色のアンティークレンガ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new OreItems("antique_brick_all", 48),
-			new Object[] { new OreItems("dyeWhite", 1) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0w, 64) }
-		));
-
-		// 黒色のアンティークレンガ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new OreItems("antique_brick_all", 48),
-			new Object[] { new OreItems("dyeBlack", 1) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_b, 64) }
-		));
-
-		// 茶色のアンティークレンガ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new OreItems("antique_brick_all", 48),
-			new Object[] { new OreItems("dyeBrown", 1) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0l, 64) }
-		));
-
-		// 緑色のアンティークレンガ
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new OreItems("antique_brick_all", 48),
-			new Object[] { new OreItems("dyeGreen", 1) },
-			new ItemStack[] { new ItemStack(BlockInit.antique_brick_0g, 64) }
 		));
 
 		// 堆肥土
@@ -418,6 +334,56 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new Object[] { new ItemStack(Items.STRING), new OreItems("listAllseed", 5) },
 			new ItemStack[] { new ItemStack(ItemInit.seedbag) }
 		));
+
+		// アクセ袋
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("magicAccessori"),
+			new Object[] { new ItemStack(ItemInit.cotton_cloth, 4),new ItemStack(Items.STRING), new ItemStack(ItemInit.mf_bottle, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.accebag) }
+		));
+
+		// プリズムの苗木
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.magicmeal),
+			new Object[] { "treeSapling" },
+			new ItemStack[] { new ItemStack(BlockInit.prism_sapling) }
+		));
+
+		Map<Block, String> saplingRecipe = new HashMap<>();
+		saplingRecipe.put(BlockInit.chestnut_sapling, "dyeBrown");
+		saplingRecipe.put(BlockInit.orange_sapling, "dyeOrange");
+		saplingRecipe.put(BlockInit.lemon_sapling, "dyeYellow");
+		saplingRecipe.put(BlockInit.coconut_sapling, "dyeLime");
+		saplingRecipe.put(BlockInit.banana_sapling, "dyeGreen");
+		saplingRecipe.put(BlockInit.estor_sapling, "dyeRed");
+		saplingRecipe.put(BlockInit.peach_sapling, "dyePink");
+
+		for (Entry<Block, String> map : saplingRecipe.entrySet()) {
+
+			// 苗木
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				map.getValue(),
+				new Object[] { "treeSapling" },
+				new ItemStack[] { new ItemStack(map.getKey()) }
+			));
+		}
+
+		Map<Block, String> brickRecipe = new HashMap<>();
+		brickRecipe.put(BlockInit.antique_brick_0, "dyeRed");
+		brickRecipe.put(BlockInit.antique_brick_0w, "dyeWhite");
+		brickRecipe.put(BlockInit.antique_brick_b, "dyeBlack");
+		brickRecipe.put(BlockInit.antique_brick_0l, "dyeBrown");
+		brickRecipe.put(BlockInit.antique_brick_0g, "dyeGreen");
+
+		for (Entry<Block, String> map : brickRecipe.entrySet()) {
+
+			// アンティークレンガ
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				new OreItems("antique_brick_all", 48),
+				new Object[] { map.getValue() },
+				new ItemStack[] { new ItemStack(map.getKey(), 64) }
+			));
+		}
 
 		// ブロック、ハーフ、階段をリストに突っ込む
 		List<RecipeRegisterHelper> recipeList = new ArrayList<>();

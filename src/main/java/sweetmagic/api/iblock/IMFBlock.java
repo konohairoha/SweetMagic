@@ -92,7 +92,7 @@ public interface IMFBlock {
 		int mf = 0;
 
 		if (!this.isMfEmpty()) {
-			return Math.min(value, (int) (value * this.getMF() / this.getMaxMF()));
+			return Math.min(value, (int) (value * (float) (this.getMF()) / (float) (this.getMaxMF())));
 		}
 
 		return mf;

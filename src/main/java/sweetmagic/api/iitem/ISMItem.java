@@ -46,6 +46,10 @@ public interface ISMItem {
 	// アイテムのアクション
 	boolean onItemAction (World world, EntityPlayer player, ItemStack stack, Item slotItem);
 
+	default boolean onItemAction (World world, EntityPlayer player, EntityLivingBase entity, ItemStack stack, Item slotItem) {
+		return false;
+	}
+
 	// テクスチャのリソースを取得
 	ResourceLocation getResource ();
 

@@ -112,5 +112,27 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 			new Object[] { new OreItems("cropOnion", 4), new OreItems("cropCarrot", 4), new ItemStack(Items.COOKED_PORKCHOP), new OreItems("egg", 8), "foodOil", "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.fried_rice, 8) }
 		));
+
+		// ハンバーグ
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("listAllbeefraw", 6),
+			new Object[] { new OreItems("dustBread", 6), new OreItems("egg", 8), new OreItems("bucketMilk", 2), new OreItems("foodOil", 2),
+					"dustSalt", "foodLiquor", new OreItems("bucketWater", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.steak_hamburg, 8) }
+		));
+
+		// ハンバーガー
+		recipe.addRecipe(new PanRecipes(
+			new ItemStack(ItemInit.steak_hamburg, 2),
+			new Object[] { new OreItems("bread", 4), new OreItems("cropOnion", 3), new OreItems("cropTomato", 4), new OreItems("cropLettuce", 3), new OreItems("foodCheese", 4) },
+			new ItemStack[] { new ItemStack(ItemInit.hamburger, 4) }
+		));
+
+		// ほうれん草の卵とじ
+		recipe.addRecipe(new PanRecipes(
+			new ItemStack(ItemInit.spinach, 6),
+			new Object[] { new OreItems("egg", 3), new OreItems("foodSoysauce", 2), new OreItems("foodLiquor", 2), new OreItems("foodOil", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.spinach_egg, 6) }
+		));
 	}
 }
