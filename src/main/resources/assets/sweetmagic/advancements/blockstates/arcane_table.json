@@ -1,11 +1,8 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:plate",
-    "textures": {
-      "0": "sweetmagic:block/sara"
-    }
-  },
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:arcane_table"
+    },
   "variants": {
     "facing": {
       "north": {},

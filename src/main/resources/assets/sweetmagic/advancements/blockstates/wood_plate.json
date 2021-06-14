@@ -3,7 +3,7 @@
   "defaults": {
     "model": "sweetmagic:plate",
     "textures": {
-      "0": "sweetmagic:block/sara"
+      "0": "sweetmagic:block/tamagotti_wood"
     }
   },
   "variants": {
