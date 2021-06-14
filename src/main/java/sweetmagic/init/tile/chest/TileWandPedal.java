@@ -29,6 +29,10 @@ public class TileWandPedal extends TileSMBase {
         }
     };
 
+    public boolean isSlotEmpty () {
+    	return this.getChestItem().isEmpty();
+    }
+
 	// インベントリの取得
 	public IItemHandler getChest() {
 		return this.chestInv;

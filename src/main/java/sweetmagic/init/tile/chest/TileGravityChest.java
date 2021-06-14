@@ -83,7 +83,7 @@ public class TileGravityChest extends TileMFBase {
 		for (EntityItem entity : entityList) {
 
 			ItemStack entityStack = entity.getItem();
-			int useMF = entityStack.getCount() * 10;
+			int useMF = entityStack.getCount() * 2;
 			if (this.getMF() < useMF) { continue; }
 
 			ItemStack stack = ItemHandlerHelper.insertItemStacked(this.chestInv, entityStack, false);

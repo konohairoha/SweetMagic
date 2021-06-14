@@ -38,7 +38,7 @@ public class TileMFFurnace extends TileMFBase {
 	private final ItemStackHandler outInv = new StackHandler(this, this.getInvSize());
 	private final ItemStackHandler fuelInv = new StackHandler(this, 1);
 	public int maxMagiaFlux = 200000;
-	public int needMF = 20;
+	public int needMF = 60;
 	public int maxSmeltTime = 60;
 	public int smeltTime = 0;
 

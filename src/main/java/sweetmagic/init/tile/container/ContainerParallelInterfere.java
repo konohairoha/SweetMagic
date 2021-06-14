@@ -45,7 +45,7 @@ public class ContainerParallelInterfere extends Container implements IScrollChan
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return this.tile.isNotAir();
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -7,6 +7,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,6 +35,7 @@ public class TileSMSpaner extends TileSMBase {
 	public int randTime = 0;
 	public EntityPlayer player = null;
 	public Entity entity = null;
+	public float healthRate = 1F;
 
 	@Override
 	public void update() {
@@ -46,6 +48,16 @@ public class TileSMSpaner extends TileSMBase {
 		if (this.getTime() % this.randTime == 0 && !WorldHelper.isPeaceful(this.world)
 				&& this.isRangePlayer() && !this.checkEntity() && !this.world.isRemote) {
 			this.spawnMob();
+		}
+
+		if (this.world.isRemote && this.getTime() % 8 == 0 && this.isRangePlayer()) {
+			for (int i = 0; i < 8; i++) {
+				double d3 = (double) ((float) this.pos.getX() + this.world.rand.nextFloat());
+				double d4 = (double) ((float) this.pos.getY() + this.world.rand.nextFloat());
+				double d5 = (double) ((float) this.pos.getZ() + this.world.rand.nextFloat());
+				this.world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+				this.world.spawnParticle(EnumParticleTypes.FLAME, d3, d4, d5, 0.0D, 0.0D, 0.0D);
+			}
 		}
 	}
 
@@ -60,17 +72,23 @@ public class TileSMSpaner extends TileSMBase {
 			boolean isAir = this.getBlock(this.pos.down()) == Blocks.AIR;
 
 			EntityLivingBase entity = this.getEntity();
-			int x = rand.nextInt(7) - 3 + this.pos.getX();
-			int y = this.pos.getY() + ( isAir ? rand.nextInt(2) + 1 : -(rand.nextInt(2) + 1) );
-			int z = rand.nextInt(7) - 3 + this.pos.getZ();
+			double x = rand.nextInt(7) - 3 + this.pos.getX() + 0.5D;
+			double y = this.pos.getY() + ( isAir ? -(rand.nextInt(4) + 1) : rand.nextInt(4) + 1 ) + 0.5D;
+			double z = rand.nextInt(7) - 3 + this.pos.getZ() + 0.5D;
 
 			if (this.isAir(new BlockPos(x, y, z))) {
-				x = this.pos.getX();
-				y = this.pos.getY() + 2 * (isAir ? -1 : 1);
-				z = this.pos.getZ();
+				x = this.pos.getX() + 0.5D;
+				y = this.pos.getY() + 2 * (isAir ? -1 : 1) + 0.5D;
+				z = this.pos.getZ() + 0.5D;
 			}
 
 			entity.setPosition(x, y, z);
+
+			if (this.healthRate > 1F) {
+				entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(entity.getMaxHealth() * this.healthRate);
+				entity.setHealth(entity.getMaxHealth());
+			}
+
 			this.setArmor(entity);
 			((EntityLiving) entity).onInitialSpawn(this.world.getDifficultyForLocation(this.pos), (IEntityLivingData) null);
 			AnvilChunkLoader.spawnEntity(entity, this.world);
@@ -101,7 +119,7 @@ public class TileSMSpaner extends TileSMBase {
 	// 範囲取得
 	public AxisAlignedBB getAABB () {
 		boolean isAir = this.getBlock(this.pos.down()) == Blocks.AIR;
-		return new AxisAlignedBB(this.pos.add(-15, isAir ? -8 : -4, -15), this.pos.add(15, 5, 15));
+		return new AxisAlignedBB(this.pos.add(-20, isAir ? -8 : -4, -20), this.pos.add(20, 5, 20));
 	}
 
 	// 範囲にモブがいるか
@@ -168,6 +186,7 @@ public class TileSMSpaner extends TileSMBase {
 	public NBTTagCompound writeNBT(NBTTagCompound tags) {
 		tags.setInteger("data", this.data);
 		tags.setInteger("randTime", this.randTime);
+		tags.setFloat("healthRate", this.healthRate);
 		return tags;
 	}
 
@@ -175,6 +194,7 @@ public class TileSMSpaner extends TileSMBase {
 	public void readNBT(NBTTagCompound tags) {
         this.data = tags.getInteger("data");
         this.randTime = tags.getInteger("randTime");
+        this.healthRate = tags.getFloat("healthRate");
 	}
 
 	public void setMob () {

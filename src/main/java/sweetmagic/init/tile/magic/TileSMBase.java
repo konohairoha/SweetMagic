@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,7 +30,7 @@ public class TileSMBase extends TileEntity implements ITickable {
 	public void update() {
 
 		// クライアント
-		if (this.world.isRemote) {
+		if (!this.isSever()) {
 			this.clientUpdate();
 		}
 
@@ -143,6 +144,10 @@ public class TileSMBase extends TileEntity implements ITickable {
 		return tag;
 	}
 
+	public boolean isUsableByPlayer(EntityPlayer player) {
+		return true;
+	}
+
 	public boolean isNotAir () {
 		return this.getBlock(this.pos) != Blocks.AIR;
 	}
@@ -182,5 +187,10 @@ public class TileSMBase extends TileEntity implements ITickable {
 			redstone = Math.max(redstone, world.getRedstonePower(pos.offset(dir), dir));
 		}
 		return redstone > 0;
+	}
+
+	// サーバー側かどうか
+	public boolean isSever () {
+		return !this.world.isRemote;
 	}
 }

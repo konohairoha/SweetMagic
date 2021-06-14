@@ -33,6 +33,11 @@ public class TileModenWallRack extends TileModenRack {
         }
     };
 
+    // スロットが空かどうか
+    public ItemStackHandler getSlot () {
+    	return this.chestInv;
+    }
+
 	private final IItemHandlerModifiable output = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.OUT);
 	private final IItemHandler side = new CombinedInvWrapper(this.chestInv);
 	private final CombinedInvWrapper join = new CombinedInvWrapper(this.chestInv);

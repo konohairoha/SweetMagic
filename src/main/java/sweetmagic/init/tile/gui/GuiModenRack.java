@@ -50,6 +50,7 @@ public class GuiModenRack extends GuiContainer {
 			this.drawTexturedModalRect(x + 60, y + 24, 173, 0, 54, 18);
 			break;
 		case 2:
+		case 3:
 			this.drawTexturedModalRect(x + 78, y + 24, 173, 0, 18, 18);
 			break;
 		}

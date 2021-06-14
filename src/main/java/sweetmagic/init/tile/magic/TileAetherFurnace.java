@@ -29,8 +29,6 @@ public class TileAetherFurnace extends TileMFBase {
 	private final ItemStackHandler inputInventory = new StackHandler(this, 5);	// MFアイテムのスロット
 	private final ItemStackHandler crystaleInventory = new StackHandler(this, 18);	// クリスタルスロット
 
-	public TileAetherFurnace () { }
-
 	@Override
 	public void serverUpdate() {
 

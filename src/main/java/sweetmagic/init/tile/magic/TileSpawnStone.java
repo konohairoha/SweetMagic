@@ -34,6 +34,7 @@ import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntityPixieVex;
+import sweetmagic.init.entity.monster.EntitySandryon;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
@@ -86,6 +87,9 @@ public class TileSpawnStone extends TileSMBase {
 				isBoss = true;
 			} else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.poison_block) {
 				this.data = 10;
+				isBoss = true;
+			} else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.cosmic_crystal_ore) {
+				this.data = 11;
 				isBoss = true;
 			} else if (this.isPowerUp == 0) {
 				this.data = rand.nextInt(6);
@@ -263,11 +267,16 @@ public class TileSpawnStone extends TileSMBase {
 				double z = this.getPos().getZ() + vRand.nextDouble() * 4 - vRand.nextDouble() * 4;
 
 				vex.setPosition(x, this.getPos().getY() + vRand.nextDouble() * 2, z);
-				vex.data = vRand.nextInt(3);
+				vex.setData(vRand.nextInt(3));
 				vex.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 99999, 4, true, false));
 				this.world.spawnEntity(vex);
 			}
 
+			break;
+		case 11:
+			// サンドリヨン
+			entity = new EntitySandryon(this.world);
+			entity.addPotionEffect(new PotionEffect(PotionInit.refresh_effect, 99999, 1, true, false));
 			break;
 		}
 

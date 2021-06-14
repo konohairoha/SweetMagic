@@ -16,9 +16,11 @@ import vazkii.quark.api.IChestButtonCallback;
 public class GuiPouch extends GuiContainer implements IChestButtonCallback {
 
 	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID,"textures/gui/gui_moden_rack.png");
+	private InventoryPouch inv;
 
 	public GuiPouch(InventoryPlayer inventoryPlayer, InventoryPouch inv) {
 		super(new ContainerPouch(inventoryPlayer, inv));
+		this.inv = inv;
 		this.xSize = 173;
 		this.ySize = 132;
 	}
@@ -41,9 +43,20 @@ public class GuiPouch extends GuiContainer implements IChestButtonCallback {
 		int y = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
-		for (int k = 0; k < 2; k++) {
-			this.drawTexturedModalRect(x + 52, y + 7 + k * 18, 173, 0, 54, 18);
-			this.drawTexturedModalRect(x + 70, y + 7 + k * 18, 173, 0, 54, 18);
+
+		if (this.inv.slotSize == 8) {
+			for (int k = 0; k < 2; k++) {
+				this.drawTexturedModalRect(x + 52, y + 7 + k * 18, 173, 0, 54, 18);
+				this.drawTexturedModalRect(x + 70, y + 7 + k * 18, 173, 0, 54, 18);
+			}
+		}
+
+		else {
+			for (int k = 0; k < 2; k++) {
+				this.drawTexturedModalRect(x + 16, y + 7 + k * 18, 173, 0, 54, 18);
+				this.drawTexturedModalRect(x + 70, y + 7 + k * 18, 173, 0, 54, 18);
+				this.drawTexturedModalRect(x + 106, y + 7 + k * 18, 173, 0, 54, 18);
+			}
 		}
 	}
 

@@ -196,7 +196,7 @@ public class TileMFPot extends TileMFBase {
 		long time = this.getTime();
 		if (time % 10 != 0) { return; }
 
-        AxisAlignedBB aabb = new AxisAlignedBB(this.pos.add(-12.5, -1, -12.5), this.pos.add(12.5, 4, 12.5));
+        AxisAlignedBB aabb = new AxisAlignedBB(this.pos.add(-12.5, -4, -12.5), this.pos.add(12.5, 4, 12.5));
 		List<EntityLivingBase> entityList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 		if (entityList.isEmpty()) { return; }
 

@@ -37,11 +37,6 @@ public class GuiMFF extends GuiContainer {
 		int y = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
-//		if (this.tile.canSmelt()) {
-//			progress = this.tile.getBurnTimeRemainingScaled(12);
-//			this.drawTexturedModalRect(x + 66, y + 38 + 10 - progress, 210, 10 - progress, 21, progress + 2);
-//		}
-
 		int progress = this.tile.getSmeltTimeScaled(24);
 		this.drawTexturedModalRect(x + 88, y + 35, 210, 14, progress, 17);
 

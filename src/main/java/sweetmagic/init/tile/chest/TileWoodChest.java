@@ -61,6 +61,16 @@ public class TileWoodChest extends TileSMBase {
 		return this.getChest().getStackInSlot(i);
 	}
 
+    public boolean isSlotEmpty () {
+
+    	for (int i = 0; i < this.getInvSize(); i++) {
+    		ItemStack stack = this.getChestItem(i);
+    		if (!stack.isEmpty()) { return false; }
+    	}
+
+    	return true;
+    }
+
 	@Override
 	public NBTTagCompound writeNBT(NBTTagCompound tags) {
 		super.writeNBT(tags);

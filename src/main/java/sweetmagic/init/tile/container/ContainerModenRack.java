@@ -49,6 +49,7 @@ public class ContainerModenRack extends Container {
 				this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), i, 61 + 18 * i, 25, s -> true));
 			break;
 		case 2:
+		case 3:
 			this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), 0, 79, 25, s -> true));
 			break;
 		}
@@ -56,7 +57,7 @@ public class ContainerModenRack extends Container {
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return this.tile.isNotAir();
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@SideOnly(Side.CLIENT)

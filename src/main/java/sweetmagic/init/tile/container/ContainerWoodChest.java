@@ -41,8 +41,8 @@ public class ContainerWoodChest extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return this.tile.isNotAir();
+	public boolean canInteractWith(EntityPlayer player) {
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@SideOnly(Side.CLIENT)

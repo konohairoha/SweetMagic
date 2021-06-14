@@ -8,7 +8,7 @@ import sweetmagic.init.block.magic.MFFurnace;
 
 public class TileMFFurnaceAdvanced extends TileMFFurnace {
 
-	public int needMF = 60;
+	public int needMF = 200;
 	public int maxMagiaFlux = 2000000;
 	public int maxSmeltTime = 20;
 	public int smeltTime = 0;

@@ -7,15 +7,15 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import sweetmagic.init.tile.magic.TileMagiaWrite;
+import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
-public class ContainerMagiaWrite extends Container {
+public class ContainerMFArcaneTable extends Container {
 
-	final TileMagiaWrite tile;
+	final TileMFArcaneTable tile;
 
-	public ContainerMagiaWrite(InventoryPlayer invPlayer, TileMagiaWrite tile) {
+	public ContainerMFArcaneTable(InventoryPlayer invPlayer, TileMFArcaneTable tile) {
 		this.tile = tile;
 		this.initSlots(invPlayer);
 	}
@@ -23,7 +23,8 @@ public class ContainerMagiaWrite extends Container {
 	void initSlots(InventoryPlayer invPlayer) {
 
 		//Input
-		this.addSlotToContainer(new ValidatedSlot(this.tile.getTool(), 0, 39, 39, SlotPredicates.HASENCHA));
+		for (int i = 0; i < 2; i++)
+			this.addSlotToContainer(new ValidatedSlot(this.tile.getWand(), i, 39, 18 + i * 36, SlotPredicates.ISITEM));
 
 		//Player Inventory
 		for (int i = 0; i < 3; i++)
@@ -46,7 +47,7 @@ public class ContainerMagiaWrite extends Container {
 
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.getSlot(index);
-		int slotCount = 1;
+		int slotCount = 2;
 
 		if (slot != null && slot.getHasStack()) {
 			ItemStack stack1 = slot.getStack();

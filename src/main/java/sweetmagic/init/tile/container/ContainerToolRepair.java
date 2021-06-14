@@ -38,7 +38,7 @@ public class ContainerToolRepair extends Container {
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return this.tile.isNotAir();
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@Nonnull

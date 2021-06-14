@@ -42,7 +42,7 @@ public class ContainerAetherHopper extends Container {
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return this.tile.isNotAir();
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@SideOnly(Side.CLIENT)

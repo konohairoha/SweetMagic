@@ -37,14 +37,12 @@ public class TileToolRepair extends TileMFBase {
 		// 一定時間経てば処理
 		if (this.getTime() % 20 != 0 || this.isMfEmpty()) { return; }
 
-		if (!this.world.isRemote) {
-
-			// MFが空ではないなら杖にMFを入れる
+		// サーバー側ならアイテムの耐久値回復をする
+		if (this.isSever()) {
 			this.repairTool();
-
-			this.markDirty();
 		}
 
+		// クライアント
 		else {
 
 			if (!this.getWandItem(0).isEmpty()) {
@@ -77,7 +75,7 @@ public class TileToolRepair extends TileMFBase {
 
 			// 消費MFを取得してそれ未満なら次へ
 			int maxDamage = stack.getMaxDamage();
-			int useMF = Math.min(100000, (int) ((maxDamage * 0.1F) *(maxDamage * 0.1F) * 0.1F));
+			int useMF = Math.min(100000, (int) ((maxDamage * 0.1F) * (maxDamage * 0.1F) * 0.1F));
 			if (this.getMF() < useMF) { continue; }
 
 			// 耐久値の回復とMFの消費
@@ -88,6 +86,8 @@ public class TileToolRepair extends TileMFBase {
 			// MFが空なら終了
 			if (this.isMfEmpty()) { break; }
 		}
+
+		this.markDirty();
 	}
 
 	public void spawnParticl (float pX, float pZ) {

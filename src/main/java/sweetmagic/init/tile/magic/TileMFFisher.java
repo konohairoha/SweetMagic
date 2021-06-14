@@ -5,6 +5,7 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -140,9 +141,16 @@ public class TileMFFisher extends TileMFBase {
 				ItemHandlerHelper.insertItemStacked(this.outputInv, stack, false);
 			}
 
+			Random rand = this.world.rand;
+
 			// 確率で海藻を追加
-			if (this.world.rand.nextFloat() <= 0.3F) {
+			if (rand.nextFloat() <= 0.3F) {
 				ItemHandlerHelper.insertItemStacked(this.outputInv, new ItemStack(ItemInit.seaweed), false);
+			}
+
+			// 確率で鮭を追加
+			if (rand.nextFloat() <= 0.1F) {
+				ItemHandlerHelper.insertItemStacked(this.outputInv, new ItemStack(Items.FISH, 1, 1), false);
 			}
 		}
 

@@ -17,11 +17,13 @@ public class InventoryPouch implements IItemHandlerModifiable {
 
 	public final IItemHandlerModifiable inventory;
 	public final ItemStack invItem;
+	public final int slotSize;
 
 	public InventoryPouch(EntityPlayer player) {
 		this.invItem = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		IPouch pouch = (IPouch) this.invItem.getItem();
-		this.inventory = new ItemStackHandler(pouch.getSlotSize());
+		this.slotSize = pouch.getSlotSize();
+		this.inventory = new ItemStackHandler(this.slotSize);
 		this.readFromNBT(ItemHelper.getNBT(this.invItem));
 	}
 

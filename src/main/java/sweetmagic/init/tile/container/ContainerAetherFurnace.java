@@ -46,7 +46,7 @@ public class ContainerAetherFurnace extends Container {
 
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
-		return true;
+		return this.tile.isUsableByPlayer(player);
 	}
 
 	@SideOnly(Side.CLIENT)

@@ -36,6 +36,21 @@ public class TileModenRack extends TileSMBase {
         }
     };
 
+    // スロットが空かどうか
+    public ItemStackHandler getSlot () {
+    	return this.chestInv;
+    }
+
+    public boolean isSlotEmpty () {
+
+    	for (int i = 0; i < this.getInvSize(); i++) {
+    		ItemStack stack = this.getChestItem(i);
+    		if (!stack.isEmpty()) { return false; }
+    	}
+
+    	return true;
+    }
+
 	private final IItemHandlerModifiable output = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.OUT);
 	private final IItemHandler side = new CombinedInvWrapper(this.chestInv);
 	private final CombinedInvWrapper join = new CombinedInvWrapper(this.chestInv);

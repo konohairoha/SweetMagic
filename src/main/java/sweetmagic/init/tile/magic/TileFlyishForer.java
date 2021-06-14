@@ -2,6 +2,7 @@ package sweetmagic.init.tile.magic;
 
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -28,6 +29,16 @@ public class TileFlyishForer extends TileMFFisher {
 
 			// アイテムをスポーン
 			ItemHandlerHelper.insertItemStacked(this.outputInv, stack.copy(), false);
+
+			// 30%の確率で
+			if (this.rand.nextFloat() <= 0.3F) {
+				ItemHandlerHelper.insertItemStacked(this.outputInv, new ItemStack(Items.BEEF), false);
+			}
+
+			// 30%の確率で
+			if (this.rand.nextFloat() <= 0.3F) {
+				ItemHandlerHelper.insertItemStacked(this.outputInv, new ItemStack(Items.PORKCHOP), false);
+			}
 		}
 
 		this.playSound(this.pos, SoundEvents.ENTITY_SHEEP_SHEAR, 0.5F, 1F);

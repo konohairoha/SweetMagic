@@ -25,9 +25,17 @@ public class ContainerPouch extends Container {
 		this.world = this.player.getEntityWorld();
 		SlotPredicates.stack = this.player.getHeldItemMainhand();
 
-		for (int k = 0; k < 2; ++k)
-			for (int j = 0; j < 4; ++j)
-				this.addSlotToContainer(new ValidatedSlot(this.inventory, j + k * 4, 53 + j * 18, 8 + k * 18, SlotPredicates.ISMAGICITEMS));
+		if (this.inventory.slotSize == 8) {
+			for (int k = 0; k < 2; ++k)
+				for (int j = 0; j < 4; ++j)
+					this.addSlotToContainer(new ValidatedSlot(this.inventory, j + k * 4, 53 + j * 18, 8 + k * 18, SlotPredicates.ISMAGICITEMS));
+		}
+
+		else {
+			for (int k = 0; k < 2; ++k)
+				for (int j = 0; j < 8; ++j)
+					this.addSlotToContainer(new ValidatedSlot(this.inventory, j + k * 8, 17 + j * 18, 8 + k * 18, SlotPredicates.ISMAGICITEMS));
+		}
 
 		for (int i = 0; i < 3; ++i)
 			for (int j = 0; j < 9; ++j)
