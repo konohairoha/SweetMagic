@@ -62,7 +62,7 @@ public class WorldGenPrsmTree extends WorldGenAbstractTree {
 		world.setBlockToAir(pos);
 
 		IBlockState log = this.log;
-		IBlockState smLeaves = this.leave.withProperty(SMLeaves.CHECK_DECAY, false);
+		IBlockState smLeaves = this.getLeaveState();
 
 		// 大きい木
 		if (!this.isSmall) {
@@ -80,6 +80,11 @@ public class WorldGenPrsmTree extends WorldGenAbstractTree {
 	// 草か土かチェック
 	public boolean checkBlock (Block block) {
 		return block != Blocks.DIRT && block != Blocks.GRASS;
+	}
+
+	// 葉っぱのIBlockStateを取得
+	public IBlockState getLeaveState () {
+		return this.leave.getBlock() instanceof SMLeaves ? this.leave.withProperty(SMLeaves.CHECK_DECAY, false) : this.leave;
 	}
 
 	// 普通の木

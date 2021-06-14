@@ -17,20 +17,24 @@ public class GenLayerSMBiome extends GenLayerSMWorld {
 
     public GenLayerSMBiome(long seed, GenLayer layer) {
         super(seed);
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLOWERGARDEN, 4));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLOWERVALLEY, 1));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLUITFOREST, 3));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLUITFORESTHILL, 1));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.COCONUTBEACH, 3));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.COCONUTBEACHHILL, 1));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.ESTORFOREST, 3));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMFOREST, 3));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMBERG, 1));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMHILL, 1));
-        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.SLIVERBERG, 2));
-        this.biomesToGenerate.add(new BiomeEntry(Biomes.RIVER, 2));
-        this.biomesToGenerate.add(new BiomeEntry(Biomes.OCEAN, 1));
-        this.biomesToGenerate.add(new BiomeEntry(Biomes.BEACH, 1));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLOWERGARDEN, 10));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLOWERVALLEY, 3));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLUITFOREST, 10));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLUITFORESTHILL, 3));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.COCONUTBEACH, 10));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.COCONUTBEACHHILL, 2));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.ESTORFOREST, 8));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMFOREST, 10));
+        this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMBERG, 2));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.PRISMHILL, 3));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.SLIVERBERG, 4));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.BIGPLATE, 5));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.DRYLAND, 5));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FROZENFOREST, 7));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FROZENFORESTHILL, 3));
+        this.biomesToGenerate.add(new BiomeEntry(Biomes.RIVER, 7));
+        this.biomesToGenerate.add(new BiomeEntry(Biomes.OCEAN, 5));
+        this.biomesToGenerate.add(new BiomeEntry(Biomes.BEACH, 2));
         this.totalWeight = this.biomesToGenerate.getTotalWeight();
         this.parent = layer;
     }

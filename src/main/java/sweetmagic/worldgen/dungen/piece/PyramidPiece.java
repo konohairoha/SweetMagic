@@ -17,11 +17,9 @@ public class PyramidPiece {
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<PyramidTemplate> list, Random random) {
-
         list.add(new PyramidPiece.PyramidTemplate(manager, pos.down(36), rot, "pyramid_main"));
         list.add(new PyramidPiece.PyramidTemplate(manager, pos.add(17, -36, 70), rot, "pyramid_sub"));
         list.add(new PyramidPiece.PyramidTemplate(manager, pos.add(24, 0, 12), rot, "pyramid_top"));
-
     }
 
     public static class PyramidTemplate extends BaseStructureTemplate {

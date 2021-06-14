@@ -17,7 +17,7 @@ public class BiomePrismForest extends Biome {
 	public static final WorldGenerator PRISM_Mini = new WorldGenPrsmTree(BlockInit.prism_log, BlockInit.prism_leaves, true);
 
     public BiomePrismForest() {
-        super(new BiomeProperties("PrismForest").setTemperature(-1F).setBaseHeight(0.2F).setHeightVariation(0.1F).setRainfall(0.6F));
+        super(new BiomeProperties("PrismForest").setTemperature(-0.5F).setBaseHeight(0.2F).setHeightVariation(0.1F).setRainfall(0.6F));
         this.decorator.treesPerChunk = 2;
         this.decorator.grassPerChunk = 2;
         this.setRegistryName("PrismForest");

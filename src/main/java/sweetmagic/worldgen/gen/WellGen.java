@@ -25,7 +25,7 @@ public class WellGen extends BaseWorldGen {
 
 	public static List<ItemStack> chestA = new ArrayList<>();
 	public static List<ItemStack> chestB = new ArrayList<>();
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("ido");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("ido");
 
     public WellGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance * 3;

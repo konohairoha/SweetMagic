@@ -25,6 +25,7 @@ import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.key.ClientKeyHelper;
 import sweetmagic.key.SMKeybind;
@@ -175,7 +176,15 @@ public class ToolTipEvent {
 			}
 
 			else if (itemStack instanceof IHarness) {
-				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness.name")));
+
+				if (itemStack == ItemInit.angel_harness) {
+					tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness.name")));
+				}
+
+				else if (itemStack == ItemInit.aether_boot) {
+					tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.aether_boot.name")));
+				}
+
 				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness_charge.name")));
 				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.angel_harness_dus.name")));
 			}

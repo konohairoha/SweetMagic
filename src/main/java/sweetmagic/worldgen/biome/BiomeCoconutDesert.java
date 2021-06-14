@@ -14,13 +14,14 @@ public class BiomeCoconutDesert extends Biome {
 	public static final WorldGenerator FLOWER =  new WorldGenCoconutTree(true, BlockInit.coconut_log, BlockInit.coconut_leaves, BlockInit.coconut_plant, 0);
 
 	public BiomeCoconutDesert(String name, BiomeProperties property) {
-        super(property);
-        this.decorator.treesPerChunk = 0;
-      this.decorator.grassPerChunk = 2;
-        this.setRegistryName(name);
-        this.topBlock = Blocks.SAND.getDefaultState();
-        this.fillerBlock = Blocks.SAND.getDefaultState();
-    }
+		super(property);
+		this.decorator.treesPerChunk = 0;
+		this.decorator.grassPerChunk = 2;
+		this.setRegistryName(name);
+		this.topBlock = Blocks.SAND.getDefaultState();
+		this.fillerBlock = Blocks.SAND.getDefaultState();
+		this.spawnableCreatureList.clear();
+	}
 
     public BiomeCoconutDesert() {
         super(new BiomeProperties("CoconutDesert").setTemperature(1.25F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
@@ -29,6 +30,7 @@ public class BiomeCoconutDesert extends Biome {
         this.setRegistryName("CoconutDesert");
         this.topBlock = Blocks.SAND.getDefaultState();
         this.fillerBlock = Blocks.SAND.getDefaultState();
+        this.spawnableCreatureList.clear();
     }
 
     // チャンス

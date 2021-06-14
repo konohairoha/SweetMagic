@@ -17,11 +17,11 @@ import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class WorldVillageGen extends BaseWorldGen {
 
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("vill_house");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("vill_house");
 
     public WorldVillageGen() {
-		this.maxChance = SMConfig.dungeon_spawnchance;
-		this.minChance = 10;
+		this.maxChance = SMConfig.dungeon_spawnchance * 2;
+		this.minChance = 0;
 		this.seedRand = 39;
     }
 
@@ -40,7 +40,7 @@ public class WorldVillageGen extends BaseWorldGen {
     // 村チェック
     @Override
     public boolean checkVillage (World world, BlockPos pos) {
-    	return world.villageCollection.getNearestVillage(pos, 24) == null;
+    	return world.villageCollection.getNearestVillage(pos, 32) != null;
     }
 
     // 生成できる座標であるか
@@ -53,18 +53,6 @@ public class WorldVillageGen extends BaseWorldGen {
     public void generate(World world, BlockPos pos) {
 
     	pos = pos.down(2);
-
-    	System.out.println("=============" + pos);
-
-//    	for (int x = 2; x < 8; x++) {
-//    		for (int z = 2; z < 12; z++) {
-//    			Block block = world.getBlockState(pos.add(x + 20, 3, z + 8)).getBlock();
-//        		if (block != Blocks.AIR && !(block instanceof BlockBush)) {
-//        			return;
-//        		}
-//        	}
-//    	}
-
         WorldGenerator gen = this.SM_HOUSE;
     	gen.generate(world, this.rand, pos);
 

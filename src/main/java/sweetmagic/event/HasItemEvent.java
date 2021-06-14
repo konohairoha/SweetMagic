@@ -1,5 +1,8 @@
 package sweetmagic.event;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -19,7 +22,10 @@ import sweetmagic.init.ItemInit;
 public class HasItemEvent {
 
 	public static boolean hasThisItem;
-	int tickTime = 0;
+	private int tickTime = 0;
+
+	private static final List<Item> itemList = Arrays.<Item> asList(
+			ItemInit.magic_light, ItemInit.magic_starburst, ItemInit.magic_sacredbuster, Item.getItemFromBlock(BlockInit.magiclight));
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent
@@ -50,7 +56,7 @@ public class HasItemEvent {
 		}
 
 		// 持っているアイテムが光魔法なら
-		hasThisItem = item == ItemInit.magic_light || item == ItemInit.magic_starburst || item == ItemInit.magic_sacredbuster;
+		hasThisItem = itemList.contains(item);
 
 		if (hasThisItem && world.isRemote) {
 			this.renderEffect(world, player);

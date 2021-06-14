@@ -17,11 +17,9 @@ public class IdoPiece {
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<IdoTemplate> list, Random random) {
-
         list.add(new IdoPiece.IdoTemplate(manager, pos.down(21), rot, "ido"));
         list.add(new IdoPiece.IdoTemplate(manager, pos.add(1, -35, 2), rot, "ido_under"));
         list.add(new IdoPiece.IdoTemplate(manager, pos.add(31, -22, 23), rot, "ido_miti"));
-
     }
 
     public static class IdoTemplate extends BaseStructureTemplate {

@@ -8,6 +8,8 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.BlockDirt;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -31,7 +33,7 @@ public class MapGenKutiMura extends BaseMaoGen {
 
     public MapGenKutiMura(SMChunkGen provider) {
         super(provider);
-        this.distance = 35;
+        this.distance = 28;
     }
 
     public String getStructureName() {
@@ -40,7 +42,7 @@ public class MapGenKutiMura extends BaseMaoGen {
 
     // バイオームリストの取得
     public List<Biome> getBiomeList () {
-    	return Arrays.<Biome>asList(BiomeInit.FLUITFOREST);
+    	return Arrays.<Biome>asList(BiomeInit.DRYLAND);
     }
 
     protected StructureStart getStructureStart(int chunkX, int chunkZ) {
@@ -50,6 +52,8 @@ public class MapGenKutiMura extends BaseMaoGen {
     // 生成クラス
     public static class Start extends BaseStructureStart {
 
+    	private static final IBlockState DIRT = Blocks.DIRT.getDefaultState();
+    	private static final IBlockState COARSE = Blocks.DIRT.getDefaultState().withProperty(BlockDirt.VARIANT, BlockDirt.DirtType.COARSE_DIRT);
     	public int posY;
 
         public Start() { }
@@ -61,7 +65,7 @@ public class MapGenKutiMura extends BaseMaoGen {
         @Override
         public void create(World world, SMChunkGen chunk, Random rand, int chunkX, int chunkZ) {
 
-            Rotation rot = Rotation.NONE;
+            Rotation rot = this.getRot(rand);
             ChunkPrimer primer = new ChunkPrimer();
             chunk.setChunkGen(chunkX, chunkZ, primer);
             int i = 5;
@@ -90,10 +94,15 @@ public class MapGenKutiMura extends BaseMaoGen {
 					for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 
 						BlockPos pos = new BlockPos(x, y, z);
-	                    Block block = world.getBlockState(pos).getBlock();
+						IBlockState state = world.getBlockState(pos);
+	                    Block block = state.getBlock();
 
-	                    if (y < this.posY && block == Blocks.AIR) {
-	                    	world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 2);
+	                    if (y < this.posY && (block == Blocks.AIR || !block.isFullBlock(state))) {
+	                    	world.setBlockState(pos, DIRT, 2);
+	                    }
+
+	                    else if (y == this.posY && block == Blocks.AIR) {
+	                    	world.setBlockState(pos, COARSE, 2);
 	                    }
 
 	                    if (block == Blocks.AIR) { continue; }

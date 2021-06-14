@@ -17,10 +17,8 @@ public class MekyuPiece {
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<MekyuTemplate> list, Random random) {
-
         list.add(new MekyuPiece.MekyuTemplate(manager, pos.down(41), rot, "mekyu_main"));
         list.add(new MekyuPiece.MekyuTemplate(manager, pos.add(78, 0, 40), rot, "mekyu_tree"));
-
     }
 
     public static class MekyuTemplate extends BaseStructureTemplate {

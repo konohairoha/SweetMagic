@@ -37,19 +37,20 @@ public class MapGenTogijyo extends BaseMaoGen {
     }
 
     // バイオームリストの取得
-    public List<Biome> getBiomeList () {
-    	return Arrays.<Biome>asList(BiomeInit.FLOWERGARDEN);
+	public List<Biome> getBiomeList() {
+		return Arrays.<Biome> asList(BiomeInit.FLOWERGARDEN);
     }
 
-    protected StructureStart getStructureStart(int chunkX, int chunkZ) {
-        return new MapGenTogijyo.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
+	protected StructureStart getStructureStart(int chunkX, int chunkZ) {
+		return new MapGenTogijyo.Start(this.world, this.provider, this.rand, chunkX, chunkZ);
     }
 
     // 生成クラス
     public static class Start extends BaseStructureStart {
 
-    	IBlockState dirt = Blocks.DIRT.getDefaultState();
-    	IBlockState stone = Blocks.STONE.getDefaultState();
+    	private static final IBlockState dirt = Blocks.DIRT.getDefaultState();
+    	private static final IBlockState stone = Blocks.STONE.getDefaultState();
+    	private static final IBlockState GRASS = Blocks.GRASS.getDefaultState();
     	public int posY;
 
         public Start() { }
@@ -60,7 +61,7 @@ public class MapGenTogijyo extends BaseMaoGen {
 
         public void create(World world, SMChunkGen chunk, Random rand, int chunkX, int chunkZ) {
 
-            Rotation rot = Rotation.NONE;
+            Rotation rot = this.getRot(rand);
             ChunkPrimer primer = new ChunkPrimer();
             chunk.setChunkGen(chunkX, chunkZ, primer);
             int i = 5;
@@ -103,9 +104,13 @@ public class MapGenTogijyo extends BaseMaoGen {
 	                    	continue;
 	                    }
 
-	                    else if (y >= this.posY || ( block != Blocks.AIR && block.isFullBlock(state) ) ) { continue; }
+						else if (y < this.posY && (block == Blocks.AIR || !block.isFullBlock(state))) {
+							world.setBlockState(pos, y < 60 ? this.stone : this.dirt, 2);
+						}
 
-						world.setBlockState(pos, y < 60 ? this.stone : this.dirt, 2);
+	                    else if (y == this.posY && block == Blocks.AIR) {
+	                    	world.setBlockState(pos, GRASS, 2);
+	                    }
 					}
                 }
             }

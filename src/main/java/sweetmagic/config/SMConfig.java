@@ -27,6 +27,8 @@ public class SMConfig {
 	public final static String BIOME_COME = "If these flags are set to true, we will generate a biome.";
 	public final static String DIM = "dimension_Id_config";
 	public final static String DIM_COME = "Set the dimension ID.";
+	public final static String DIFFICUL = "difficulty config";
+	public final static String DIFFICUL_COME = "Setting the difficulty level.";
 
 	// ヘルプレシピ
 	public static boolean help_recipe = false;
@@ -78,6 +80,11 @@ public class SMConfig {
 	public static String render_name = "Render Effect.";
 	public static String render_come = "If these flags are set to true, some renders will not take place.";
 
+	// 杖GUI
+	public static boolean isLeftSide = true;
+	public static String renderSide_name = "Position the wand GUI.";
+	public static String renderSide_come = "If true, the wand's GUI will be displayed on the left side; if false, the GUI will be displayed on the right side.";
+
 	// バイオーム
 	public static boolean genBiome = true;
 	public static String biome_name = "Generate Biome.";
@@ -92,6 +99,11 @@ public class SMConfig {
 	public static int dimId = 1222;
 	public static String dim_name = "Set Dimension Id.";
 	public static String dim_come = "Set the dimension ID. default = 1222";
+
+	// 難易度
+	public static boolean isHard = false;
+	public static String hard_name = "High difficulty mode settings.";
+	public static String hard_come = "By setting it to true, you can get a Stardust crystal in the bonus chest and various difficulty levels!";
 
 	public void load(File file) {
 		File cfgFile = new File(file, "sweetmagic.cfg");
@@ -113,21 +125,24 @@ public class SMConfig {
 			cfg.setCategoryComment(RENDER, RENDER_COME);
 			cfg.setCategoryComment(BIOME, BIOME_COME);
 			cfg.setCategoryComment(DIM, DIM_COME);
+			cfg.setCategoryComment(DIFFICUL, DIFFICUL_COME);
 
 			//　Property　別変数　=　cfg.get("小さいカテゴリでまとめるための文字列", "Key(例：add bettyutool=true　みたいな)", コンフィグ参照用変数)
-			Property look_hrcp = cfg.get(ITEMADD, help_recipe_name, this.help_recipe, help_recipe_come);
-			Property look_knife = cfg.get(ITEMADD, help_knifedrop_name, this.help_knifedrop, help_knifedrop_come);
-			Property look_mdropC = cfg.get(ITEMADD, mobdrop_crystal_name, this.mobdrop_crystal, mobdrop_crystal_come);
-			Property look_spawn_house = cfg.get(STRUCTURE_BOOL, structure_name, this.isGenStructure, structure_come);
-			Property look_houseChance = cfg.get(MISC, house_spawnchance_name, this.house_spawnchance, house_spawnchance_come);
-			Property look_spawn_houseloot = cfg.get(MISC, house_lootchance_name, this.house_lootchance, house_lootchance_come);
-			Property look_dungeonChance = cfg.get(MISC, dungeon_spawnchance_name, this.dungeon_spawnchance, dungeon_spawnchance_come);
-			Property look_spawn_dungeonloot = cfg.get(MISC, dungeon_lootchance_name, this.dungeon_lootchance, dungeon_lootchance_come);
-			Property look_spawn_mob = cfg.get(MOB, spawn_mob_name, this.spawn_mob, spawn_mob_come);
-			Property look_render = cfg.get(RENDER, render_name, this.isRender, render_come);
-			Property look_biome = cfg.get(BIOME, biome_name, this.genBiome, biome_come);
-			Property look_FLW = cfg.get(STRUCTURE_BOOL, flower_name, this.genFlowers, flower_come);
-			Property look_dim = cfg.get(DIM, dim_name, this.dimId, dim_come);
+			Property look_hrcp = cfg.get(ITEMADD, this.help_recipe_name, this.help_recipe, this.help_recipe_come);
+			Property look_knife = cfg.get(ITEMADD, this.help_knifedrop_name, this.help_knifedrop, this.help_knifedrop_come);
+			Property look_mdropC = cfg.get(ITEMADD, this.mobdrop_crystal_name, this.mobdrop_crystal, this.mobdrop_crystal_come);
+			Property look_spawn_house = cfg.get(STRUCTURE_BOOL, this.structure_name, this.isGenStructure, this.structure_come);
+			Property look_houseChance = cfg.get(MISC, this.house_spawnchance_name, this.house_spawnchance, this.house_spawnchance_come);
+			Property look_spawn_houseloot = cfg.get(MISC, this.house_lootchance_name, this.house_lootchance, this.house_lootchance_come);
+			Property look_dungeonChance = cfg.get(MISC, this.dungeon_spawnchance_name, this.dungeon_spawnchance, this.dungeon_spawnchance_come);
+			Property look_spawn_dungeonloot = cfg.get(MISC, this.dungeon_lootchance_name, this.dungeon_lootchance, this.dungeon_lootchance_come);
+			Property look_spawn_mob = cfg.get(MOB, this.spawn_mob_name, this.spawn_mob, this.spawn_mob_come);
+			Property look_render = cfg.get(RENDER, this.render_name, this.isRender, this.render_come);
+			Property look_renderSide = cfg.get(RENDER, this.renderSide_name, this.isLeftSide, this.renderSide_come);
+			Property look_biome = cfg.get(BIOME, this.biome_name, this.genBiome, this.biome_come);
+			Property look_FLW = cfg.get(STRUCTURE_BOOL, this.flower_name, this.genFlowers, this.flower_come);
+			Property look_dim = cfg.get(DIM, this.dim_name, this.dimId, this.dim_come);
+			Property look_hard = cfg.get(DIFFICUL, this.hard_name, this.isHard, this.hard_come);
 
 			// look_○○　で　読み込んだ変数をStatic参照できる変数に代入
 			this.help_recipe = look_hrcp.getBoolean();
@@ -136,9 +151,11 @@ public class SMConfig {
 			this.isGenStructure = look_spawn_house.getBoolean();
 			this.spawn_mob = look_spawn_mob.getBoolean();
 			this.isRender = look_render.getBoolean();
+			this.isLeftSide = look_renderSide.getBoolean();
 			this.genBiome = look_biome.getBoolean();
 			this.genFlowers = look_FLW.getBoolean();
 			this.dimId = look_dim.getInt();
+			this.isHard = look_hard.getBoolean();
 
 			// int　0以下が設定されていたらデフォルトを設定
 			this.house_spawnchance = look_houseChance.getInt();

@@ -32,8 +32,8 @@ import sweetmagic.worldgen.structures.WorldGenStructure;
 public class GeddanGen extends BaseWorldGen {
 
 	public static List<ItemStack> chestA = new ArrayList<>();
-	public final WorldGenStructure BOT = new WorldGenStructure("geddan_bot");
-	public final WorldGenStructure UP = new WorldGenStructure("geddan_up");
+	private static final WorldGenStructure BOT = new WorldGenStructure("geddan_bot");
+	private static final WorldGenStructure UP = new WorldGenStructure("geddan_up");
 
     public GeddanGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance * 3;

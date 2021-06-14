@@ -10,7 +10,6 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.entity.projectile.EntityMagicItem;
 
@@ -23,13 +22,9 @@ public class EntityItemTossEvent {
 		EntityItem entity = event.getEntityItem();
 		if (entity == null || entity instanceof EntityMagicItem) { return; }
 
-		// MF関連のアイテム以外なら終了
+		// エンチャ付いてないなら終了
 		ItemStack stack = entity.getItem();
-		if (!(stack.getItem() instanceof IMFTool)) { return; }
-
-		// エンチャレベルチェック
-		int level = EnchantmentHelper.getEnchantmentLevel(EnchantInit.aetherCharm, stack);
-		if (level <= 0) { return; }
+		if (!(this.checkEncha(stack))) { return; }
 
 		// エンティティの置き換え
 		World world = entity.world;
@@ -63,5 +58,10 @@ public class EntityItemTossEvent {
 		entity.motionZ += Math.sin((double) f3) * (double) f2;
 
         return entity;
+	}
+
+	// エンチャがついてないか確認
+	public boolean checkEncha (ItemStack stack) {
+		return EnchantmentHelper.getEnchantmentLevel(EnchantInit.aetherCharm, stack) > 0;
 	}
 }

@@ -27,31 +27,30 @@ import net.minecraft.world.gen.NoiseGeneratorOctaves;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenDungeons;
 import net.minecraft.world.gen.structure.MapGenMineshaft;
+import net.minecraft.world.gen.structure.MapGenStronghold;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.InitNoiseGensEvent.ContextOverworld;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent.Populate.EventType;
 import net.minecraftforge.event.terraingen.TerrainGen;
+import sweetmagic.worldgen.dungen.map.MapGenCastle;
 import sweetmagic.worldgen.dungen.map.MapGenDekaijyu;
 import sweetmagic.worldgen.dungen.map.MapGenIdo;
 import sweetmagic.worldgen.dungen.map.MapGenKutiMura;
 import sweetmagic.worldgen.dungen.map.MapGenMekyu;
 import sweetmagic.worldgen.dungen.map.MapGenPyramid;
 import sweetmagic.worldgen.dungen.map.MapGenTogijyo;
+import sweetmagic.worldgen.dungen.map.MapGenVillager;
 import sweetmagic.worldgen.dungen.map.MapWitchHouse;
 import sweetmagic.worldgen.map.SMMapGenCaves;
 import sweetmagic.worldgen.map.SMMapGenRiver;
 
 public class SMChunkGen implements IChunkGenerator {
 
-    public static final IBlockState WATER = Blocks.WATER.getDefaultState();
-    public static final IBlockState LAVA = Blocks.LAVA.getDefaultState();
-    public static final IBlockState ICE = Blocks.ICE.getDefaultState();
-    public static final IBlockState SNOW_LAYER = Blocks.SNOW_LAYER.getDefaultState();
-    public static final IBlockState MAGMA = Blocks.MAGMA.getDefaultState();
-    public static final IBlockState STONE = Blocks.STONE.getDefaultState();
-    public static final IBlockState DIRT = Blocks.DIRT.getDefaultState();
-    public static final IBlockState GRASS = Blocks.GRASS.getDefaultState();
+	private static final IBlockState WATER = Blocks.WATER.getDefaultState();
+	private static final IBlockState LAVA = Blocks.LAVA.getDefaultState();
+    private static final IBlockState ICE = Blocks.ICE.getDefaultState();
+    private static final IBlockState SNOW_LAYER = Blocks.SNOW_LAYER.getDefaultState();
 
     private final Random rand;
     private final World world;
@@ -75,6 +74,7 @@ public class SMChunkGen implements IChunkGenerator {
     private MapGenBase caveGen = new SMMapGenCaves();
     private MapGenBase riverGen = new SMMapGenRiver();
     private MapGenMineshaft mineshaftGen = new MapGenMineshaft();
+    private MapGenStronghold strongGen= new MapGenStronghold();
     private Biome[] biomesForGeneration;
 
 	// 追加生成の設定
@@ -85,12 +85,15 @@ public class SMChunkGen implements IChunkGenerator {
     private MapGenMekyu mekyu = new MapGenMekyu(this);
     private MapGenIdo ido = new MapGenIdo(this);
     private MapWitchHouse witchhouse = new MapWitchHouse(this);
+    private MapGenCastle castle = new MapGenCastle(this);
+    private MapGenVillager villager = new MapGenVillager(this);
 
 
     public SMChunkGen(World world, long seed, boolean enabled, String option) {
         {
         	this.caveGen = TerrainGen.getModdedMapGen(this.caveGen, InitMapGenEvent.EventType.CAVE);
         	this.riverGen = TerrainGen.getModdedMapGen(this.riverGen, InitMapGenEvent.EventType.RAVINE);
+        	strongGen = (MapGenStronghold) TerrainGen.getModdedMapGen(strongGen, InitMapGenEvent.EventType.STRONGHOLD);
         	this.mineshaftGen = (MapGenMineshaft) TerrainGen.getModdedMapGen(this.mineshaftGen,  InitMapGenEvent.EventType.MINESHAFT);
 
         	// 追加生成の設定
@@ -121,6 +124,14 @@ public class SMChunkGen implements IChunkGenerator {
 
             if (TerrainGen.getModdedMapGen(this.witchhouse, InitMapGenEvent.EventType.CUSTOM) instanceof MapWitchHouse) {
             	this.witchhouse = (MapWitchHouse) TerrainGen.getModdedMapGen(this.witchhouse, InitMapGenEvent.EventType.CUSTOM);
+            }
+
+            if (TerrainGen.getModdedMapGen(this.castle, InitMapGenEvent.EventType.CUSTOM) instanceof MapGenCastle) {
+            	this.castle = (MapGenCastle) TerrainGen.getModdedMapGen(this.castle, InitMapGenEvent.EventType.CUSTOM);
+            }
+
+            if (TerrainGen.getModdedMapGen(this.villager, InitMapGenEvent.EventType.CUSTOM) instanceof MapGenVillager) {
+            	this.villager = (MapGenVillager) TerrainGen.getModdedMapGen(this.villager, InitMapGenEvent.EventType.CUSTOM);
             }
         }
         this.world = world;
@@ -174,6 +185,7 @@ public class SMChunkGen implements IChunkGenerator {
 
         this.caveGen.generate(this.world, x, z, primer);
         this.riverGen.generate(this.world, x, z, primer);
+        this.strongGen.generate(this.world, x, z, primer);
 
         if (this.mapFeaturesEnabled) {
             if (this.settings.useMineShafts) {
@@ -189,6 +201,8 @@ public class SMChunkGen implements IChunkGenerator {
         this.mekyu .generate(this.world, x, z, primer);
         this.ido .generate(this.world, x, z, primer);
         this.witchhouse .generate(this.world, x, z, primer);
+        this.castle .generate(this.world, x, z, primer);
+        this.villager .generate(this.world, x, z, primer);
 
         Chunk chunk = new Chunk(this.world, primer, x, z);
         byte[] abyte = chunk.getBiomeArray();
@@ -265,7 +279,6 @@ public class SMChunkGen implements IChunkGenerator {
                 }
             }
         }
-
     }
 
     public void replaceWorldChunkGen(int x, int z, ChunkPrimer primer, Biome... biomes) {
@@ -376,6 +389,7 @@ public class SMChunkGen implements IChunkGenerator {
 
     @Override
     public void populate(int x, int z) {
+
         BlockFalling.fallInstantly = true;
         int i = x * 16;
         int j = z * 16;
@@ -387,7 +401,6 @@ public class SMChunkGen implements IChunkGenerator {
         this.rand.setSeed((long) x * k + (long) z * l ^ this.world.getSeed());
         boolean flag = false;
         ChunkPos chunkpos = new ChunkPos(x, z);
-
         ForgeEventFactory.onChunkPopulate(true, this, this.world, this.rand, x, z, flag);
 
         if (this.mapFeaturesEnabled) {
@@ -395,6 +408,8 @@ public class SMChunkGen implements IChunkGenerator {
                 this.mineshaftGen.generateStructure(this.world, this.rand, chunkpos);
             }
         }
+
+        this.strongGen.generateStructure(this.world, this.rand, chunkpos);
 
     	// 追加生成の設定
         this.pryramid.generateStructure(this.world, this.rand, chunkpos);
@@ -404,6 +419,8 @@ public class SMChunkGen implements IChunkGenerator {
         this.mekyu.generateStructure(this.world, this.rand, chunkpos);
         this.ido.generateStructure(this.world, this.rand, chunkpos);
         this.witchhouse.generateStructure(this.world, this.rand, chunkpos);
+        this.castle.generateStructure(this.world, this.rand, chunkpos);
+        this.villager.generateStructure(this.world, this.rand, chunkpos);
 
 		if (TerrainGen.populate(this, this.world, this.rand, x, z, flag, EventType.DUNGEON)) {
 			for (int j2 = 0; j2 < this.settings.dungeonChance; ++j2) {
@@ -455,7 +472,7 @@ public class SMChunkGen implements IChunkGenerator {
     }
 
     @Override
-    public boolean generateStructures(Chunk chunkIn, int x, int z) {
+    public boolean generateStructures(Chunk chunk, int x, int z) {
         return false;
     }
 
@@ -474,6 +491,10 @@ public class SMChunkGen implements IChunkGenerator {
             return this.mineshaftGen.getNearestStructurePos(world, pos, findUnexplored);
         }
 
+        else if ("Stronghold".equals(structure) && this.strongGen != null) {
+			return this.strongGen.getNearestStructurePos(world, pos, findUnexplored);
+		}
+
         return null;
     }
 
@@ -489,7 +510,7 @@ public class SMChunkGen implements IChunkGenerator {
     @Override
     public boolean isInsideStructure(World world, String structure, BlockPos pos) {
 
-    	if ("pyramid_top".equals(structure) && this.pryramid != null) {
+        if ("pyramid_top".equals(structure) && this.pryramid != null) {
         	return this.pryramid.isInsideStructure(pos);
     	}
 
@@ -515,6 +536,14 @@ public class SMChunkGen implements IChunkGenerator {
 
     	else if ("witchhouse_main".equals(structure) && this.witchhouse != null) {
         	return this.witchhouse.isInsideStructure(pos);
+    	}
+
+    	else if ("castle".equals(structure) && this.castle != null) {
+        	return this.castle.isInsideStructure(pos);
+    	}
+
+    	else if ("villager".equals(structure) && this.villager != null) {
+        	return this.villager.isInsideStructure(pos);
     	}
 
         if (!this.mapFeaturesEnabled) { return false; }

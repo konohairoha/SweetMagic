@@ -1,12 +1,14 @@
 package sweetmagic.handlers;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeEnd;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -23,8 +25,10 @@ import sweetmagic.event.HasItemEvent;
 import sweetmagic.event.LivingDamageEvent;
 import sweetmagic.event.LivingDethEvent;
 import sweetmagic.event.LivingPotionEvent;
+import sweetmagic.event.MobDropEvent;
 import sweetmagic.event.SMHarvestEvent;
 import sweetmagic.event.SMLoottableEvent;
+import sweetmagic.event.TeleportEvent;
 import sweetmagic.event.XPPickupEvent;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
@@ -36,6 +40,7 @@ import sweetmagic.init.entity.layer.LayerEffectBase;
 import sweetmagic.init.entity.layer.LayerRefresh;
 import sweetmagic.init.entity.layer.LayerRegen;
 import sweetmagic.init.entity.layer.LayerRenderWand;
+import sweetmagic.init.entity.layer.LayerWandSandryon;
 import sweetmagic.init.entity.monster.EntityArchSpider;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
 import sweetmagic.init.entity.monster.EntityCreeperCal;
@@ -61,6 +66,8 @@ import sweetmagic.init.tile.cook.TileStove;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherHopper;
 import sweetmagic.init.tile.magic.TileFlyishForer;
+import sweetmagic.init.tile.magic.TileMFAetherLanp;
+import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
 import sweetmagic.init.tile.magic.TileMFFisher;
@@ -69,6 +76,7 @@ import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
 import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFMMTank;
 import sweetmagic.init.tile.magic.TileMFPot;
+import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
@@ -86,19 +94,23 @@ import sweetmagic.init.tile.magic.TileWarpBlock;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
 import sweetmagic.init.tile.plant.TileCleroLanp;
 import sweetmagic.init.tile.plant.TileSannyFlower;
+import sweetmagic.worldgen.dungen.map.MapGenCastle;
 import sweetmagic.worldgen.dungen.map.MapGenDekaijyu;
 import sweetmagic.worldgen.dungen.map.MapGenIdo;
 import sweetmagic.worldgen.dungen.map.MapGenKutiMura;
 import sweetmagic.worldgen.dungen.map.MapGenMekyu;
 import sweetmagic.worldgen.dungen.map.MapGenPyramid;
 import sweetmagic.worldgen.dungen.map.MapGenTogijyo;
+import sweetmagic.worldgen.dungen.map.MapGenVillager;
 import sweetmagic.worldgen.dungen.map.MapWitchHouse;
+import sweetmagic.worldgen.dungen.piece.CastlePiece;
 import sweetmagic.worldgen.dungen.piece.DekaijyuPiece;
 import sweetmagic.worldgen.dungen.piece.IdoPiece;
 import sweetmagic.worldgen.dungen.piece.KutiMuraPiece;
 import sweetmagic.worldgen.dungen.piece.MekyuPiece;
 import sweetmagic.worldgen.dungen.piece.PyramidPiece;
 import sweetmagic.worldgen.dungen.piece.TogijyoPiece;
+import sweetmagic.worldgen.dungen.piece.VillagerPiece;
 import sweetmagic.worldgen.dungen.piece.WitchHousePiece;
 import sweetmagic.worldgen.gen.BonusGen;
 import sweetmagic.worldgen.gen.CFlowerGen;
@@ -107,7 +119,6 @@ import sweetmagic.worldgen.gen.CledonGen;
 import sweetmagic.worldgen.gen.FlowerGardenGen;
 import sweetmagic.worldgen.gen.FluitForestFlowerGen;
 import sweetmagic.worldgen.gen.GeddanGen;
-import sweetmagic.worldgen.gen.MoatGen;
 import sweetmagic.worldgen.gen.MoonGen;
 import sweetmagic.worldgen.gen.NetGen;
 import sweetmagic.worldgen.gen.SMOreGen;
@@ -115,14 +126,14 @@ import sweetmagic.worldgen.gen.SMSkyIslandGen;
 import sweetmagic.worldgen.gen.SnowDropGen;
 import sweetmagic.worldgen.gen.StickyGen;
 import sweetmagic.worldgen.gen.SugarGen;
-import sweetmagic.worldgen.gen.TentoGen;
 import sweetmagic.worldgen.gen.WellGen;
 import sweetmagic.worldgen.gen.WitchHouseGen;
 import sweetmagic.worldgen.gen.WorldVillageGen;
 
 public class RegistryHandler {
 
-	public static final String MODID = SweetMagicCore.MODID;
+	private static final String MODID = SweetMagicCore.MODID;
+
 
 	public static void Common(FMLPreInitializationEvent event) {
 
@@ -156,9 +167,6 @@ public class RegistryHandler {
 		WitchHouseGen.initLootTable();									// ルートテーブルInit
 
 		GameRegistry.registerWorldGenerator(new WorldVillageGen(), 1);	// 村家生成
-		GameRegistry.registerWorldGenerator(new TentoGen(), 1);	// テント生成
-
-		GameRegistry.registerWorldGenerator(new MoatGen(), 0);	// 小山生成
 
 		GameRegistry.registerWorldGenerator(new SMSkyIslandGen(), 0);	// 浮島生成
 
@@ -195,8 +203,11 @@ public class RegistryHandler {
 		MapGenStructureIO.registerStructure(MapWitchHouse.Start.class, "witchhouse_main");
 		WitchHousePiece.registerIdoPiece();
 
-//		MapGenStructureIO.registerStructure(MapGenVillager.Start.class, "villager");
-//		VillagerPiece.registerIdoPiece();
+		MapGenStructureIO.registerStructure(MapGenCastle.Start.class, "castle");
+		CastlePiece.registerIdoPiece();
+
+		MapGenStructureIO.registerStructure(MapGenVillager.Start.class, "villager");
+		VillagerPiece.registerIdoPiece();
 
 	}
 
@@ -244,6 +255,9 @@ public class RegistryHandler {
 		registerTile(TileMFMMTable.class, "MMTable");
 		registerTile(TileStardustWish.class, "StardustWish");
 		registerTile(TileMFFurnaceAdvanced.class, "MFFurnaceAdvanced");
+		registerTile(TileMFSuccessor.class, "MFSuccessor");
+		registerTile(TileMFAetherLanp.class, "MFAetherLanp");
+		registerTile(TileMFArcaneTable.class, "MFArcaneTable");
 	}
 
 	// 草から種の追加
@@ -259,6 +273,7 @@ public class RegistryHandler {
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.tomato), 5);
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.onion), 5);
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.cotton_seed), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.spinach_seed), 5);
 	}
 
 	// イベント登録
@@ -273,6 +288,8 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
 		MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
 		MinecraftForge.EVENT_BUS.register(new EntityItemTossEvent());
+		MinecraftForge.EVENT_BUS.register(new TeleportEvent());
+		MinecraftForge.EVENT_BUS.register(new MobDropEvent());
 	}
 
 	// レイヤー登録
@@ -282,6 +299,7 @@ public class RegistryHandler {
 			LayerEffectBase.initialiseLayers(LayerRefresh::new);
 			LayerEffectBase.initialiseLayers(LayerRenderWand::new);
 			LayerEffectBase.initialiseLayers(LayerRegen::new);
+			LayerEffectBase.initialiseLayers(LayerWandSandryon::new);
 		}
 	}
 
@@ -305,7 +323,7 @@ public class RegistryHandler {
 			for (Biome bio : ForgeRegistries.BIOMES) {
 
 				// 特定のバイオームなら次へ
-				if (checkBiome(bio)) { continue; }
+				if (biomeList.contains(bio)) { continue; }
 
 				EntityRegistry.addSpawn(EntitySkullFrost.class, 25, 1, 3, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityCreeperCal.class, 25, 1, 1, EnumCreatureType.MONSTER, bio);
@@ -320,11 +338,9 @@ public class RegistryHandler {
 		}
 	}
 
-	// バイオームチェック
-	public static boolean checkBiome (Biome bio) {
-		return bio == Biomes.MUSHROOM_ISLAND || bio == Biomes.MUSHROOM_ISLAND_SHORE ||
-				bio == Biomes.HELL || bio == Biomes.VOID || bio instanceof BiomeEnd;
-	}
+	// バイオームリスト
+	private static final List<Biome> biomeList = Arrays.<Biome> asList(Biomes.MUSHROOM_ISLAND, Biomes.MUSHROOM_ISLAND_SHORE,
+			Biomes.HELL, Biomes.VOID, Biomes.SKY);
 
 	public static void registerTile (Class<? extends TileEntity> tileClass, String name) {
 		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(MODID, name));

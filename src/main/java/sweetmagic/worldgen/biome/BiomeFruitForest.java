@@ -16,12 +16,13 @@ import sweetmagic.worldgen.gen.WorldGenFruitTree;
 
 public class BiomeFruitForest extends Biome {
 
-	public static final WorldGenerator ORANGE = new WorldGenFruitTree(false, BlockInit.orange_log, BlockInit.orange_leaves);
-	public static final WorldGenerator CHESTNUT = new WorldGenFruitTree(false, BlockInit.chestnut_log, BlockInit.chestnut_leaves);
-	public static final WorldGenerator LEMON = new WorldGenFruitTree(false, BlockInit.lemon_log, BlockInit.lemon_leaves);
-	public static final WorldGenerator ESTOR = new WorldGenEstor(false, BlockInit.estor_log, BlockInit.estor_leaves);
-	public static final WorldGenBirchTree BIRCH= new WorldGenBirchTree(false, false);
-	public static final WorldGenTrees ORK = new WorldGenTrees(false);
+	private static final WorldGenerator ORANGE = new WorldGenFruitTree(false, BlockInit.orange_log, BlockInit.orange_leaves);
+	private static final WorldGenerator CHESTNUT = new WorldGenFruitTree(false, BlockInit.chestnut_log, BlockInit.chestnut_leaves);
+	private static final WorldGenerator LEMON = new WorldGenFruitTree(false, BlockInit.lemon_log, BlockInit.lemon_leaves);
+	private static final WorldGenerator ESTOR = new WorldGenEstor(false, BlockInit.estor_log, BlockInit.estor_leaves);
+	private static final WorldGenerator PEACH = new WorldGenFruitTree(false, BlockInit.peach_log, BlockInit.peach_leaves);
+	private static final WorldGenBirchTree BIRCH= new WorldGenBirchTree(false, false);
+	private static final WorldGenTrees ORK = new WorldGenTrees(false);
 
 	public BiomeFruitForest(String name, BiomeProperties property) {
         super(property);
@@ -46,7 +47,7 @@ public class BiomeFruitForest extends Biome {
 	// 木の生成
 	public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
 
-		switch (rand.nextInt(6)) {
+		switch (rand.nextInt(7)) {
 		case 0:
 			return (WorldGenAbstractTree) ORANGE;
 		case 1:
@@ -59,6 +60,8 @@ public class BiomeFruitForest extends Biome {
 			return (WorldGenAbstractTree) ORK;
 		case 5:
 			return (WorldGenAbstractTree) ESTOR;
+		case 6:
+			return (WorldGenAbstractTree) PEACH;
 		}
 
 		return (WorldGenAbstractTree) ORANGE;

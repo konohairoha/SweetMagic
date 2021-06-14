@@ -19,7 +19,7 @@ import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class SMSkyIslandGen extends BaseWorldGen {
 
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("skyisland");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("skyisland");
 	public List<GenHelper> skyList = new ArrayList<>();
 
     public SMSkyIslandGen() {

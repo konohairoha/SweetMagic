@@ -32,7 +32,7 @@ public class MapWitchHouse extends BaseMaoGen {
     }
 
     public String getStructureName() {
-        return "ido";
+        return "witchhouse";
     }
 
     // バイオームリストの取得
@@ -67,8 +67,8 @@ public class MapWitchHouse extends BaseMaoGen {
             int j1 = primer.findGroundBlockIdx(7 + i, 7 + j);
             int posY = Math.min(69, Math.min(Math.min(y1, l), Math.min(i1, j1)));
 
-            BlockPos pos = new BlockPos(chunkX * 16 + 8, posY, chunkZ * 16 + 8);
-            List<WitchHousePiece.WitchHouseTemplate> list = Lists.<WitchHousePiece.WitchHouseTemplate>newLinkedList();
+			BlockPos pos = new BlockPos(chunkX * 16 + 8, posY, chunkZ * 16 + 8);
+			List<WitchHousePiece.WitchHouseTemplate> list = Lists.<WitchHousePiece.WitchHouseTemplate> newLinkedList();
             WitchHousePiece.generateCore(world.getSaveHandler().getStructureTemplateManager(), pos, rot, list, rand);
 
             this.components.addAll(list);
@@ -94,10 +94,6 @@ public class MapWitchHouse extends BaseMaoGen {
 
 	                    else if (block == BlockInit.smspaner) {
 	                    	this.setSMSpaner(world, rand, pos);
-	                    }
-
-	                    else if (block == BlockInit.parallel_interfere) {
-	                    	world.setBlockState(pos, BlockInit.stardust_wish.getDefaultState(), 2);
 	                    }
 	                }
 				}

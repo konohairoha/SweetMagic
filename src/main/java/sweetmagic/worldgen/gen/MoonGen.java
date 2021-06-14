@@ -27,8 +27,6 @@ public class MoonGen extends BaseFlowerGen {
 	// 花の生成
 	public void genFlower (World world, Random rand, int posX, int posZ, IBlockState state) {
 
-//		if (world.rand.nextInt(2) != 0) { return; }
-
 		IBlockState state1 = state.withProperty(SweetState.STAGE4, 2);
 
 		// チャンス
@@ -44,7 +42,6 @@ public class MoonGen extends BaseFlowerGen {
 				int pX = randX + rand.nextInt(8) - rand.nextInt(8);
 				int pY = y + rand.nextInt(4) - rand.nextInt(4);
 				int pZ = randZ + rand.nextInt(8) - rand.nextInt(8);
-
 				BlockPos pos = new BlockPos (pX, pY, pZ);
 				IBlockState state2 = world.getBlockState(pos);
 				if (!this.checkSetBlock(world, pos, state2)) { continue; }
@@ -55,7 +52,8 @@ public class MoonGen extends BaseFlowerGen {
 	}
 
 	// 植えれるかのチェック
-	public boolean checkSetBlock (World world, BlockPos p1, IBlockState state) {
-		return state.getBlock() == Blocks.GRASS;
+	public boolean checkSetBlock (World world, BlockPos pos, IBlockState state) {
+		Block block = world.getBlockState(pos.up()).getBlock();
+		return world.canSeeSky(pos.up()) && ( block == Blocks.AIR || block == Blocks.SNOW_LAYER) && state.getBlock() == Blocks.GRASS;
 	}
 }

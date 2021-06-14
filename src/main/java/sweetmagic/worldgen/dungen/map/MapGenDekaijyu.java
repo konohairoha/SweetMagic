@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.Rotation;
@@ -51,6 +52,8 @@ public class MapGenDekaijyu extends BaseMaoGen {
     public static class Start extends BaseStructureStart {
 
     	public int posY;
+    	private static final IBlockState DIRT = Blocks.DIRT.getDefaultState();
+    	private static final IBlockState GRASS = Blocks.GRASS.getDefaultState();
 
         public Start() { }
 
@@ -61,7 +64,7 @@ public class MapGenDekaijyu extends BaseMaoGen {
         @Override
         public void create(World world, SMChunkGen chunk, Random rand, int chunkX, int chunkZ) {
 
-            Rotation rot = Rotation.NONE;
+            Rotation rot = this.getRot(rand);
             ChunkPrimer primer = new ChunkPrimer();
             chunk.setChunkGen(chunkX, chunkZ, primer);
             int i = 5;
@@ -90,10 +93,15 @@ public class MapGenDekaijyu extends BaseMaoGen {
 					for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 
 						BlockPos pos = new BlockPos(x, y, z);
-	                    Block block = world.getBlockState(pos).getBlock();
+						IBlockState state = world.getBlockState(pos);
+	                    Block block = state.getBlock();
 
-	                    if (y < this.posY && block == Blocks.AIR) {
-	                    	world.setBlockState(pos, Blocks.DIRT.getDefaultState(), 2);
+	                    if (y < this.posY && (block == Blocks.AIR || !block.isFullBlock(state))) {
+	                    	world.setBlockState(pos, DIRT, 2);
+	                    }
+
+	                    else if (y == this.posY && block == Blocks.AIR) {
+	                    	world.setBlockState(pos, GRASS, 2);
 	                    }
 
 	                    if (block == Blocks.AIR || block == Blocks.LOG || block == Blocks.LEAVES) { continue; }

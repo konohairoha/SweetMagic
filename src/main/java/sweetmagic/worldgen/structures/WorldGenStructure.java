@@ -21,8 +21,8 @@ public class WorldGenStructure extends WorldGenerator implements IStructure {
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, BlockPos position) {
-		this.generateStructure(world, position);
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		this.generateStructure(world, pos);
 		return true;
 	}
 

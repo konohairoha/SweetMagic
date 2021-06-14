@@ -7,6 +7,7 @@ import java.util.Random;
 import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
@@ -51,6 +52,8 @@ public class MapGenMekyu extends BaseMaoGen {
     // 生成クラス
     public static class Start extends BaseStructureStart {
 
+    	private static final IBlockState GRASS = Blocks.GRASS.getDefaultState();
+
         public Start() { }
 
         public Start(World world, SMChunkGen chunk, Random rabd, int chunkX, int chunkZ) {
@@ -84,8 +87,8 @@ public class MapGenMekyu extends BaseMaoGen {
             super.generateStructure(world, rand, sbb);
 
 			for (int x = sbb.minX; x <= sbb.maxX; ++x) {
-				for (int y = sbb.minY; y <= sbb.maxY; ++y) {
-					for (int z = sbb.minZ; z <= sbb.maxZ; ++z) {
+				for (int z = sbb.minZ; z <= sbb.maxZ; ++z) {
+					for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 
 						BlockPos pos = new BlockPos(x, y, z);
 	                    Block block = world.getBlockState(pos).getBlock();
@@ -125,6 +128,10 @@ public class MapGenMekyu extends BaseMaoGen {
 								tile.isPowerUp= 1;
 								tile.isBossSummon = false;
 		                    }
+						}
+
+						else if (block == Blocks.DIRT && world.getBlockState(pos.up()).getBlock() == Blocks.AIR) {
+	                    	world.setBlockState(pos, GRASS, 2);
 						}
 	                }
 				}

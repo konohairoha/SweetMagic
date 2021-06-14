@@ -17,9 +17,7 @@ public class KutiMuraPiece {
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<KutiMuraTemplate> list, Random rand) {
-
         list.add(new KutiMuraPiece.KutiMuraTemplate(manager, pos, rot, "kuchihatetamura"));
-
     }
 
     public static class KutiMuraTemplate extends BaseStructureTemplate {

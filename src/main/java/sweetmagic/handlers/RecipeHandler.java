@@ -12,6 +12,7 @@ import com.google.common.collect.Multimap;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.item.crafting.Ingredient;
@@ -45,6 +46,9 @@ public class RecipeHandler {
 		Ingredient dustSalt = Ingredient.fromStacks(SMUtil.getOreArray("dustSalt"));
 		Ingredient dry_seaweed = Ingredient.fromStacks(new ItemStack(ItemInit.dry_seaweed));
 		Ingredient compost_drit = Ingredient.fromStacks(new ItemStack(BlockInit.compost_drit));
+		Ingredient treeSapling = Ingredient.fromStacks(SMUtil.getOreArray("treeSapling"));
+		Ingredient iron_bars = Ingredient.fromStacks(new ItemStack(Blocks.IRON_BARS));
+		Ingredient ironNugget = Ingredient.fromStacks(new ItemStack(Items.IRON_NUGGET));
 
 		/*草ブロックから粘土*/
 		if (SMConfig.help_recipe) {
@@ -263,61 +267,50 @@ public class RecipeHandler {
 			new ItemStack(BlockInit.pillar_stone_w, 4)
 		);
 
-		// ウィザードローブ
-		RecipeHandler.addRecipe("wizard_robe",
-			new RecipeNBTExtend(new ResourceLocation(MODID, "wizard_robe"),
-			new ItemStack(ItemInit.wizard_robe),
-				"APA",
-				"DRD",
-				"APA",
-				'D', "dyeBlack",
-				'P', ItemInit.pure_crystal,
-				'A', "magicAccessori",
-				'R', "magicians_grobe"
-			)
+		// 料理皿
+		addShapelessRecipe( "plate",
+			new Ingredient[] { iron_bars, iron_bars, recipeBook },
+			new ItemStack(BlockInit.plate, 4)
 		);
 
-		// フェアリーローブ
-		RecipeHandler.addRecipe("feary_robe",
-			new RecipeNBTExtend(new ResourceLocation(MODID, "feary_robe"),
-			new ItemStack(ItemInit.feary_robe),
-				"APA",
-				"DRD",
-				"APA",
-				'D', "dyeGreen",
-				'P', ItemInit.pure_crystal,
-				'A', "magicAccessori",
-				'R', "magicians_grobe"
-			)
+		// 木皿
+		addShapelessRecipe( "wood_plate",
+			new Ingredient[] { slabWood, slabWood, recipeBook },
+			new ItemStack(BlockInit.wood_plate, 4)
 		);
 
-		// ウィンディーネローブ
-		RecipeHandler.addRecipe("windine_robe",
-			new RecipeNBTExtend(new ResourceLocation(MODID, "windine_robe"),
-			new ItemStack(ItemInit.windine_robe),
-				"APA",
-				"DRD",
-				"APA",
-				'D', "dyeBlue",
-				'P', ItemInit.pure_crystal,
-				'A', "magicAccessori",
-				'R', "magicians_grobe"
-			)
+		// 木皿
+		addShapelessRecipe( "iron_plate",
+			new Ingredient[] { ironNugget, ironNugget, recipeBook },
+			new ItemStack(BlockInit.iron_plate, 4)
 		);
 
-		// イフリートローブ
-		RecipeHandler.addRecipe("ifrite_robe",
-			new RecipeNBTExtend(new ResourceLocation(MODID, "ifrite_robe"),
-			new ItemStack(ItemInit.ifrite_robe),
-				"APA",
-				"DRD",
-				"APA",
-				'D', "dyeRed",
-				'P', ItemInit.pure_crystal,
-				'A', "magicAccessori",
-				'R', "magicians_grobe"
-			)
-		);
+		// ローブ
+		Map<Item, String> mapRecipe = new HashMap<>();
+		mapRecipe.put(ItemInit.wizard_robe, "dyeBlack");
+		mapRecipe.put(ItemInit.feary_robe, "dyeGreen");
+		mapRecipe.put(ItemInit.windine_robe, "dyeBlue");
+		mapRecipe.put(ItemInit.ifrite_robe, "dyeRed");
+		mapRecipe.put(ItemInit.sandryon_robe, "dyeYellow");
+
+		for (Entry<Item, String> map : mapRecipe.entrySet()) {
+
+			// ローブ
+			Item robe = map.getKey();
+
+			RecipeHandler.addRecipe(robe.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(MODID, robe.getUnlocalizedName()),
+				new ItemStack(robe),
+					"APA",
+					"DRD",
+					"APA",
+					'D', map.getValue(),
+					'P', ItemInit.pure_crystal,
+					'A', "magicAccessori",
+					'R', "magicians_grobe"
+				)
+			);
+		}
 
 		// カフェキッチンシンク
 		RecipeHandler.addRecipe("cafe_kitchen_sink",
@@ -368,6 +361,7 @@ public class RecipeHandler {
 		recipeList.add(new RecipeRegisterHelper(BlockInit.coconut_planks, BlockInit.coconut_stairs, BlockInit.coconut_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.prism_planks, BlockInit.prism_stairs, BlockInit.prism_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.estor_planks, BlockInit.estor_stairs, BlockInit.estor_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.peach_planks, BlockInit.peach_stairs, BlockInit.peach_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.antique_brick_b, BlockInit.antique_brick_stairs_b, BlockInit.antique_brick_slab_b));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.flagstone, BlockInit.flagstone_stairs, BlockInit.flagstone_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.flagstone_color, BlockInit.flagstone_color_stairs, BlockInit.flagstone_color_slab));
@@ -442,6 +436,7 @@ public class RecipeHandler {
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.lemon_log, BlockInit.lemon_planks, BlockInit.lemon_plate, false));
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.prism_log, BlockInit.prism_planks, BlockInit.prism_plate, false));
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.estor_log, BlockInit.estor_planks, BlockInit.estor_plate, false));
+		recipeList2.add(new RecipeRegisterHelper(BlockInit.peach_log, BlockInit.peach_planks, BlockInit.peach_plate, false));
 
 		for (RecipeRegisterHelper recipe : recipeList2) {
 
@@ -695,6 +690,28 @@ public class RecipeHandler {
 			);
 		}
 
+		// 植え込み
+		Map<Block, Block> plantRecipe = new HashMap<>();
+		plantRecipe.put(BlockInit.chestnut_leaves, BlockInit.chestnut_planting);
+		plantRecipe.put(BlockInit.orange_leaves, BlockInit.orange_planting);
+		plantRecipe.put(BlockInit.estor_leaves, BlockInit.estor_planting);
+		plantRecipe.put(BlockInit.peach_leaves, BlockInit.peach_planting);
+
+		for (Entry<Block, Block> map : plantRecipe.entrySet()) {
+
+			Ingredient plant = Ingredient.fromStacks(new ItemStack(map.getKey()));
+			Block leave = map.getValue();
+
+			addShapelessRecipe( leave.getUnlocalizedName(),
+				new Ingredient[] {
+					plant,
+					plant,
+					treeSapling
+				},
+				new ItemStack(leave, 8)
+			);
+		}
+
 		// 単体クラフト
 		singleCraft(new ItemStack(BlockInit.magicbook), new ItemStack(Items.BOOK, 3));
 		singleCraft(new ItemStack(ItemInit.whipping_cream), new ItemStack(ItemInit.butter, 2));
@@ -704,6 +721,7 @@ public class RecipeHandler {
 		singleCraft(new ItemStack(BlockInit.cornflower), new ItemStack(Items.DYE, 2 , 6));
 		singleCraft(new ItemStack(ItemInit.eggplant), new ItemStack(ItemInit.eggplant_seed));
 		singleCraft(new ItemStack(ItemInit.j_radish), new ItemStack(ItemInit.j_radish_seed));
+		singleCraft(new ItemStack(ItemInit.spinach), new ItemStack(ItemInit.spinach_seed));
 		singleCraft(new ItemStack(BlockInit.lemon_trapdoor_n), new ItemStack(BlockInit.lemon_trapdoor));
 		singleCraft(new ItemStack(ItemInit.lettuce), new ItemStack(ItemInit.lettuce_seed));
 		singleCraft(new ItemStack(ItemInit.ine), new ItemStack(ItemInit.rice_seed, 2));
@@ -711,7 +729,7 @@ public class RecipeHandler {
 		singleCraft(new ItemStack(ItemInit.sugarbell), new ItemStack(Items.SUGAR, 2), "sugar_0");
 		singleCraft(new ItemStack(ItemInit.coconut), new ItemStack(Items.SUGAR, 4), "sugar_1");
 		singleCraft(new ItemStack(Items.WATER_BUCKET), new ItemStack(ItemInit.watercup, 8));
-		singleCraft(new ItemStack(Items.MILK_BUCKET), new ItemStack(ItemInit.milk_pack));
+		singleCraft(new ItemStack(Items.MILK_BUCKET), new ItemStack(ItemInit.milk_pack, 8));
 		singleCraft(new ItemStack(ItemInit.milk_pack), new ItemStack(ItemInit.whipping_cream, 2));
 		singleCraft(new ItemStack(BlockInit.white_ironfence), new ItemStack(BlockInit.black_ironfence));
 		singleCraft(new ItemStack(BlockInit.black_ironfence), new ItemStack(BlockInit.white_ironfence));

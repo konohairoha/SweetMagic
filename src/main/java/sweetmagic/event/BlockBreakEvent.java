@@ -3,6 +3,7 @@ package sweetmagic.event;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.BlockEvent;
@@ -23,7 +24,7 @@ public class BlockBreakEvent {
 		BlockPos pos = event.getPos();
 		IBlockState state = event.getState();
 		Block block = state.getBlock();
-		if (state.getBlockHardness(world, pos) < 1D || !block.isFullCube(state)) { return; }
+		if ( state.getBlockHardness(world, pos) < 1D || !block.isFullCube(state) || block == Blocks.MOB_SPAWNER ) { return; }
 
 		event.setCanceled(true);
 	}

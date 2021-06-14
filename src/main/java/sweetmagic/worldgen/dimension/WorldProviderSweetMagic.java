@@ -2,6 +2,8 @@ package sweetmagic.worldgen.dimension;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.gen.IChunkGenerator;
@@ -41,5 +43,9 @@ public class WorldProviderSweetMagic extends WorldProvider {
 	@SideOnly(Side.CLIENT)
 	public float getCloudHeight() {
 		return 192F;
+	}
+
+	public WorldSleepResult canSleepAt(EntityPlayer player, BlockPos pos) {
+		return WorldSleepResult.ALLOW;
 	}
 }

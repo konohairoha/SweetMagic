@@ -18,9 +18,11 @@ import sweetmagic.init.tile.container.ContainerFreezer;
 import sweetmagic.init.tile.container.ContainerGravityChest;
 import sweetmagic.init.tile.container.ContainerJuiceMaker;
 import sweetmagic.init.tile.container.ContainerKichenChest;
+import sweetmagic.init.tile.container.ContainerMFArcaneTable;
 import sweetmagic.init.tile.container.ContainerMFChanger;
 import sweetmagic.init.tile.container.ContainerMFFisher;
 import sweetmagic.init.tile.container.ContainerMFFurnace;
+import sweetmagic.init.tile.container.ContainerMFSuccessor;
 import sweetmagic.init.tile.container.ContainerMFTable;
 import sweetmagic.init.tile.container.ContainerMFTank;
 import sweetmagic.init.tile.container.ContainerMagiaWrite;
@@ -44,9 +46,11 @@ import sweetmagic.init.tile.gui.GuiGravityChest;
 import sweetmagic.init.tile.gui.GuiGuidBook;
 import sweetmagic.init.tile.gui.GuiJuiceMaker;
 import sweetmagic.init.tile.gui.GuiKichenChest;
+import sweetmagic.init.tile.gui.GuiMFArcaneTable;
 import sweetmagic.init.tile.gui.GuiMFChanger;
 import sweetmagic.init.tile.gui.GuiMFF;
 import sweetmagic.init.tile.gui.GuiMFFisher;
+import sweetmagic.init.tile.gui.GuiMFSuccessor;
 import sweetmagic.init.tile.gui.GuiMFTable;
 import sweetmagic.init.tile.gui.GuiMFTank;
 import sweetmagic.init.tile.gui.GuiMagiaWrite;
@@ -64,12 +68,14 @@ import sweetmagic.init.tile.inventory.InventoryRobe;
 import sweetmagic.init.tile.inventory.InventorySMWand;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherHopper;
+import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
 import sweetmagic.init.tile.magic.TileMFFisher;
 import sweetmagic.init.tile.magic.TileMFFurnace;
 import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
 import sweetmagic.init.tile.magic.TileMFMMTable;
+import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
@@ -108,6 +114,8 @@ public class SMGuiHandler implements IGuiHandler {
 	public static final int STARDUSTWISH = 26;
 	public static final int MFF_ADVANCED_GUI = 27;
 	public static final int KICHEN_CHEST_GUI = 28;
+	public static final int SUCCESSOR_GUI = 29;
+	public static final int ARCANETABLE_GUI = 30;
 
 	///サーバ側の処理
 	@Override
@@ -173,6 +181,10 @@ public class SMGuiHandler implements IGuiHandler {
 			return new ContainerMFFurnace(inv, (TileMFFurnaceAdvanced) tile);
 		case KICHEN_CHEST_GUI:
 			return new ContainerKichenChest(inv, (TileWoodChest) tile);
+		case SUCCESSOR_GUI:
+			return new ContainerMFSuccessor(inv, (TileMFSuccessor) tile);
+		case ARCANETABLE_GUI:
+			return new ContainerMFArcaneTable(inv, (TileMFArcaneTable) tile);
 		}
 
 		return null;
@@ -246,6 +258,10 @@ public class SMGuiHandler implements IGuiHandler {
 			return new GuiMFF(inv, (TileMFFurnaceAdvanced) tile);
 		case KICHEN_CHEST_GUI:
 			return new GuiKichenChest(inv, (TileWoodChest) tile);
+		case SUCCESSOR_GUI:
+			return new GuiMFSuccessor(inv, (TileMFSuccessor) tile);
+		case ARCANETABLE_GUI:
+			return new GuiMFArcaneTable(inv, (TileMFArcaneTable) tile);
 		}
 
 		return null;

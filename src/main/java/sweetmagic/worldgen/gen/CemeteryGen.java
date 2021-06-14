@@ -32,7 +32,7 @@ public class CemeteryGen extends BaseWorldGen {
 	public static List<ItemStack> chestA = new ArrayList<>();
 	public static List<ItemStack> chestB = new ArrayList<>();
 	public static List<ItemStack> chestC = new ArrayList<>();
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("tomb");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("tomb");
 
     public CemeteryGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance;

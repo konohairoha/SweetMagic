@@ -14,7 +14,7 @@ import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class BonusGen extends BaseWorldGen {
 
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("bonus");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("bonus");
 
     public BonusGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance + 20;
@@ -45,16 +45,8 @@ public class BonusGen extends BaseWorldGen {
 
     //生成物の内容
     public void generate(World world, BlockPos pos) {
-
         WorldGenerator gen = this.SM_HOUSE;
     	gen.generate(world, this.rand, pos);
-
     	this.setLootTable(world, this.rand, pos.add(2, 2, 2), LootTableInit.BIGINERCHEST, 0.25F);
-//    	// スポナーの中身を設定
-//    	this.setSpaner(world, p.add(16, 2, 8), 1);
-//
-//    	// チェストの中身を確定
-//		TileEntity chest = world.getTileEntity(p.add(32, 8, 29));
-//		((TileEntityChest) chest).setInventorySlotContents(0, new ItemStack(ItemInit.veil_darkness));
     }
 }

@@ -17,9 +17,7 @@ public class DekaijyuPiece {
     }
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<DekaijyuTemplate> list, Random rand) {
-
         list.add(new DekaijyuPiece.DekaijyuTemplate(manager, pos, rot, "dekaijyu"));
-
     }
 
     public static class DekaijyuTemplate extends BaseStructureTemplate {

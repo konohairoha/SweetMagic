@@ -35,7 +35,7 @@ public class WitchHouseGen extends BaseWorldGen {
 
 	public static List<ItemStack> chestA = new ArrayList<>();
 	public static List<ItemStack> chestB = new ArrayList<>();
-	public final WorldGenStructure SM_HOUSE = new WorldGenStructure("witch_house");
+	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("witch_house");
 
     public WitchHouseGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance;

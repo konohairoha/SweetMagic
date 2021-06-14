@@ -22,6 +22,7 @@ import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntityPixieVex;
+import sweetmagic.init.entity.monster.EntitySandryon;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
 import sweetmagic.init.entity.monster.EntityShadowWolf;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
@@ -29,8 +30,11 @@ import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.EntityZombieHora;
 import sweetmagic.init.entity.monster.EntityZombieKronos;
+import sweetmagic.init.entity.projectile.EntityAbsoluteZeroMagic;
 import sweetmagic.init.entity.projectile.EntityBabuleMagic;
+import sweetmagic.init.entity.projectile.EntityBlackHole;
 import sweetmagic.init.entity.projectile.EntityBlazeCyclone;
+import sweetmagic.init.entity.projectile.EntityBlazeEndMagic;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
 import sweetmagic.init.entity.projectile.EntityElectricMagic;
@@ -48,6 +52,7 @@ import sweetmagic.init.entity.projectile.EntityPoisonMagic;
 import sweetmagic.init.entity.projectile.EntityRockBlast;
 import sweetmagic.init.entity.projectile.EntityShinigFlare;
 import sweetmagic.init.entity.projectile.EntitySittableBlock;
+import sweetmagic.init.entity.projectile.EntitySuperNova;
 
 public class CommonProxy {
 
@@ -87,8 +92,12 @@ public class CommonProxy {
 		arrowEntity(EntityMeteorMagic.class, "meteormagic");
 		arrowEntity(EntityFrostRain.class, "frostrain");
 		arrowEntity(EntityRockBlast.class, "rockblast");
+		arrowEntity(EntityAbsoluteZeroMagic.class, "absolutezero");
+		arrowEntity(EntityBlazeEndMagic.class, "blazeend");
+		arrowEntity(EntityBlackHole.class, "blackhole");
 		arrowEntity(EntityBabuleMagic.class, "babulemagic");
 		arrowEntity(EntityShinigFlare.class, "shiningflare");
+		arrowEntity(EntitySuperNova.class, "supernova");
 		arrowEntity(EntitySittableBlock.class, "sittable");
 		arrowEntity(EntityMagicItem.class, "magicitem");
 
@@ -107,6 +116,7 @@ public class CommonProxy {
 		arrowEntity(EntityZombieKronos.class, "zombiekronos");
 		eggEntity(EntityBraveSkeleton.class, "braveskeleton");
 		eggEntity(EntityAncientFairy.class, "ancientfairy");
+		eggEntity(EntitySandryon.class, "sandryon");
 
 	}
 

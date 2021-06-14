@@ -25,6 +25,7 @@ import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntityPixieVex;
+import sweetmagic.init.entity.monster.EntitySandryon;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
 import sweetmagic.init.entity.monster.EntityShadowWolf;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
@@ -32,8 +33,11 @@ import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.EntityZombieHora;
 import sweetmagic.init.entity.monster.EntityZombieKronos;
+import sweetmagic.init.entity.projectile.EntityAbsoluteZeroMagic;
 import sweetmagic.init.entity.projectile.EntityBabuleMagic;
+import sweetmagic.init.entity.projectile.EntityBlackHole;
 import sweetmagic.init.entity.projectile.EntityBlazeCyclone;
+import sweetmagic.init.entity.projectile.EntityBlazeEndMagic;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
 import sweetmagic.init.entity.projectile.EntityElectricMagic;
@@ -51,7 +55,9 @@ import sweetmagic.init.entity.projectile.EntityRockBlast;
 import sweetmagic.init.entity.projectile.EntityShinigFlare;
 import sweetmagic.init.render.block.RenderFermenter;
 import sweetmagic.init.render.block.RenderJuiceMaker;
+import sweetmagic.init.render.block.RenderMFArcaneTable;
 import sweetmagic.init.render.block.RenderMFFisher;
+import sweetmagic.init.render.block.RenderMFSuccessor;
 import sweetmagic.init.render.block.RenderMFTable;
 import sweetmagic.init.render.block.RenderMagiaWrite;
 import sweetmagic.init.render.block.RenderModenRack;
@@ -75,6 +81,7 @@ import sweetmagic.init.render.monster.RenderEnderShadow;
 import sweetmagic.init.render.monster.RenderIfritVerre;
 import sweetmagic.init.render.monster.RenderPhantomZombie;
 import sweetmagic.init.render.monster.RenderPixieVex;
+import sweetmagic.init.render.monster.RenderSandryon;
 import sweetmagic.init.render.monster.RenderShadowGolem;
 import sweetmagic.init.render.monster.RenderShadowWolf;
 import sweetmagic.init.render.monster.RenderSkullFrost;
@@ -82,7 +89,10 @@ import sweetmagic.init.render.monster.RenderWindineVerre;
 import sweetmagic.init.render.monster.RenderWitchMadameVerre;
 import sweetmagic.init.render.monster.RenderZombieHora;
 import sweetmagic.init.render.monster.RenderZombieKronos;
+import sweetmagic.init.render.projectile.RenderAbsoluteZeroMagic;
 import sweetmagic.init.render.projectile.RenderBabuleMagic;
+import sweetmagic.init.render.projectile.RenderBlackHole;
+import sweetmagic.init.render.projectile.RenderBlazeEndMagic;
 import sweetmagic.init.render.projectile.RenderCardNormal;
 import sweetmagic.init.render.projectile.RenderCyclonMagic;
 import sweetmagic.init.render.projectile.RenderCyclone;
@@ -103,8 +113,10 @@ import sweetmagic.init.tile.chest.TileWandPedal;
 import sweetmagic.init.tile.cook.TileFermenter;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 import sweetmagic.init.tile.cook.TilePot;
+import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFFisher;
+import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.magic.TileMagiaWrite;
@@ -145,6 +157,8 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileWandPedal.class, new RenderWandPedal());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileMagiaWrite.class, new RenderMagiaWrite());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileToolRepair.class, new RenderToolRepair());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileMFSuccessor.class, new RenderMFSuccessor());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileMFArcaneTable.class, new RenderMFArcaneTable());
 
 		// レイヤー登録
 		RegistryHandler.layerHandler();
@@ -180,6 +194,9 @@ public class ClientProxy extends CommonProxy {
 		registRender(EntityRockBlast.class, RenderRockBlast.class);
 		registRender(EntityBabuleMagic.class, RenderBabuleMagic.class);
 		registRender(EntityShinigFlare.class, RenderShinigFlare.class);
+		registRender(EntityAbsoluteZeroMagic.class, RenderAbsoluteZeroMagic.class);
+		registRender(EntityBlazeEndMagic.class, RenderBlazeEndMagic.class);
+		registRender(EntityBlackHole.class, RenderBlackHole.class);
 
 		registRender(EntityNomal.class, RenderCardNormal.class);
 
@@ -201,6 +218,7 @@ public class ClientProxy extends CommonProxy {
 		registRender(EntityBraveSkeleton.class, RenderBraveSkeleton.class);
 		registRender(EntityPixieVex.class, RenderPixieVex.class);
 		registRender(EntityAncientFairy.class, RenderAncientFairy.class);
+		registRender(EntitySandryon.class, RenderSandryon.class);
 	}
 
 	//えんちちのれんだー
