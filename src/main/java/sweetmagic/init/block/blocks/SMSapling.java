@@ -2,6 +2,7 @@ package sweetmagic.init.block.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.SoundType;
@@ -48,6 +49,7 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 	 * 4 = プリズム
 	 * 5 = バナナ
 	 * 6 = エストール
+	 * 7 = 桃
 	 */
 
 	@Override
@@ -59,43 +61,82 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 
 		// オレンジ
 		case 0:
-			gen = new WorldGenFruitTree(true, BlockInit.orange_log, BlockInit.orange_leaves);
+			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
 			break;
 
 		// レモン
 		case 1:
-			gen = new WorldGenFruitTree(true, BlockInit.lemon_log, BlockInit.lemon_leaves);
+			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
 			break;
 
 		// 栗
 		case 2:
-			gen = new WorldGenFruitTree(true, BlockInit.chestnut_log, BlockInit.chestnut_leaves);
+			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
 			break;
 
 		// ヤシ
 		case 3:
-			gen = new WorldGenCoconutTree(true, BlockInit.coconut_log, BlockInit.coconut_leaves, BlockInit.coconut_plant, 0);
+			gen = new WorldGenCoconutTree(true, this.getLog(), this.getLeave(), BlockInit.coconut_plant, 0);
 			break;
 
 		// プリズム
 		case 4:
-			gen = new WorldGenPrsmTree(BlockInit.prism_log, BlockInit.prism_leaves, false);
+			gen = new WorldGenPrsmTree(this.getLog(), this.getLeave(), false);
 			break;
 
 		// バナナ
 		case 5:
-			gen = new WorldGenCoconutTree(true, Blocks.LOG, BlockInit.banana_leaves, BlockInit.banana_plant, 1);
+			gen = new WorldGenCoconutTree(true, this.getLog(), this.getLeave(), BlockInit.banana_plant, 1);
 			break;
 
 		// エストール
 		case 6:
-			gen = new WorldGenEstor(true, BlockInit.estor_log, BlockInit.estor_leaves);
+			gen = new WorldGenEstor(true, this.getLog(), this.getLeave());
+			break;
+
+		// 桃
+		case 7:
+			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
 			break;
 		}
 
 		if (gen != null) {
 	    	gen.generate(world, rand, pos);
 		}
+	}
+
+	// 原木の取得
+	public Block getLog () {
+
+		switch (this.data) {
+		case 0: return BlockInit.orange_log;	// オレンジ
+		case 1: return BlockInit.lemon_log;	// レモン
+		case 2: return BlockInit.chestnut_log;	// 栗
+		case 3: return BlockInit.coconut_log;	// ヤシ
+		case 4: return BlockInit.prism_log;	// プリズム
+		case 5: return Blocks.LOG;				// バナナ
+		case 6: return BlockInit.estor_log;	// エストール
+		case 7: return BlockInit.peach_log;	// 桃
+		}
+
+		return BlockInit.orange_log;
+	}
+
+	// 葉っぱの取得
+	public Block getLeave () {
+
+		switch (this.data) {
+		case 0: return BlockInit.orange_leaves;	// オレンジ
+		case 1: return BlockInit.lemon_leaves;		// レモン
+		case 2: return BlockInit.chestnut_leaves;	// 栗
+		case 3: return BlockInit.coconut_leaves;	// ヤシ
+		case 4: return BlockInit.prism_leaves;		// プリズム
+		case 5: return BlockInit.banana_leaves;	// バナナ
+		case 6: return BlockInit.estor_leaves;		// エストール
+		case 7: return BlockInit.peach_leaves;		// 桃
+		}
+
+		return BlockInit.orange_leaves;
 	}
 
 	@Override

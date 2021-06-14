@@ -122,6 +122,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 	 * 7 = クレロデンドルム
 	 * 8 = コットン
 	 * 9 = ナスタチウム
+	 * 10 = ほうれん草
 	 */
 
 	// ドロップする種
@@ -138,6 +139,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		case 7:	return ItemInit.clerodendrum_seed;
 		case 8:	return ItemInit.cotton_seed;
 		case 9:	return ItemInit.fire_nasturtium_seed;
+		case 10: return ItemInit.spinach_seed;
 		}
 
 		return null;
@@ -157,9 +159,15 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		case 7:	return ItemInit.clero_petal;
 		case 8:	return ItemInit.cotton;
 		case 9:	return ItemInit.fire_nasturtium_petal;
+		case 10: return ItemInit.spinach;
 		}
 
 		return null;
+	}
+
+	// ドロップする作物
+	public Item getDropItem () {
+		return this.getCrop();
 	}
 
 	// 終わり

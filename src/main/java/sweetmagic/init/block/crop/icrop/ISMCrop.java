@@ -7,6 +7,7 @@ import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -28,7 +29,7 @@ public interface ISMCrop {
 
 		// 鍬を持っていたら
 		if (hand.getItem() instanceof SMHoe) {
-			addDrop += world.rand.nextInt(2) + 1;
+			addDrop += world.rand.nextInt(2) + 1 + this.getFoutuneValue(player);
 			hand.damageItem(20, player);
 		}
 
@@ -64,5 +65,22 @@ public interface ISMCrop {
 	// 作物回収時の音
 	default void playCropSound (World world, Random rand, BlockPos pos) {
         world.playSound(null, pos,SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+	}
+
+	// 幸運での加算
+	default int getFoutuneValue (EntityPlayer player) {
+
+		int value = 0;
+
+		if (player.isPotionActive(MobEffects.LUCK)) {
+			value += player.getActivePotionEffect(MobEffects.LUCK).getAmplifier();
+		}
+
+		return value;
+	}
+
+	// ドロップアイテムの取得
+	default Item getDropItem () {
+		return null;
 	}
 }

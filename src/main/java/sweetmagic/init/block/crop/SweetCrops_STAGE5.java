@@ -144,6 +144,11 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		return null;
 	}
 
+	// ドロップする作物
+	public Item getDropItem () {
+		return this.getCrop();
+	}
+
 	// 終わり
 
 	//最重要メソッド　ワールド読み込みなどで呼ばれるやつ。

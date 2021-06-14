@@ -6,6 +6,7 @@ import java.util.List;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -18,6 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iitem.IMFTool;
+import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
@@ -46,6 +48,7 @@ public class PedalCreate extends BaseMFBlock {
 		if (!world.isRemote && !tile.isCharge) {
 
 			ItemStack copy = stack.copy();
+			Item copyItem = copy.getItem();
 
 			// プレイヤーのInventoryの取得
 			NonNullList<ItemStack> pInv = player.inventory.mainInventory;
@@ -71,11 +74,11 @@ public class PedalCreate extends BaseMFBlock {
 				if (recipeInfo.keepTag && copy.hasTagCompound()) {
 
 					// ブロックにMFを持ってたら
-					if (tags != null && tags.hasKey(MF) && !(copy.getItem() instanceof IMFTool)) {
+					if (tags != null && tags.hasKey(MF) && !(copyItem instanceof IMFTool)) {
 						this.blockItemSpawn(world, player, tags, result);
 					}
 
-					else if (copy.getItem() instanceof IMFTool) {
+					else if (copyItem instanceof IMFTool || copyItem instanceof IPouch) {
 			    		result.setTagCompound(copy.getTagCompound());
 					}
 				}

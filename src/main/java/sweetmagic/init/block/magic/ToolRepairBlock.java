@@ -22,6 +22,8 @@ import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFFace;
+import sweetmagic.init.tile.magic.TileMFArcaneTable;
+import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMagiaWrite;
 import sweetmagic.init.tile.magic.TileToolRepair;
 
@@ -30,6 +32,7 @@ public class ToolRepairBlock extends BaseMFFace {
 	public final int data;
 	public static final AxisAlignedBB TOOL = new AxisAlignedBB(0.2D, 0D, 0.2D, 0.8D, 0.65D, 0.8D);
 	public static final AxisAlignedBB WRITE = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.875D, 0.925D);
+	public static final AxisAlignedBB SUCCESSOR = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.4375D, 1D);
 
     public ToolRepairBlock(String name, int data) {
 		super(name);
@@ -40,6 +43,8 @@ public class ToolRepairBlock extends BaseMFFace {
     /**
      * 0 = ツールリペアラー
      * 1 = マギア・リライト
+     * 2 = マギア・サクセサー
+     * 3 = アルカナ・テーブル
      */
 
 	// ブロックでのアクション
@@ -56,6 +61,12 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 1:
 			guiId = SMGuiHandler.MAGIAWRITE;
 			break;
+		case 2:
+			guiId = SMGuiHandler.SUCCESSOR_GUI;
+			break;
+		case 3:
+			guiId = SMGuiHandler.ARCANETABLE_GUI;
+			break;
 		}
 
 		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
@@ -66,6 +77,8 @@ public class ToolRepairBlock extends BaseMFFace {
 		switch (this.data) {
 		case 0:	return new TileToolRepair();
 		case 1:	return new TileMagiaWrite();
+		case 2:	return new TileMFSuccessor();
+		case 3:	return new TileMFArcaneTable();
 		}
 		return null;
 	}
@@ -76,6 +89,8 @@ public class ToolRepairBlock extends BaseMFFace {
 		switch (this.data) {
 		case 0:	return TOOL;
 		case 1:	return WRITE;
+		case 2:	return SUCCESSOR;
+		case 3:	return FULL_BLOCK_AABB;
 		}
 
 		return FULL_BLOCK_AABB;
@@ -93,8 +108,12 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 1:
 			tip = "tip.magia_rewrite.name";
 			break;
+		case 2:
+			tip = "tip.magia_successor.name";
+			break;
 		}
 
 		tooltip.add(I18n.format(TextFormatting.GOLD + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

@@ -173,8 +173,15 @@ public class WandPedal extends BaseFaceBlock {
 	}
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
     	TileWandPedal tile = (TileWandPedal) world.getTileEntity(pos);
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+
+		if (tile.isSlotEmpty()) {
+			spawnAsEntity(world, pos, stack);
+			return;
+		}
+
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setTag("BlockEntityTag", tile.writeToNBT(new NBTTagCompound()));
 		stack.setTagCompound(tags);

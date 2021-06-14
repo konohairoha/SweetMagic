@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
@@ -64,30 +65,39 @@ public class BlockWoodChest extends BaseFaceBlock {
 		if (world.isRemote) { return true; }
 
 		int guiId = 0;
+		SoundEvent sound = null;
 
 		switch (this.data) {
 		case 0:
-			this.playerSound(world, pos, SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			sound = SoundEvents.BLOCK_PISTON_CONTRACT;
 			guiId = SMGuiHandler.WOODCHEST;
 			break;
 		case 1:
-			this.playerSound(world, pos, SoundEvents.BLOCK_IRON_DOOR_OPEN, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			sound = SoundEvents.BLOCK_IRON_DOOR_OPEN;
 			guiId = SMGuiHandler.WOODCHEST;
 			break;
 		case 2:
-			this.playerSound(world, pos, SoundEvents.BLOCK_PISTON_CONTRACT, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
+			sound = SoundEvents.BLOCK_PISTON_CONTRACT;
 			guiId = SMGuiHandler.KICHEN_CHEST_GUI;
 			break;
 		}
 
+		this.playerSound(world, pos, sound, 0.5F, world.rand.nextFloat() * 0.1F + 0.9F);
 		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 
 		return true;
 	}
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
     	TileWoodChest tile = (TileWoodChest) world.getTileEntity(pos);
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+
+		if (tile.isSlotEmpty()) {
+			spawnAsEntity(world, pos, stack);
+			return;
+		}
+
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setTag("BlockEntityTag", tile.writeToNBT(new NBTTagCompound()));
 		stack.setTagCompound(tags);

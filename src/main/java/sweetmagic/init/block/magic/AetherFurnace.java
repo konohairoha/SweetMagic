@@ -77,6 +77,11 @@ public class AetherFurnace extends BaseMFBlock {
 		}
 	}
 
+    @Override
+	public boolean hasTileEntity(IBlockState state) {
+		return !this.isTop;
+	}
+
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
 		return super.canPlaceBlockAt(world, pos) && super.canPlaceBlockAt(world, pos.up());
@@ -153,22 +158,10 @@ public class AetherFurnace extends BaseMFBlock {
 		if (this.isTop) { return; }
 
 		super.breakBlock(world, pos, state);
-//		ItemStack stack = new ItemStack(this);
-//		TileAetherFurnace tile = (TileAetherFurnace) world.getTileEntity(pos);
-//		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
-//		NBTTagCompound tags = new NBTTagCompound();
-//		if (tileTags.hasKey(tile.POST)) { tileTags.removeTag(tile.POST); }
-//		tags.setTag("BlockEntityTag", tileTags);
-//		System.out.println("==========" + tile.getList());
-//		this.saveStackList(tags, tile.getList(), "ItemList");
-//		stack.setTagCompound(tags);
-//		world.updateComparatorOutputLevel(pos, state.getBlock());
-//		spawnAsEntity(world, pos, stack);
-//        world.removeTileEntity(pos);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 
 		if (this.isTop) { return null; }
 

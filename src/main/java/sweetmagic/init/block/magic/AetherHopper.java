@@ -61,6 +61,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String text = new TextComponentTranslation("tip.aether_hopper.name", new Object[0]).getFormattedText();
 		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 
 	@Override

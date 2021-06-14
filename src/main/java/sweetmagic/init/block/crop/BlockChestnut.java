@@ -185,6 +185,11 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 		return null;
 	}
 
+	// ドロップする作物
+	public Item getDropItem () {
+		return this.getCrop();
+	}
+
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {

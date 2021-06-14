@@ -44,6 +44,7 @@ public class BlockModenRack extends BaseFaceBlock {
 	 * 0 = モダンラック
 	 * 1 = モダンウォールラック
 	 * 2 = 皿
+	 * 3 = 木皿
 	 */
 
 	@Override
@@ -58,6 +59,7 @@ public class BlockModenRack extends BaseFaceBlock {
 		case 0:	return new TileModenRack();
 		case 1:	return new TileModenWallRack();
 		case 2:	return new TilePlate();
+		case 3:	return new TilePlate();
 		}
 
 		return null;
@@ -78,6 +80,7 @@ public class BlockModenRack extends BaseFaceBlock {
 			}
 
 		case 2:
+		case 3:
 			return AABB;
 		}
 
@@ -93,8 +96,15 @@ public class BlockModenRack extends BaseFaceBlock {
 	}
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
     	TileModenRack tile = (TileModenRack) world.getTileEntity(pos);
 		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+
+		if (tile.isSlotEmpty()) {
+			spawnAsEntity(world, pos, stack);
+			return;
+		}
+
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setTag("BlockEntityTag", tile.writeToNBT(new NBTTagCompound()));
 		stack.setTagCompound(tags);

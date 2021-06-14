@@ -77,6 +77,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	 * 0 = レモン
 	 * 1 = みかん
 	 * 2 = エストール
+	 * 3 = 桃
 	 */
 
 	@Override
@@ -228,7 +229,10 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 			break;
 		case 2:
 			block = BlockInit.estor_sapling;
-		break;
+			break;
+		case 3:
+			block = BlockInit.peach_sapling;
+			break;
 		}
 
 		return SMUtil.getItemBlock(block);
@@ -241,6 +245,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		case 0:	return ItemInit.lemon;
 		case 1:	return ItemInit.orange;
 		case 2:	return ItemInit.estor_apple;
+		case 3:	return ItemInit.peach;
 		}
 
 		return null;
