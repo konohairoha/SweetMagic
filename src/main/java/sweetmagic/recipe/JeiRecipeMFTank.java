@@ -20,6 +20,7 @@ public class JeiRecipeMFTank {
 	public static void init() {
 		JeiRecipeMFTank.register(new ItemStack(Items.GLASS_BOTTLE, 1), new ItemStack(ItemInit.mf_sbottle, 1));
 		JeiRecipeMFTank.register(new ItemStack(ItemInit.b_mf_bottle, 1), new ItemStack(ItemInit.mf_bottle, 1));
+		JeiRecipeMFTank.register(new ItemStack(ItemInit.b_mf_magiabottle, 1), new ItemStack(ItemInit.mf_magiabottle, 1));
 
 	}
 
@@ -29,7 +30,7 @@ public class JeiRecipeMFTank {
 	}
 
 	// 通常レシピと鉱石辞書でのレシピ登録を行う
-	private static void commonRegister(Object inputStack, ItemStack outputStack/*, int burnTime*/) {
+	private static void commonRegister(Object inputStack, ItemStack outputStack) {
 		recipes.add(new JeiRecipeMFTank( inputStack, outputStack ));
 	}
 
@@ -39,13 +40,17 @@ public class JeiRecipeMFTank {
 	}
 
 	public ItemStack getInput() {
+
 		ItemStack ipt = ItemStack.EMPTY;
+
 		//通常のItemStack
 		if (this.inputStack instanceof ItemStack) {
 			ipt = ((ItemStack) this.inputStack).copy();
 		}
+
 		//鉱石辞書
 		else if (this.inputStack instanceof String) {
+
 			NonNullList<ItemStack> oreDict = OreDictionary.getOres((String) this.inputStack);
 			for (ItemStack stack : oreDict) {
 				ipt = (stack.copy());

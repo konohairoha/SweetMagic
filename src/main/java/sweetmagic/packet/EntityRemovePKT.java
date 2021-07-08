@@ -14,7 +14,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import sweetmagic.init.PotionInit;
-import sweetmagic.util.SoundHelper;
 
 public class EntityRemovePKT implements IMessage {
 
@@ -78,8 +77,6 @@ public class EntityRemovePKT implements IMessage {
 		  			List<EntityLivingBase> list = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 
 					for (EntityLivingBase entity : list) {
-//						if (!(entity instanceof IMob)) { continue; }
-
 						this.action(entity);
 					}
 				}
@@ -89,7 +86,6 @@ public class EntityRemovePKT implements IMessage {
 					switch (mdg.data) {
 					case 0:
 						entity.removePotionEffect(PotionInit.regene);
-						SoundHelper.PlaySoundToPlayer(6, 0.5F, 1F);
 						break;
 					case 1:
 						entity.addPotionEffect(new PotionEffect(PotionInit.babule, mdg.time, mdg.level));

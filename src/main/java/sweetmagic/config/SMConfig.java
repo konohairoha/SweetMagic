@@ -105,6 +105,17 @@ public class SMConfig {
 	public static String hard_name = "High difficulty mode settings.";
 	public static String hard_come = "By setting it to true, you can get a Stardust crystal in the bonus chest and various difficulty levels!";
 
+	// ダメージレート
+	public static double damageRate = 1D;
+	public static String damageRate_name = "Damage rate for magic attack power.";
+	public static String damageRate_come = "Set the damage rate for magic attack power. The higher the number, the greater the damage. Default is 1.0.";
+
+	// 最大エンチャレベル
+	public static int maxLevel = 10;
+	public static String maxLevel_name= "Maximum level of Wand Add Power enchantment";
+	public static String maxLevel_come= "Sets the maximum level of magic firepower increase enchantments. Normally only effective up to level 10, but can be changed.";
+
+
 	public void load(File file) {
 		File cfgFile = new File(file, "sweetmagic.cfg");
 		SMConfig.INSTANCE.load(new Configuration(cfgFile));
@@ -143,6 +154,8 @@ public class SMConfig {
 			Property look_FLW = cfg.get(STRUCTURE_BOOL, this.flower_name, this.genFlowers, this.flower_come);
 			Property look_dim = cfg.get(DIM, this.dim_name, this.dimId, this.dim_come);
 			Property look_hard = cfg.get(DIFFICUL, this.hard_name, this.isHard, this.hard_come);
+			Property look_dmrate = cfg.get(DIFFICUL, this.damageRate_name, this.damageRate, this.damageRate_come);
+			Property look_maxlevel = cfg.get(DIFFICUL, this.maxLevel_name, this.maxLevel, this.maxLevel_come);
 
 			// look_○○　で　読み込んだ変数をStatic参照できる変数に代入
 			this.help_recipe = look_hrcp.getBoolean();
@@ -156,6 +169,8 @@ public class SMConfig {
 			this.genFlowers = look_FLW.getBoolean();
 			this.dimId = look_dim.getInt();
 			this.isHard = look_hard.getBoolean();
+			this.damageRate = look_dmrate.getDouble();
+			this.maxLevel = look_maxlevel.getInt();
 
 			// int　0以下が設定されていたらデフォルトを設定
 			this.house_spawnchance = look_houseChance.getInt();
@@ -168,7 +183,11 @@ public class SMConfig {
 			this.dungeon_spawnchance = look_dungeonChance.getInt();
 			if(dungeon_spawnchance < 1) { dungeon_spawnchance = 160; }
 			this.dungeon_lootchance = look_spawn_dungeonloot.getInt();
-			if(dungeon_lootchance < 1) { dungeon_lootchance = 32; }
+			if(this.dungeon_lootchance < 1) { this.dungeon_lootchance = 32; }
+
+			// int 0以下が設定
+			if(this.damageRate <= 0) { this.damageRate = 1D; }
+			if (this.maxLevel < 1) { this.maxLevel = 10; }
 		}
 
 		// これはなんかのエラー用に置いておくっぽい。

@@ -4,6 +4,7 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -23,7 +24,7 @@ public class RemovePotion implements IMessage {
 	/**
 	 * 1 = 幻影
 	 * 2 = リジェネ
-	 * 3 = 全デバフ解除
+	 * 3 = リフレッシュエフェクト
 	 */
 
 	// 変数読み出し
@@ -53,9 +54,10 @@ public class RemovePotion implements IMessage {
 					switch (potion) {
 					case 1:
 					case 2:
+					case 3:
 						player.removeActivePotionEffect(this.getPotion(potion));
 						break;
-					case 3:
+					case 4:
 						this.reflash(player);
 						break;
 					}
@@ -72,6 +74,8 @@ public class RemovePotion implements IMessage {
 						break;
 					case 2:
 						pot = PotionInit.regene;
+					case 3:
+						pot = PotionInit.refresh_effect;
 					}
 
 					return pot;
@@ -79,8 +83,13 @@ public class RemovePotion implements IMessage {
 
 				// デバフ解除
 				public void reflash (EntityPlayer player) {
-					for (Potion potion : PotionInit.getDeBuffPotionList()) {
-						player.removeActivePotionEffect(potion);
+					for (PotionEffect effect : player.getActivePotionEffects()) {
+
+						// デバフなら
+						Potion potion = effect.getPotion();
+						if (potion.isBadEffect()) {
+							player.removePotionEffect(potion);
+						}
 					}
 				}
 			});
