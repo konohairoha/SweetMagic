@@ -18,6 +18,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.config.SMConfig;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.AdvancedInit;
@@ -414,7 +415,7 @@ public interface IWand extends IMFTool {
 	default int addWandLevel (World world, EntityPlayer player, ItemStack stack, ISMItem smItem, Enchantment enchant) {
 
 		// 射撃魔法以外ならエンチャレベルだけを返す
-		int enchaLevel = Math.min(EnchantmentHelper.getEnchantmentLevel(enchant, stack), 10);
+		int enchaLevel = Math.min(EnchantmentHelper.getEnchantmentLevel(enchant, stack), SMConfig.maxLevel);
 		if (smItem.getType() != SMType.SHOTTER) { return enchaLevel; }
 
 		int addPower = 0;
@@ -437,7 +438,7 @@ public interface IWand extends IMFTool {
 			IAcce acce = (IAcce) item;
 			if (!acce.canUseEffect(world, player, st)) { continue; }
 
-			// ウィッチスクロールなら10%を返す
+			// 血吸なら10%を返す
 			if (item == ItemInit.blood_sucking_ring) {
 				addPower++;
 				((IAcce) item).acceeffect(world, player, st);
