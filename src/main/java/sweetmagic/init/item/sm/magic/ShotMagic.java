@@ -190,6 +190,9 @@ public class ShotMagic extends MFSlotItem {
 		case 29:
 			toolTip.add("tip.magic_blackhole.name");
 			break;
+		case 30:
+			toolTip.add("tip.magic_supernova.name");
+			break;
 		}
 
 		return toolTip;
@@ -288,7 +291,7 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 18:
 				entity = new EntityCyclonMagic(world, player, stack);
-				entity.setDamage((entity.getDamage() + power ) / 2 );
+				entity.setDamage((entity.getDamage() + power ) * 0.2D );
 				entity.isHit = true;
 				break;
 			case 19:
@@ -433,7 +436,7 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 18:
 				entity = new EntityCyclonMagic(world, player, stack);
-				entity.setDamage( (entity.getDamage() + power ) * 0.25D );
+				entity.setDamage( (entity.getDamage() + power ) * 0.2D );
 				entity.isHit = true;
 				break;
 			}

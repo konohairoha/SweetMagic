@@ -68,16 +68,21 @@ public class MFWeather extends MFSlotItem implements IElementItem {
 	@Override
 	public boolean onItemAction(World world, EntityPlayer player, ItemStack stack, Item slotItem) {
 
+		if (world instanceof WorldServer) {
+			this.changeWeather(world);
+			world.playSound(null, new BlockPos(player), SMSoundEvent.CHANGETIME, SoundCategory.VOICE, 0.35F, 1.0F);
+		}
 
+		return true;
+	}
+
+	public void changeWeather (World world) {
 		if (world instanceof WorldServer) {
 			WorldInfo info = world.getMinecraftServer().getWorld(0).getWorldInfo();
 			info.setRainTime(this.getRainTime());
 			info.setThunderTime(0);
 			info.setRaining(this.getRainTime() != 0);
-			world.playSound(null, new BlockPos(player), SMSoundEvent.CHANGETIME, SoundCategory.VOICE, 0.35F, 1.0F);
 		}
-
-		return true;
 	}
 
 	//ツールチップの表示

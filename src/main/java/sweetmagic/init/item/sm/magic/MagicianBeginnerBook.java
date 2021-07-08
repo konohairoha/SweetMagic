@@ -34,6 +34,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 import sweetmagic.util.ItemHelper;
 import sweetmagic.util.SMUtil;
@@ -76,7 +77,7 @@ public class MagicianBeginnerBook extends SMItem {
 			player.setActiveHand(hand);
 			BlockPos pos = new BlockPos(tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z));
 
-			if (world instanceof WorldServer) {
+			if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
 				this.genHouse(world, pos, tags);
 			}
 			if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
@@ -108,7 +109,7 @@ public class MagicianBeginnerBook extends SMItem {
 
 		if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
 
-		if (world instanceof WorldServer) {
+		if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
 			this.genHouse(world, pos, tags);
 		}
 
@@ -189,15 +190,11 @@ public class MagicianBeginnerBook extends SMItem {
 
         IBlockState state = world.getBlockState(pos);
         Block block = state.getBlock();
+		if (block.isAir(state, world, pos)) { return false; }
 
-		if (block.isAir(state, world, pos)) {
-            return false;
-		} else {
-			world.playEvent(2001, pos, Block.getStateId(state));
-			block.dropBlockAsItem(world, pos, state, 0);
-
-            return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
-        }
+		world.playEvent(2001, pos, Block.getStateId(state));
+		block.dropBlockAsItem(world, pos, state, 0);
+        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
     }
 
 	public RayTraceResult getHitBlock(EntityPlayer player) {

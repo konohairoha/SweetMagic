@@ -55,6 +55,7 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 7 = 夜の帳
 	 * 8 = 魔術師のグローブ
 	 * 9
+	 * 12 = 毒牙
 	 */
 
 	@Override
@@ -97,6 +98,9 @@ public class SMAcce extends SMItem implements IAcce {
 		case 11:
 			toolTip.add("tip.gravity_pendant.name");
 			break;
+		case 12:
+			toolTip.add("tip.poison_fang.name");
+			break;
 		}
 
 		return toolTip;
@@ -112,6 +116,9 @@ public class SMAcce extends SMItem implements IAcce {
 		// 守護のペンダント
 		case 8:
 			return player.getHealth() <= 6 && !player.getCooldownTracker().hasCooldown(stack.getItem());
+		// 毒牙
+		case 12:
+			return player.getHealth() <= 6;
 		}
 
 		return true;
