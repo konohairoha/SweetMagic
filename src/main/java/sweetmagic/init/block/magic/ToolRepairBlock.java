@@ -111,6 +111,9 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 2:
 			tip = "tip.magia_successor.name";
 			break;
+		case 3:
+			tip = "tip.arcane_table.name";
+			break;
 		}
 
 		tooltip.add(I18n.format(TextFormatting.GOLD + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));

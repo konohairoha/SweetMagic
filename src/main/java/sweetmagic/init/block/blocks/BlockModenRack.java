@@ -90,7 +90,7 @@ public class BlockModenRack extends BaseFaceBlock {
 	// ブロックでのアクション
 	@Override
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
-		if (world.isRemote) { return true; }
+		if (world.isRemote || player == null) { return true; }
 		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MODENRACK_GUI, world, pos.getX(), pos.getY(), pos.getZ());
 		return true;
 	}

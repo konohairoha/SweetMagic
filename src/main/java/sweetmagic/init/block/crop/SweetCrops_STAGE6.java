@@ -112,7 +112,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 	 * 1 = 種籾
 	 * 2 = 大豆
 	 * 3 = 小豆
-	 *
+	 * 4 = クオーツ
 	 */
 
 	//ドロップする種
@@ -123,6 +123,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 		case 1:	return ItemInit.rice_seed;
 		case 2:	return ItemInit.soybean;
 		case 3:	return ItemInit.azuki_seed;
+		case 4: return ItemInit.quartz_seed;
 		}
 
 		return null;
@@ -135,7 +136,8 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 		case 0:	return ItemInit.raspberry;
 		case 1:	return ItemInit.ine;
 		case 2:	return ItemInit.soybean;
-		case 3:		return ItemInit.azuki_seed;
+		case 3:	return ItemInit.azuki_seed;
+		case 4:	return Items.QUARTZ;
 		}
 
 		return null;
@@ -256,7 +258,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 		}
 
 		if (age >= this.getMaxBlockState()) {
-			drops.add(new ItemStack(this.getCrop(), 3 + fortune, 0));
+			drops.add(new ItemStack(this.getCrop(), 4 + fortune, 0));
 			for (int i = this.srand.nextInt(4) + 1; i > 0; i--) {
 				drops.add(new ItemStack(this.getSeed(), 1, 0));
 			}
@@ -288,11 +290,17 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 
 		if (age >= this.getMaxBlockState()) {
 
-	    	EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
+	    	EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(4) + 2);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
 			this.playCropSound(world, rand, pos);
 
+			// 幸運の取得
+			int luck = this.getFoutuneValue(player);
+
+			if (this.metaCrop == 2 && luck > 0) {
+				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemInit.edamame, rand.nextInt(2 + luck) + 1)));
+			}
 		}
 
 		else {
@@ -306,7 +314,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 			}
 
 			else if (this.metaCrop == 2 && age == 4) {
-				EntityItem drop = new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemInit.edamame, rand.nextInt(2) + 1));
+				EntityItem drop = new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemInit.edamame, rand.nextInt(4) + 3));
 				world.spawnEntity(drop);
 				this.playCropSound(world, rand, pos);
 				world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる

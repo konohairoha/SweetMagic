@@ -31,7 +31,6 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
-import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.EnumPlantType;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.alstroemeria.AlstroemeriaRecipeInfo;
@@ -41,6 +40,7 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
 import sweetmagic.init.item.sm.magic.MFTime;
+import sweetmagic.init.item.sm.magic.MFWeather;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
 import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.PlayerHelper;
@@ -248,20 +248,16 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 
 		// ドリズリィ・ミオソチスのお花を持っている状態だったら1日雨にする
 		if (objMyosotis != null) {
-			WorldInfo info = world.getWorldInfo();
-			info.setRainTime(12000);
-			info.setThunderTime(0);
-			info.setRaining(true);
+			MFWeather item = (MFWeather) ItemInit.dm_flower;
+			item.changeWeather(world);
 			SMUtil.decrPInvMin(player, 1, objMyosotis[0]);
 			tmFlg = true;
 		}
 
 		// ファイアーナスタチウムを持っていたら晴れにする
 		else if (obFire != null) {
-			WorldInfo info = world.getWorldInfo();
-			info.setRainTime(0);
-			info.setThunderTime(0);
-			info.setRaining(false);
+			MFWeather item = (MFWeather) ItemInit.fire_nasturtium_petal;
+			item.changeWeather(world);
 			SMUtil.decrPInvMin(player, 1, obFire[0]);
 			tmFlg = true;
 		}

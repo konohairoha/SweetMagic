@@ -4,9 +4,9 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseModelBlock;
+import sweetmagic.init.base.BaseFaceBlock;
 
-public class SMTableDot extends BaseModelBlock {
+public class SMTableDot extends BaseFaceBlock {
 
 	public SMTableDot(String name) {
 		super(Material.WOOD, name);

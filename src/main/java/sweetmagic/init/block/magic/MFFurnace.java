@@ -38,6 +38,8 @@ public class MFFurnace extends BaseMFFace {
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
+		if (world.isRemote) { return; }
+
 		int guiId = 0;
 
 		switch (this.data) {
@@ -53,7 +55,7 @@ public class MFFurnace extends BaseMFFace {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 
 		switch (this.data) {
 		case 0: return new TileMFFurnace();
@@ -63,16 +65,16 @@ public class MFFurnace extends BaseMFFace {
 		return null;
 	}
 
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		if (!setBlock) {
-			super.breakBlock(world, pos, state);
-		}
-	}
+//	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+//		if (!setBlock) {
+//			super.breakBlock(world, pos, state);
+//		}
+//	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(I18n.format(TextFormatting.GREEN + new TextComponentTranslation("tip.mffurnace.name", new Object[0]).getFormattedText()));
-		super.addInformation(stack, playerIn, tooltip, advanced);
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

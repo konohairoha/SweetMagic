@@ -5,8 +5,10 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -41,7 +43,7 @@ public interface ISMCrop {
 
 	default void getPickPlant (World world, EntityPlayer player, BlockPos pos, ItemStack stack) {
 
-		int area = 2;
+		int area = 2 + EnchantmentHelper.getEnchantmentLevel(Enchantments.UNBREAKING, stack);
 
 		for (BlockPos p : BlockPos.getAllInBox(pos.add(-area, 0, -area), pos.add(area, area, area))) {
 
