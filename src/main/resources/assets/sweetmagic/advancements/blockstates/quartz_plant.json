@@ -1,0 +1,20 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/quartz_stage5"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/ore_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/ore_stage1" }},
+      "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/ore_stage2" }},
+      "3": { "model": "cross", "textures": { "cross": "sweetmagic:block/ore_stage3" }},
+      "4": { "model": "cross", "textures": { "cross": "sweetmagic:block/quartz_stage4" }},
+      "5": { "model": "cross", "textures": { "cross": "sweetmagic:block/quartz_stage5" }}
+    },
+     "inventory": [{}]
+  }
+}

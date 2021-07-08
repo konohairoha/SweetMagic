@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:cafe_table"
+    "model": "sweetmagic:balcony_chair"
   },
   "variants": {
     "facing": {

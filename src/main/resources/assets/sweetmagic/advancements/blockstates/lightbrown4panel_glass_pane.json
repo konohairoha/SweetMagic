@@ -1,0 +1,31 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "pane_post",
+        "textures": {
+            "edge": "sweetmagic:block/glass_lightbrown4panel_edge",
+            "pane": "sweetmagic:block/glass_lightbrown4panel_normal",
+            "layer0": "sweetmagic:block/glass_lightbrown4panel_normal"
+        },
+    	"transform": "forge:default-item"
+    },
+    "variants": {
+        "forward": {
+            "true": { "submodel": { "north_side": { "model": "pane_side" } } },
+            "false": { "submodel": { "north_side": { "model": "pane_noside" } } }
+        },
+        "back": {
+            "true": { "submodel": { "south_side": { "model": "pane_side_alt" } } },
+            "false": { "submodel": { "south_side": { "model": "pane_noside_alt", "y": 90 } } }
+        },
+        "left": {
+            "true": { "submodel": { "west_side": { "model": "pane_side_alt", "y": 90 } } },
+            "false": { "submodel": { "west_side": { "model": "pane_noside", "y": 270 } } }
+        },
+        "right": {
+            "true": { "submodel": { "east_side": { "model": "pane_side", "y": 90 } } },
+            "false": { "submodel": { "east_side": { "model": "pane_noside_alt" } } }
+        },
+     "inventory": [{ "model": "builtin/generated" }]
+    }
+}
