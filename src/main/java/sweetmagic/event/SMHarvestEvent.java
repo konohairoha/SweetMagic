@@ -9,6 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemSpade;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -29,8 +30,10 @@ public class SMHarvestEvent {
 		if (stack.isEmpty()) { return; }
 
 		int maxDama = stack.getMaxDamage();
+		Item item = stack.getItem();
+//		boolean isLuck = player.isPotionActive(MobEffects.LUCK);
 
-		if (stack.getItem() instanceof ItemSpade && maxDama >= 250) {
+		if (item instanceof ItemSpade && maxDama >= 250) {
 
 			// 幸運レベルを取得
 			int level = event.getFortuneLevel() + 1;
@@ -56,7 +59,7 @@ public class SMHarvestEvent {
 		}
 
 		// オルタナティブピッケル
-		else if (stack.getItem() == ItemInit.alt_pick && !player.isSneaking()) {
+		else if (item == ItemInit.alt_pick && !player.isSneaking()) {
 
 			World world = player.world;
 			IBlockState state = event.getState();

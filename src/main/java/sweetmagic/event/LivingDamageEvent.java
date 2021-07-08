@@ -8,7 +8,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
@@ -46,58 +45,11 @@ public class LivingDamageEvent {
 
 		// ダメージの取得
 		DamageSource src = event.getSource();
-		boolean cancelFlag = false;
-
-		// エメラルドピアスの効果
-		if (target instanceof EntityPlayer) {
-			newDam = this.emelaldPiasEffect((EntityPlayer) target, newDam);
-		}
 
 		// えんちちーによる攻撃なら
 		if (src.getTrueSource() instanceof EntityLivingBase) {
-
-			EntityLivingBase attacker = (EntityLivingBase) src.getTrueSource();
-
-			// 無敵魔法
-			if (target.isPotionActive(PotionInit.aether_shield)) {
-				event.setAmount(0);
-				event.setCanceled(true);
-				return;
-			}
-
-			// 回避魔法
-			if (target.isPotionActive(PotionInit.cyclone)) {
-
-				this.avoidAtttack(event, target, target.getActivePotionEffect(PotionInit.cyclone).getAmplifier() + 1);
-
-				// 攻撃を無効化されたら終了
-				if (event.isCanceled()) { return; }
-			}
-
-
-			// 未来視レベル2以上なら
-			if (target.isPotionActive(PotionInit.timestop) && target.getActivePotionEffect(PotionInit.timestop).getAmplifier() >= 1) {
-
-				this.futureVision(event, src, target, attacker, newDam);
-
-				// 攻撃を無効化されたら終了
-				if (event.isCanceled()) { return; }
-			}
-
-			// 攻撃者が燃焼状態なら攻撃力ダウン
-			if (attacker.isPotionActive(PotionInit.flame)) {
-				newDam *= 0.75;
-			}
-
-			// 火力上昇ならダメージアップ
-			if (attacker.isPotionActive(PotionInit.shadow)) {
-				newDam = this.lunaticAdd(attacker, newDam);
-			}
-
-			// 攻撃されたのがえんちちーかつエレキアーマーかつボスでないなら
-			if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker.isNonBoss()) {
-				newDam = this.getElecArmor(target, attacker, newDam);
-			}
+			newDam = this.fromEntityDamage(event, (EntityLivingBase) src.getTrueSource(), target, src, newDam);
+			if (event.isCanceled()) { return; }
 		}
 
 		// エーテルバリアーを張っていれば
@@ -110,67 +62,84 @@ public class LivingDamageEvent {
 
 		// ローブを着ていたら
 		if (chestItem instanceof IRobe) {
-			newDam = this.robwDamageCut(src, target, newDam, chest, chestItem);
+			newDam = this.robeDamageCut(src, target, newDam, chest, chestItem);
 		}
 
-		// それ以外が攻撃した場合
-		if (!(target instanceof EntityPlayer)) {
+		event.setAmount(newDam);
+	}
 
-			if (!(src.getTrueSource() instanceof EntityLivingBase)) { return; }
+	// えんちちーの攻撃
+	public float fromEntityDamage (LivingHurtEvent event, EntityLivingBase attacker, EntityLivingBase target, DamageSource src, float newDam) {
 
-			EntityLivingBase entity = (EntityLivingBase) src.getTrueSource();
+		// エメラルドピアスの効果
+		if (target instanceof EntityPlayer) {
+			newDam = this.emelaldPiasEffect((EntityPlayer) target, newDam);
+		}
 
-			// 毒の付与
-			if (entity.isPotionActive(PotionInit.grant_poison)) {
-				this.addPoison(entity, target);
+		// 無敵魔法
+		if (target.isPotionActive(PotionInit.aether_shield)) {
+			event.setAmount(0);
+			event.setCanceled(true);
+			return newDam;
+		}
+
+		// 未来視レベル2以上なら
+		if (target.isPotionActive(PotionInit.timestop) && this.getPotionLevel(target, PotionInit.timestop) >= 1) {
+
+			// 攻撃を無効化したら終了
+			if (this.futureVision(src, target, attacker, newDam)) {
+				event.setAmount(0F);
+				event.setCanceled(true);
+				return 0F;
 			}
+		}
 
-			// 未来視が付いてたらスタン
-			if (entity.isPotionActive(PotionInit.timestop) && target instanceof EntityLiving && src == DamageSource.MAGIC) {
-				this.activeFutureVision(entity, (EntityLiving) target);
+		// 攻撃者が燃焼状態なら攻撃力ダウン
+		if (attacker.isPotionActive(PotionInit.flame)) {
+			newDam *= 0.75;
+		}
+
+		// 火力上昇ならダメージアップ
+		if (attacker.isPotionActive(PotionInit.shadow)) {
+			newDam = this.lunaticAdd(target, attacker, newDam);
+		}
+
+		// 攻撃されたのがえんちちーかつエレキアーマーかつボスでないなら
+		if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker.isNonBoss()) {
+			newDam = this.getElecArmor(target, attacker, newDam);
+		}
+
+		// 毒の付与
+		if (attacker.isPotionActive(PotionInit.grant_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
+			this.addGrantPoison(attacker, target);
+		}
+
+		// 未来視が付いてたらスタン
+		if (attacker.isPotionActive(PotionInit.timestop) && target instanceof EntityLiving && src instanceof SMDamage) {
+			this.activeFutureVision(attacker, (EntityLiving) target);
+		}
+
+		// 猛毒が付いてたらダメージ増加
+		if (target.isPotionActive(PotionInit.deadly_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
+			newDam = this.addPoisonDamage(target, newDam);
+		}
+
+		// 回避魔法
+		if (target.isPotionActive(PotionInit.cyclone)) {
+
+			// 攻撃向こうかなら終了
+			if(this.avoidAtttack(target, this.getPotionLevel(target, PotionInit.cyclone))) {
+				event.setAmount(0);
+				return 0F;
 			}
-
-			// 猛毒が付いてたらダメージ増加
-			if (target.isPotionActive(PotionInit.deadly_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
-				newDam = this.addPoisonDamage(target, newDam);
-			}
 		}
 
-		// ダメージが0以下なら攻撃無効
-		if (newDam <= 0 && target instanceof EntityPlayer) {
-			cancelFlag = true;
-		}
-
-		// ダメージ無効フラグがtrueなら
-		if (cancelFlag) {
-			this.cancelDamage(event, (EntityPlayer) target);
-		}
-
-		else {
-			event.setAmount(newDam);
-		}
+		return newDam;
 	}
 
 	// 回避魔法
-	public void avoidAtttack (LivingHurtEvent event, EntityLivingBase entity, int level) {
-
-		float chance = 0F;
-
-		switch (level) {
-		case 1:
-			chance = 0.01F;
-			break;
-		case 2:
-			chance = 0.03F;
-			break;
-		case 3:
-			chance = 0.05F;
-			break;
-		}
-
-		if (chance < entity.world.rand.nextFloat()) { return; }
-
-		event.setCanceled(true);
+	public boolean avoidAtttack (EntityLivingBase entity, int level) {
+		return ( 0.01F + level * 0.02F ) >= entity.world.rand.nextFloat();
 	}
 
 	// エレキアーマー
@@ -195,11 +164,10 @@ public class LivingDamageEvent {
 	}
 
 	// ルナティックバフ
-	public float lunaticAdd(EntityLivingBase liv, float dame) {
-		PotionEffect effect = liv.getActivePotionEffect(PotionInit.shadow);
-		float level = Math.min(2.5F, 1F + (effect.getAmplifier() + 1) * 0.1F);
-		dame *= level;
-		return dame;
+	public float lunaticAdd(EntityLivingBase target, EntityLivingBase attacker, float dame) {
+		float rate = Math.min(2.5F, 1F + this.getPotionLevel(attacker, PotionInit.shadow) * 0.1F);
+		if (!target.isNonBoss()) { Math.max(1.5F, rate); }
+		return dame *= rate;
 	}
 
 	// エメラルドピアス
@@ -235,9 +203,10 @@ public class LivingDamageEvent {
 		return dame;
 	}
 
-	public float futureVision (LivingHurtEvent event, DamageSource src, EntityLivingBase target, EntityLivingBase attacker, float newDam) {
+	// 未来視による反撃
+	public boolean futureVision (DamageSource src, EntityLivingBase target, EntityLivingBase attacker, float newDam) {
 
-		if (src.getTrueSource() instanceof EntityLiving) {
+		if (attacker instanceof EntityLiving) {
 
 			EntityLiving living = ( EntityLiving) attacker;
 
@@ -249,17 +218,14 @@ public class LivingDamageEvent {
 			// バフ時間の減少
 			this.setPotionTime(target.world, target, effect.getPotion(), level, time, 6000);
 
-			// 敵を動かなくさせる
-			EventUtil.tameAIDonmov(living, 6);
+			// 8秒間敵を動かなくさせる
+			EventUtil.tameAIDonmov(living, 8);
 			DamageSource damage = SMDamage.MagicDamage(living, target);
 			attacker.attackEntityFrom(damage, newDam);
-
-			// ダメージを向こうにしてイベントを無効化
-			newDam = 0F;
-			event.setAmount(0F);
-			event.setCanceled(true);
+			return true;
 		}
-		return newDam;
+
+		return false;
 	}
 
 	// エーテルバリア
@@ -271,26 +237,17 @@ public class LivingDamageEvent {
 
 		// バフ時間の減少
 		this.setPotionTime(liv.world, liv, effect.getPotion(), level, time, (int) (dame * 20));
-		dame = dame / level;
 
-		return dame;
-	}
-
-	// ダメージ無効処理
-	public void cancelDamage(LivingHurtEvent event, EntityPlayer player) {
-
-		// ダメージを向こうにしてイベントを無効化
-		event.setAmount(0F);
-		event.setCanceled(true);
+		return dame / level;
 	}
 
 	// 猛毒追加ダメージ
 	public float addPoisonDamage (EntityLivingBase living, float dame) {
-		return dame += living.getActivePotionEffect(PotionInit.deadly_poison).getAmplifier() + 2;
+		return dame += this.getPotionLevel(living, PotionInit.deadly_poison) + 2;
 	}
 
 	// ローブダメージ軽減
-	public float robwDamageCut (DamageSource src, EntityLivingBase living, float dame, ItemStack chest, Item chestItem) {
+	public float robeDamageCut (DamageSource src, EntityLivingBase target, float dame, ItemStack chest, Item chestItem) {
 
 		IRobe robe = (IRobe) chestItem;
 		Entity attacker = src.getTrueSource();
@@ -324,26 +281,16 @@ public class LivingDamageEvent {
 	}
 
 	// 毒の付与
-	public void addPoison (EntityLivingBase entity, EntityLivingBase living) {
-		if (!living.isPotionActive(PotionInit.grant_poison)) {
-			int level = entity.getActivePotionEffect(PotionInit.grant_poison).getAmplifier() + 1;
-			NBTTagCompound tags = living.getEntityData();
-			level = tags.getBoolean("isCyclone") ? level : ++level;
-			living.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, 600, level));
-			tags.setBoolean("isCyclone", false);
+	public void addGrantPoison (EntityLivingBase attacker, EntityLivingBase target) {
+		if ( !(attacker instanceof EntityPlayer && target instanceof EntityPlayer) ) {
+			int level = this.getPotionLevel(attacker, PotionInit.grant_poison) + 1;
+			target.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, 600, level));
 		}
 	}
 
-	// 未来視レベル1
-	public void activeFutureVision (EntityLivingBase player, EntityLiving target) {
-
-		// ポーションレベル取得
-		int level = player.getActivePotionEffect(PotionInit.timestop).getAmplifier() + 1;
-
-		// レベル0なら
-		if (level == 1) {
-
-			// 敵を動かなくさせる
+	// 未来視レベル0なら敵を動かなくさせる
+	public void activeFutureVision (EntityLivingBase attacker, EntityLiving target) {
+		if (this.getPotionLevel(attacker, PotionInit.timestop) == 0) {
 			EventUtil.tameAIDonmov(target, 1);
 		}
 	}
@@ -396,5 +343,10 @@ public class LivingDamageEvent {
 		else {
 			PlayerHelper.addPotion(entity, potion, time, level, false);
 		}
+	}
+
+	// ポーションレベル取得
+	public int getPotionLevel (EntityLivingBase entity, Potion potion) {
+		return entity.getActivePotionEffect(potion).getAmplifier();
 	}
 }

@@ -65,22 +65,18 @@ public class HasItemEvent {
 
 	public void renderEffect (World world, EntityPlayer player) {
 
+		int area = 12;
 		BlockPos pPos = player.getPosition();
 
-		for (int x = -12; x < 12; x++) {
-			for (int z = -12; z < 12; z++) {
-				for (int y = -12; y < 12; y++) {
+		for (BlockPos pos : BlockPos.getAllInBox(pPos.add(-area, -area, -area), pPos.add(area, area, area))) {
 
-					BlockPos pos = new BlockPos((int) pPos.getX() + x, (int) pPos.getY() + y, (int) pPos.getZ() + z);
-					Block block = world.getBlockState(pos).getBlock();
-					if (block != BlockInit.magiclight) { continue; }
+			Block block = world.getBlockState(pos).getBlock();
+			if (block != BlockInit.magiclight) { continue; }
 
-					double d0 = (int) pos.getX() + 0.5D;
-					double d1 = (int) pos.getY() + 0.6D;
-					double d2 = (int) pos.getZ() + 0.5D;
-					FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleMagicLight.Factory().createParticle(0, world, d0, d1, d2, 0D, 0D, 0D));
-				}
-			}
+			double d0 = (int) pos.getX() + 0.5D;
+			double d1 = (int) pos.getY() + 0.6D;
+			double d2 = (int) pos.getZ() + 0.5D;
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleMagicLight.Factory().createParticle(0, world, d0, d1, d2, 0D, 0D, 0D));
 		}
 	}
 }
