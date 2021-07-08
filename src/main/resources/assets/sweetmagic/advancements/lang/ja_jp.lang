@@ -374,6 +374,23 @@ item.sandwich_fruit.name=フルーツサンド
 item.sandwich.name=サンドイッチ
 item.aquarius_sorcerer_wand.name=アクエリアス・ソーサラー・ワンド
 item.phosphorus_wand.name=フォスフォラス・ワンド
+item.magic_supernova.name=スーパー・ノヴァ
+item.poison_fang.name=ポイズン・ファング
+item.cosmos_light_ingot.name=コズモライト・インゴット
+item.startlight_wand.name=スターライト・ワンド
+item.mf_magiabottle.name=マギアボトル
+item.fried_potato.name=フライドポテト
+item.softcream_vannila.name=ソフトクリーム（バニラ）
+item.softcream_strawberry.name=ソフトクリーム（ストロベリー）
+item.softcream_chocolate.name=ソフトクリーム（チョコ）
+item.cake_chiffon.name=シフォンケーキ
+item.b_mf_magiabottle.name=空のマギアボトル
+item.quartz_seed.name=クオーツの種
+item.hotcake.name=ホットケーキ
+item.kinakomochi.name=きな粉餅
+item.mochi.name=餅
+item.zunda.name=ずんだ餅
+item.ohagi.name=おはぎ
 
 
 #-- Tile --
@@ -786,6 +803,45 @@ tile.aether_lanp.name=エーテル・ランタン
 tile.wood_plate.name=木皿
 tile.iron_plate.name=鉄皿
 tile.arcane_table.name=アルカナ・テーブル
+tile.balcony_table.name=バルコニーテーブル
+tile.balcony_chair.name=バルコニーチェア
+tile.whiteline_brick.name=ホワイトラインレンガ
+tile.whiteline_brick_stairs.name=ホワイトラインレンガの階段
+tile.whiteline_brick_slab.name=ホワイトラインレンガの半ブロック
+tile.whiteline_brick_y.name=黄色のホワイトラインレンガ
+tile.whiteline_brick_y_stairs.name=黄色のホワイトラインレンガの階段
+tile.whiteline_brick_y_slab.name=黄色のホワイトラインレンガの半ブロック
+tile.whiteline_brick_b.name=黒色のホワイトラインレンガ
+tile.whiteline_brick_b_stairs.name=黒色のホワイトラインレンガの階段
+tile.whiteline_brick_b_slab.name=黒色のホワイトラインレンガの半ブロック
+tile.whiteline_brick_pot.name=ホワイトラインレンガの植木鉢
+tile.cosmos_light_block.name=コズモライトブロック
+tile.quartz_plant.name=クオーツの苗
+tile.green4panel_glass_pane.name=緑色の4パネのガラス板
+tile.brown4panel_glass_pane.name=茶色の4パネのガラス板
+tile.lightbrown4panel_glass_pane.name=薄茶色の4パネのガラス板
+tile.darkbrown4panel_glass_pane.name=濃茶色の4パネのガラス板
+tile.ami_glass_pane.name=ワイヤー入りガラス板
+tile.antique_tdoor_g.name=緑色のアンティークレンガのトラップドア
+tile.old_tdoor.name=青色の古びたレンガのトラップドア
+tile.old_tdoor_r.name=赤色の古びたレンガのトラップドア
+tile.old_tdoor_g.name=緑色の古びたレンガのトラップドア
+tile.old_tdoor_y.name=黄色の古びたレンガのトラップドア
+tile.old_tdoor_l.name=灰色の古びたレンガのトラップドア
+tile.old_tdoor_b.name=茶色の古びたレンガのトラップドア
+tile.old_tdoor_s.name=空色の古びたレンガのトラップドア
+tile.longtile_brick_o_tdoor.name=オレンジ色のロングタイルレンガのトラップドア
+tile.longtile_brick_y_tdoor.name=黄色のロングタイルレンガのトラップドア
+tile.longtile_brick_b_tdoor.name=青色のロングタイルレンガのトラップドア
+tile.longtile_brick_g_tdoor.name=緑色のロングタイルレンガのトラップドア
+tile.longtile_brick_tdoor.name=茶色のロングタイルレンガのトラップドア
+tile.longtile_brick_l_tdoor.name=黒色のロングタイルレンガのトラップドア
+tile.longtile_brick_w_tdoor.name=白色のロングタイルレンガのトラップドア
+tile.whiteline_brick_tdoor.name=ホワイトラインレンガのトラップドア
+tile.whiteline_brick_y_tdoor.name=黄色のホワイトラインレンガのトラップドア
+tile.whiteline_brick_b_tdoor.name=黒色のホワイトラインレンガのトラップドア
+tile.fance_gothic_black.name=黒色のゴシックフェンス
+tile.fance_gothic_white.name=白色のゴシックフェンス
 
 
 # -- gui --
@@ -1011,6 +1067,23 @@ tip.aether_boot.name=装備中は風魔法などによる吹き飛ばし、ノ�
 tip.sandryon_robe.name=防具の見た目変更なし
 tip.food2.name=全デバフ除去
 tip.magicmeal.name=土に右クリックでスイートマジックの特殊な花を生成、スイートマジックの苗木に右クリックで巨木に成長する。
+tip.magic_supernova.name=周囲に爆発を複数発生させる射撃魔法
+tip.poison_fang.name=体力が半分以下のときに魔法での攻撃時にクリティカルが半分の確率で発生
+tip.arcane_table.name=通常アイテムにエーテルチャーム、エーテルヒールを付与できる
+tip.sl_reset.name=座標のリセットキー： 
+tip.sl_repelace.name=設置モード切替キー： 
+tip.starlightwand_left.name=ブロックに左クリックで始点登録、スニーク左クリックで終点の登録。
+tip.starlightwand_right.name=右クリックで登録した座標にブロック設置
+tip.starlightwand_set.name=クリエイティブモード以外の時はインベントリ、またはローブに設置するブロックを入れてMFがある状態だと設置が可能
+tip.starlightwand_start.name=始点の座標： 
+tip.starlightwand_end.name=終点の座標： 
+tip.starlightwand_block.name=登録したブロック： 
+tip.starlightwand_empty.name=登録した座標なし
+tip.starlightwand_inst.name=設置モード
+tip.starlightwand_replace.name=置換モード
+tip.starlightwand_mode.name=ブロック設置タイプ： 
+tip.quartz_seed.name=種袋からのみ入手
+
 
 
 #-- Potion --
@@ -1117,16 +1190,15 @@ smguid.entry.seaweed=新たな釣りアイテム
 smguid.entry.seedbag=種が入手できる袋
 smguid.entry.lantan=MFを集めるランタン
 smguid.entry.succesor=杖レベルの継承
+smguid.entry.arcana=エンチャント付与するブロック
 
 smguid.entry.key=ダンジョン専用アイテム
 smguid.entry.flower_pot=SweetMagicで見つけることのできる花
 
-smguid.entry.biome=新しいバイオーム
-smguid.entry.vil=スイートマジックの村
-smguid.entry.chest=チェスト系ブロックの機能改善
-smguid.entry.plate=新しい皿
-smguid.entry.arcana=エンチャント付与するブロック
-smguid.entry.wand_gui=杖のスロット切り替えの改善
+smguid.entry.ingot=インゴットの追加
+smguid.entry.star=ブロック置換、設置杖
+smguid.entry.quartz=クオーツの作物
+smguid.entry.gothic=ゴシックなフェンス
 
 
 # -- GUIDText --
@@ -1158,16 +1230,15 @@ smguid.text.seaweed=<t><t>海藻は釣りでのみ入手することができま
 smguid.text.seedbag=<t><t>種を中々入手しにくいことが多かったので、ランダムに種を入手することができる種袋を追加しました。鉱石辞書を使っているので他modの種も出る場合があります。
 smguid.text.lantan=<t><t>MFを生産する花瓶が沢山入手できることから、魔法流の杖でのMF送受信登録を行う操作を簡略化するために、周囲の花瓶から生産されたMFを回収する特殊なランタンを追加しました。<br>花瓶を探知する範囲は12ブロックとなっており、多数の花瓶をまとめて管理することができます。
 smguid.text.succesor=<t><t>新しい杖のレベルをある程度まで上げることができるアイテムです。<br>上がる杖レベルは継承元の杖のレベルの半分ですが、必要MF量が多いので使用には注意してください。
+smguid.text.arcana=<t><t>本来ならスイートマジックのエンチャント付けることができないアイテムにエーテルチャーム、エーテルヒールを付与できるようにしたのが、アルカナテーブルです。<br>一度に20万MFが必要ですが、ロストや壊れたりしないようになります。
 
 smguid.text.key=<t><t>ダンジョン内でのみ、魔法のカギを入手することができます。<br>使い方として、鍵をもってマジックバリアガラスに右クリックでガラスを壊すことができ、奥へと進むことができます。
 smguid.text.flower_pot=<t><t>スイートマジックには沢山の花が生成されます。<br>これらの花は平原などに生成され、全て染料としても使えます。<br>スノードロップだけは雪原などの寒いバイオームのみに生成されます。<br>いくつかの花は花瓶にしてさまざまな用途に使用します。<br>花の生成が邪魔な場合はコンフィグで無効化が可能です。
 
-smguid.text.biome=<t><t>スイートマジックディメンションに新たにバイオームを4つ追加しました。<br>今までほかのバイオームに生成していたものがいくつか新しく追加したバイオームで生成されるようになりました。
-smguid.text.vil=<t><t>新しい生成物としてスイートマジックのオリジナルの村を追加しました。<br>様々な家が生成されるのでそこを拠点として使っても大丈夫なようにしてます。
-smguid.text.chest=<t><t>今までスイートマジックのチェスト系は壊してもスタックできませんでしたが、中身が入っていないチェストに関してはスタックできるようにしました。
-smguid.text.plate=<t><t>色んな見た目の皿が欲しいと思い、新たに木皿と鉄皿を追加しました。<br>色んな料理を飾ったりするために使ってください。
-smguid.text.arcana=<t><t>本来ならスイートマジックのエンチャント付けることができないアイテムにエーテルチャーム、エーテルヒールを付与できるようにしたのが、アルカナテーブルです。<br>一度に20万MFが必要ですが、ロストや壊れたりしないようになります。
-smguid.text.wand_gui=<t><t>魔法の杖のスロットを切り替える時に空スロットは飛ばすようになりました。
+smguid.text.ingot=<t><t>新しいインゴットとして、コズモライトインゴットを追加しています。<br>現在は使い道が少ないですが、今後用途が増えていく予定です。お楽しみに！
+smguid.text.star=<t><t>新しく、スターライトワンドを追加しました。MFを消費して、ブロックの設置、置換を一括で行うことができる杖です。<br>ブロックをいちいち1個ずつ設置することが面倒なあなたに。<br>なお、使い方はツールチップに記載しています。<br>ただし、まだ開発中のため一部のブロックや、向きには対応してます。
+smguid.text.quartz=<t><t>ネザークォーツを入手できる手段として、クォーツの種を追加しました。<br>ただし、種の入手方法は、種袋からの入手のみとなります。<br>また、畑に植えることができますが、土ブロックや草ブロックの上に植えることもできます。
+smguid.text.gothic=<t><t>おしゃれなゴシック調のフェンスを追加しました。建築のお供にどうぞ。
 
 
 # -- ADVENT --

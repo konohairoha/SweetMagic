@@ -371,8 +371,25 @@ item.spinach_egg.name=Scrambled Eggs with Spinach
 item.vienna_coffee.name=Vienna Coffee
 item.sandwich_fruit.name=Fruit Sandwich
 item.sandwich.name=Sandwich
-item.aquarius_sorcerer_wand.name=アクエリアス・ソーサラー・ワンド
-item.phosphorus_wand.name=フォスフォラス・ワンド
+item.aquarius_sorcerer_wand.name=Aquarius Sorcerer Wand
+item.phosphorus_wand.name=Phosphorus Wand
+item.magic_supernova.name=Super Nova
+item.poison_fang.name=Poison Fang
+item.cosmos_light_ingot.name=CosmosLight Ingot
+item.startlight_wand.name=StartLight Wand
+item.mf_magiabottle.name=MagiaBottle
+item.fried_potato.name=French Fries
+item.softcream_vannila.name=Soft Serve(Vanilla)
+item.softcream_strawberry.name=Soft Serve(Strawberry)
+item.softcream_chocolate.name=Soft Serve(Chocolate)
+item.cake_chiffon.name=Chiffon Cake
+item.b_mf_magiabottle.name=Empty MagiaBottle
+item.quartz_seed.name=Quartz Seeds
+item.hotcake.name=PanCake
+item.kinakomochi.name=Rice Cakes Covered With Sweetened Soybean Flour
+item.mochi.name=Rice Cakes
+item.zunda.name=Rice Cake Covered In Sweetened Mashed Green Soybeans
+item.ohagi.name=Rice Ball Coated With Sweetened Red Beans
 
 
 #-- Tile --
@@ -773,6 +790,45 @@ tile.aether_lanp.name=Aether Lantern
 tile.wood_plate.name=Wooden Plate
 tile.iron_plate.name=Iron Plate
 tile.arcane_table.name=Arcane Table
+tile.balcony_table.name=Balcony Table
+tile.balcony_chair.name=Balcony Chair
+tile.whiteline_brick.name=Whiteline Bricks
+tile.whiteline_brick_stairs.name=Whiteline Bricks Stairs
+tile.whiteline_brick_slab.name=Whiteline Bricks Slab
+tile.whiteline_brick_y.name=Whiteline Bricks(Yellow)
+tile.whiteline_brick_y_stairs.name=Whiteline Bricks Stairs(Yellow)
+tile.whiteline_brick_y_slab.name=Whiteline Bricks Slab(Yellow)
+tile.whiteline_brick_b.name=Whiteline Bricks(Black)
+tile.whiteline_brick_b_stairs.name=Whiteline Bricks Stairs(Black)
+tile.whiteline_brick_b_slab.name=Whiteline Bricks Slab(Black)
+tile.whiteline_brick_pot.name=Whiteline Bricks Flowerpot
+tile.cosmos_light_block.name=CosmosLight Blocks
+tile.quartz_plant.name=Quartz Plant
+tile.green4panel_glass_pane.name=4Panel Glass Pane(Green)
+tile.brown4panel_glass_pane.name=4Panel Glass Pane(Brown)
+tile.lightbrown4panel_glass_pane.name=4Panel Glass Pane(Light Brown)
+tile.darkbrown4panel_glass_pane.name=4Panel Glass Pane(Dark Brown)
+tile.ami_glass_pane.name=Wired Glass Pane
+tile.antique_tdoor_g.name=Antique Bricks Trapdoor（Green）
+tile.old_tdoor.name=Old Brocks Trapdoor(Blue)
+tile.old_tdoor_r.name=Old Brocks Trapdoor(Red)
+tile.old_tdoor_g.name=Old Brocks Trapdoor(Green)
+tile.old_tdoor_y.name=Old Brocks Trapdoor(Yellow)
+tile.old_tdoor_l.name=Old Brocks Trapdoor(Gray)
+tile.old_tdoor_b.name=Old Brocks Trapdoor(Brown)
+tile.old_tdoor_s.name=Old Brocks Trapdoor(Skyblue)
+tile.longtile_brick_o_tdoor.name=Long Tile Bricks Trapdoor(Orange)
+tile.longtile_brick_y_tdoor.name=Long Tile Bricks Trapdoor(Yellow)
+tile.longtile_brick_b_tdoor.name=Long Tile Bricks Trapdoor(Blue)
+tile.longtile_brick_g_tdoor.name=Long Tile Bricks Trapdoor(Green)
+tile.longtile_brick_tdoor.name=Long Tile Bricks Trapdoor(Brown)
+tile.longtile_brick_l_tdoor.name=Long Tile Bricks Trapdoor(Black)
+tile.longtile_brick_w_tdoor.name=Long Tile Bricks Trapdoor(White)
+tile.whiteline_brick_tdoor.name=White Line Bricks Trapdoor
+tile.whiteline_brick_y_tdoor.name=White Line Bricks Trapdoor(Yellow)
+tile.whiteline_brick_b_tdoor.name=White Line Bricks Trapdoor(Black)
+tile.fance_gothic_black.name=Gothic Fence(Black)
+tile.fance_gothic_white.name=Gothic Fence(White)
 
 
 # -- gui --
@@ -1000,7 +1056,23 @@ tip.magic_aether_shield2.name=Instead of being unable to use wand magic, you tak
 tip.aether_boot.name=While equipped, you will not be blown away or knocked back by wind magic.
 tip.sandryon_robe.name=No change in the appearance of armour
 tip.food2.name=Removal of all Debuffs
-tip.magicmeal.name=土に右クリックでスイートマジックの特殊な花を生成、スイートマジックの苗木に右クリックで巨木に成長する。
+tip.magicmeal.name=Right click on the soil to generate a special Sweet Magic flower, right click on the Sweet Magic sapling to grow into a giant tree.
+tip.magic_supernova.name=Shooting magic that creates multiple explosions in the surrounding area
+tip.poison_fang.name=When your health is below half, you have a half chance of getting a critical hit when attacking with magic.
+tip.arcane_table.name=Can add "Aether Charm" and "Aether Heal" to normal items
+tip.sl_reset.name=Reset key for Position： 
+tip.sl_repelace.name=Installation mode switching key： 
+tip.starlightwand_left.name=Left click on the block to register the starting point, left click on the sneak to register the ending point.
+tip.starlightwand_right.name=Right-click to place a block at the registered coordinates.
+tip.starlightwand_set.name=When you are not in creative mode, you can place blocks in your inventory or in your robe when MF is available.
+tip.starlightwand_start.name=Position of the starting point： 
+tip.starlightwand_end.name=Position of the end point： 
+tip.starlightwand_block.name=Registered block： 
+tip.starlightwand_empty.name=No registered Position
+tip.starlightwand_inst.name=Installation mode
+tip.starlightwand_replace.name=Replace mode
+tip.starlightwand_mode.name=Block installation type： 
+tip.quartz_seed.name=Obtained only from "Seed Bag"
 
 
 #-- Potion --
@@ -1060,6 +1132,7 @@ entity.pixievex.name=Pixie Vex
 entity.sandryon.name="Creation Witch" Sandryon
 entity.ancientfairy.name="Fascinated Fairy" Anicinet Fairy
 
+
 # -- KEY --
 key.open.name=Open GUI
 key.next.name=Next Slot
@@ -1106,16 +1179,15 @@ smguid.entry.seaweed=New fishing items
 smguid.entry.seedbag=A bag where you can get seeds
 smguid.entry.lantan=Collecting MF
 smguid.entry.succesor=Wand's level inheritance
+smguid.entry.arcana=Blocks that grant Enchant
 
 smguid.entry.key=SweetMagic Dungeons exclusive item
 smguid.entry.flower_pot=Addition of colorful flowers
 
-smguid.entry.biome=New Biome
-smguid.entry.vil=SweetMagic Village
-smguid.entry.chest=Improved functioning of chests
-smguid.entry.plate=New Plate
-smguid.entry.arcana=Blocks that grant Enchant
-smguid.entry.wand_gui=Improved slot switching for wands
+smguid.entry.ingot=Adding Ingots
+smguid.entry.star=Block replacement, installation cane
+smguid.entry.quartz=Quartz Crop
+smguid.entry.gothic=Gothic Fence
 
 
 # -- GUID Text --
@@ -1147,16 +1219,15 @@ smguid.text.seaweed=<t><t>Seaweed can only be obtained by fishing. MF Fisher wit
 smguid.text.seedbag=<t><t>Since it was often difficult to obtain seeds, we added a Seed Bag that allows you to obtain seeds at random. Since it uses an ore dictionary, seeds of other mods may come out.
 smguid.text.lantan=<t><t>To simplify the operation of registering MF transmission / reception, we have added a special lantern that collects MF produced from the surrounding vase. The range to detect vases is 12 blocks, and you can manage a large number of vases at once.
 smguid.text.succesor=<t><t>You can raise the Wand level to some extent. The level of the Wand that goes up is half that of the inheritance source, but be careful when using it as it requires a large amount of MF.
+smguid.text.arcana=<t><t>"Arcane Table" allows you to grant "Aether Charm" and "Aether Mending" to items that would otherwise not be able to be enchanted with sweetmagic. <br>It costs 200,000 MF at a time, but it will not be lost or broken.
 
 smguid.text.key=<t><t>The magic key has been added as an item that can only be obtained in dungeons. To use it, you can open it by right-clicking on the magic barrier glass while holding the key.
 smguid.text.flower_pot=<t><t>Added a lot of flowers. All the flowers added this time are generated on the plains, and all can be used as dyes. Only Snowdrop are produced in cold biomes such as snowfields. Some flowers can be used in vases to produce MF. If flowers generation are an obstacle, you can disable it in the config.
 
-smguid.text.biome=<t><t>Four new biomes have been added to the SweetMagic Dimension. <br>Some biomes that used to be generated in other biomes will now be generated in the new biomes.
-smguid.text.vil=<t><t>We've added the original SweetMagic village as a new generator. <br>Various houses are generated so that you can use it as a base.
-smguid.text.chest=<t><t>Until now, chests such as the SweetMagic chests could not be stacked even if they were broken, but now chests with no contents can be stacked.
-smguid.text.plate=<t><t>We wanted to have a variety of different looking plates, so we added a new wooden plate and an iron plate. <br>You can use them to decorate different dishes.
-smguid.text.arcana=<t><t>"Arcane Table" allows you to grant "Aether Charm" and "Aether Mending" to items that would otherwise not be able to be enchanted with sweetmagic. <br>It costs 200,000 MF at a time, but it will not be lost or broken.
-smguid.text.wand_gui=<t><t>When switching magic wand slots, empty slots will now be skipped.
+smguid.text.ingot=<t><t>We are adding a new ingot, the Cozumolite ingot. <br>There are few uses for it at the moment, but we plan to add more uses in the future. Look forward to it!
+smguid.text.star=<t><t>The new Starlight Wand is a wand that allows you to place and replace blocks in bulk by consuming MF. <br>For those of you who can't be bothered with placing blocks one by one. <br>How to use it is described in the tooltip. <br>Because it is still under development, some blocks and orientations are still supported.
+smguid.text.quartz=<t><t>Quartz seeds have been added as a means to obtain nether quartz. <br>However, the only way to obtain the seeds is from the seed bag. <br>You can also plant them in fields, or on top of soil blocks or grass blocks.
+smguid.text.gothic=<t><t>A stylish gothic fence has been added. Please use it as a companion for your architecture.
 
 
 # -- ADVENT --
