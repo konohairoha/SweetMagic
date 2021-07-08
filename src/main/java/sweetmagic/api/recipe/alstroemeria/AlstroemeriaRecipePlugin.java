@@ -35,8 +35,15 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// ガラスの瓶→空っぽの魔法流の瓶変換
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(Items.GLASS_BOTTLE),
-			new Object[] { new ItemStack(Items.GLASS_BOTTLE, 10) },
+			new Object[] { new ItemStack(Items.GLASS_BOTTLE, 9) },
 			new ItemStack[] { SMUtil.getStack(ItemInit.b_mf_bottle) }
+		));
+
+		// 空っぽの魔法流の瓶→空のマギアボトル変換
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.b_mf_bottle),
+			new Object[] { new ItemStack(ItemInit.b_mf_bottle, 9) },
+			new ItemStack[] { SMUtil.getStack(ItemInit.b_mf_magiabottle) }
 		));
 
 		// 魔法流の小瓶→魔法流の瓶変換
@@ -44,6 +51,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(ItemInit.mf_sbottle),
 			new Object[] { new ItemStack(ItemInit.mf_sbottle, 9) },
 			new ItemStack[] { SMUtil.getStack(ItemInit.mf_bottle) }
+		));
+
+		// 魔法流の瓶→マギアボトル変換
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.mf_bottle),
+			new Object[] { new ItemStack(ItemInit.mf_bottle, 9) },
+			new ItemStack[] { SMUtil.getStack(ItemInit.mf_magiabottle) }
 		));
 
 		// 石の模様付きレンガ6つ→魔法流生成器
@@ -74,6 +88,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.alternative_ingot, 2) }
 		));
 
+		// コズモライトインゴット
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.alternative_ingot),
+			new Object[] { new ItemStack(Items.GOLD_INGOT), new ItemStack(ItemInit.mf_magiabottle) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmos_light_ingot, 2) }
+		));
+
 		// エーテルクリスタルのかけら
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(ItemInit.aether_crystal_shard, 1),
@@ -84,30 +105,30 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// ディバインクリスタル
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(ItemInit.aether_crystal, 6),
-			new Object[] { new ItemStack(ItemInit.mf_sbottle, 4), new ItemStack(ItemInit.sannyflower_petal, 4), new ItemStack(ItemInit.moonblossom_petal, 4)},
+			new Object[] { new ItemStack(ItemInit.mf_sbottle, 4), new ItemStack(ItemInit.sannyflower_petal, 4), new ItemStack(ItemInit.moonblossom_petal, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.divine_crystal) }
 		));
 
 		// ピュアクリスタル
 		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(ItemInit.divine_crystal, 6),
-			new Object[] { new ItemStack(ItemInit.mf_bottle, 3), new ItemStack(ItemInit.sannyflower_petal, 16), new ItemStack(ItemInit.moonblossom_petal, 16)},
+			new ItemStack(ItemInit.divine_crystal, 4),
+			new Object[] { new ItemStack(ItemInit.mf_bottle, 6), new ItemStack(ItemInit.sannyflower_petal, 8), new ItemStack(ItemInit.moonblossom_petal, 8) },
 			new ItemStack[] { new ItemStack(ItemInit.pure_crystal) }
 		));
 
 		// デウスクリスタル
 		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(ItemInit.pure_crystal, 4),
-			new Object[] { new ItemStack(ItemInit.mf_bottle, 6), new ItemStack(ItemInit.sannyflower_petal, 32), new ItemStack(ItemInit.moonblossom_petal, 32)
-					, new ItemStack(ItemInit.witch_tears, 4)},
+			new ItemStack(ItemInit.pure_crystal, 3),
+			new Object[] { new ItemStack(ItemInit.mf_magiabottle, 1), new ItemStack(ItemInit.sannyflower_petal, 12), new ItemStack(ItemInit.moonblossom_petal, 12)
+					, new ItemStack(ItemInit.witch_tears, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.deus_crystal) }
 		));
 
 		// コズミッククリスタル
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(ItemInit.deus_crystal, 1),
-			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new ItemStack(ItemInit.mf_bottle, 10), new ItemStack(ItemInit.sannyflower_petal, 64)
-					, new ItemStack(ItemInit.moonblossom_petal, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new ItemStack(ItemInit.mf_magiabottle, 4), new ItemStack(ItemInit.sannyflower_petal, 16)
+					, new ItemStack(ItemInit.moonblossom_petal, 16), new ItemStack(ItemInit.mystical_page, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal) }
 		));
 
@@ -407,6 +428,22 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 				new ItemStack[] { new ItemStack(re.getPlanks(), 32) }
 			));
 		}
+
+		Map<Block, String> whiteLineRecipe = new HashMap<>();
+		whiteLineRecipe.put(BlockInit.whiteline_brick, "dyeOrange");
+		whiteLineRecipe.put(BlockInit.whiteline_brick_y, "dyeYellow");
+		whiteLineRecipe.put(BlockInit.whiteline_brick_b, "dyeBlack");
+
+		for (Entry<Block, String> map : whiteLineRecipe.entrySet()) {
+
+			// ホワイトラインレンガ
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				new ItemStack(Blocks.SAND, 4),
+				new Object[] { new OreItems("antique_brick_all", 32), map.getValue() },
+				new ItemStack[] { new ItemStack(map.getKey(), 64) }
+			));
+		}
+
 
 		Map<Block, String> vaseRecipe = new HashMap<>();
 		vaseRecipe.put(BlockInit.flower_vese_o, "dyeOrange");

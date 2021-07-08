@@ -3,7 +3,6 @@ package sweetmagic.api.recipe.mftable;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 
 @SMMFTableRecipePlugin(priority = EventPriority.LOW)
@@ -33,7 +32,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// デウスクリスタルワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"purecrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(Items.DIAMOND, 8), new ItemStack(ItemInit.witch_tears, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.cosmos_light_ingot, 8), new ItemStack(ItemInit.witch_tears, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.deuscrystal_wand) },
 			1
 		));
@@ -41,7 +40,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// コズミッククリスタルワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"deuscrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal), new ItemStack(Items.DIAMOND, 16), new ItemStack(ItemInit.mystical_page, 4) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal), new ItemStack(ItemInit.cosmos_light_ingot, 16), new ItemStack(ItemInit.mystical_page, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.cosmiccrystal_wand) },
 			1
 		));
@@ -49,7 +48,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// セイクリッドメテオールワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.prizmium, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.prizmium, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.sacred_meteor_wand) },
 			1
 		));
@@ -57,7 +56,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// スノーダストワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.unmeltable_ice, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.unmeltable_ice, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.snowdust_wand) },
 			1
 		));
@@ -65,7 +64,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// フリューゲルヴェントワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.tiny_feather, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.tiny_feather, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.flugel_wind_wand) },
 			1
 		));
@@ -73,7 +72,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// エルクシディアフラワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.grav_powder, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.grav_powder, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.elksi_diafusola_wand) },
 			1
 		));
@@ -81,7 +80,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// アクエリアス・ソーサラー・ワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.aquarius_sorcerer_wand) },
 			1
 		));
@@ -89,7 +88,7 @@ public class MFTableRecipePlugin implements IMFTableRecipePlugin {
 		// フォスフォラスワンド
 		recipe.addRecipe(new MFTableRecipes(
 			"cosmiccrystalWand",
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.fire_nasturtium_petal, 64), new ItemStack(BlockInit.twilightlight, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal, 2), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.fire_nasturtium_petal, 64), new ItemStack(ItemInit.mf_magiabottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.phosphorus_wand) },
 			1
 		));

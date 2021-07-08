@@ -238,5 +238,26 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new Object[] { new OreItems("dustSugar", 4), "cropLemon", new OreItems("dustFlour", 3), new OreItems("egg", 2), "foodButter", "bucketMilk" },
 			new ItemStack[] { new ItemStack(ItemInit.cookie_jam, 8) }
 		));
+
+		// シフォンケーキ
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("egg", 6),
+			new Object[] { new OreItems("dustSugar", 8), new OreItems("dustFlour", 2), new OreItems("bucketWater", 2), new OreItems("foodOil", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.cake_chiffon, 8) }
+		));
+
+		// きなこもち
+		recipe.addRecipe(new OvenRecipes(
+			new ItemStack(ItemInit.mochi, 4),
+			new Object[] { new ItemStack(ItemInit.kinako, 4), new OreItems("dustSugar", 2), new OreItems("bucketWater", 3) },
+			new ItemStack[] { new ItemStack(ItemInit.kinakomochi, 6) }
+		));
+
+		// おはぎ
+		recipe.addRecipe(new OvenRecipes(
+			new ItemStack(ItemInit.mochi, 4),
+			new Object[] { new OreItems("cropBean", 5), new OreItems("dustSugar", 6), new OreItems("bucketWater", 3), new OreItems("dustSalt", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.ohagi, 8) }
+		));
 	}
 }

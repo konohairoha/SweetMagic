@@ -168,5 +168,26 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 			new Object[] { new ItemStack(ItemInit.bonito_flakes, 3), new OreItems("foodSoysauce", 2), new OreItems("bucketWater", 3), new OreItems("dustSalt", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.salad_ohitasi, 6) }
 		));
+
+		// フライドポテト
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("cropPotato", 3),
+			new Object[] { new OreItems("dustFlour", 2), new OreItems("dustSalt", 2), new OreItems("foodOil", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.fried_potato, 5) }
+		));
+
+		// モチ
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("cropRice", 6),
+			new Object[] { new OreItems("bucketWater", 4) },
+			new ItemStack[] { new ItemStack(ItemInit.mochi, 6) }
+		));
+
+		// ずんだ餅
+		recipe.addRecipe(new PotRecipes(
+			new ItemStack(ItemInit.mochi, 4),
+			new Object[] { new OreItems("cropGreenSoybeans", 3), "dustSugar" },
+			new ItemStack[] { new ItemStack(ItemInit.zunda, 6) }
+		));
 	}
 }

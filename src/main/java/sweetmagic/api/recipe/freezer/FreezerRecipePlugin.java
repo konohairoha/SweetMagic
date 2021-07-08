@@ -225,5 +225,26 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 			new Object[] { new OreItems("cropLettuce", 3), new OreItems("bread", 3), new OreItems("foodButter", 2), "dustSalt" },
 			new ItemStack[] { new ItemStack(ItemInit.egg_sandwitch, 8) }
 		));
+
+		// ソフトクリーム（バニラ）
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("bucketMilk", 4),
+			new Object[] { new OreItems("foodCream", 4), new ItemStack(ItemInit.vannila_essence, 4), "dustSalt", "foodGelatine" },
+			new ItemStack[] { new ItemStack(ItemInit.softcream_vannila, 8) }
+		));
+
+		// ソフトクリーム（バニラ）
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("bucketMilk", 4),
+			new Object[] { new OreItems("foodCream", 4), new OreItems("cropStrawberry", 4), "dustSalt", "foodGelatine" },
+			new ItemStack[] { new ItemStack(ItemInit.softcream_strawberry, 8) }
+		));
+
+		// ソフトクリーム（バニラ）
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("bucketMilk", 4),
+			new Object[] { new OreItems("foodCream", 4), new ItemStack(ItemInit.chocolate, 2), "dustSalt", "foodGelatine" },
+			new ItemStack[] { new ItemStack(ItemInit.softcream_chocolate, 8) }
+		));
 	}
 }

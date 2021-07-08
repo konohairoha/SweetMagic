@@ -134,5 +134,12 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 			new Object[] { new OreItems("egg", 3), new OreItems("foodSoysauce", 2), new OreItems("foodLiquor", 2), new OreItems("foodOil", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.spinach_egg, 6) }
 		));
+
+		// ホットケーキ
+		recipe.addRecipe(new PanRecipes(
+			new ItemStack(ItemInit.vannila_essence, 2),
+			new Object[] { new OreItems("egg", 3), new OreItems("dustFlour", 6), new OreItems("dustSugar", 3), new OreItems("bucketMilk", 2), new OreItems("foodOil", 2), "foodButter" },
+			new ItemStack[] { new ItemStack(ItemInit.hotcake, 6) }
+		));
 	}
 }

@@ -103,9 +103,10 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 
 		// 夜の帳
 		recipe.addRecipe(new PedalRecipes(
-			new ItemStack(ItemInit.cotton_cloth, 48),
+			new ItemStack(ItemInit.cotton_cloth, 36),
 			new Object[] { new ItemStack(ItemInit.pure_crystal, 3), new ItemStack(ItemInit.poison_bottle, 4), new ItemStack(ItemInit.tiny_feather, 4),
-					 new ItemStack(ItemInit.unmeltable_ice, 4), new ItemStack(ItemInit.electronic_orb, 4), new ItemStack(ItemInit.mystical_page, 6) },
+					 new ItemStack(ItemInit.unmeltable_ice, 4), new ItemStack(ItemInit.electronic_orb, 4), new ItemStack(ItemInit.stray_soul, 4),
+					 new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.veil_darkness) }
 		));
 
@@ -326,6 +327,13 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack(BlockInit.peach_log, 8),
 			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.cotton_cloth, 8), new ItemStack(ItemInit.blank_page, 4), new ItemStack(Items.FEATHER, 2), new OreItems("dyeBlack", 2) },
 			new ItemStack[] { new ItemStack(BlockInit.arcane_table) }
+		));
+
+		// スターライトワンド
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.cosmos_light_ingot, 4),
+			new Object[] { new ItemStack(ItemInit.alternative_ingot, 2), new ItemStack(ItemInit.witch_tears) },
+			new ItemStack[] { new ItemStack(ItemInit.startlight_wand) }
 		));
 
 		Map<Item, String> aetherRecipe = new HashMap<>();
