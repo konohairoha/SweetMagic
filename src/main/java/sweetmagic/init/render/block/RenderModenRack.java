@@ -1,5 +1,6 @@
 package sweetmagic.init.render.block;
 
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
@@ -7,6 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.blocks.BlockModenRack;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.util.RenderUtils;
 
@@ -19,9 +21,19 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 
 	@Override
 	public void render(TileModenRack te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+
+		Block block = te.getBlock(te.getPos());
+		if ( !(block instanceof BlockModenRack)) { return; }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-        this.renderItem(te, x, y - 0.5, z, partialTicks);
+
+        try {
+            this.renderItem(te, x, y - 0.5, z, partialTicks);
+        }
+
+		catch (Throwable e) { }
+
         GlStateManager.popMatrix();
 	}
 

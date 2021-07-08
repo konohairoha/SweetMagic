@@ -31,6 +31,7 @@ import sweetmagic.init.item.sm.magic.MFTime;
 import sweetmagic.init.item.sm.magic.MFWeather;
 import sweetmagic.init.item.sm.magic.MagicianBeginnerBook;
 import sweetmagic.init.item.sm.magic.ShotMagic;
+import sweetmagic.init.item.sm.magic.StarLightWand;
 import sweetmagic.init.item.sm.magic.TouchMagic;
 import sweetmagic.init.item.sm.seed.MagicMeal;
 import sweetmagic.init.item.sm.seed.SMSeed;
@@ -71,7 +72,7 @@ public class ItemInit {
 	public static Item dm_seed, dm_flower;
 
     // 鉱石、クリスタル
-	public static Item alternative_ingot, aether_crystal_shard, cosmic_crystal_shard;
+	public static Item alternative_ingot, cosmos_light_ingot, aether_crystal_shard, cosmic_crystal_shard;
 	public static Item aether_crystal, divine_crystal, pure_crystal, deus_crystal, cosmic_crystal;
 
 	// エーテルツール
@@ -86,10 +87,10 @@ public class ItemInit {
 	public static Item magicmeal, clero_petal, clerodendrum_seed, prizmium;
 	public static Item fire_powder, fire_nasturtium_petal, fire_nasturtium_seed;
 	public static Item sticky_stuff_petal, sticky_stuff_seed, glowflower_seed;
-	public static Item cotton, cotton_seed;
+	public static Item cotton, cotton_seed, quartz_seed;
 
     // MFボトル
-	public static Item b_mf_bottle, mf_sbottle, mf_bottle;
+	public static Item b_mf_bottle, b_mf_magiabottle, mf_sbottle, mf_bottle, mf_magiabottle;
 
 	// 魔法素材
 	public static Item mysterious_page, ender_shard, stray_soul, electronic_orb, poison_bottle, witch_tears, veil_darkness;
@@ -98,7 +99,7 @@ public class ItemInit {
 	public static Item unmeltable_ice, grav_powder, tiny_feather, blank_page, blank_magic, cotton_cloth, mystical_page;
 
 	// 杖
-	public static Item mf_stuff, aether_wand, divine_wand, purecrystal_wand, deuscrystal_wand, cosmiccrystal_wand, creative_wand;
+	public static Item mf_stuff, startlight_wand, aether_wand, divine_wand, purecrystal_wand, deuscrystal_wand, cosmiccrystal_wand, creative_wand;
 
 	// エーテルワンド
 	public static Item aether_wand_r, aether_wand_g, aether_wand_b, aether_wand_y, aether_wand_p;
@@ -117,7 +118,7 @@ public class ItemInit {
 
 	// 装備品
 	public static Item warrior_bracelet, witch_scroll, scorching_jewel, mermaid_veil, blood_sucking_ring, emelald_pias, fortune_ring;
-	public static Item varrier_pendant, magicians_grobe, magician_quillpen, gravity_pendant;
+	public static Item varrier_pendant, magicians_grobe, magician_quillpen, gravity_pendant, poison_fang;
 
 	// ドア
 	public static Item black_moderndoor, brown_2paneldoor, brown_5paneldoor, brown_elegantdoor, brown_arch_door, brown_arch_plantdoor;
@@ -189,6 +190,8 @@ public class ItemInit {
 	public static Item salad_ohitasi, bonito_flakes, steak_hamburg, sushi_egg, sushi_salmon, peach_tart;
 	public static Item hamburger, gateau_chocolat, cookie_jam, peach_compote;
 	public static Item sandwich, sandwich_fruit, vienna_coffee, spinach_egg;
+	public static Item fried_potato, softcream_vannila, softcream_strawberry, softcream_chocolate, cake_chiffon;
+	public static Item hotcake, kinakomochi, mochi, zunda, ohagi;
 
 	// 飲み物
 	public static Item corn_soup, berryorange_juice, strawberrymilk, coconut_juice, milk_pack, fruit_wine;
@@ -228,13 +231,14 @@ public class ItemInit {
 
         // 鉱石、クリスタル
 		alternative_ingot = new SMItem("alternative_ingot");
+		cosmos_light_ingot = new SMItem("cosmos_light_ingot");
 		aether_crystal_shard = new MFItem("aether_crystal_shard", 50);
 		cosmic_crystal_shard = new MFItem("cosmic_crystal_shard", 1000);
 		aether_crystal = new MFItem("aether_crystal", 600);
 		divine_crystal = new MFItem("divine_crystal", 8000);
-		pure_crystal = new MFItem("pure_crystal", 90000);
+		pure_crystal = new MFItem("pure_crystal", 100000);
 		deus_crystal = new MFItem("deus_crystal", 450000);
-		cosmic_crystal = new MFItem("cosmic_crystal", 600000);
+		cosmic_crystal = new MFItem("cosmic_crystal", 1000000);
 
 		// エーテルツール
 		//斧　　：アイテム名　=new アイテムアックス("アイテム名"、採掘レベル、耐久値、効率、攻撃力、エンチャントレベル)、攻撃力、攻撃速度
@@ -273,11 +277,14 @@ public class ItemInit {
         glowflower_seed = new SMSeed("glowflower_seed", BlockInit.glowflower_plant, 1);
         cotton = new SMItem("cotton", magicList);
         cotton_seed = new SMSeed("cotton_seed", BlockInit.cotton_plant, 1);
+        quartz_seed = new SMSeed("quartz_seed", BlockInit.quartz_plant, 1);
 
         // MFボトル
 		mf_sbottle = new MFItem("mf_sbottle", 1000);
 		b_mf_bottle = new SMItem("b_mf_bottle", magicList);
 		mf_bottle = new MFItem("mf_bottle", 10000);
+		b_mf_magiabottle = new SMItem("b_mf_magiabottle", magicList);
+		mf_magiabottle = new MFItem("mf_magiabottle", 100000);
 
 		// 魔法素材
 		ender_shard = new SMDropItem("ender_shard");
@@ -299,6 +306,7 @@ public class ItemInit {
 
 		// 杖
 		mf_stuff = new MFStuff("magiaflux_stuff");
+		startlight_wand = new StarLightWand("startlight_wand");
 		aether_wand = new SMWand("aether_wand", 1, 3000, 3);
 		divine_wand = new SMWand("divine_wand", 2, 15000, 6);
 		purecrystal_wand = new SMWand("purecrystal_wand", 3, 40000, 9);
@@ -365,6 +373,7 @@ public class ItemInit {
 		magicians_grobe = new SMAcce("magicians_grobe", SMAcceType.TERMS, true, 9);
 		magician_quillpen = new SMAcce("magician_quillpen", SMAcceType.TERMS, false, 10);
 		gravity_pendant = new SMAcce("gravity_pendant", SMAcceType.TERMS, true, 11);
+		poison_fang = new SMAcce("poison_fang", SMAcceType.TERMS, false, 12);
 
 		// ドア
 		black_moderndoor = new SMIDoor("black_moderndoor_i", BlockInit.black_moderndoor);
@@ -459,7 +468,7 @@ public class ItemInit {
         magic_burst = new ShotMagic("magic_burst", 15, SMElement.BLAST, 1, 160, 100, "magic_tamagotti");
         magic_blast = new ShotMagic("magic_tamagotti", 4, SMElement.BLAST, 2, 120, 200);
         magic_magia_destroy = new ShotMagic("magic_magia_destroy", 17, SMElement.BLAST, 3, 160, 300, "magic_tamagotti");
-        magic_supernova = new ShotMagic("magic_supernova", 30, SMElement.BLAST, 4, 240, 500, "magic_tamagotti");
+        magic_supernova = new ShotMagic("magic_supernova", 30, SMElement.BLAST, 4, 280, 500, "magic_tamagotti");
 
         magic_slowtime = new ChargeMagic("magic_slowtime", 4, SMElement.TIME, 1, 1500, 100);
         magic_deusora = new AirMagic("magic_deusora", 13, SMElement.TIME, 2, 3600, 200, "magic_slowtime");
@@ -602,6 +611,11 @@ public class ItemInit {
 		kurikinton = new SMFood (7, 0.55F, "kurikinton", 0);
 		pumpkin_nituke = new SMFood (7, 0.6F, "pumpkin_nituke", 0);
 		croquette  = new SMFood(7, 0.65F, "croquette", 0);
+		fried_potato  = new SMFood(6, 0.5F, "fried_potato", 1);
+		mochi  = new SMFood(5, 0.4F, "mochi", 0);
+		kinakomochi  = new SMFood(6, 0.4F, "kinakomochi", 0);
+		zunda  = new SMFood(5, 0.75F, "zunda", 3);
+		ohagi  = new SMFood(5, 0.5F, "ohagi", 0);
 
 		// 冷蔵庫類
 		strawberry_jelly = new SMFood (4, 0.75F, "strawberry_jelly", 2);
@@ -619,6 +633,9 @@ public class ItemInit {
 		youkan = new SMFood (4, 1.5F, "youkan", 0);
 		fluit_mix = new SMFood(12, 0.1F, "fluit_mix", 0);
 		peach_compote = new SMFood(5, 0.6F, "peach_compote", 0);
+		softcream_vannila = new SMFood(8, 0.4F, "softcream_vannila", 0);
+		softcream_strawberry = new SMFood(5, 0.7F, "softcream_strawberry", 0);
+		softcream_chocolate = new SMFood(6, 0.6F, "softcream_chocolate", 0);
 
 		// クッキー
 		lemon_cookie = new SMFood(6, 0.5F, "lemon_cookie", 1);
@@ -648,7 +665,9 @@ public class ItemInit {
 		mont_blanc = new SMFood (7, 0.8F, "mont_blanc", 0);
 		talttatan = new SMFood(6, 0.75F, "talttatan", 0);
 		german_tree_cake = new SMFood(8, 0.5F, "german_tree_cake", 0);
+		cake_chiffon = new SMFood(7, 0.6F, "cake_chiffon", 0);
 		eclair = new SMFood (6, 0.6F, "eclair", 0);
+		hotcake = new SMFood (8, 0.55F, "hotcake", 0);
 		fruit_crepe = new SMFood (8, 0.25F, "fruit_crepe", 0);
 		cream_brulee = new SMFood (8, 0.4F, "cream_brulee", 0);
 		marshmallow = new SMFood (4, 0.5F, "marshmallow", 1);

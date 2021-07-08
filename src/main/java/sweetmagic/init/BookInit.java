@@ -3,6 +3,7 @@ package sweetmagic.init;
 import java.util.ArrayList;
 import java.util.List;
 
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import sweetmagic.SweetMagicCore;
@@ -43,10 +44,11 @@ public class BookInit {
 	public static BookEntry tool_repar, write, drawer, hopper, robe, harness, choker;
 	public static BookEntry seaweed, seedbag;
 	public static BookEntry lantan, succesor;
+	public static BookEntry arcana;
 
 	public static BookEntry key, flower_pot;
 
-	public static BookEntry biome, chest, wand_gui, plate, vil, arcana;
+	public static BookEntry ingot, star, quartz, gothic;
 
 	public static void init() {
 
@@ -85,17 +87,15 @@ public class BookInit {
 		seedbag = new BookEntry("seedbag", magic).setIcon(new ItemStack(ItemInit.seedbag));
 		lantan = new BookEntry("lantan", magic).setIcon(new ItemStack(BlockInit.aether_lanp));
 		succesor = new BookEntry("succesor", magic).setIcon(new ItemStack(BlockInit.magia_successor));
+		arcana = new BookEntry("arcana", magic).setIcon(new ItemStack(BlockInit.arcane_table));
 
 		key = new BookEntry("key", structure).setIcon(new ItemStack(ItemInit.magickey));
 		flower_pot = new BookEntry("flower_pot", structure).setIcon(new ItemStack(BlockInit.solid_star_pot));
 
-		biome = new BookEntry("biome", update).setIcon(new ItemStack(BlockInit.chestnut_sapling));
-		vil = new BookEntry("vil", update).setIcon(new ItemStack(ItemInit.magicianbeginner_book));
-		chest = new BookEntry("chest", update).setIcon(new ItemStack(BlockInit.treasure_chest));
-		plate = new BookEntry("plate", update).setIcon(new ItemStack(BlockInit.wood_plate));
-		arcana = new BookEntry("arcana", update).setIcon(new ItemStack(BlockInit.arcane_table));
-		wand_gui = new BookEntry("wand_gui", update).setIcon(new ItemStack(ItemInit.aether_wand));
-
+		ingot = new BookEntry("ingot", update).setIcon(new ItemStack(ItemInit.cosmos_light_ingot));
+		star = new BookEntry("star", update).setIcon(new ItemStack(ItemInit.startlight_wand));
+		quartz = new BookEntry("quartz", update).setIcon(new ItemStack(Items.QUARTZ));
+		gothic = new BookEntry("gothic", update).setIcon(new ItemStack(BlockInit.fance_gothic_white));
 
 		sugarbell.addPage(new BookPageText(sugarbell, "sugarbell").addRelatedEntries(sannyflower, moonblossom, alstroemeria));
 		sannyflower.addPage(new BookPageText(sannyflower, "sannyflower").addRelatedEntries(moonblossom, alstroemeria));
@@ -124,16 +124,15 @@ public class BookInit {
 		seedbag.addPage(new BookPageText(seedbag, "seedbag"));
 		lantan.addPage(new BookPageText(lantan, "lantan"));
 		succesor.addPage(new BookPageText(succesor, "succesor"));
+		arcana.addPage(new BookPageText(arcana, "arcana"));
 
 		key.addPage(new BookPageText(key, "key"));
 		flower_pot.addPage(new BookPageText(flower_pot, "flower_pot"));
 
-		biome.addPage(new BookPageText(biome, "biome"));
-		vil.addPage(new BookPageText(vil, "vil"));
-		chest.addPage(new BookPageText(chest, "chest"));
-		plate.addPage(new BookPageText(plate, "plate"));
-		arcana.addPage(new BookPageText(arcana, "arcana"));
-		wand_gui.addPage(new BookPageText(wand_gui, "wand_gui"));
+		ingot.addPage(new BookPageText(ingot, "ingot"));
+		star.addPage(new BookPageText(star, "star"));
+		quartz.addPage(new BookPageText(quartz, "quartz"));
+		gothic.addPage(new BookPageText(gothic, "gothic"));
 
 	}
 }

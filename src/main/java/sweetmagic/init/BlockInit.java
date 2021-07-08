@@ -143,6 +143,7 @@ public class BlockInit {
 
 	// 板ガラス
 	public static Block sugarglass_pane, shading_sugarglass_pane, frosted_glass_line_pane, frosted_glass_pane, prismglass_pane;
+	public static Block green4panel_glass_pane, brown4panel_glass_pane, lightbrown4panel_glass_pane, darkbrown4panel_glass_pane, ami_glass_pane;
 
 	// 4パネガラス
 	public static Block green4panel_glass, brown4panel_glass, lightbrown4panel_glass, darkbrown4panel_glass, ami_glass;
@@ -171,7 +172,7 @@ public class BlockInit {
 	public static Block iberis_umbellata_basket, campanula_basket, primula_polyansa_basket, christmas_rose_basket, portulaca_basket;
 
 	// 鉱石
-	public static Block ac_ore, alt_block, cosmic_crystal_ore;
+	public static Block ac_ore, alt_block, cosmos_light_block, cosmic_crystal_ore;
 
 	// MFブロック
 	public static Block mfchanger, advanced_mfchanger;
@@ -205,7 +206,6 @@ public class BlockInit {
 	public static Block antique_brick_stairs_b, antique_brick_slab_b;
 	public static Block antique_brick_stairs_l, antique_brick_slab_l;
 	public static Block antique_brick_stairs_g, antique_brick_slab_g;
-	public static Block antique_tdoor_0, antique_tdoor_0w, antique_tdoor_b, antique_tdoor_l;
 	public static Block flagstone, flagstone_stairs, flagstone_slab;
 	public static Block flagstone_color, flagstone_color_stairs, flagstone_color_slab;
 	public static Block old_brick, old_brick_stairs, old_brick_slab;
@@ -224,10 +224,18 @@ public class BlockInit {
 	public static Block longtile_brick, longtile_brick_stairs, longtile_brick_slab;
 	public static Block longtile_brick_l, longtile_brick_l_stairs, longtile_brick_l_slab;
 	public static Block longtile_brick_w, longtile_brick_w_stairs, longtile_brick_w_slab;
+	public static Block whiteline_brick, whiteline_brick_stairs, whiteline_brick_slab;
+	public static Block whiteline_brick_y, whiteline_brick_y_stairs, whiteline_brick_y_slab;
+	public static Block whiteline_brick_b, whiteline_brick_b_stairs, whiteline_brick_b_slab;
+
+	// レンガのトラップドア
+	public static Block antique_tdoor_0, antique_tdoor_0w, antique_tdoor_b, antique_tdoor_l, antique_tdoor_g;
+	public static Block old_tdoor, old_tdoor_r, old_tdoor_g , old_tdoor_y, old_tdoor_l, old_tdoor_b, old_tdoor_s;
+	public static Block longtile_brick_o_tdoor, longtile_brick_p_tdoor, longtile_brick_r_tdoor, longtile_brick_y_tdoor, longtile_brick_b_tdoor;
+	public static Block longtile_brick_g_tdoor, longtile_brick_tdoor, longtile_brick_l_tdoor, longtile_brick_w_tdoor;
+	public static Block whiteline_brick_tdoor, whiteline_brick_y_tdoor, whiteline_brick_b_tdoor;
 
 	public static Block pillar_stone, pillar_stone_w;
-
-	public static Block longtile_brick_r_tdoor, longtile_brick_p_tdoor;
 
 	// 窓
 	public static Block antique_window_white, antique_window_brown, antique_window_brown2, antique_window_green;
@@ -247,6 +255,7 @@ public class BlockInit {
 	public static Block tomato_plant, egg_plant,  j_radish_plant, lettuce_plant, cabbage_plant;
 	public static Block azuki_plant, onion_plant, raspberry_plant, glowflower_plant, cotton_plant;
 	public static Block banana_plant, coffee_plant, spinach_plant;
+	public static Block quartz_plant;
 
 	// 街頭
 	public static Block pole_down, pole, lantern, lantern_side1, lantern_side2;
@@ -258,6 +267,7 @@ public class BlockInit {
 	public static Block moden_wallrack, moden_wallrack_l, moden_wallrack_b;
 	public static Block moden_stair, plate, wood_plate, iron_plate, magicbook;
 	public static Block cafe_chair, cafe_table;
+	public static Block balcony_chair, balcony_table;
 
 	public static Block rattan_chair_y, rattan_chair_b, rattan_chair_d;
 	public static Block rattan_basket_y, rattan_basket_b, rattan_basket_d;
@@ -274,9 +284,9 @@ public class BlockInit {
 	// 植え込み
 	public static Block orange_planting, chestnut_planting, estor_planting, peach_planting;
 
-	public static Block white_ironfence, black_ironfence;
+	public static Block white_ironfence, black_ironfence, fance_gothic_white, fance_gothic_black;
 	public static Block antique_brick_pot_r, orange_planks_pot, orange_planks_pot_w, estor_planks_pot, compost_drit;
-	public static Block longtile_brick_pot_o, longtile_brick_pot_l;
+	public static Block longtile_brick_pot_o, longtile_brick_pot_l, whiteline_brick_pot;
 
 	public static Block woodbox;
 
@@ -396,6 +406,11 @@ public class BlockInit {
 		frosted_glass_pane = new SMGlassPane("frosted_glass_pane", blockList, 0);
 		frosted_glass_line_pane = new SMGlassPane("frosted_glass_line_pane", blockList, 0);
 		prismglass_pane = new SMGlassPane("prismglass_pane", blockList, 2);
+		green4panel_glass_pane = new SMGlassPane("green4panel_glass_pane", blockList, 0);
+		brown4panel_glass_pane = new SMGlassPane("brown4panel_glass_pane", blockList, 0);
+		lightbrown4panel_glass_pane = new SMGlassPane("lightbrown4panel_glass_pane", blockList, 0);
+		darkbrown4panel_glass_pane = new SMGlassPane("darkbrown4panel_glass_pane", blockList, 0);
+		ami_glass_pane = new SMGlassPane("ami_glass_pane", blockList, 0);
 
 		// 4パネガラス
 		green4panel_glass = new WoodPaneGlass("green4panel_glass", 0, false, false);
@@ -452,7 +467,8 @@ public class BlockInit {
 		// 鉱石
 		ac_ore = new BlockSMOre("ac_ore", 0);
 		cosmic_crystal_ore = new BlockSMOre("cosmic_crystal_ore", 1);
-		alt_block = new SMIron("alt_block", 2.4F, 16.0F, 1, 0);
+		alt_block = new SMIron("alt_block", 2.4F, 1024F, 1, 0);
+		cosmos_light_block = new SMIron("cosmos_light_block", 2.4F, 1024F, 1, 0);
 
 		// MFブロック(基本)
 		mfchanger = new MFChange("mfchanger", 0);
@@ -557,10 +573,6 @@ public class BlockInit {
 		antique_brick_slab_b = new AntiqueSlab("antique_brick_slab_b");
 		antique_brick_slab_l = new AntiqueSlab("antique_brick_slab_l");
 		antique_brick_slab_g = new AntiqueSlab("antique_brick_slab_g");
-		antique_tdoor_0 = new SMTrapDoor("antique_tdoor_0", 0, Material.ROCK);
-		antique_tdoor_0w = new SMTrapDoor("antique_tdoor_0w", 0, Material.ROCK);
-		antique_tdoor_b = new SMTrapDoor("antique_tdoor_b", 0, Material.ROCK);
-		antique_tdoor_l = new SMTrapDoor("antique_tdoor_l", 0, Material.ROCK);
 		flagstone = new AntiqueBrick("flagstone", 1.25F, 1024F, 0, 0);
 		flagstone_stairs = new AntiqueStairs("flagstone_stairs", flagstone.getDefaultState());
 		flagstone_slab = new AntiqueSlab("flagstone_slab");
@@ -618,11 +630,47 @@ public class BlockInit {
 		longtile_brick_w_stairs = new AntiqueStairs("longtile_brick_w_stairs", longtile_brick_w.getDefaultState());
 		longtile_brick_w_slab = new AntiqueSlab("longtile_brick_w_slab");
 
+		whiteline_brick = new AntiqueBrick("whiteline_brick", 1.25F, 1024F, 0, 0);
+		whiteline_brick_stairs = new AntiqueStairs("whiteline_brick_stairs", whiteline_brick.getDefaultState());
+		whiteline_brick_slab = new AntiqueSlab("whiteline_brick_slab");
+		whiteline_brick_y = new AntiqueBrick("whiteline_brick_y", 1.25F, 1024F, 0, 0);
+		whiteline_brick_y_stairs = new AntiqueStairs("whiteline_brick_y_stairs", whiteline_brick_y.getDefaultState());
+		whiteline_brick_y_slab = new AntiqueSlab("whiteline_brick_y_slab");
+		whiteline_brick_b = new AntiqueBrick("whiteline_brick_b", 1.25F, 1024F, 0, 0);
+		whiteline_brick_b_stairs = new AntiqueStairs("whiteline_brick_b_stairs", whiteline_brick_b.getDefaultState());
+		whiteline_brick_b_slab = new AntiqueSlab("whiteline_brick_b_slab");
+
 		pillar_stone = new BlockPillarStone("pillar_stone");
 		pillar_stone_w = new BlockPillarStone("pillar_stone_w");
 
-		longtile_brick_r_tdoor = new SMTrapDoor("longtile_brick_r_tdoor", 0, Material.ROCK);
+		// レンガトラップドア
+		antique_tdoor_0 = new SMTrapDoor("antique_tdoor_0", 0, Material.ROCK);
+		antique_tdoor_0w = new SMTrapDoor("antique_tdoor_0w", 0, Material.ROCK);
+		antique_tdoor_b = new SMTrapDoor("antique_tdoor_b", 0, Material.ROCK);
+		antique_tdoor_l = new SMTrapDoor("antique_tdoor_l", 0, Material.ROCK);
+		antique_tdoor_g = new SMTrapDoor("antique_tdoor_g", 0, Material.ROCK);
+
+		old_tdoor = new SMTrapDoor("old_tdoor", 0, Material.ROCK);
+		old_tdoor_r = new SMTrapDoor("old_tdoor_r", 0, Material.ROCK);
+		old_tdoor_g = new SMTrapDoor("old_tdoor_g", 0, Material.ROCK);
+		old_tdoor_y = new SMTrapDoor("old_tdoor_y", 0, Material.ROCK);
+		old_tdoor_l = new SMTrapDoor("old_tdoor_l", 0, Material.ROCK);
+		old_tdoor_b = new SMTrapDoor("old_tdoor_b", 0, Material.ROCK);
+		old_tdoor_s = new SMTrapDoor("old_tdoor_s", 0, Material.ROCK);
+
+		longtile_brick_o_tdoor = new SMTrapDoor("longtile_brick_o_tdoor", 0, Material.ROCK);
 		longtile_brick_p_tdoor = new SMTrapDoor("longtile_brick_p_tdoor", 0, Material.ROCK);
+		longtile_brick_r_tdoor = new SMTrapDoor("longtile_brick_r_tdoor", 0, Material.ROCK);
+		longtile_brick_y_tdoor = new SMTrapDoor("longtile_brick_y_tdoor", 0, Material.ROCK);
+		longtile_brick_b_tdoor = new SMTrapDoor("longtile_brick_b_tdoor", 0, Material.ROCK);
+		longtile_brick_g_tdoor = new SMTrapDoor("longtile_brick_g_tdoor", 0, Material.ROCK);
+		longtile_brick_tdoor = new SMTrapDoor("longtile_brick_tdoor", 0, Material.ROCK);
+		longtile_brick_l_tdoor = new SMTrapDoor("longtile_brick_l_tdoor", 0, Material.ROCK);
+		longtile_brick_w_tdoor = new SMTrapDoor("longtile_brick_w_tdoor", 0, Material.ROCK);
+
+		whiteline_brick_tdoor = new SMTrapDoor("whiteline_brick_tdoor", 0, Material.ROCK);
+		whiteline_brick_y_tdoor = new SMTrapDoor("whiteline_brick_y_tdoor", 0, Material.ROCK);
+		whiteline_brick_b_tdoor = new SMTrapDoor("whiteline_brick_b_tdoor", 0, Material.ROCK);
 
 		antique_window_white = new SMTrapDoor("antique_window_white", 0, Material.WOOD);
 		antique_window_brown = new SMTrapDoor("antique_window_brown", 0, Material.WOOD);
@@ -668,6 +716,7 @@ public class BlockInit {
 		onion_plant = new SweetCrops_STAGE5("onion_plant", 3, 0, 5.6F);
 		coffee_plant = new SweetCrops_STAGE5("coffee_plant", 5, 0, 5.6F);
 		raspberry_plant = new SweetCrops_STAGE6("raspberry_plant",0, 1, 6.0F);
+		quartz_plant = new SweetCrops_STAGE6("quartz_plant",4, 1, 6.0F);
 		chestnut_plant = new BlockChestnut("chestnut_plant", 0);
 		coconut_plant = new BlockChestnut("coconut_plant", 1);
 		banana_plant = new BlockChestnut("banana_plant", 2);
@@ -713,6 +762,9 @@ public class BlockInit {
 		cafe_table = new SMTableDot("cafe_table");
 		cafe_chair = new SMChair("cafe_chair", 3);
 
+		balcony_table = new SMTableDot("balcony_table");
+		balcony_chair = new SMChair("balcony_chair", 3);
+
 		// チェスト系
 		moden_rack = new BlockModenRack("moden_rack", 0);
 		moden_rack_brown = new BlockModenRack("moden_rack_brown", 0);
@@ -757,10 +809,13 @@ public class BlockInit {
 		estor_planks_pot = new PlantPot("estor_planks_pot", SoundType.GROUND, 3);
 		longtile_brick_pot_o = new PlantPot("longtile_brick_pot_o", SoundType.GROUND, 4);
 		longtile_brick_pot_l = new PlantPot("longtile_brick_pot_l", SoundType.GROUND, 5);
+		whiteline_brick_pot = new PlantPot("whiteline_brick_pot", SoundType.GROUND, 6);
 
 		// ガーデンフェンス
 		white_ironfence = new IronFence("white_ironfence");
 		black_ironfence = new IronFence("black_ironfence");
+		fance_gothic_white = new IronFence("fance_gothic_white");
+		fance_gothic_black = new IronFence("fance_gothic_black");
 
 		// 裏データ
 		sample = new BlockLanp("sample", 0, 32F, 0, 1, 0.5F, SoundType.GLASS, noTabList);
