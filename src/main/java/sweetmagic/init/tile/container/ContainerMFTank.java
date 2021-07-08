@@ -4,12 +4,10 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
-import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.ValidatedSlot;
@@ -55,50 +53,32 @@ public class ContainerMFTank extends Container {
 
 	@Nonnull
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer player, int index) {
+	public ItemStack transferStackInSlot(EntityPlayer player, int slotIndex) {
 
-		ItemStack itemstack = ItemStack.EMPTY;
-		Slot slot = this.inventorySlots.get(index);
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.getSlot(slotIndex);
+
+		int slotCount = 2;
 
 		if (slot != null && slot.getHasStack()) {
-			ItemStack itemstack1 = slot.getStack();
-			itemstack = itemstack1.copy();
+			ItemStack stack1 = slot.getStack();
+			stack = stack1.copy();
 
-			if (index == 2) {
-				if (!this.mergeItemStack(itemstack1, 2, 38, true)) {
-					return ItemStack.EMPTY;
-				}
-
-				slot.onSlotChange(itemstack1, itemstack);
-			} else if (index != 1 && index != 0) {
-				if (itemstack1.getItem() == Items.GLASS_BOTTLE || itemstack1.getItem() == ItemInit.b_mf_bottle) {
-					if (!this.mergeItemStack(itemstack1, 0, 1, false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (index >= 2 && index < 29) {
-					if (!this.mergeItemStack(itemstack1, 29, 38, false)) {
-						return ItemStack.EMPTY;
-					}
-				} else if (index >= 29 && index < 38 && !this.mergeItemStack(itemstack1, 2, 29, false)) {
-					return ItemStack.EMPTY;
-				}
-			} else if (!this.mergeItemStack(itemstack1, 2, 38, false)) {
+			if (slotIndex < slotCount && !this.mergeItemStack(stack1, slotCount, 36 + slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (itemstack1.isEmpty()) {
+			if (slotIndex >= slotCount && !this.mergeItemStack(stack1, 0, slotCount, false)) {
+				return ItemStack.EMPTY;
+			}
+
+			if (stack1.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
 			} else {
 				slot.onSlotChanged();
 			}
-
-			if (itemstack1.getCount() == itemstack.getCount()) {
-				return ItemStack.EMPTY;
-			}
-
-			slot.onTake(player, itemstack1);
 		}
 
-		return itemstack;
+		return stack;
 	}
 }

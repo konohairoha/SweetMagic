@@ -2,15 +2,15 @@ package sweetmagic.init.tile.container;
 
 import javax.annotation.Nonnull;
 
+import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.init.tile.slot.ValidatedSlot;
@@ -41,12 +41,8 @@ public class ContainerWoodChest extends Container {
 	}
 
 	@Override
-	public boolean canInteractWith(EntityPlayer player) {
+	public boolean canInteractWith(@Nonnull EntityPlayer player) {
 		return this.tile.isUsableByPlayer(player);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2) {
 	}
 
 	@Nonnull
@@ -80,9 +76,13 @@ public class ContainerWoodChest extends Container {
 
 	@Override
 	public void onContainerClosed(EntityPlayer player) {
+
 		super.onContainerClosed(player);
 
-		BlockWoodChest block = (BlockWoodChest) this.tile.getBlock(this.tile.getPos());
+		Block chest = this.tile.getBlock(this.tile.getPos());
+		if (chest == null || chest == Blocks.AIR) { return; }
+
+		BlockWoodChest block = (BlockWoodChest) chest;
 
 		switch (block.data) {
 		case 0:

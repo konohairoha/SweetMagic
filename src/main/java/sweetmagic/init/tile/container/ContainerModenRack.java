@@ -7,8 +7,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
@@ -18,12 +16,14 @@ public class ContainerModenRack extends Container {
 
 	public ContainerModenRack(InventoryPlayer invPlayer, TileModenRack tile) {
 		this.tile = tile;
-		this.initSlots(invPlayer);
-	}
 
-	void initSlots(InventoryPlayer invPlayer) {
+		try {
+			this.addSlot();
+		}
 
-		this.addSlot();
+		catch (Throwable e) {
+			invPlayer.closeInventory(invPlayer.player);
+		}
 
 		// Player Inventory
 		for (int i = 0; i < 3; i++)
@@ -58,10 +58,6 @@ public class ContainerModenRack extends Container {
 	@Override
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
 		return this.tile.isUsableByPlayer(player);
-	}
-
-	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2) {
 	}
 
 	@Nonnull

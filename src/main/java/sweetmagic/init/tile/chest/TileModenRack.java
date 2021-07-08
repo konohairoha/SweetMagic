@@ -113,6 +113,6 @@ public class TileModenRack extends TileSMBase {
 
 	public int getRackData () {
 		Block block = this.getBlock(this.getPos());
-		return ((BlockModenRack)block).data;
+		return ((BlockModenRack) block).data;
 	}
 }

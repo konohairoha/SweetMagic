@@ -62,7 +62,7 @@ public class TileWandPedal extends TileSMBase {
 	}
 
 	// データ値の取得
-	public int getData () {
-		return ( (WandPedal)this.getBlock(this.pos)).data;
+	public int getData() {
+		return ((WandPedal) this.getBlock(this.pos)).data;
 	}
 }

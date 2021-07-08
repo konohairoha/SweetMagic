@@ -39,21 +39,24 @@ public class GuiModenRack extends GuiContainer {
 		int y = (this.height - this.ySize) / 2;
 		this.drawTexturedModalRect(x, y, 0, 0, this.xSize, this.ySize);
 
-		// (X開始位置、Y開始位置、ゲージの左下X、ゲージの左下Y、ゲージのXサイズ、ゲージのYサイズ)
-		switch (this.tile.getRackData()) {
-		case 0:
-			for (int i = 0; i < 3; i++)
-				for (int k = 0; k < 2; k++)
-					this.drawTexturedModalRect(x + 6 + 54 * i, y + 7 + k * 18, 173, 0, 54, 18);
-			break;
-		case 1:
-			this.drawTexturedModalRect(x + 60, y + 24, 173, 0, 54, 18);
-			break;
-		case 2:
-		case 3:
-			this.drawTexturedModalRect(x + 78, y + 24, 173, 0, 18, 18);
-			break;
+		try {
+			// (X開始位置、Y開始位置、ゲージの左下X、ゲージの左下Y、ゲージのXサイズ、ゲージのYサイズ)
+			switch (this.tile.getRackData()) {
+			case 0:
+				for (int i = 0; i < 3; i++)
+					for (int k = 0; k < 2; k++)
+						this.drawTexturedModalRect(x + 6 + 54 * i, y + 7 + k * 18, 173, 0, 54, 18);
+				break;
+			case 1:
+				this.drawTexturedModalRect(x + 60, y + 24, 173, 0, 54, 18);
+				break;
+			case 2:
+			case 3:
+				this.drawTexturedModalRect(x + 78, y + 24, 173, 0, 18, 18);
+				break;
+			}
 		}
 
+		catch (Throwable e) { }
 	}
 }
