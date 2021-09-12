@@ -5,6 +5,7 @@ import java.util.function.Predicate;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -28,13 +29,13 @@ public final class SlotPredicates {
     public static final Predicate<ItemStack> FURNACE_FUEL = input -> !input.isEmpty() && TileEntityFurnace.isItemFuel(input);
 
 	// MFアイテムか
-    public static final Predicate<ItemStack> MFF_FUEL = input -> !input.isEmpty() && doesItemHaveEmc(input);
+    public static final Predicate<ItemStack> MFF_FUEL = input -> !input.isEmpty() && isMFItem(input);
 
     // かまどレシピまたは鉄インゴットか
     public static final Predicate<ItemStack> SMELTABLE = input -> !input.isEmpty() && !FurnaceRecipes.instance().getSmeltingResult(input).isEmpty();
 
     // MF空ビンだけが入るように
-    public static final Predicate<ItemStack> MFBOTTLE = input -> !input.isEmpty() && (input.getItem() == Items.GLASS_BOTTLE || input.getItem() == ItemInit.b_mf_bottle);
+    public static final Predicate<ItemStack> MFBOTTLE = input -> !input.isEmpty() && isBottle(input.getItem());
 
     // MF空ビンだけが入るように
     public static final Predicate<ItemStack> ALLITEM = input -> !input.isEmpty();
@@ -43,7 +44,7 @@ public final class SlotPredicates {
     public static final Predicate<ItemStack> SMELEMENT = input -> canInputSMItem(input);
 
     // 杖なら
-    public static final Predicate<ItemStack> SMWAND = input -> !input.isEmpty() && input.getItem() instanceof IMFTool;
+    public static final Predicate<ItemStack> SMWAND = input -> !input.isEmpty() && input.getItem() instanceof IMFTool && input.getItem() != ItemInit.magic_book_cosmic;
 
     // 水なら
     public static final Predicate<ItemStack> WATERCUP = input -> !input.isEmpty() && isWaterCup(input);
@@ -55,7 +56,7 @@ public final class SlotPredicates {
     public static final Predicate<ItemStack> ISFOOD = input -> !input.isEmpty() && input.getItem() instanceof ItemFood;
 
 	// クリスタル以外か
-    public static final Predicate<ItemStack> ISNOTCRYSTAL = input -> !input.isEmpty() && doesItemHaveEmc(input) && isNotCrystal(input);
+    public static final Predicate<ItemStack> ISNOTCRYSTAL = input -> !input.isEmpty() && isMFItem(input) && isNotCrystal(input);
 
 	// 魔法アイテムか
     public static final Predicate<ItemStack> ISMAGICITEMS = input -> !input.isEmpty() && isMagicItems(input);
@@ -69,8 +70,12 @@ public final class SlotPredicates {
     // ダメージを受けているかどうか
     public static final Predicate<ItemStack> ISDAMA = input -> !input.isEmpty() && input.getItemDamage() != 0;
 
+
+    // ダメージを受けているかどうか
+    public static final Predicate<ItemStack> ISITEM = input -> !input.isEmpty() && !(input.getItem() instanceof ItemBlock);
+
     // MFを持っているかどうか
-	public static boolean doesItemHaveEmc(ItemStack stack) {
+	public static boolean isMFItem(ItemStack stack) {
 
 		if (stack.isEmpty()) {
 			return false;
@@ -100,7 +105,7 @@ public final class SlotPredicates {
 	// 杖にアイテムを入れれるかどうか
 	public static boolean canInputSMItem (ItemStack input) {
 
-		if (input.isEmpty() || !(input.getItem() instanceof ISMItem)) { return false;}
+		if (input.isEmpty() || !(input.getItem() instanceof ISMItem) || stack.isEmpty() || !(stack.getItem() instanceof IWand)) { return false;}
 
 		ISMItem smItem = (ISMItem) input.getItem();
 		int smTier = smItem.getTier();
@@ -113,9 +118,7 @@ public final class SlotPredicates {
 
 	// 射撃タイプかどうか
 	public static boolean isShotMagic (ItemStack input) {
-
 		ISMItem smItem = (ISMItem) input.getItem();
-
 		return canInputSMItem(input) && smItem.getType() == SMType.SHOTTER;
 	}
 
@@ -123,6 +126,10 @@ public final class SlotPredicates {
 	public static boolean isNotCrystal(ItemStack stack) {
 		Item item = stack.getItem();
 		return item != ItemInit.aether_crystal && item != ItemInit.divine_crystal && item != ItemInit.pure_crystal && item != ItemInit.deus_crystal && item != ItemInit.cosmic_crystal;
+	}
+
+	public static boolean isBottle (Item item) {
+		return item == Items.GLASS_BOTTLE || item == ItemInit.b_mf_bottle || item == ItemInit.b_mf_magiabottle;
 	}
 
 	public static boolean isMagicItems(ItemStack stack) {

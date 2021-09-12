@@ -7,7 +7,7 @@ import sweetmagic.init.tile.magic.TileSMBase;
 
 public class StackHandler extends ItemStackHandler {
 
-	TileSMBase tile;
+	private TileSMBase tile;
 
 	public StackHandler (TileSMBase tile, int size) {
 		super(size);

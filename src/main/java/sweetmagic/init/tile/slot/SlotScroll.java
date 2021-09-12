@@ -15,8 +15,8 @@ public class SlotScroll extends ValidatedSlot {
 	public ContainerParallelInterfere container;
 	public int index;
 
-	public SlotScroll (IItemHandler item, int index, int xPosition, int yPosition, Predicate<ItemStack> validator, ContainerParallelInterfere container) {
-		super(item, index, xPosition, yPosition, validator);
+	public SlotScroll (IItemHandler item, int index, int x, int y, Predicate<ItemStack> validator, ContainerParallelInterfere container) {
+		super(item, index, x, y, validator);
 		this.container = container;
 		this.index = index;
 	}

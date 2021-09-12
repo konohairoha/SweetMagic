@@ -17,31 +17,40 @@ public class WrappedItemHandler implements IItemHandlerModifiable {
 
 	@Override
 	public int getSlots() {
-		return compose.getSlots();
+		return this.compose.getSlots();
 	}
 
 	@Nonnull
 	@Override
 	public ItemStack getStackInSlot(int slot) {
-		return compose.getStackInSlot(slot);
+		return this.compose.getStackInSlot(slot);
 	}
 
 	@Nonnull
 	@Override
 	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-		if (this.mode == WriteMode.IN || this.mode == WriteMode.IN_OUT)
+
+		if (this.mode == WriteMode.IN || this.mode == WriteMode.IN_OUT) {
 			return this.compose.insertItem(slot, stack, simulate);
-		else
+
+		}
+
+		else {
 			return stack;
+		}
 	}
 
 	@Nonnull
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		if (this.mode == WriteMode.OUT || this.mode == WriteMode.IN_OUT)
+
+		if (this.mode == WriteMode.OUT || this.mode == WriteMode.IN_OUT) {
 			return this.compose.extractItem(slot, amount, simulate);
-		else
+		}
+
+		else {
 			return ItemStack.EMPTY;
+		}
 	}
 
 	@Override

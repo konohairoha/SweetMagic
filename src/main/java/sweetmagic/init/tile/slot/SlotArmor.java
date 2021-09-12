@@ -26,10 +26,4 @@ public class SlotArmor extends Slot {
     public boolean isItemValid (ItemStack stack) {
         return !stack.isEmpty() ? stack.getItem().isValidArmor(stack, this.slotType, this.entity) : false;
     }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public String getSlotTexture () {
-//        return ItemArmor.EMPTY_SLOT_NAMES[this.slotType.getIndex()];
-//    }
 }

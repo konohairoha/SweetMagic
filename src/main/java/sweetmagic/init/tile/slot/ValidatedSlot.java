@@ -12,8 +12,8 @@ public class ValidatedSlot extends SlotItemHandler {
 
 	private final Predicate<ItemStack> validator;
 
-	public ValidatedSlot(IItemHandler item, int index, int xPosition, int yPosition, Predicate<ItemStack> validator) {
-		super(item, index, xPosition, yPosition);
+	public ValidatedSlot(IItemHandler item, int index, int x, int y, Predicate<ItemStack> validator) {
+		super(item, index, x, y);
 		this.validator = validator;
 	}
 
