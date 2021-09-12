@@ -25,8 +25,8 @@ public class SMSkyIslandGen extends BaseWorldGen {
     public SMSkyIslandGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance * 12;
 		this.minChance = 0;
-		this.minY = 160;
-		this.maxY = 161;
+		this.minY = 120;
+		this.maxY = 121;
 		this.seedRand = 31;
     }
 

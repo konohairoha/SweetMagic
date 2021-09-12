@@ -13,6 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.worldgen.gen.WorldGenEstor;
 import sweetmagic.worldgen.gen.WorldGenFruitTree;
+import sweetmagic.worldgen.gen.WorldGenPrsmTree;
 
 public class BiomeFruitForest extends Biome {
 
@@ -23,12 +24,20 @@ public class BiomeFruitForest extends Biome {
 	private static final WorldGenerator PEACH = new WorldGenFruitTree(false, BlockInit.peach_log, BlockInit.peach_leaves);
 	private static final WorldGenBirchTree BIRCH= new WorldGenBirchTree(false, false);
 	private static final WorldGenTrees ORK = new WorldGenTrees(false);
+	private boolean isTall = false;
 
-	public BiomeFruitForest(String name, BiomeProperties property) {
+	private static final WorldGenerator ORANGE_TALL = new WorldGenPrsmTree(BlockInit.orange_log, BlockInit.orange_leaves, false);
+	private static final WorldGenerator CHESTNUT_TALL = new WorldGenPrsmTree(BlockInit.chestnut_log, BlockInit.chestnut_leaves, false);
+	private static final WorldGenerator LEMON_TALL = new WorldGenPrsmTree(BlockInit.lemon_log, BlockInit.lemon_leaves, false);
+	private static final WorldGenerator ESTOR_TALL = new WorldGenPrsmTree(BlockInit.estor_log, BlockInit.estor_leaves, false);
+	private static final WorldGenerator PEACH_TALL = new WorldGenPrsmTree(BlockInit.peach_log, BlockInit.peach_leaves, false);
+
+	public BiomeFruitForest(String name, BiomeProperties property, boolean isTall) {
         super(property);
         this.decorator.treesPerChunk = 3;
         this.decorator.grassPerChunk = 2;
         this.setRegistryName(name);
+        this.isTall = isTall;
     }
 
     public BiomeFruitForest() {
@@ -47,21 +56,39 @@ public class BiomeFruitForest extends Biome {
 	// 木の生成
 	public WorldGenAbstractTree getRandomTreeFeature(Random rand) {
 
-		switch (rand.nextInt(7)) {
-		case 0:
-			return (WorldGenAbstractTree) ORANGE;
-		case 1:
-			return (WorldGenAbstractTree) CHESTNUT;
-		case 2:
-			return (WorldGenAbstractTree) LEMON;
-		case 3:
-			return (WorldGenAbstractTree) BIRCH;
-		case 4:
-			return (WorldGenAbstractTree) ORK;
-		case 5:
-			return (WorldGenAbstractTree) ESTOR;
-		case 6:
-			return (WorldGenAbstractTree) PEACH;
+		if (this.isTall) {
+
+			switch (rand.nextInt(5)) {
+			case 0:
+				return (WorldGenAbstractTree) ORANGE_TALL;
+			case 1:
+				return (WorldGenAbstractTree) CHESTNUT_TALL;
+			case 2:
+				return (WorldGenAbstractTree) LEMON_TALL;
+			case 3:
+				return (WorldGenAbstractTree) ESTOR_TALL;
+			case 4:
+				return (WorldGenAbstractTree) PEACH_TALL;
+			}
+		}
+
+		else {
+			switch (rand.nextInt(7)) {
+			case 0:
+				return (WorldGenAbstractTree) ORANGE;
+			case 1:
+				return (WorldGenAbstractTree) CHESTNUT;
+			case 2:
+				return (WorldGenAbstractTree) LEMON;
+			case 3:
+				return (WorldGenAbstractTree) BIRCH;
+			case 4:
+				return (WorldGenAbstractTree) ORK;
+			case 5:
+				return (WorldGenAbstractTree) ESTOR;
+			case 6:
+				return (WorldGenAbstractTree) PEACH;
+			}
 		}
 
 		return (WorldGenAbstractTree) ORANGE;
@@ -71,6 +98,6 @@ public class BiomeFruitForest extends Biome {
 	@SideOnly(Side.CLIENT)
 	public int getGrassColorAtPos(BlockPos pos) {
 		int i = super.getGrassColorAtPos(pos);
-		return (i & 16711422) + 2634762 >> 1;
+		return this.isTall ? i : (i & 16711422) + 2634762 >> 1;
     }
 }

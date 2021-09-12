@@ -49,8 +49,7 @@ public class WorldGenPrsmTree extends WorldGenAbstractTree {
 
 		for (int x = -1; x <= 1; x++) {
 			for (int z = -1; z <= 1; z++) {
-				BlockPos p = pos.add(x, -1, z);
-				if (this.checkBlock(world.getBlockState(p).getBlock())){ return false; }
+				if (this.checkBlock(world.getBlockState(pos.add(x, -1, z)).getBlock())) { return false; }
 			}
 		}
 

@@ -32,6 +32,8 @@ public class GenLayerSMBiome extends GenLayerSMWorld {
 		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.DRYLAND, 5));
 		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FROZENFOREST, 7));
 		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FROZENFORESTHILL, 3));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FROZENDEEP, 2));
+		this.biomesToGenerate.add(new BiomeEntry(BiomeInit.FLUITTOWERFOREST, 3));
         this.biomesToGenerate.add(new BiomeEntry(Biomes.RIVER, 7));
         this.biomesToGenerate.add(new BiomeEntry(Biomes.OCEAN, 5));
         this.biomesToGenerate.add(new BiomeEntry(Biomes.BEACH, 2));

@@ -21,63 +21,50 @@ public class CFlowerGen extends BaseFlowerGen {
 	// IBlockStateの取得
 	public IBlockState getState () {
 
-		IBlockState state = null;
-
-		switch (this.rand.nextInt(17)) {
+		switch (this.rand.nextInt(20)) {
 		case 0:
-			state = BlockInit.lily_valley.getDefaultState();
-			break;
+			return BlockInit.lily_valley.getDefaultState();
 		case 1:
-			state = BlockInit.cornflower.getDefaultState();
-			break;
+			return BlockInit.cornflower.getDefaultState();
 		case 2:
-			state = BlockInit.cosmos.getDefaultState();
-			break;
+			return BlockInit.cosmos.getDefaultState();
 		case 3:
-			state = BlockInit.blackrose.getDefaultState();
-			break;
+			return BlockInit.blackrose.getDefaultState();
 		case 4:
-			state = BlockInit.white_clover.getDefaultState();
-			break;
+			return BlockInit.white_clover.getDefaultState();
 		case 5:
-			state = BlockInit.foxtail_grass.getDefaultState();
-			break;
+			return BlockInit.foxtail_grass.getDefaultState();
 		case 6:
-			state = BlockInit.ultramarine_rose.getDefaultState();
-			break;
+			return BlockInit.ultramarine_rose.getDefaultState();
 		case 7:
-			state = BlockInit.iberis_umbellata.getDefaultState();
-			break;
+			return BlockInit.iberis_umbellata.getDefaultState();
 		case 8:
-			state = BlockInit.solid_star.getDefaultState();
-			break;
+			return BlockInit.solid_star.getDefaultState();
 		case 9:
-			state = BlockInit.zinnia.getDefaultState();
-			break;
+			return BlockInit.zinnia.getDefaultState();
 		case 10:
-			state = BlockInit.campanula.getDefaultState();
-			break;
+			return BlockInit.campanula.getDefaultState();
 		case 11:
-			state = BlockInit.primula_polyansa.getDefaultState();
-			break;
+			return BlockInit.primula_polyansa.getDefaultState();
 		case 12:
-			state = BlockInit.hydrangea.getDefaultState();
-			break;
+			return BlockInit.hydrangea.getDefaultState();
 		case 13:
-			state = BlockInit.carnation_crayola.getDefaultState();
-			break;
+			return BlockInit.carnation_crayola.getDefaultState();
 		case 14:
-			state = BlockInit.christmas_rose.getDefaultState();
-			break;
+			return BlockInit.christmas_rose.getDefaultState();
 		case 15:
-			state = BlockInit.turkey_balloonflower.getDefaultState();
-			break;
+			return BlockInit.turkey_balloonflower.getDefaultState();
 		case 16:
-			state = BlockInit.portulaca.getDefaultState();
-			break;
+			return BlockInit.portulaca.getDefaultState();
+		case 17:
+			return BlockInit.surfinia.getDefaultState();
+		case 18:
+			return BlockInit.pansy_yellowmazenta.getDefaultState();
+		case 19:
+			return BlockInit.pansy_blue.getDefaultState();
 		}
 
-		return state;
+		return BlockInit.lily_valley.getDefaultState();
 	}
 
 	// 花の生成
