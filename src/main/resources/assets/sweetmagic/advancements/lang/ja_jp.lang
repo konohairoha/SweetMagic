@@ -154,7 +154,7 @@ item.pure_crystal.name=ピュア・クリスタル
 item.aether_crystal_shard.name=エーテルクリスタルのかけら
 item.magic_starburst.name=スターバースト・レイ
 item.magic_rangebreaker.name=レンジ・ブレイカー
-item.magic_effectremover.name=エフェクト・リムバー
+item.magic_effectremover.name=エフェクト・リムーバー
 tile.glowflower_plant.name=グロウフラワーの苗
 item.magic_frostspear.name=フロスト・スピア
 item.magic_flamenova.name=フレイム・ノヴァ
@@ -391,6 +391,36 @@ item.kinakomochi.name=きな粉餅
 item.mochi.name=餅
 item.zunda.name=ずんだ餅
 item.ohagi.name=おはぎ
+item.simple_door_1_i.name=シンプルドア
+item.simple_door_2_i.name=シンプルドア（網あり）
+item.riceball_grilled.name=焼きおにぎり
+item.panna_cotta.name=パンナコッタ
+item.salmon_carpaccio.name=サーモンカルパッチョ
+item.magic_mining_enchant.name=マイニング・エンチャント
+item.magic_rockblast.name=ロック・ブラスト
+item.magic_hugerock_fall.name=ヒュージロック・フォール
+item.salad_fruit.name=フルーツサラダ
+item.pretzel.name=プレッシェル
+item.melon_bread.name=メロンパン
+item.canele.name=カヌレ
+item.butter_role.name=バターロール
+item.croissant.name=クロワッサン
+item.pineapple.name=パイナップル
+item.pineapple_seed.name=パイナップルの種
+item.greenpepper.name=ピーマン
+item.greenpepper_seed.name=ピーマンの種
+item.madeleine.name=マドレーヌ
+item.sweet_and_sour_pork.name=酢豚
+item.magic_expand_barrier.name=イクスパンド・バリア
+item.pendulum_necklace.name=ペンデュラムネックレス
+item.magic_book_cosmic.name=不思議な魔術書「宇宙の魔術」
+item.peppers_stuffed_with_meat.name=ピーマンの肉詰め
+item.peppers_with_soy_sauce_and_bonito.name=ピーマンのおかか醤油
+item.unyielding_fire.name=不屈の炎
+item.frosted_chain.name=フロストチェーン
+item.holly_charm.name=ホーリーチャーム
+item.wind_relief.name=風のレリーフ
+item.magic_shadowhorse.name=サモン・ホース
 
 
 #-- Tile --
@@ -842,6 +872,35 @@ tile.whiteline_brick_y_tdoor.name=黄色のホワイトラインレンガのト�
 tile.whiteline_brick_b_tdoor.name=黒色のホワイトラインレンガのトラップドア
 tile.fance_gothic_black.name=黒色のゴシックフェンス
 tile.fance_gothic_white.name=白色のゴシックフェンス
+tile.simple_door_1.name=シンプルドア
+tile.simple_door_2.name=シンプルドア（網あり）
+tile.magia_accelerator.name=マギア・アクセラレータ
+tile.pineapple_plant.name=パイナップルの苗
+tile.greenpepper_plant.name=ピーマンの苗
+tile.bread_wood_tray.name=ブレッドウッドトレー
+tile.bread_basket.name=ブレッドバスケット
+tile.tong_stand.name=トングスタンド
+tile.showcase.name=ショーケース
+tile.menu_list.name=メニュー表
+tile.menu_list_w.name=メニュー表
+tile.antique_lantern.name=アンティークランタン
+tile.iron_chain.name=アイロンチェーン
+tile.counter_chair.name=カウンターチェア
+tile.glass_cup.name=ガラスコップ
+tile.surfinia.name=サフィニア
+tile.pansy_blue.name=パンジー（青）
+tile.pansy_yellowmazenta.name=パンジー（黄）
+tile.surfinia_basket.name=サフィニアのバスケット
+tile.pansy_blue_basket.name=パンジー（青）のバスケット
+tile.pansy_yellowmazenta_basket.name=パンジー（黄）のバスケット
+tile.bread_baskets.name=食パンバスケット
+tile.hard_bread_basket.name=フランスパンバスケット
+tile.wall_towel.name=壁掛けタオル
+tile.wall_none.name=壁掛けタオル（タオルなし）
+tile.tinplate_bucket.name=ブリキのバケツ
+tile.frypan_red_off.name=赤色のフライパン
+tile.frypan_red_on.name=赤色のフライパン(調理中)
+tile.frypan_red_re.name=赤色のフライパン
 
 
 # -- gui --
@@ -948,7 +1007,7 @@ tip.magic_elecarmor.name=杖のレベルに応じて受けたダメージの割�
 tip.magic_refresh.name=範囲内のモブにデバフ解除するポーションを付加
 tip.magic_healingwish.name=範囲内のモブにデバフ解除するポーションを付加 + 体力全回復
 tip.magic_lightningbolt.name=向いてる方向の敵一体に攻撃
-tip.machete.name=敵モブ以外に攻撃すると一度だけドロップアイテムを落とす
+tip.machete.name=モブからドロップするアイテム数が増える
 tip.magic_storm.name=相手を吹き飛ばす風射撃魔法を3つ射出する
 tip.magic_gravitywave.name=地面に着いたときに敵モブを吸い込みダメージを与える
 tip.magic_meteor_fall.name=向いている方向にメテオを降り注ぐ（空が見えないと使用不可）
@@ -1009,7 +1068,7 @@ tip.dropboss.name=確率で落とすモブ：
 tip.witch_scroll.name=魔法使用時のクールタイムを少し減らす
 tip.scorching_jewel.name=マグマの中の移動速度アップ+火炎耐性付与
 tip.mermaid_veil.name=水中の移動速度アップ+水中呼吸
-tip.blood_sucking_ring.name=射撃魔法を使用時にハートを1削り魔法火力を増やす
+tip.blood_sucking_ring.name=射撃魔法を使用時にハートを削り魔法火力を増やし、敵を倒したときにハートを少し回復する
 tip.emelald_pias.name=被ダメージを0.5増えて経験値取得量が増える
 tip.fortune_ring.name=幸運Ⅱを付与
 tip.smacce.name=発動条件
@@ -1083,7 +1142,29 @@ tip.starlightwand_inst.name=設置モード
 tip.starlightwand_replace.name=置換モード
 tip.starlightwand_mode.name=ブロック設置タイプ： 
 tip.quartz_seed.name=種袋からのみ入手
-
+tip.magic_mining_enchant.name=採掘速度アップバフを付与
+tip.magic_rockblast.name=敵の防御力に応じて追加ダメージ
+tip.magic_hugerock_fall.name=敵の防御力に応じて追加ダメージ + 弱体化を付与
+tip.mf_amount.name=MF量：
+tip.magia_accelerator.name=MFを消費して半径5ブロックのMFを生産しない魔法関連ブロックの動きを加速させる
+tip.sm_redstone.name=レッドストーンによる制御が可能
+tip.magic_expand_barrier.name=周囲の味方モブにエーテルバリア + 持続回復を付与
+tip.heal_value.name=最大体力に応じて体力を回復
+tip.pendulum_necklace.name=魔法によるバフ効果を付与する際に少し時間を伸ばす
+tip.magicbook_cosmic.name=特殊クラフトで使用しても返ってくる
+tip.magic_shadowhorse.name=移動速度とジャンプ力の高い馬を召喚
+tip.unyielding_fire.name=火属性攻撃魔法の威力が大きく上がる
+tip.frosted_chain.name=氷属性攻撃魔法の使用時に周囲の敵を氷状態に
+tip.holly_charm.name=光属性攻撃魔法の使用時のクリティカル率が大幅に上がる
+tip.wind_relief.name=風属性攻撃魔法の使用中の攻撃回避を必ず行う
+tip.glasscup.name=飲み物をガラスコップに入れることができる。ただし、色はアイテムごとで固定。
+tip.cafekitchen.name=カフェキッチンテーブルが上にあると見た目が変化する
+tip.watercup.name=燃焼状態を解除する
+tip.magicbook_cosmic_open.name=キーでドロップアイテム回収時のMF変換モードの切り替え
+tip.magicbook_cosmic_pick.name=MF変換モード：
+tip.magicmeal_flower.name=スイートマジックの花に対して右クリックすると花を増やせる
+tip.walltowel.name=右クリックでタオルの付け外しが可能
+tip.magicbook_cosmic_shift.name=スニーク右クリックでMFの分だけエーテルクリスタルに変換する
 
 
 #-- Potion --
@@ -1108,6 +1189,7 @@ potion.effect.nausea=吐き気
 potion.effect.health_boost=体力増強
 sweetmagic.effect.resistance_blow=吹き飛ばし耐性
 sweetmagic.effect.aether_shield=エーテルシールド
+sweetmagic.effect.magic_array=魔法陣
 
 
 #-- Enchant --
@@ -1143,6 +1225,7 @@ entity.spirit_fire_ifrite.name=炎の精霊 イフリート・ヴェール
 entity.pixievex.name=ピクシィ・ヴェックス
 entity.ancientfairy.name=蟲惑の妖精 エンシェント・フェアリー
 entity.sandryon.name=創成の魔女 サンドリヨン
+entity.shadowhorse.name=シャドー・ホース
 
 
 # -- KEY --
@@ -1195,10 +1278,14 @@ smguid.entry.arcana=エンチャント付与するブロック
 smguid.entry.key=ダンジョン専用アイテム
 smguid.entry.flower_pot=SweetMagicで見つけることのできる花
 
-smguid.entry.ingot=インゴットの追加
-smguid.entry.star=ブロック置換、設置杖
-smguid.entry.quartz=クオーツの作物
-smguid.entry.gothic=ゴシックなフェンス
+smguid.entry.plant=作物の高さ調整
+smguid.entry.machete=アイテムのドロップ増加
+smguid.entry.chair=2つの使い方の椅子
+smguid.entry.cos_book=新しい魔術書
+smguid.entry.un_fire=上位装備品
+smguid.entry.horse=3つ目の召喚魔法
+smguid.entry.blood=血の代償
+smguid.entry.mb_book=レンダー処理の変更
 
 
 # -- GUIDText --
@@ -1235,10 +1322,14 @@ smguid.text.arcana=<t><t>本来ならスイートマジックのエンチャン�
 smguid.text.key=<t><t>ダンジョン内でのみ、魔法のカギを入手することができます。<br>使い方として、鍵をもってマジックバリアガラスに右クリックでガラスを壊すことができ、奥へと進むことができます。
 smguid.text.flower_pot=<t><t>スイートマジックには沢山の花が生成されます。<br>これらの花は平原などに生成され、全て染料としても使えます。<br>スノードロップだけは雪原などの寒いバイオームのみに生成されます。<br>いくつかの花は花瓶にしてさまざまな用途に使用します。<br>花の生成が邪魔な場合はコンフィグで無効化が可能です。
 
-smguid.text.ingot=<t><t>新しいインゴットとして、コズモライトインゴットを追加しています。<br>現在は使い道が少ないですが、今後用途が増えていく予定です。お楽しみに！
-smguid.text.star=<t><t>新しく、スターライトワンドを追加しました。MFを消費して、ブロックの設置、置換を一括で行うことができる杖です。<br>ブロックをいちいち1個ずつ設置することが面倒なあなたに。<br>なお、使い方はツールチップに記載しています。<br>ただし、まだ開発中のため一部のブロックや、向きには対応してます。
-smguid.text.quartz=<t><t>ネザークォーツを入手できる手段として、クォーツの種を追加しました。<br>ただし、種の入手方法は、種袋からの入手のみとなります。<br>また、畑に植えることができますが、土ブロックや草ブロックの上に植えることもできます。
-smguid.text.gothic=<t><t>おしゃれなゴシック調のフェンスを追加しました。建築のお供にどうぞ。
+smguid.text.plant=<t><t>スイートマジックの花や作物を植木鉢に植えたときの高さを植木鉢に合わせて低くなるようにしました。
+smguid.text.machete=<t><t>マチェットの効果を今までの効果から一新して、マチェットでモブを倒した際にドロップする個数が増えるようにしました。<br>もちろん、ドロップ増加のエンチャントでさらに個数が増えます。
+smguid.text.chair=<t><t>2つの用途として使える椅子を追加しました。<br>通常は高さが1ブロックの椅子ですが、半ブロックの上に設置することで高さが1.5ブロックの椅子として扱えます。
+smguid.text.cos_book=<t><t>いくつかの機能を持った上位の魔術書を追加しました。<br>特殊クラフトで使用しても返ってきたり、エーテルクリスタルのかけらを手に入れたらMFに変換するようにしたりできる魔術書です。<br>細かな機能の説明はアイテムのツールチップを参照してください。
+smguid.text.un_fire=<t><t>効果が通常より強い上位装備品があります。<br>特殊クラフトでのみ入手できて、条件が限られていますが効果が優秀なものが多いです。
+smguid.text.horse=<t><t>新しいtier1の召喚魔法を追加しました。<br>馬を召喚する魔法で移動に特化した馬となっていますので、序盤のお供として活用してください。
+smguid.text.blood=<t><t>血吸の指輪の効果を追加しました。<br>魔法でモブを倒したときに少し体力を回復するようになりました。
+smguid.text.mb_book=<t><t>マジシャンズ・ビギナーハウスで設置する際にブロックが描画されるようになりました。<br>処理が重いのでコンフィグで軽量化することも可能です。
 
 
 # -- ADVENT --

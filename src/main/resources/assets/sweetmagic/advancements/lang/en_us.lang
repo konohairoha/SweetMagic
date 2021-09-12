@@ -390,6 +390,36 @@ item.kinakomochi.name=Rice Cakes Covered With Sweetened Soybean Flour
 item.mochi.name=Rice Cakes
 item.zunda.name=Rice Cake Covered In Sweetened Mashed Green Soybeans
 item.ohagi.name=Rice Ball Coated With Sweetened Red Beans
+item.simple_door_1_i.name=Simple Door
+item.simple_door_2_i.name=Simple Door（With a Net）
+item.riceball_grilled.name=Grilled Rice Balls
+item.panna_cotta.name=Panna Cotta
+item.salmon_carpaccio.name=Salmon Carpaccio
+item.magic_mining_enchant.name=Mining Enchantment
+item.magic_rockblast.name=Rock Blast
+item.magic_hugerock_fall.name=Huge Rock Fall
+item.salad_fruit.name=Fruit Salad
+item.pretzel.name=Pretzel
+item.melon_bread.name=Melonpan
+item.canele.name=Canele
+item.butter_role.name=Butter Roll
+item.croissant.name=Croissant
+item.pineapple.name=Pineapple
+item.pineapple_seed.name=Pineapple Seeds
+item.greenpepper.name=Green Pepper
+item.greenpepper_seed.name=Green Pepper Seeds
+item.madeleine.name=Madeleine
+item.sweet_and_sour_pork.name=Sweet And Sour Pork
+item.magic_expand_barrier.name=Expand Barrier
+item.pendulum_necklace.name=Pendulum Necklace
+item.magic_book_cosmic.name=SweetMagic Craft Book Cosmic
+item.peppers_stuffed_with_meat.name=Pepper Stuffed With Meat
+item.peppers_with_soy_sauce_and_bonito.name=Green Pepper With Soy Sauce And Bonito
+item.unyielding_fire.name=Unyielding Fire
+item.frosted_chain.name=Frosted Chain
+item.holly_charm.name=Holly Charm
+item.wind_relief.name=Wind Relief
+item.magic_shadowhorse.name=Shadow Horse
 
 
 #-- Tile --
@@ -829,6 +859,35 @@ tile.whiteline_brick_y_tdoor.name=White Line Bricks Trapdoor(Yellow)
 tile.whiteline_brick_b_tdoor.name=White Line Bricks Trapdoor(Black)
 tile.fance_gothic_black.name=Gothic Fence(Black)
 tile.fance_gothic_white.name=Gothic Fence(White)
+tile.simple_door_1.name=Simple Door
+tile.simple_door_2.name=Simple Door（With a Net）
+tile.magia_accelerator.name=Magia・Accelerator
+tile.pineapple_plant.name=Pineapple Plant
+tile.greenpepper_plant.name=Green Pepper Plant
+tile.bread_wood_tray.name=Bread Wood Tray
+tile.bread_basket.name=Bread Basket
+tile.tong_stand.name=Tong Stand
+tile.showcase.name=Showcase
+tile.menu_list.name=Menu List
+tile.menu_list_w.name=Menu List
+tile.antique_lantern.name=Antique Lantern
+tile.iron_chain.name=Iron Chain
+tile.counter_chair.name=Counter Chair
+tile.glass_cup.name=Glass Cup
+tile.surfinia.name=Surfinia
+tile.pansy_blue.name=Pansy(Blue)
+tile.pansy_yellowmazenta.name=Pansy(Yellow)
+tile.surfinia_basket.name=Surfinia Basket
+tile.pansy_blue_basket.name=Pansy Basket(Blue)
+tile.pansy_yellowmazenta_basket.name=Pansy Basket(Yellow)
+tile.bread_baskets.name=Bread Baskets
+tile.hard_bread_basket.name=Hard Bbread Basket
+tile.wall_towel.name=Wall Towel
+tile.wall_none.name=Wall Towel(None)
+tile.tinplate_bucket.name=Tinplate Bucket
+tile.frypan_red_off.name=Red Color FryPan
+tile.frypan_red_on.name=Red Color FryPan(Cooking)
+tile.frypan_red_re.name=Red Color FryPan
 
 
 # -- gui --
@@ -938,7 +997,7 @@ tip.magic_elecarmor.name=Return the damage you received to the enemy (Depends on
 tip.magic_refresh.name=Cures partner's debuff in range
 tip.magic_healingwish.name=Cures and Heals (Full) ourself
 tip.magic_lightningbolt.name=Attack in a straight line
-tip.machete.name=Drop items only once (Only attacking non-enemy mobs)
+tip.machete.name=More items will be dropped from mobs.
 tip.magic_storm.name=Fire 3 wind-shooting spells that will blow your opponent away
 tip.magic_gravitywave.name=When it reaches the ground, it sucks in enemies and deals damage
 tip.magic_meteor_fall.name=Raining meteor in the direction you're facing (Can't use it if you can't see the sky)
@@ -999,7 +1058,7 @@ tip.dropboss.name=Mobs with a probability of dropping:
 tip.witch_scroll.name=Slightly reduces the cool time for using magic
 tip.scorching_jewel.name=Flame resistance + increased movement speed in magma
 tip.mermaid_veil.name=Increased movement speed in water + underwater breathing
-tip.blood_sucking_ring.name=When using ranged magic, it reduces your health and increases your magic power
+tip.blood_sucking_ring.name=Shaves hearts when using ranged magic, increases magic firepower, and restores a small amount of hearts when enemies are killed.
 tip.emelald_pias.name=Increases damage taken by 0.5 damage and increases the amount of experience gained
 tip.fortune_ring.name=Gives Good Luck II
 tip.magic_earth_destruction.name=Shooting magic that destroys a large area of blocks on impact
@@ -1073,6 +1132,29 @@ tip.starlightwand_inst.name=Installation mode
 tip.starlightwand_replace.name=Replace mode
 tip.starlightwand_mode.name=Block installation type： 
 tip.quartz_seed.name=Obtained only from "Seed Bag"
+tip.magic_mining_enchant.name=Gives a Haste buff
+tip.magic_rockblast.name=Additional damage based on enemy defense.
+tip.magic_hugerock_fall.name=Additional damage based on enemy defense + Weakness
+tip.mf_amount.name=MF amount：
+tip.magia_accelerator.name=Spend MF to accelerate the movement of magic-related blocks that do not produce MF in a 5-block radius
+tip.sm_redstone.name=Can be controlled by Redstone
+tip.magic_expand_barrier.name=Grants Aether Barrier + Regeneration to surrounding allied mobs.
+tip.heal_value.name=Restore strength according to maximum strength.
+tip.pendulum_necklace.name=Extend the time a bit when granting magical buff effects.
+tip.magicbook_cosmic.name=It will return when used in special craft.
+tip.magic_shadowhorse.name=Summons a horse with high movement speed and jumping ability.
+tip.unyielding_fire.name=The power of fire attack magic is greatly increased.
+tip.frosted_chain.name=When using ice attack magic, the surrounding enemies are turned to ice.
+tip.holly_charm.name=When using ice attack magic, the surrounding enemies are turned to ice.
+tip.wind_relief.name=Always avoid attacks while using wind attack magic.
+tip.glasscup.name=Always avoid attacks while using wind attack magic.
+tip.cafekitchen.name=If the cafe kitchen table is on top, the appearance will change.
+tip.watercup.name=Release the burning state.
+tip.magicbook_cosmic_open.name=ey to toggle MF conversion mode when collecting dropped items.
+tip.magicbook_cosmic_pick.name=MF conversion mode：
+tip.magicmeal_flower.name=Right-click on a Sweet Magic flower to add more flowers.
+tip.walltowel.name=Right-click to attach or remove towels.
+tip.magicbook_cosmic_shift.name=Sneak right-click to convert to Aether Crystal for MF.
 
 
 #-- Potion --
@@ -1096,6 +1178,7 @@ potion.effect.nausea=Nausea
 potion.effect.health_boost=Health Boost
 sweetmagic.effect.resistance_blow=Blow Resistance
 sweetmagic.effect.aether_shield=Aether Shield
+sweetmagic.effect.magic_array=Magic Array
 
 
 #-- Enchant --
@@ -1131,6 +1214,7 @@ entity.spirit_fire_ifrite.name="Flame Spirit" Ifrit
 entity.pixievex.name=Pixie Vex
 entity.sandryon.name="Creation Witch" Sandryon
 entity.ancientfairy.name="Fascinated Fairy" Anicinet Fairy
+entity.shadowhorse.name=Shadow Horse
 
 
 # -- KEY --
@@ -1184,10 +1268,14 @@ smguid.entry.arcana=Blocks that grant Enchant
 smguid.entry.key=SweetMagic Dungeons exclusive item
 smguid.entry.flower_pot=Addition of colorful flowers
 
-smguid.entry.ingot=Adding Ingots
-smguid.entry.star=Block replacement, installation cane
-smguid.entry.quartz=Quartz Crop
-smguid.entry.gothic=Gothic Fence
+smguid.entry.plant=Adjusting The Height Of Crops
+smguid.entry.machete=Increased Item Drops
+smguid.entry.chair=Two Ways To Use The Chair
+smguid.entry.cos_book=The New Book Of Magic
+smguid.entry.un_fire=High Grade Equipment
+smguid.entry.horse=The Third Summoning Spell
+smguid.entry.blood=Ultimate Offering
+smguid.entry.mb_book=Change The Render Process
 
 
 # -- GUID Text --
@@ -1224,10 +1312,14 @@ smguid.text.arcana=<t><t>"Arcane Table" allows you to grant "Aether Charm" and "
 smguid.text.key=<t><t>The magic key has been added as an item that can only be obtained in dungeons. To use it, you can open it by right-clicking on the magic barrier glass while holding the key.
 smguid.text.flower_pot=<t><t>Added a lot of flowers. All the flowers added this time are generated on the plains, and all can be used as dyes. Only Snowdrop are produced in cold biomes such as snowfields. Some flowers can be used in vases to produce MF. If flowers generation are an obstacle, you can disable it in the config.
 
-smguid.text.ingot=<t><t>We are adding a new ingot, the Cozumolite ingot. <br>There are few uses for it at the moment, but we plan to add more uses in the future. Look forward to it!
-smguid.text.star=<t><t>The new Starlight Wand is a wand that allows you to place and replace blocks in bulk by consuming MF. <br>For those of you who can't be bothered with placing blocks one by one. <br>How to use it is described in the tooltip. <br>Because it is still under development, some blocks and orientations are still supported.
-smguid.text.quartz=<t><t>Quartz seeds have been added as a means to obtain nether quartz. <br>However, the only way to obtain the seeds is from the seed bag. <br>You can also plant them in fields, or on top of soil blocks or grass blocks.
-smguid.text.gothic=<t><t>A stylish gothic fence has been added. Please use it as a companion for your architecture.
+smguid.text.plant=<t><t>Sweet Magic's flowers and crops are planted in flowerpots so that their height is lower to match the flowerpots.
+smguid.text.machete=<t><t>The Machete effect has been completely revamped to increase the number of drops you get when you kill mobs with Machete. <br>Of course, the Looting enchantment will increase the number of drops even more.
+smguid.text.chair=<t><t>We have added a chair that can be used as two different purposes. <br>The chair is normally one block high, but can be treated as a 1.5 block high chair by placing it on top of a half block.
+smguid.text.cos_book=<t><t>We have added a higher level magic book with several features. <br>This is a spellbook that can be used in special crafting and returned, or converted to MF when you get an Aether Crystal Shard. <br>See the item's tooltip for a detailed description of its functions.
+smguid.text.un_fire=<t><t>There are higher level equipment whose effects are stronger than normal. <br>They can only be obtained through special crafting and have limited conditions, but many of them have excellent effects.
+smguid.text.horse=<t><t>A new tier 1 summoning spell has been added. <br>We have added a new tier 1 summoning spell that summons a horse, which specializes in movement.
+smguid.text.blood=<t><t>Added the effects of the Ring of Bloodsucking. <BR>When you kill mobs with magic, you now regain a little health.
+smguid.text.mb_book=<t><t>Blocks are now drawn when placed in the Magicians Beginner House Book. <br>The processing is heavy and can be lightened by configuring.
 
 
 # -- ADVENT --

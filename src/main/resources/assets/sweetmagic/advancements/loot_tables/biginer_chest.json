@@ -7,7 +7,7 @@
         {
           "type": "item", "weight": 3,
           "name": "sweetmagic:aether_crystal",
-          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 6 } } ]
         },
         {
           "type": "item", "weight": 6,
@@ -35,14 +35,14 @@
           "functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
         },
         {
-          "type": "item", "weight": 2,
+          "type": "item", "weight": 3,
           "name": "sweetmagic:blank_magic",
-          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
         },
         {
-          "type": "item", "weight": 1,
+          "type": "item", "weight": 2,
           "name": "sweetmagic:mysterious_page",
-          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
         },
         {
           "type": "item", "weight": 3,
@@ -87,7 +87,7 @@
         {
           "type": "item", "weight": 3,
           "name": "minecraft:iron_ingot",
-          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 3 } } ]
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 5 } } ]
         },
         {
           "type": "item", "weight": 2,

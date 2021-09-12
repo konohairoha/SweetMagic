@@ -204,9 +204,27 @@
 		},
 			"magic_aether_shield2": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:magic_aether_shield2" } ] }
+		},
+			"magic_supernova": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_supernova" } ] }
+		},
+			"magic_mining_enchant": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_mining_enchant" } ] }
+		},
+			"magic_rockblast": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_rockblast" } ] }
+		},
+			"magic_hugerock_fall": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_hugerock_fall" } ] }
+		},
+			"magic_expand_barrier": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_expand_barrier" } ] }
+		},
+			"magic_shadowhorse": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_shadowhorse" } ] }
 		}
     },
    "rewards": {
- 		"experience": 2000
+ 		"experience": 2300
 	}
 }
