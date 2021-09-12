@@ -15,12 +15,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -45,7 +43,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		if (world.isRemote) { return; }
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.AETHERHOPPER, world, pos.getX(), pos.getY(), pos.getZ());
+		this.openGui(world, player, pos, SMGuiHandler.AETHERHOPPER);
 	}
 
 	@Override
@@ -59,8 +57,7 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		String text = new TextComponentTranslation("tip.aether_hopper.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.aether_hopper.name")));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 

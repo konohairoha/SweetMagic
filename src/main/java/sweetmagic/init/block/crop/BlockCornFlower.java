@@ -6,9 +6,12 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.blocks.PlantPot;
 
 public class BlockCornFlower extends BlockBush {
 
@@ -34,6 +37,13 @@ public class BlockCornFlower extends BlockBush {
 	@Override
 	public EnumPlantType getPlantType(IBlockAccess world, BlockPos pos) {
 		return EnumPlantType.Plains;
+	}
+
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		double y = world.getBlockState(pos.down()).getBlock() instanceof PlantPot ? -0.0625D : 0D;
+		long i = MathHelper.getCoordinateRandom(pos.getX(), 0, pos.getZ());
+		return new Vec3d(((double) ((float) (i >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D, y, ((double) ((float) (i >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D);
 	}
 
 	//置いた後Renderで位置がずれる(XYZ または XZ)

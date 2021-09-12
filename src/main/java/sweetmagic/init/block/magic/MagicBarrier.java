@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -54,9 +53,10 @@ public class MagicBarrier extends BaseModelBlock {
 		world.setBlockState(pos, BlockInit.magicbarrier_off.getDefaultState(), 2);
 		if (!player.isCreative()) { stack.shrink(1); }
 
-		int range = 64;
-        AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-range, -range / 2, -range), pos.add(range, range / 2, range));
-		List<EntityPlayer> entityList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+//		int range = 64;
+//        AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-range, -range / 2, -range), pos.add(range, range / 2, range));
+//		List<EntityPlayer> entityList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+		List<EntityPlayer> entityList = world.playerEntities;
 
 		for (EntityPlayer entity : entityList) {
 			entity.removePotionEffect(PotionInit.breakblock);

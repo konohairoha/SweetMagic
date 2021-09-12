@@ -25,13 +25,11 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -69,11 +67,11 @@ public class AetherFurnace extends BaseMFBlock {
 			TileEntity tile = world.getTileEntity(pos.down());
 			if (!(tile instanceof TileAetherFurnace)) { return; }
 
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.AETHER_GUI, world, pos.getX(), pos.getY() - 1, pos.getZ());
+			this.openGui(world, player, pos.down(), SMGuiHandler.AETHER_GUI);
 		}
 
 		else {
-			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.AETHER_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+			this.openGui(world, player, pos, SMGuiHandler.AETHER_GUI);
 		}
 	}
 
@@ -221,7 +219,8 @@ public class AetherFurnace extends BaseMFBlock {
 			tip = "tip.aether_furnace.name";
 		}
 
-		tooltip.add(I18n.format(TextFormatting.GREEN + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_redstone.name")));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip(tip)));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

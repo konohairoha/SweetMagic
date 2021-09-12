@@ -58,6 +58,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 		this.setRegistryName(name);
 		this.setGrowValue(8.5F);
 		this.setHardness(0F);
+        this.setResistance(1024F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();

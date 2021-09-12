@@ -21,6 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -57,6 +58,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setHardness(0.0F);
+        this.setResistance(1024F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -73,6 +75,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 	/**
 	 * コピペ時更新必須ブロック情報
 	 */
+
 	// スタート
 	@Override
 	protected BlockStateContainer createBlockState() {
@@ -103,6 +106,11 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		return 1;
 	}
 
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
+	}
+
 	/**
 	 * 作物情報
 	 */
@@ -114,6 +122,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 	 * 3 = 玉ねぎ
 	 * 4 = スッテキー
 	 * 5 = コーヒー豆
+	 * 6 = パイナップル
 	 */
 	protected Item getSeed() {
 
@@ -124,6 +133,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		case 3:	return ItemInit.onion;
 		case 4:	return ItemInit.sticky_stuff_seed;
 		case 5:	return ItemInit.coffee_seed;
+		case 6:	return ItemInit.pineapple_seed;
 		}
 
 		return null;
@@ -139,6 +149,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 		case 3:	return ItemInit.onion;
 		case 4:	return ItemInit.sticky_stuff_petal;
 		case 5:	return ItemInit.coffee_seed;
+		case 6:	return ItemInit.pineapple;
 		}
 
 		return null;

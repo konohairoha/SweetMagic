@@ -18,10 +18,10 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFFace;
+import sweetmagic.init.tile.magic.TileMFAccelerator;
 import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMagiaWrite;
@@ -37,6 +37,9 @@ public class ToolRepairBlock extends BaseMFFace {
     public ToolRepairBlock(String name, int data) {
 		super(name);
 		this.data = data;
+		if (data == 4) {
+			setLightLevel(1F);
+		}
 		BlockInit.magicList.add(this);
     }
 
@@ -45,11 +48,13 @@ public class ToolRepairBlock extends BaseMFFace {
      * 1 = マギア・リライト
      * 2 = マギア・サクセサー
      * 3 = アルカナ・テーブル
+     * 4 = マギア・アクセラレータ
      */
 
 	// ブロックでのアクション
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
+
 		if (world.isRemote) { return; }
 
 		int guiId = 0;
@@ -67,9 +72,15 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 3:
 			guiId = SMGuiHandler.ARCANETABLE_GUI;
 			break;
+		case 4:
+			TileMFAccelerator tile = (TileMFAccelerator) world.getTileEntity(pos);
+			TextComponentTranslation tip = new TextComponentTranslation("tip.mf_amount.name");
+			player.sendMessage(tip.appendText(String.format("%,d", tile.getMF())));
+			break;
 		}
 
-		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+		if (guiId == 0) { return; }
+		this.openGui(world, player, pos, guiId);
 	}
 
 	@Override
@@ -79,6 +90,7 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 1:	return new TileMagiaWrite();
 		case 2:	return new TileMFSuccessor();
 		case 3:	return new TileMFArcaneTable();
+		case 4:	return new TileMFAccelerator();
 		}
 		return null;
 	}
@@ -91,6 +103,7 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 1:	return WRITE;
 		case 2:	return SUCCESSOR;
 		case 3:	return FULL_BLOCK_AABB;
+		case 4:	return SUCCESSOR;
 		}
 
 		return FULL_BLOCK_AABB;
@@ -114,9 +127,13 @@ public class ToolRepairBlock extends BaseMFFace {
 		case 3:
 			tip = "tip.arcane_table.name";
 			break;
+		case 4:
+			tip = "tip.magia_accelerator.name";
+			tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_redstone.name")));
+			break;
 		}
 
-		tooltip.add(I18n.format(TextFormatting.GOLD + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip(tip)));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -84,8 +83,7 @@ public class MagicLight extends BaseModelBlock {
 
 		if (this.data == 0) { return; }
 
-  		String tip= new TextComponentTranslation("tip.sm_twilightlight.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + tip));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_twilightlight.name")));
 	}
 
 }

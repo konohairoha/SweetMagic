@@ -32,7 +32,7 @@ public class BlockSMOre extends SMIron {
 		BlockInit.blockList.add(this);
     }
 
-	//ドロップさせるアイテム
+	// ドロップさせるアイテム
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		switch(this.data) {
@@ -42,7 +42,7 @@ public class BlockSMOre extends SMIron {
 		}
 	}
 
-	//ドロップさせる数
+	// ドロップさせる数
 	@Override
 	public int quantityDropped(Random random) {
 		switch(this.data) {
@@ -52,7 +52,7 @@ public class BlockSMOre extends SMIron {
 		}
 	}
 
-	//幸運のエンチャントによる加算
+	// 幸運のエンチャントによる加算
 	@Override
 	public int quantityDroppedWithBonus(int fortune, Random rand) {
 
@@ -67,7 +67,7 @@ public class BlockSMOre extends SMIron {
 		}
     }
 
-    //経験値ドロップ
+    // 経験値ドロップ
     @Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune) {
     	return MathHelper.getInt(world instanceof World ? ((World) world).rand : new Random(), 3, 6);

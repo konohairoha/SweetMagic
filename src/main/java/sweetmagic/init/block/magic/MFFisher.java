@@ -12,12 +12,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -38,7 +36,7 @@ public class MFFisher extends BaseMFBlock {
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		if (world.isRemote) { return; }
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFFISHER_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+		this.openGui(world, player, pos, SMGuiHandler.MFFISHER_GUI);
 	}
 
 	@Override
@@ -58,7 +56,7 @@ public class MFFisher extends BaseMFBlock {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 
 		String tip = "";
 
@@ -71,7 +69,8 @@ public class MFFisher extends BaseMFBlock {
 			break;
 		}
 
-		tooltip.add(I18n.format(TextFormatting.GREEN + new TextComponentTranslation(tip, new Object[0]).getFormattedText()));
-		super.addInformation(stack, playerIn, tooltip, advanced);
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_redstone.name")));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip(tip)));
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

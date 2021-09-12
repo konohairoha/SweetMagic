@@ -21,6 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -59,6 +60,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setHardness(0.0F);
+        this.setResistance(1024F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -107,6 +109,11 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		return 1;
 	}
 
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
+	}
+
 	/**
 	 * 作物情報
 	 */
@@ -123,6 +130,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 	 * 8 = コットン
 	 * 9 = ナスタチウム
 	 * 10 = ほうれん草
+	 * 11 = ピーマン
 	 */
 
 	// ドロップする種
@@ -140,6 +148,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		case 8:	return ItemInit.cotton_seed;
 		case 9:	return ItemInit.fire_nasturtium_seed;
 		case 10: return ItemInit.spinach_seed;
+		case 11: return ItemInit.greenpepper_seed;
 		}
 
 		return null;
@@ -160,6 +169,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		case 8:	return ItemInit.cotton;
 		case 9:	return ItemInit.fire_nasturtium_petal;
 		case 10: return ItemInit.spinach;
+		case 11: return ItemInit.greenpepper;
 		}
 
 		return null;

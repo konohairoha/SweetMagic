@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -67,8 +66,7 @@ public class BlockRattanBasket extends BaseModelBlock {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
-		String text = new TextComponentTranslation("tip.rattanbasket.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.rattanbasket.name")));
 	}
 }

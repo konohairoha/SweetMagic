@@ -23,7 +23,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -125,7 +124,7 @@ public class WandPedal extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
-		TileWandPedal tile = (TileWandPedal)world.getTileEntity(pos);
+		TileWandPedal tile = (TileWandPedal) world.getTileEntity(pos);
 		ItemStack wand = tile.getChestItem();
 
 		// アイテムをセットしてないなら
@@ -201,7 +200,6 @@ public class WandPedal extends BaseFaceBlock {
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		String text = new TextComponentTranslation("tip.wandpedal.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.wandpedal.name")));
 	}
 }

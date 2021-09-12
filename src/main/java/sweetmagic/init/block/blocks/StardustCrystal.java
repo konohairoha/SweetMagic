@@ -21,7 +21,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -186,7 +185,6 @@ public class StardustCrystal extends BaseModelBlock {
 	// ツールチップの表示
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		String tip = new TextComponentTranslation("tip.sturdust_crystal.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sturdust_crystal.name")));
 	}
 }

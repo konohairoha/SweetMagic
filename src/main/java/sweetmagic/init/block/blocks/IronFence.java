@@ -47,8 +47,8 @@ public class IronFence extends BaseModelBlock {
 		new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D)
 	};
 
-	public IronFence(String name/*, List<Block> list, int data*/) {
-		super(Material.IRON, name);
+	public IronFence(String name) {
+		super(Material.GLASS, name);
         setHardness(0.2F);
 		setResistance(1024F);
 		setSoundType(SoundType.METAL);
@@ -134,7 +134,7 @@ public class IronFence extends BaseModelBlock {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
-	public int quantityDropped(Random random) {
+	public int quantityDropped(Random rand) {
         return 1;
     }
 

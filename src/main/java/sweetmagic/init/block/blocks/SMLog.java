@@ -15,6 +15,7 @@ public class SMLog extends BlockLog implements ISmeltItemBlock {
     public SMLog(String name) {
         setRegistryName(name);
         setUnlocalizedName(name);
+		setResistance(1024F);
         setDefaultState(this.blockState.getBaseState().withProperty(LOG_AXIS, SMLog.EnumAxis.Y));
         setHarvestLevel("axe", 1);
 		BlockInit.blockList.add(this);

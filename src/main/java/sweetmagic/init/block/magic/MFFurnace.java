@@ -12,12 +12,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.base.BaseMFFace;
 import sweetmagic.init.tile.magic.TileMFFurnace;
@@ -51,7 +49,7 @@ public class MFFurnace extends BaseMFFace {
 			break;
 		}
 
-		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+		this.openGui(world, player, pos, guiId);
 	}
 
 	@Override
@@ -65,16 +63,10 @@ public class MFFurnace extends BaseMFFace {
 		return null;
 	}
 
-//	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-//		if (!setBlock) {
-//			super.breakBlock(world, pos, state);
-//		}
-//	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(I18n.format(TextFormatting.GREEN + new TextComponentTranslation("tip.mffurnace.name", new Object[0]).getFormattedText()));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.mffurnace.name")));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

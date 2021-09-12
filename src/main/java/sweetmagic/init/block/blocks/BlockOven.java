@@ -32,7 +32,7 @@ public class BlockOven extends BaseFaceBlock {
 
 	public BlockOven(String name, float light, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(0.5F);
+		setHardness(0.3F);
 		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);

@@ -21,6 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -49,14 +50,15 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 		new AxisAlignedBB(0.1D, 0.0D, 0.1D, 0.9D, 0.6250D, 0.9D)
 	};
 
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return CROPS_AABB[this.getNowStateMeta(state)];
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return CROPS_AABB[this.getNowStateMeta(state)];
     }
 
 	public SweetCrops_STAGE6(String name, int data, int grnd, float growVal) {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setHardness(0F);
+        this.setResistance(1024F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -101,6 +103,11 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 	//必ず骨粉が効くようにする場合ここをいじる
 	protected int getBonemealAgeIncrease(World world) {
 		return 1;
+	}
+
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
 	}
 
 	/**

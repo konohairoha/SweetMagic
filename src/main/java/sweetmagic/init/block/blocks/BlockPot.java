@@ -40,7 +40,7 @@ public class BlockPot extends BaseFaceBlock {
 
 	public BlockPot(String name, float light, int data, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(1.0F);
+		setHardness(0.1F);
         setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);

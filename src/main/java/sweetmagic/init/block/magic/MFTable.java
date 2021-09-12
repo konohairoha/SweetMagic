@@ -15,7 +15,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.api.recipe.mftable.MFTableRecipeInfo;
@@ -147,7 +146,7 @@ public class MFTable extends BaseMFBlock {
 			break;
 		}
 
-		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+		this.openGui(world, player, pos, guiId);
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 package sweetmagic.init.block.blocks;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -11,6 +12,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -25,7 +27,6 @@ import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
 import sweetmagic.init.tile.cook.TileStove;
-import sweetmagic.util.PlayerHelper;
 
 public class BlockStove  extends BaseFaceBlock {
 
@@ -33,7 +34,7 @@ public class BlockStove  extends BaseFaceBlock {
 
 	public BlockStove(String name, float light, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(0.5F);
+		setHardness(0.3F);
         setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);
@@ -62,12 +63,11 @@ public class BlockStove  extends BaseFaceBlock {
 	        ItemStack stack = player.getHeldItem(hand);
 
             if (this.checkBlock(stack)) {
-            	Block block = stack.getItem() == Item.getItemFromBlock(BlockInit.pot_off) ? BlockInit.pot_off : BlockInit.frypan_off;
-            	world.setBlockState(pos.up(), block.getDefaultState().withProperty(FACING, state.getValue(FACING)), 3);
-                if (!PlayerHelper.isCleative(player)) { stack.setCount(stack.getCount() - 1); }
+            	world.setBlockState(pos.up(), this.getBlock(stack).getDefaultState().withProperty(FACING, state.getValue(FACING)), 3);
+                if (!player.isCreative()) { stack.shrink(1); }
 
                 SoundType sound = this.getSoundType(state, world, pos, player);
-                this.playerSound(world, pos, sound.getPlaceSound(),(sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+                this.playerSound(world, pos, sound.getPlaceSound(),(sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
             	return true;
             }
 		}
@@ -77,7 +77,14 @@ public class BlockStove  extends BaseFaceBlock {
     }
 
     public boolean checkBlock (ItemStack stack) {
-    	return stack.getItem() == Item.getItemFromBlock(BlockInit.pot_off) || stack.getItem() == Item.getItemFromBlock(BlockInit.frypan_off);
+    	List<Item> itemList = Arrays.<Item> asList(
+    		Item.getItemFromBlock(BlockInit.pot_off), Item.getItemFromBlock(BlockInit.frypan_off), Item.getItemFromBlock(BlockInit.frypan_red_off)
+    	);
+    	return itemList.contains(stack.getItem());
+    }
+
+    public Block getBlock (ItemStack stack) {
+    	return ((ItemBlock) stack.getItem()).getBlock();
     }
 
     public static void setState(World world, BlockPos pos) {

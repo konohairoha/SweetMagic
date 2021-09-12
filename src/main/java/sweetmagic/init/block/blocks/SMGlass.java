@@ -45,12 +45,12 @@ public class SMGlass extends BlockGlass {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
-	public int quantityDropped(Random random) {
+	public int quantityDropped(Random rand) {
         return 1;
     }
 
 	// フェンスとかにつながないように
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 

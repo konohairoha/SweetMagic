@@ -38,7 +38,7 @@ public class BlockFreezer extends BaseFaceBlock {
 
 	public BlockFreezer(String name, boolean isTop, List<Block> list) {
 		super(Material.IRON, name);
-        setHardness(0.11F);
+        setHardness(0.1F);
         setResistance(99999F);
 		this.setSoundType(SoundType.METAL);
 		this.isTop = isTop;

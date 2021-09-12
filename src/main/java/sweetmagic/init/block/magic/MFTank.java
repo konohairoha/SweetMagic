@@ -6,7 +6,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -28,7 +27,7 @@ public class MFTank extends BaseMFBlock {
 	@Override
 	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
 		if (world.isRemote) { return; }
-		player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFTANK_GUI, world, pos.getX(), pos.getY(), pos.getZ());
+		this.openGui(world, player, pos, SMGuiHandler.MFTANK_GUI);
 	}
 
 	@Override

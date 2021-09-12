@@ -56,6 +56,8 @@ public class SMDoor extends BlockDoor {
      * 5 = アーチプラントドア
      * 6 = 木製3ドア
      * 7 = 白木製3ドア
+     * 8 = シンプルドア1
+     * 9 = シンプルド2
      */
 
 	private Item getItem() {
@@ -76,6 +78,10 @@ public class SMDoor extends BlockDoor {
 			return ItemInit.woodgold_3;
 		case 7:
 			return ItemInit.whitewoodgold_3;
+		case 8:
+			return ItemInit.simple_door_1;
+		case 9:
+			return ItemInit.simple_door_2;
 		}
 		return null;
 	}

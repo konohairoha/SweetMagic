@@ -19,6 +19,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
@@ -47,6 +48,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 		this.setUnlocalizedName(name);
 		this.setRegistryName(name);
 		this.setHardness(0.0F);
+        this.setResistance(1024F);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
 		this.disableStats();
@@ -115,6 +117,11 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { SweetState.STAGE4 });
+	}
+
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
 	}
 
 	/**

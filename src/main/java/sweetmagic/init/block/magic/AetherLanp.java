@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -51,13 +50,13 @@ public class AetherLanp extends BaseMFFace {
 		if (world.isRemote) { return; }
 
 		TileMFAetherLanp tile = (TileMFAetherLanp) world.getTileEntity(pos);
-		player.sendMessage(new TextComponentString("MF量：" + tile.getMF()));
+		TextComponentTranslation tip = new TextComponentTranslation("tip.mf_amount.name");
+		player.sendMessage(tip.appendText(String.format("%,d", tile.getMF())));
 	}
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		String text = new TextComponentTranslation("tip.aether_lanp.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.aether_lanp.name")));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

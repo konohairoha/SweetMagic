@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +23,7 @@ import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseMFBlock;
+import sweetmagic.init.entity.projectile.EntityMagicItem;
 import sweetmagic.init.tile.magic.TilePedalCreate;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
@@ -59,6 +59,7 @@ public class PedalCreate extends BaseMFBlock {
 
 			// 入れるアイテム、完成品はItemStackリストに突っ込む
 			RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
+			copy.setCount(recipeInfo.getHandList().get(0).getCount());
 			ItemHandlerHelper.insertItemStacked(tile.handInv, copy, false);
 
 			for (ItemStack input : recipeUtil.getInput()) {
@@ -104,7 +105,7 @@ public class PedalCreate extends BaseMFBlock {
 		}
 
 		for (ItemStack s : stackList) {
-			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
+			world.spawnEntity(new EntityMagicItem(world, player, s));
 		}
 
 		NBTTagCompound nbt = (NBTTagCompound) tags.getTag("BlockEntityTag");
@@ -162,7 +163,7 @@ public class PedalCreate extends BaseMFBlock {
 		TilePedalCreate tile = (TilePedalCreate) world.getTileEntity(pos);
 
 		for (ItemStack s : tile.getList()) {
-			world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s.copy()));
+			world.spawnEntity(new EntityMagicItem(world, pos.getX(), pos.getY(), pos.getZ(), s.copy()));
 			s.shrink(s.getCount());
 		}
 

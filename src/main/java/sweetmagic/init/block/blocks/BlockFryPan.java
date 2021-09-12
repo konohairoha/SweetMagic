@@ -35,14 +35,18 @@ public class BlockFryPan extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.2D, 0.1D, 0.8D, 0D, 0.8D);
+	private final int data;
+	private final CookingType type;
 
-	public BlockFryPan(String name, float light, List<Block> list) {
+	public BlockFryPan(String name, float light, CookingType type, int data, List<Block> list) {
 		super(Material.IRON, name);
-		setHardness(0.33F);
+		setHardness(0.1F);
 		setResistance(1024F);
 		setSoundType(SoundType.STONE);
 		this.setLightLevel(light);
 		disableStats();
+		this.type = type;
+		this.data = data;
 		list.add(this);
 	}
 
@@ -66,7 +70,7 @@ public class BlockFryPan extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
-        if (world.getBlockState(pos).getBlock() != BlockInit.frypan_re) {
+        if (this.type != CookingType.FIN) {
 
             // 下のブロックがコンロではないなら終了
             Block uBlock = world.getBlockState(pos.down()).getBlock();
@@ -84,7 +88,7 @@ public class BlockFryPan extends BaseFaceBlock {
 		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
 
 		// 未起動
-		if (state.getBlock() == BlockInit.frypan_off) {
+		if (this.type == CookingType.PRE) {
 
 			// 手持ちアイテムからレシピと一致するかを検索
 			PanRecipeInfo recipeInfo = SweetMagicAPI.getPanRecipeInfo(stack, pInv);
@@ -129,7 +133,7 @@ public class BlockFryPan extends BaseFaceBlock {
 		}
 
 		// 完成後
-		else if (state.getBlock() == BlockInit.frypan_re) {
+		else if (this.type == CookingType.FIN) {
 
 			for (ItemStack s : pot.outPutList) {
 				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
@@ -144,19 +148,45 @@ public class BlockFryPan extends BaseFaceBlock {
 		return true;
 	}
 
-    public static void setState(World world, BlockPos pos) {
+    public void setState(World world, BlockPos pos) {
         IBlockState state = world.getBlockState(pos);
         TileEntity tile = world.getTileEntity(pos);
-        Block block = state.getBlock();
         keepInventory = true;
-		if (block == BlockInit.frypan_on) {
-			world.setBlockState(pos, BlockInit.frypan_re.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.frypan_re) {
-			world.setBlockState(pos, BlockInit.frypan_off.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.frypan_off) {
-			world.setBlockState(pos, BlockInit.frypan_on.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-			BlockStove.setState(world, pos.down());
-		}
+
+        Block frypan = null;
+
+        // 通常フライパン
+        if (this.data == 0) {
+        	switch (this.type) {
+        	case PRE:
+        		frypan = BlockInit.frypan_on;
+        		break;
+        	case COOKING:
+        		frypan = BlockInit.frypan_re;
+        		break;
+        	case FIN:
+        		frypan = BlockInit.frypan_off;
+        		break;
+        	}
+        }
+
+        // フライパン(赤)
+        else if (this.data == 1) {
+        	switch (this.type) {
+        	case PRE:
+        		frypan = BlockInit.frypan_red_on;
+        		break;
+        	case COOKING:
+        		frypan = BlockInit.frypan_red_re;
+        		break;
+        	case FIN:
+        		frypan = BlockInit.frypan_red_off;
+        		break;
+        	}
+        }
+
+		world.setBlockState(pos, frypan.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
+
 		keepInventory = false;
 		if (tile != null) {
             tile.validate();
@@ -168,10 +198,11 @@ public class BlockFryPan extends BaseFaceBlock {
 
 		if (!keepInventory) {
 
-			ItemStack stack = new ItemStack(Item.getItemFromBlock(BlockInit.frypan_off));
+			ItemStack stack = new ItemStack(this.data == 0 ? BlockInit.frypan_off : BlockInit.frypan_red_off);
 			TilePot tile = (TilePot) world.getTileEntity(pos);
+
 			// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-			if (state.getBlock() == BlockInit.frypan_on || state.getBlock() == BlockInit.frypan_re) {
+			if (this.type != CookingType.PRE) {
 				for (ItemStack s : tile.inPutList) {
 					world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
 				}
@@ -192,5 +223,11 @@ public class BlockFryPan extends BaseFaceBlock {
 
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return null;
+    }
+
+    public enum CookingType {
+    	PRE,
+    	COOKING,
+    	FIN;
     }
 }

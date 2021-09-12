@@ -15,9 +15,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -69,6 +69,21 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 		return null;
 	}
 
+    // 向き変更対応
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing face) {
+
+		TileParallelInterfere tile = (TileParallelInterfere) world.getTileEntity(pos);
+		boolean flag = super.rotateBlock(world, pos, face);
+
+		if (tile != null) {
+            tile.validate();
+            world.setTileEntity(pos, tile);
+        }
+
+		return flag;
+	}
+
+
 	//右クリックの処理
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
@@ -105,11 +120,8 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		//xx_xx.langファイルから文字を取得する方法
-		String text1 = new TextComponentTranslation("tip.parallelinterfere_title.name", new Object[0]).getFormattedText();
-		String text2 = new TextComponentTranslation("tip.parallelinterfere_text.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text1));
-		tooltip.add(I18n.format(TextFormatting.GREEN + text2));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.parallelinterfere_title.name")));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.parallelinterfere_text.name")));
 	}
 
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
@@ -122,6 +134,6 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 
     @Override
 	public float getEnchantPowerBonus(World world, BlockPos pos) {
-		return 15;
+		return this.data == 0 ? 15 : 30;
 	}
 }

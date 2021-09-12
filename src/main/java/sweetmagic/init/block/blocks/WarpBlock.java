@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -168,13 +167,9 @@ public class WarpBlock extends BaseModelBlock {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
-
-		String text = new TextComponentTranslation("tip.warp_block_rege.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
-
-		String text2 = new TextComponentTranslation("tip.warp_block_teleport.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text2));
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.warp_block_rege.name")));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.warp_block_teleport.name")));
 	}
 
 	@Override

@@ -10,15 +10,18 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,6 +29,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseFaceBlock;
 import sweetmagic.init.tile.chest.TileWoodChest;
 
@@ -56,6 +60,21 @@ public class BlockWoodChest extends BaseFaceBlock {
 	@Override
 	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileWoodChest();
+	}
+
+	// 右クリックの処理
+	@Override
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+
+		if (this.data == 2 && face == EnumFacing.UP && player.getHeldItem(hand).getItem() == Items.BUCKET) {
+			if (!world.isRemote) {
+				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, new ItemStack(ItemInit.watercup, 9)));
+			}
+            player.playSound(SoundEvents.ITEM_BUCKET_FILL, 1.0F, 1.0F);
+			return true;
+		}
+
+		return super.onBlockActivated(world, pos, state, player, hand, face, hitX, hitY, hitZ);
 	}
 
 	// ブロックでのアクション
@@ -114,9 +133,23 @@ public class BlockWoodChest extends BaseFaceBlock {
         return null;
     }
 
+    // 向き変更対応
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing face) {
+
+    	TileWoodChest tile = (TileWoodChest) world.getTileEntity(pos);
+		boolean flag = super.rotateBlock(world, pos, face);
+
+		if (tile != null) {
+            tile.validate();
+            world.setTileEntity(pos, tile);
+        }
+
+		return flag;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-		tooltip.add(I18n.format(TextFormatting.GOLD + new TextComponentTranslation("tip.parallelinterfere_title.name", new Object[0]).getFormattedText()));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.parallelinterfere_title.name")));
 	}
 }

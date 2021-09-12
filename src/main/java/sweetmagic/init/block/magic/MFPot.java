@@ -26,7 +26,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
@@ -95,7 +94,8 @@ public class MFPot extends BaseMFBlock {
 		// それ以外
 		else {
 			TileMFPot tile = (TileMFPot) world.getTileEntity(pos);
-			player.sendMessage(new TextComponentString("MF量：" + tile.getMF()));
+			TextComponentTranslation tip = new TextComponentTranslation("tip.mf_amount.name");
+			player.sendMessage(tip.appendText(String.format("%,d", tile.getMF())));
 		}
 	}
 
@@ -234,8 +234,7 @@ public class MFPot extends BaseMFBlock {
 			break;
 		}
 
-		String text = new TextComponentTranslation(tip, new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GOLD + text));
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip(tip)));
 	}
 
 	@SideOnly(Side.CLIENT)

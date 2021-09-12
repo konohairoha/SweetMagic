@@ -10,6 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -21,6 +22,7 @@ import sweetmagic.init.base.BaseFaceBlock;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.chest.TileModenWallRack;
 import sweetmagic.init.tile.cook.TilePlate;
+import sweetmagic.init.tile.cook.TileShocase;
 
 public class BlockModenRack extends BaseFaceBlock {
 
@@ -30,6 +32,7 @@ public class BlockModenRack extends BaseFaceBlock {
 	private final static AxisAlignedBB EAST = new AxisAlignedBB(0D, 0.9375D, 0D, 0.62D, 1D, 1D);
 	private final static AxisAlignedBB WEST = new AxisAlignedBB(0.38D, 0.9375D, 0D, 1D, 1D, 1D);
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.125D, 0D, 0.125D, 0.875D, 0.1D, 0.875D);
+	private final static AxisAlignedBB HOLDER = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.125D, 1D);
 
 	public BlockModenRack(String name, int data) {
 		super(Material.WOOD, name);
@@ -45,6 +48,9 @@ public class BlockModenRack extends BaseFaceBlock {
 	 * 1 = モダンウォールラック
 	 * 2 = 皿
 	 * 3 = 木皿
+	 * 4 = パン置き
+	 * 5 = パン置き
+	 * 6 = ショーケース
 	 */
 
 	@Override
@@ -60,10 +66,28 @@ public class BlockModenRack extends BaseFaceBlock {
 		case 1:	return new TileModenWallRack();
 		case 2:	return new TilePlate();
 		case 3:	return new TilePlate();
+		case 4:	return new TilePlate();
+		case 5:	return new TilePlate();
+		case 6:	return new TileShocase();
 		}
 
 		return null;
 	}
+
+    // 向き変更対応
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing face) {
+
+		TileModenRack tile = (TileModenRack) world.getTileEntity(pos);
+		boolean flag = super.rotateBlock(world, pos, face);
+
+		if (tile != null) {
+            tile.validate();
+            world.setTileEntity(pos, tile);
+        }
+
+		return flag;
+	}
+
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -82,6 +106,9 @@ public class BlockModenRack extends BaseFaceBlock {
 		case 2:
 		case 3:
 			return AABB;
+		case 4:
+		case 5:
+			return HOLDER;
 		}
 
 		return FULL_BLOCK_AABB;

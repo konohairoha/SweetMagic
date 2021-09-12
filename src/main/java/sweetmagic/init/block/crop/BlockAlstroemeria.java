@@ -12,7 +12,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -27,6 +26,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -39,6 +39,7 @@ import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
+import sweetmagic.init.entity.projectile.EntityMagicItem;
 import sweetmagic.init.item.sm.magic.MFTime;
 import sweetmagic.init.item.sm.magic.MFWeather;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
@@ -140,6 +141,11 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 	// 現在の成長段階をintで取得するためのもの。
 	public static int getNowStateMeta(IBlockState state) {
 		return SweetState.getInt(state, getSweetState());
+	}
+
+	@Deprecated
+	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
 	}
 
 	// IPlantable
@@ -323,7 +329,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 		AdvancedInit.astral_craft.triggerFor(player);
 
 		for (ItemStack result : recipeUtil.getResult()) {
-			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, result));
+			world.spawnEntity(new EntityMagicItem(world, player, result));
 			ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.LAVA);
 		}
 
@@ -350,4 +356,16 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 	public MFTime getMFTime(Item item) {
 		return (MFTime) item;
 	}
+
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+
+    	TileAlstroemeria tile = (TileAlstroemeria) world.getTileEntity(pos);
+
+    	// 召喚中なら夜の帳をドロップ
+    	if (tile.isSummon) {
+    		spawnAsEntity(world, pos, new ItemStack(ItemInit.veil_darkness));
+    	}
+
+    	super.breakBlock(world, pos, state);
+    }
 }
