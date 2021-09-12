@@ -45,7 +45,7 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		// アップルマフィン
 		recipe.addRecipe(new OvenRecipes(
-			new OreItems("cropAplle", 2),
+			new OreItems("cropApple", 2),
 			new Object[] { new ItemStack(ItemInit.vannila_essence, 2), new OreItems("dustFlour", 2), new OreItems("egg", 2), new OreItems("dustSugar", 2), "bucketMilk", "foodButter" },
 			new ItemStack[] { new ItemStack(ItemInit.apple_muffin, 4)}
 		));
@@ -101,14 +101,14 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 
 		// アップルパイ
 		recipe.addRecipe(new OvenRecipes(
-			new OreItems("cropAplle", 3),
+			new OreItems("cropApple", 3),
 			new Object[] { new OreItems("foodCustard", 2), "egg", "dustSugar",  new OreItems("dustFlour", 3), "bucketWater", "foodButter" },
 			new ItemStack[] { new ItemStack(ItemInit.applepie, 6) }
 		));
 
 		// クリームパン
 		recipe.addRecipe(new OvenRecipes(
-				new OreItems("foodCustard", 4),
+			new OreItems("foodCustard", 4),
 			new Object[] { new OreItems("bread", 2), "egg" },
 			new ItemStack[] { new ItemStack(ItemInit.cream_filled_roll, 4) }
 		));
@@ -258,6 +258,41 @@ public class OvenRecipePlugin implements IOvenRecipePlugin {
 			new ItemStack(ItemInit.mochi, 4),
 			new Object[] { new OreItems("cropBean", 5), new OreItems("dustSugar", 6), new OreItems("bucketWater", 3), new OreItems("dustSalt", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.ohagi, 8) }
+		));
+
+		// メロンパン
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("dustSugar", 4),
+			new Object[] { new OreItems("egg", 2), new OreItems("foodButter", 2), new OreItems("bucketWater", 2), new OreItems("dustFlour", 6), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.melon_bread, 8) }
+		));
+
+		// クロワッサン
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("bucketMilk", 2),
+			new Object[] { new OreItems("dustFlour", 4), "egg", new OreItems("foodButter", 4), new OreItems("dustSugar", 2), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.croissant, 7) }
+		));
+
+		// カヌレ
+		recipe.addRecipe(new OvenRecipes(
+			"foodLiquor",
+			new Object[] { new OreItems("dustFlour", 4), "egg", new OreItems("foodButter", 2), new OreItems("bucketMilk", 2), new OreItems("dustSugar", 2), new ItemStack(ItemInit.vannila_essence) },
+			new ItemStack[] { new ItemStack(ItemInit.canele, 6) }
+		));
+
+		// バターロール
+		recipe.addRecipe(new OvenRecipes(
+			new OreItems("foodButter", 4),
+			new Object[] { new OreItems("dustFlour", 8),"egg", new OreItems("bucketWater", 2), "dustSugar", "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.butter_role, 12) }
+		));
+
+		// マドレーヌ
+		recipe.addRecipe(new OvenRecipes(
+			"foodLiquor",
+			new Object[] { new OreItems("dustFlour", 4), "egg", new OreItems("foodButter", 2), new OreItems("dustSugar", 2), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.madeleine, 6) }
 		));
 	}
 }

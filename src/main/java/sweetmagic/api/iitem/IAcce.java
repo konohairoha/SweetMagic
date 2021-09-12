@@ -72,4 +72,7 @@ public interface IAcce {
 	default boolean isDuplication () {
 		return false;
 	}
+
+	// ポーチから取り出したときの処理
+	default void extractPorch (EntityPlayer player) { }
 }

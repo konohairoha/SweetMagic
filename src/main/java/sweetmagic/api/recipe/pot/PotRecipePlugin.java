@@ -189,5 +189,12 @@ public class PotRecipePlugin implements IPotRecipePlugin {
 			new Object[] { new OreItems("cropGreenSoybeans", 3), "dustSugar" },
 			new ItemStack[] { new ItemStack(ItemInit.zunda, 6) }
 		));
+
+		// プレッツェル
+		recipe.addRecipe(new PotRecipes(
+			new OreItems("foodButter", 2),
+			new Object[] { new OreItems("dustFlour", 6), "bucketMilk", new OreItems("bucketWater", 2), new OreItems("dustSugar", 2), "dustSalt" },
+			new ItemStack[] { new ItemStack(ItemInit.pretzel, 8) }
+		));
 	}
 }

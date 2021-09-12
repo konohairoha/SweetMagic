@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import sweetmagic.config.SMConfig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.util.OreItems;
 
 @SMObMagiaRecipePlugin(priority = EventPriority.LOW)
 public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
@@ -44,8 +45,30 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 5範囲dig魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_mining_magia),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 48)},
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 48)
+					,"magicBookCosmic"},
 			new ItemStack[] { new ItemStack(ItemInit.magic_earth_destruction) }
+		));
+
+		// 採掘速度アップ魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(Items.STONE_PICKAXE),
+			new ItemStack[] { new ItemStack(Items.STONE_SHOVEL), new ItemStack(ItemInit.sugarbell, 2), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_mining_enchant) }
+		));
+
+		// ロックブラスト魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_mining_enchant),
+			new Object[] { new OreItems("stone", 16), new ItemStack(ItemInit.sugarbell, 8), new ItemStack(ItemInit.mysterious_page, 2) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_rockblast) }
+		));
+
+		// 巨石落とし魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_rockblast),
+			new Object[] { new OreItems("stone", 32), new ItemStack(ItemInit.sugarbell, 16), new ItemStack(ItemInit.mysterious_page, 3), new ItemStack(ItemInit.mystical_page) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_hugerock_fall) }
 		));
 
 		// 回復魔法
@@ -74,7 +97,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// デバフ解除 + 全回復魔法 + 衝撃吸収
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_healingwish),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_healing_hightlow) }
 		));
 
@@ -105,8 +129,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 光/炎魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_sacredbuster),
-			new ItemStack[] { new ItemStack(ItemInit.magic_flamenova), new ItemStack(ItemInit.cosmic_crystal_shard, 4),
-			new ItemStack(ItemInit.prizmium, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.magic_flamenova), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.prizmium, 64),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_shining_flare) }
 		));
 
@@ -137,7 +161,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// ブレイズエンド魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_meteor_fall),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.fire_nasturtium_petal, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.fire_nasturtium_petal, 64),
+						new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_blaze_end) }
 		));
 
@@ -167,7 +192,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 絶対零度魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_frostrain),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.unmeltable_ice, 32), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.unmeltable_ice, 32),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_absolute_zero) }
 		));
 
@@ -294,7 +320,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// ブラックホール魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_gravity_break),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.grav_powder, 32), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.grav_powder, 32),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_blackhole) }
 		));
 
@@ -314,19 +341,26 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_vector_halten) }
 		));
 
-		// 幻影オオカミ召喚魔法
+		// 幻影馬召喚魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.stray_soul, 3),
 			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.ender_shard, 4),
-			new ItemStack(ItemInit.moonblossom_petal, 4), new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
+					new ItemStack(ItemInit.mysterious_page), new ItemStack(ItemInit.blank_magic) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_shadowhorse) }
+		));
+
+		// 幻影ゴーレム魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_shadowhorse),
+			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.stray_soul, 8), new ItemStack(ItemInit.ender_shard, 16),
+			new ItemStack(ItemInit.mysterious_page, 4)},
 			new ItemStack[] { new ItemStack(ItemInit.magic_shadowwolf) }
 		));
 
 		// 幻影ゴーレム魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_shadowwolf),
-			new ItemStack[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.stray_soul, 8), new ItemStack(ItemInit.ender_shard, 16),
-			new ItemStack(ItemInit.mysterious_page, 4)},
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.stray_soul, 16), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_shadowgolem) }
 		));
 
@@ -399,6 +433,14 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_magia_protection) }
 		));
 
+		// バリア強化 + 持続回復範囲魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_magia_protection),
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.prizmium, 64),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
+			new ItemStack[] { new ItemStack(ItemInit.magic_expand_barrier) }
+		));
+
 		// 透明魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_barrier),
@@ -445,7 +487,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 泡爆発撃魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_foamy_hell),
-			new ItemStack[] { new ItemStack(ItemInit.magic_blast), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.magic_blast), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.dm_flower, 64),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_bleb_burst) }
 		));
 
@@ -537,7 +580,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 連鎖魔法爆発魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_magia_destroy),
-			new ItemStack[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.magicmeal, 64), new ItemStack(ItemInit.mystical_page, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.magicmeal, 64),
+					new ItemStack(ItemInit.mystical_page, 4), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.magic_supernova) }
 		));
 

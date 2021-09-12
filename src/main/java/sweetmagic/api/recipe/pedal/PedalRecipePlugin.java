@@ -58,7 +58,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.gorgeous_lamp),
 			new Object[] { new ItemStack(BlockInit.glow_lamp), new ItemStack(ItemInit.divine_crystal, 4), new OreItems("ingotIron", 12)
-					, new ItemStack(Blocks.IRON_BARS, 4)},
+					, new OreItems("ironbar", 4)},
 			new ItemStack[] { new ItemStack(BlockInit.aether_furnace_bottom) }
 		));
 
@@ -72,8 +72,8 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// マギア・リライト
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(ItemInit.deus_crystal),
-			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(ItemInit.alternative_ingot, 16),
-					new ItemStack(ItemInit.magicmeal, 8), new ItemStack(ItemInit.mystical_page, 2), new ItemStack(ItemInit.mf_bottle, 4) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(ItemInit.cosmos_light_ingot, 8),
+					new ItemStack(ItemInit.magicmeal, 8), new ItemStack(ItemInit.mystical_page, 2) },
 			new ItemStack[] { new ItemStack(BlockInit.magia_rewrite) }
 		));
 
@@ -96,8 +96,8 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// スターダスト・ウィッシュ
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(Items.BOOK, 16),
-			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new OreItems("chestWood", 64), new ItemStack(ItemInit.pure_crystal, 4)
-					, new ItemStack(ItemInit.mystical_page, 4), new ItemStack(Items.ENDER_EYE, 16), new ItemStack(Blocks.ENCHANTING_TABLE) },
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 16), new OreItems("chestWood", 16), new ItemStack(ItemInit.pure_crystal, 2)
+					, new ItemStack(ItemInit.mf_magiabottle), new ItemStack(ItemInit.mystical_page, 2), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(BlockInit.stardust_wish) }
 		));
 
@@ -184,16 +184,14 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// トルコキキョウの花瓶
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.turkey_balloonflower, 16),
-			new Object[] { new ItemStack(ItemInit.sannyflower_petal, 16), new ItemStack(ItemInit.moonblossom_petal, 16),
-					new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.mf_bottle, 2) },
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 1), new ItemStack(ItemInit.mf_magiabottle), new ItemStack(Items.FLOWER_POT) },
 			new ItemStack[] { new ItemStack(BlockInit.turkey_balloonflower_pot) }
 		));
 
 		// 群青の薔薇の花瓶
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.ultramarine_rose, 16),
-			new Object[] { new ItemStack(ItemInit.sannyflower_petal, 16),
-					new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_bottle, 4), new ItemStack(Items.FLOWER_POT) },
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_magiabottle), new ItemStack(Items.FLOWER_POT) },
 			new ItemStack[] { new ItemStack(BlockInit.ultramarine_rose_pot) }
 		));
 
@@ -262,7 +260,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.aether_furnace_bottom),
 			new Object[] { new ItemStack(BlockInit.glow_lamp, 4), new ItemStack(ItemInit.pure_crystal, 4), new ItemStack(Items.GOLD_INGOT, 12)
-					, new ItemStack(Blocks.IRON_BARS, 16), new ItemStack(ItemInit.witch_tears)},
+					, new OreItems("ironbar", 16), new ItemStack(ItemInit.witch_tears)},
 			new ItemStack[] { new ItemStack(BlockInit.advanced_aether_furnace_bottom) },
 			true
 		));
@@ -270,7 +268,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// 改良型魔法流かまど
 		recipe.addRecipe(new PedalRecipes(
 			"mffurnace",
-			new Object[] { new ItemStack(ItemInit.pure_crystal, 4), new ItemStack(ItemInit.cosmic_crystal_shard, 8), new ItemStack(ItemInit.mf_bottle, 8) },
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 3), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mf_magiabottle), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(BlockInit.advanced_mffurnace_off) },
 			true
 		));
@@ -278,7 +276,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// マスターマギアタンク
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.advanced_mftank),
-			new Object[] { new ItemStack(BlockInit.sugarglass, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2)},
+			new Object[] { new ItemStack(BlockInit.magicbarrier_off, 64), new ItemStack(ItemInit.mystical_page, 2), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(BlockInit.mm_tank) },
 			true
 		));
@@ -286,7 +284,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// マスターマギアテーブル
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.advanced_mftable),
-			new Object[] { new ItemStack(BlockInit.prism_log, 64), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mystical_page, 2) },
+			new Object[] { new ItemStack(BlockInit.prism_log, 64), new ItemStack(ItemInit.mystical_page, 2), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(BlockInit.mm_table) },
 			true
 		));
@@ -302,7 +300,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// デウスクリスタルチョーカー
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(ItemInit.pure_choker),
-			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.mf_bottle, 8) },
+			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.cosmos_light_ingot, 2), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.deus_choker) },
 			true
 		));
@@ -310,7 +308,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// マスターマギアポーチ
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(ItemInit.magicians_pouch),
-			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.mf_bottle, 8) },
+			new Object[] { new ItemStack(ItemInit.deus_crystal), new ItemStack(ItemInit.mystical_page, 4), new ItemStack(ItemInit.mf_magiabottle), "magicBookCosmic" },
 			new ItemStack[] { new ItemStack(ItemInit.master_magia_pouch) },
 			true
 		));
@@ -318,7 +316,7 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 		// マギア・サクセサー
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(BlockInit.magicbarrier_off, 8),
-			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(Items.IRON_INGOT, 8) },
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(BlockInit.pillar_stone_w, 8), new ItemStack(ItemInit.cosmos_light_ingot, 4) },
 			new ItemStack[] { new ItemStack(BlockInit.magia_successor) }
 		));
 
@@ -329,11 +327,54 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.arcane_table) }
 		));
 
+		// マギアアクセラレータ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.ami_glass, 8),
+			new Object[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(BlockInit.pillar_stone_w, 6), new ItemStack(ItemInit.cosmos_light_ingot, 4) },
+			new ItemStack[] { new ItemStack(BlockInit.magia_accelerator) }
+		));
+
 		// スターライトワンド
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(ItemInit.cosmos_light_ingot, 4),
 			new Object[] { new ItemStack(ItemInit.alternative_ingot, 2), new ItemStack(ItemInit.witch_tears) },
 			new ItemStack[] { new ItemStack(ItemInit.startlight_wand) }
+		));
+
+		// 上位魔術書
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.magic_book),
+			new Object[] { new ItemStack(ItemInit.cosmic_crystal_shard, 4), new ItemStack(ItemInit.mf_magiabottle), new ItemStack(ItemInit.mf_bottle, 3), new ItemStack(ItemInit.mf_sbottle, 8),
+					new ItemStack(ItemInit.mystical_page), new ItemStack(ItemInit.mysterious_page, 4), new ItemStack(ItemInit.witch_tears) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_book_cosmic) }
+		));
+
+		// 不浄の炎
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.fire_nasturtium_petal, 16),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_magiabottle, 3), new ItemStack(ItemInit.cosmos_light_ingot, 2), new ItemStack(ItemInit.accebag, 3), "magicBookCosmic" },
+			new ItemStack[] { new ItemStack(ItemInit.unyielding_fire) }
+		));
+
+		// フロストチェーン
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.unmeltable_ice, 16),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_magiabottle, 3), new ItemStack(ItemInit.cosmos_light_ingot, 2), new ItemStack(ItemInit.accebag, 3), "magicBookCosmic" },
+			new ItemStack[] { new ItemStack(ItemInit.frosted_chain) }
+		));
+
+		// ホーリーチャーム
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.prizmium, 16),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_magiabottle, 3), new ItemStack(ItemInit.cosmos_light_ingot, 2), new ItemStack(ItemInit.accebag, 3), "magicBookCosmic" },
+			new ItemStack[] { new ItemStack(ItemInit.holly_charm) }
+		));
+
+		// 風のレリーフ
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(ItemInit.tiny_feather, 16),
+			new Object[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.mf_magiabottle, 3), new ItemStack(ItemInit.cosmos_light_ingot, 2), new ItemStack(ItemInit.accebag, 3), "magicBookCosmic" },
+			new ItemStack[] { new ItemStack(ItemInit.wind_relief) }
 		));
 
 		Map<Item, String> aetherRecipe = new HashMap<>();

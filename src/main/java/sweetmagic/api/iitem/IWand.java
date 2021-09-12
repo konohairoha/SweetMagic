@@ -425,6 +425,10 @@ public interface IWand extends IMFTool {
 		// インベントリを取得
 		InventoryPouch neo = new InventoryPouch(player);
 		IItemHandlerModifiable inv = neo.inventory;
+		boolean isFlame = this.isElementEqual(smItem, SMElement.FLAME);
+		boolean isFrost = this.isElementEqual(smItem, SMElement.FROST);
+		boolean isCyclone = this.isElementEqual(smItem, SMElement.CYCLON);
+		boolean isShine = this.isElementEqual(smItem, SMElement.SHINE);
 
 		// インベントリの分だけ回す
 		for (int i = 0; i < inv.getSlots(); i++) {
@@ -441,7 +445,27 @@ public interface IWand extends IMFTool {
 			// 血吸なら10%を返す
 			if (item == ItemInit.blood_sucking_ring) {
 				addPower++;
-				((IAcce) item).acceeffect(world, player, st);
+				acce.acceeffect(world, player, st);
+			}
+
+			else if (item == ItemInit.unyielding_fire && isFlame) {
+				addPower += 15;
+				isFlame = false;
+			}
+
+			else if (item == ItemInit.frosted_chain && isFrost) {
+				acce.acceeffect(world, player, st);
+				isFrost = false;
+			}
+
+			else if (item == ItemInit.wind_relief && isCyclone) {
+				acce.acceeffect(world, player, st);
+				isCyclone = false;
+			}
+
+			else if (item == ItemInit.wind_relief && isShine) {
+				acce.acceeffect(world, player, st);
+				isShine = false;
 			}
 		}
 
@@ -806,6 +830,12 @@ public interface IWand extends IMFTool {
 		SMElement wandElemet = this.getWandElement();
 		return smItem.getElement() == wandElemet || ( smItem.getSubElement() != null && smItem.getSubElement() == wandElemet );
 	}
+
+	// 魔法と杖の属性一致確認
+	default boolean isElementEqual (ISMItem smItem, SMElement ele) {
+		return smItem.getElement() == ele || ( smItem.getSubElement() != null && smItem.getSubElement() == ele );
+	}
+
 
 	/*
 	 * =========================================================

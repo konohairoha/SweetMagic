@@ -32,7 +32,7 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 
 		// りんごゼリー
 		recipe.addRecipe(new FreezerRecipes(
-			"cropAplle",
+			"cropApple",
 			new Object[] { "foodGelatine", "dustSugar", "bucketWater" },
 			new ItemStack[] { new ItemStack(ItemInit.apple_jelly, 2) }
 		));
@@ -131,8 +131,8 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 		// フルーツポンチ
 		recipe.addRecipe(new FreezerRecipes(
 			new ItemStack(ItemInit.banana, 2),
-			new Object[] { "listAllfruit", "listAllfruit", new ItemStack(ItemInit.vannila_essence), "dustSugar", "bucketWater" },
-			new ItemStack[] { new ItemStack(ItemInit.fluit_mix, 6) }
+			new Object[] { "listAllfruit", new ItemStack(ItemInit.vannila_essence), "dustSugar", "bucketWater" },
+			new ItemStack[] { new ItemStack(ItemInit.fluit_mix, 5) }
 		));
 
 		// コーンサラダ
@@ -172,7 +172,7 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 
 		// りんご飴
 		recipe.addRecipe(new FreezerRecipes(
-			new OreItems("cropAplle", 2),
+			new OreItems("cropApple", 2),
 			new Object[] { new OreItems("dustSugar", 6), new OreItems("bucketWater", 2), new OreItems("stickWood", 2) },
 			new ItemStack[] { new ItemStack(ItemInit.applecandy, 2) }
 		));
@@ -233,18 +233,46 @@ public class FreezerRecipePlugin implements IFreezerRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.softcream_vannila, 8) }
 		));
 
-		// ソフトクリーム（バニラ）
+		// ソフトクリーム（ストロベリー）
 		recipe.addRecipe(new FreezerRecipes(
 			new OreItems("bucketMilk", 4),
 			new Object[] { new OreItems("foodCream", 4), new OreItems("cropStrawberry", 4), "dustSalt", "foodGelatine" },
 			new ItemStack[] { new ItemStack(ItemInit.softcream_strawberry, 8) }
 		));
 
-		// ソフトクリーム（バニラ）
+		// ソフトクリーム（チョコ）
 		recipe.addRecipe(new FreezerRecipes(
 			new OreItems("bucketMilk", 4),
 			new Object[] { new OreItems("foodCream", 4), new ItemStack(ItemInit.chocolate, 2), "dustSalt", "foodGelatine" },
 			new ItemStack[] { new ItemStack(ItemInit.softcream_chocolate, 8) }
+		));
+
+		// サーモンカルパッチョ
+		recipe.addRecipe(new FreezerRecipes(
+			new ItemStack(Items.FISH, 4, 1),
+			new Object[] { new OreItems("cropOnion", 4), new ItemStack(ItemInit.olive_oil, 4), "cropLemon", "dustSalt", new OreItems("bucketWater", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.salmon_carpaccio, 8) }
+		));
+
+		// パンナコッタ
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("listAllberry", 4),
+			new Object[] { new OreItems("foodCream", 6), new OreItems("bucketMilk", 6), "cropLemon", "foodGelatine", "bucketWater", new OreItems("dustSugar", 3) },
+			new ItemStack[] { new ItemStack(ItemInit.panna_cotta, 12) }
+		));
+
+		// フルーツサラダ
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("listAllfruit", 4),
+			new Object[] { new OreItems("cropApple", 2), new OreItems("cropLettuce", 4), "foodCheese", new ItemStack(ItemInit.salad_dressing, 3) },
+			new ItemStack[] { new ItemStack(ItemInit.salad_fruit, 6) }
+		));
+
+		// ピーマンのおかか醤油
+		recipe.addRecipe(new FreezerRecipes(
+			new OreItems("cropBellpepper", 4),
+			new Object[] { new ItemStack(ItemInit.bonito_flakes, 3), new OreItems("foodSoysauce", 2), "foodOil" },
+			new ItemStack[] { new ItemStack(ItemInit.peppers_with_soy_sauce_and_bonito, 6) }
 		));
 	}
 }

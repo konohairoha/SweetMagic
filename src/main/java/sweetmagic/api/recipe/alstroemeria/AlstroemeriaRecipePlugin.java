@@ -77,7 +77,7 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// ドリズリィ・ミオソチスの種
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(BlockInit.cornflower),
-			new Object[] { new ItemStack(ItemInit.mf_sbottle), new ItemStack(Items.WHEAT_SEEDS, 2)},
+			new Object[] { new ItemStack(ItemInit.mf_sbottle), new ItemStack(Items.WHEAT_SEEDS, 2) },
 			new ItemStack[] { new ItemStack(ItemInit.dm_seed) }
 		));
 
@@ -170,8 +170,15 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// ブレイズロッド
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(ItemInit.fire_powder, 4),
-			new Object[] { new OreItems("dustGlowstone", 2)},
+			new Object[] { new OreItems("dustGlowstone", 2) },
 			new ItemStack[] { new ItemStack(Items.BLAZE_ROD) }
+		));
+
+		// ネザーラック
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new ItemStack(ItemInit.fire_powder, 2),
+			new Object[] { new OreItems("dirt", 16) },
+			new ItemStack[] { new ItemStack(Blocks.NETHERRACK, 32) }
 		));
 
 		// 黄昏の明かり
@@ -282,7 +289,7 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 		// 網ガラス
 		recipe.addRecipe(new AlstroemeriaRecipes(
 			new ItemStack(BlockInit.sugarglass, 16),
-			new Object[] { new ItemStack(Blocks.IRON_BARS), new OreItems("stickWood", 4) },
+			new Object[] { "ironbar", new OreItems("stickWood", 4) },
 			new ItemStack[] { new ItemStack(BlockInit.ami_glass, 32) }
 		));
 
@@ -291,13 +298,6 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new ItemStack(BlockInit.sugarglass, 16),
 			new Object[] { new ItemStack(Items.IRON_NUGGET), "dyeBlack" },
 			new ItemStack[] { new ItemStack(BlockInit.gorgeous_glass, 32) }
-		));
-
-		// ゴージャスガラス（白）
-		recipe.addRecipe(new AlstroemeriaRecipes(
-			new ItemStack(BlockInit.sugarglass, 16),
-			new Object[] { new ItemStack(Items.IRON_NUGGET), "dyeWhite" },
-			new ItemStack[] { new ItemStack(BlockInit.gorgeous_glass_w, 32) }
 		));
 
 		// ゴージャスガラス（白）
@@ -361,6 +361,13 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 			new OreItems("magicAccessori"),
 			new Object[] { new ItemStack(ItemInit.cotton_cloth, 4),new ItemStack(Items.STRING), new ItemStack(ItemInit.mf_bottle, 4) },
 			new ItemStack[] { new ItemStack(ItemInit.accebag) }
+		));
+
+		// ガストの涙
+		recipe.addRecipe(new AlstroemeriaRecipes(
+			new OreItems("gemQuartz", 4),
+			new Object[] { new OreItems("dustGlowstone", 4) },
+			new ItemStack[] { new ItemStack(Items.GHAST_TEAR, 2) }
 		));
 
 		// プリズムの苗木

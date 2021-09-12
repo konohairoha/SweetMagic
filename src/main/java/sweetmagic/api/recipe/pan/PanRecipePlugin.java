@@ -141,5 +141,28 @@ public class PanRecipePlugin implements IPanRecipePlugin {
 			new Object[] { new OreItems("egg", 3), new OreItems("dustFlour", 6), new OreItems("dustSugar", 3), new OreItems("bucketMilk", 2), new OreItems("foodOil", 2), "foodButter" },
 			new ItemStack[] { new ItemStack(ItemInit.hotcake, 6) }
 		));
+
+		// 焼きおにぎり
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("foodRice", 4),
+			new Object[] { new OreItems("foodSoysauce", 4), new OreItems("foodLiquor", 2), new OreItems("foodOil", 1) },
+			new ItemStack[] { new ItemStack(ItemInit.riceball_grilled, 4) }
+		));
+
+		// 酢豚
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("listAllporkraw", 6),
+			new Object[] { new OreItems("cropOnion", 4), new OreItems("cropCarrot", 3), new OreItems("cropBellpepper", 3), new OreItems("cropPineapple", 2), new OreItems("foodSoysauce", 4),
+					new OreItems("foodLiquor", 3), new ItemStack(ItemInit.vinegar, 2), "foodOil", new OreItems("bucketWater", 3), new OreItems("dustSugar", 2) },
+			new ItemStack[] { new ItemStack(ItemInit.sweet_and_sour_pork, 6) }
+		));
+
+		// ピーマンの肉詰め
+		recipe.addRecipe(new PanRecipes(
+			new OreItems("cropBellpepper", 4),
+			new Object[] { new OreItems("listAllmeatraw", 4), new OreItems("cropTomato", 2), new OreItems("egg", 2), new OreItems("dustBread", 2), new OreItems("cropPineapple", 2),
+					new OreItems("bucketMilk", 2), "dustSalt", "foodLiquor", "foodOil" },
+			new ItemStack[] { new ItemStack(ItemInit.peppers_stuffed_with_meat, 8) }
+		));
 	}
 }

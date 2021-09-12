@@ -38,6 +38,8 @@ public class MFItemList implements IMagiaFluxItemListPlugin {
 		info.setMF(new MagiaFluxInfo(new ItemStack(ItemInit.witch_tears), 500));
 		info.setMF(new MagiaFluxInfo(new ItemStack(ItemInit.ender_shard), 10));
 		info.setMF(new MagiaFluxInfo(new ItemStack(Items.ENDER_PEARL), 90));
+		info.setMF(new MagiaFluxInfo(new ItemStack(Items.QUARTZ), 25));
+		info.setMF(new MagiaFluxInfo(new ItemStack(Blocks.QUARTZ_BLOCK), 100));
 	}
 
 	// MFを定義したアイテム情報を削除

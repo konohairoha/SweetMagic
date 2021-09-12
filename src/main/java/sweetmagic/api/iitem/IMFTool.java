@@ -1,9 +1,13 @@
 package sweetmagic.api.iitem;
 
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.handlers.PacketHandler;
+import sweetmagic.init.item.sm.magic.MFItem;
 import sweetmagic.init.tile.magic.TileMFTable;
+import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.packet.TileMFBlockPKT;
 
 public interface IMFTool {
@@ -102,4 +106,29 @@ public interface IMFTool {
 	default boolean isEmpty (ItemStack stack) {
 		return this.getMF(stack) <= 0;
 	}
+
+	// 吸い込むアイテムのMF量
+	default int getItemMF (ItemStack stack) {
+
+		int mf = 0;
+		int amount = stack.getCount();
+		Item item = stack.getItem();
+
+		// MFアイテムなら
+		if (item instanceof MFItem) {
+			mf = ((MFItem) item).getMF();
+		}
+
+		// APIに登録されたアイテムなら
+		else if (this.isMFAPIItem(new ItemStack(item))) {
+			mf = SweetMagicAPI.getMFFromItem(new ItemStack(item));
+		}
+
+		return mf * amount;
+	}
+
+    // APIアイテムかどうかの判定
+	default boolean isMFAPIItem (ItemStack stack) {
+    	return SlotPredicates.hasMFItem(stack);
+    }
 }
