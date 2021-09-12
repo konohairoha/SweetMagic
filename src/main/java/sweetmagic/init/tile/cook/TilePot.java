@@ -79,7 +79,7 @@ public class TilePot extends TileSMBase {
 	// フライパン
 	public void frypanSetBlock(Block block) {
 
-		if (block != BlockInit.frypan_on) { return; }
+		if (block != BlockInit.frypan_on && block != BlockInit.frypan_red_on) { return; }
 
 		if(this.tickSet) {
 			this.clear();
@@ -109,7 +109,7 @@ public class TilePot extends TileSMBase {
 			//BlockStateを置き換え
 			if (!this.world.isRemote) {
 				this.playSound(this.pos, SMSoundEvent.STOVE_OFF, 1F, 1F);
-				BlockFryPan.setState(this.world, this.pos);
+				((BlockFryPan) this.getBlock(this.pos)).setState(this.world, this.pos);
 				this.tickSet = true;
 			}
 		}

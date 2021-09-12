@@ -2,6 +2,7 @@ package sweetmagic.init.tile.container;
 
 import javax.annotation.Nonnull;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,6 +14,7 @@ import sweetmagic.init.tile.gui.GuiParallelInterfere.IScrollChanged;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
 import sweetmagic.init.tile.slot.SlotScroll;
 
+@ChestContainer(rowSize = 9)
 public class ContainerParallelInterfere extends Container implements IScrollChanged {
 
 	public final TileParallelInterfere tile;

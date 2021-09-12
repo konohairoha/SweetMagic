@@ -64,25 +64,12 @@ public class ContainerSMWand extends Container {
 			break;
 		}
 
-//		ItemStack amor = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-//		this.isPouch = !amor.isEmpty() && amor.getItem() instanceof IPouch;
-//		this.slotSize = ((IPouch) amor.getItem()).getSlotSize();
-//
-//		if (this.isPouch) {
-//			this.invPouch = new InventoryPouch(this.player);
-//			for (int k = 0; k < 9; ++k)
-//				for (int j = 0; j < 2; ++j)
-//					this.addSlotToContainer(new ValidatedSlot(this.invPouch, j + k * 2, 8 + j * 18, 8 + k * 18, s -> true));
-//		}
-
-
 		for (int i = 0; i < 3; i++)
 			for (int j = 0; j < 9; j++)
 				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 16 + j * 18, 112 + i * 18));
 
 		for (int i = 0; i < 9; i++)
 			this.addSlotToContainer(new Slot(invPlayer, i, 16 + i * 18, 170));
-
 	}
 
 	// 2スロット
@@ -182,11 +169,11 @@ public class ContainerSMWand extends Container {
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 
-			if (slotIndex < slotCount && !this.mergeItemStack(stack1, slotCount, 36 + slotCount, false)) {
+			if (slotIndex <= slotCount && !this.mergeItemStack(stack1, slotCount, 36 + slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
-			if (slotIndex >= slotCount && !this.mergeItemStack(stack1, 0, slotCount, false)) {
+			if (slotIndex > slotCount && !this.mergeItemStack(stack1, 0, slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
@@ -215,24 +202,4 @@ public class ContainerSMWand extends Container {
 	public boolean canInteractWith(@Nonnull EntityPlayer player) {
 		return true;
 	}
-
-//	@Override
-//	public ItemStack slotClick(int slot, int button, ClickType type, EntityPlayer player) {
-//
-//		if (slot <= this.slot && type == ClickType.CLONE) {
-//
-//	        ItemStack stack = player.getHeldItemMainhand();
-//	        IWand wand = (IWand) stack.getItem();
-//
-//	        // nbtを取得
-//			NBTTagCompound tags = wand.getNBT(stack);
-//	    	boolean flag = tags.getBoolean(IWand.FAVFLAG);
-//	    	String fav = flag ? IWand.FAV1 : IWand.FAV2;
-//
-//	    	tags.setInteger(fav, slot);
-//	    	tags.setBoolean(IWand.FAVFLAG, !flag);
-//		}
-//
-//		return super.slotClick(slot, button, type, player);
-//	}
 }

@@ -85,16 +85,16 @@ public class BookPageCategory extends BookPage {
 			if (!this.visible) { return; }
 
 			boolean flag = mouseX >= this.x && mouseY >= this.y
-					&& mouseX < this.x + this.width && mouseY < this.y + this.height;
+					&& mouseX < this.x + this.width + 15 && mouseY < this.y + this.height;
 
 			if (flag) {
 
-				if (this.ticksHovered < width) {
+				if (this.ticksHovered < this.width) {
 					this.ticksHovered++;
 				}
 
-				int rectWidth = Math.min(ticksHovered * 10, width + 15);
-				Gui.drawRect(x, y, x + rectWidth, y + height, 0x40000000);
+				int rectWidth = Math.min(this.ticksHovered * 10, this.width + 15);
+				Gui.drawRect(this.x, this.y, this.x + rectWidth, this.y + this.height, 0x40000000);
 			}
 
 			else {

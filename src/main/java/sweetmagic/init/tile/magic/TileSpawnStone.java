@@ -217,6 +217,7 @@ public class TileSpawnStone extends TileSMBase {
 			}
 
 			entity.setLocationAndAngles(x, y, z, 0, 0F);
+			entity.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 			this.world.spawnEntity(entity);
 		}
 	}
@@ -269,6 +270,7 @@ public class TileSpawnStone extends TileSMBase {
 				vex.setPosition(x, this.getPos().getY() + vRand.nextDouble() * 2, z);
 				vex.setData(vRand.nextInt(3));
 				vex.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 99999, 4, true, false));
+				vex.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 				this.world.spawnEntity(vex);
 			}
 
@@ -286,6 +288,7 @@ public class TileSpawnStone extends TileSMBase {
 		BlockPos pos = new BlockPos(x, y, z);
 		entity.setLocationAndAngles(x, y, z, 0, 0F);
 		SMUtil.tameAIAnger((EntityLiving) entity, this.player);
+		entity.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 
 		// バフ
 		if (isBuff) {

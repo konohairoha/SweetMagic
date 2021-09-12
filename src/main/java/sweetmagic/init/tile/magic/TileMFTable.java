@@ -71,8 +71,8 @@ public class TileMFTable extends TileMFBase {
 
 		// 燃焼アイテムのMFを取得してMFに加算する
 		this.setMF(this.getMF() + this.getItemBurnTime(stack));
-		stack.shrink(1);
 		this.sentClient();
+		stack.shrink(1);
 
 		return true;
 	}

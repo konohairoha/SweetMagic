@@ -39,25 +39,32 @@ public class BookPageText extends BookPage {
 		int x = gui.guiLeft + (GuiGuidBook.WIDTH / 2);
 		int maxY = gui.guiTop + GuiGuidBook.HEIGHT;
 
-		gui.drawCenteredText(TextFormatting.UNDERLINE + "" + TextFormatting.BOLD + I18n.translateToLocal(entry.getName()), x, y, 0x000000);
+		gui.drawCenteredText(TextFormatting.UNDERLINE + "" + TextFormatting.BOLD + I18n.translateToLocal(this.entry.getName()), x, y, 0x000000);
 		y += gui.getFontRenderer().FONT_HEIGHT + 4;
-		x = gui.guiLeft + 8;
+		x = gui.guiLeft + 5;
 
-		float textScale = 0.9F;
+		Gui.drawRect(x - 5 , y - 1, x + 139, y + 152, 0x62ffffff);
+		float textScale = 0.935F;
 		GlStateManager.pushMatrix();
 		GlStateManager.scale(textScale, textScale, textScale);
 
 		for (int i = 0; i < this.textKeys.size(); i++) {
 
 			String text = I18n.translateToLocal(this.textKeys.get(i));
-			int increment = (int) ((gui.getFontRenderer().FONT_HEIGHT + 4) * textScale);
+			int increment = (int) ((gui.getFontRenderer().FONT_HEIGHT + 1) * textScale);
 			List<String> lines = this.getLine(text);
 			List<String> newLine = this.getBreak(gui, lines, textScale);
 
 			for (String line : newLine) {
 
 				if (y + increment > maxY) { break; }
-				gui.getFontRenderer().drawString(line, (int) (x / textScale), (int) (y / textScale), 0xFFFFFF, true);
+
+				float slid = 0.1F;
+				int pX = (int) (x / textScale);
+				int pY = (int) (y / textScale);
+				line = line.replace("<t>", " ");
+				gui.getFontRenderer().drawString(line, pX + slid, pY + slid, 0x2c2c33, false);
+				gui.getFontRenderer().drawString(line, pX, pY, 0x2c2c33, false);
 				y += increment;
 			}
 			y += (int) (4 * textScale);
@@ -84,7 +91,7 @@ public class BookPageText extends BookPage {
 		List<String> newLine = new ArrayList<>();
 
 		for (String text : line) {
-			newLine.addAll(gui.getFontRenderer().listFormattedStringToWidth(text, (int) ((GuiGuidBook.WIDTH - 12) / textScale)));
+			newLine.addAll(gui.getFontRenderer().listFormattedStringToWidth(text, (int) ((GuiGuidBook.WIDTH - 10) / textScale)));
 		}
 
 		return newLine;
@@ -171,7 +178,7 @@ public class BookPageText extends BookPage {
 				}
 
 				mc.getTextureManager().bindTexture(GuiGuidBook.BOOK_BACKGROUND);
-				Gui.drawModalRectWithCustomSizedTexture(x, y, 146 - this.width, 226, this.width, this.height, 256F, 256F);
+				Gui.drawModalRectWithCustomSizedTexture(this.x, this.y, 146 - this.width, 226, this.width, this.height, 256F, 256F);
 				text = this.fontRenderer.trimStringToWidth(text, this.width - BASE_WIDTH, true);
 				textWidth = this.fontRenderer.getStringWidth(text);
 				this.fontRenderer.drawString(text, x + (this.width - BASE_WIDTH) - textWidth, y + 4, 0x000000);

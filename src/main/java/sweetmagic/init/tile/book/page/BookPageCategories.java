@@ -89,12 +89,10 @@ public class BookPageCategories extends BookPage {
 	            	if (this.frame > 0) {
 	            		this.frame--;
 	            	}
-//	            	GlStateManager.color(0F, 0F, 0F, 1F);
 	            }
 
-				mc.getTextureManager().bindTexture(category.getIcon());
+				mc.getTextureManager().bindTexture(this.category.getIcon());
 				Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 32, 32, 32, 32F, 32);
-//				Gui.drawModalRectWithCustomSizedTexture(x, y, 0, frame * 32F, 32, 32, 32F, 256F);
 				GlStateManager.color(1F, 1F, 1F, 1F);
 				GlStateManager.disableBlend();
 			}

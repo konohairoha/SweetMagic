@@ -52,7 +52,13 @@ public class GuiModenRack extends GuiContainer {
 				break;
 			case 2:
 			case 3:
+			case 4:
+			case 5:
 				this.drawTexturedModalRect(x + 78, y + 24, 173, 0, 18, 18);
+				break;
+			case 6:
+				for (int i = 0; i < 2; i++)
+					this.drawTexturedModalRect(x + 78, y + 10 + 18 * i, 173, 0, 18, 18);
 				break;
 			}
 		}

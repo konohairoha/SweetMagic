@@ -202,10 +202,10 @@ public class GuiSMWand extends GuiContainer {
 
 		//ゲージの位置を計算
 		tip_x += 19;
-		tip_y += 39;
+		tip_y += 40;
 
 		if (tip_x <= mouseX && mouseX <= tip_x + 6
-				&& tip_y <= mouseY && mouseY <= tip_y + 117) {
+				&& tip_y <= mouseY && mouseY <= tip_y + 51) {
 
 			//GUIの左上からの位置
 			int xAxis = (mouseX - (this.width - this.xSize) / 2);

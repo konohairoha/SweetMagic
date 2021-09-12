@@ -2,6 +2,7 @@ package sweetmagic.init.tile.magic;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.magic.MFFurnace;
@@ -79,5 +80,24 @@ public class TileMFFurnaceAdvanced extends TileMFFurnace {
 	@Override
 	public int getMaxMF() {
 		return this.maxMagiaFlux;
+	}
+
+	@Override
+	public NBTTagCompound writeNBT(NBTTagCompound tags) {
+		super.writeNBT(tags);
+		tags.setShort("CookTime", (short) this.smeltTime);
+		tags.setTag("Input", this.inputInv.serializeNBT());
+		tags.setTag("Output", this.outInv.serializeNBT());
+		tags.setTag("Fuel", this.fuelInv.serializeNBT());
+		return tags;
+	}
+
+	@Override
+	public void readNBT(NBTTagCompound tags) {
+		super.readNBT(tags);
+		this.smeltTime = tags.getShort("CookTime");
+		this.inputInv.deserializeNBT(tags.getCompoundTag("Input"));
+		this.outInv.deserializeNBT(tags.getCompoundTag("Output"));
+		this.fuelInv.deserializeNBT(tags.getCompoundTag("Fuel"));
 	}
 }

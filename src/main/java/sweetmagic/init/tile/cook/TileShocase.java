@@ -16,11 +16,11 @@ import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.init.tile.slot.WrappedItemHandler;
 
-public class TilePlate extends TileModenRack {
+public class TileShocase extends TileModenRack {
 
 	// スロット数
 	public int getInvSize () {
-		return 1;
+		return 2;
 	}
 
 	// インベントリ

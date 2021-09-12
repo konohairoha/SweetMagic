@@ -2,6 +2,7 @@ package sweetmagic.init.tile.container;
 
 import javax.annotation.Nonnull;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import sweetmagic.init.tile.chest.TileRattanBasket;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
+@ChestContainer(rowSize = 9)
 public class ContainerRattanBasket extends Container {
 
 	public final TileRattanBasket tile;

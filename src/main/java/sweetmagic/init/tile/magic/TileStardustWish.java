@@ -89,7 +89,7 @@ public class TileStardustWish extends TileParallelInterfere {
 		@Nonnull
 		@Override
 		public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-			return SlotPredicates.SMELTABLE.test(stack) ? super.insertItem(slot, stack, simulate) : stack;
+			return SlotPredicates.ALLITEM.test(stack) ? super.insertItem(slot, stack, simulate) : stack;
 		}
 	};
 

@@ -7,6 +7,7 @@ import javax.annotation.Nonnull;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -93,12 +94,8 @@ public class TileMFTank extends TileMFBase {
 		ItemStack toSmelt = this.inputInventory.getStackInSlot(0);
 		if (toSmelt.isEmpty()) { return false; }
 
-		// 鉄ならtoSmeltを書き換え
-		if (toSmelt.getItem() == Items.GLASS_BOTTLE || toSmelt.getItem() == ItemInit.b_mf_bottle) {
-			return true;
-		}
-
-		return false;
+		Item item = toSmelt.getItem();
+		return item == Items.GLASS_BOTTLE || item == ItemInit.b_mf_bottle || item == ItemInit.b_mf_magiabottle;
 	}
 
 	// 精錬後のアイテム
@@ -123,14 +120,20 @@ public class TileMFTank extends TileMFBase {
 	public ItemStack getSmeltItem (ItemStack toSmelt) {
 
 		ItemStack smeltResult = ItemStack.EMPTY;
+		Item bottle = toSmelt.getItem();
+
+		// マギアボトル
+		if (bottle == ItemInit.b_mf_magiabottle) {
+			smeltResult = new ItemStack(ItemInit.mf_magiabottle);
+		}
 
 		// MFボトル
-		if (toSmelt.getItem() == ItemInit.b_mf_bottle) {
+		else if (bottle == ItemInit.b_mf_bottle) {
 			smeltResult = new ItemStack(ItemInit.mf_bottle);
 		}
 
 		// MF小ボトル
-		else if (toSmelt.getItem() == Items.GLASS_BOTTLE) {
+		else if (bottle == Items.GLASS_BOTTLE) {
 			smeltResult = new ItemStack(ItemInit.mf_sbottle);
 		}
 
@@ -141,15 +144,21 @@ public class TileMFTank extends TileMFBase {
 	public int needMF () {
 
 		ItemStack toSmelt = inputInventory.getStackInSlot(0);
+		Item bottle = toSmelt.getItem();
 		int needMF = 0;
 
+		// マギアボトル
+		if (bottle == ItemInit.b_mf_magiabottle) {
+			needMF = 100000;
+		}
+
 		// MFボトル
-		if (toSmelt.getItem() == ItemInit.b_mf_bottle) {
+		else if (bottle == ItemInit.b_mf_bottle) {
 			needMF = 10000;
 		}
 
 		// MF小ボトル
-		else if (toSmelt.getItem() == Items.GLASS_BOTTLE) {
+		else if (bottle == Items.GLASS_BOTTLE) {
 			needMF = 1000;
 		}
 

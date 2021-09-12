@@ -176,6 +176,7 @@ public class TileSMBase extends TileEntity implements ITickable {
 		return block != Blocks.AIR && block.isFullBlock(state);
 	}
 
+	// 赤石制御
 	public boolean isActive(World world, BlockPos pos) {
 		return this.isRedStonePower(world, pos) ? false : true;
 	}

@@ -2,6 +2,7 @@ package sweetmagic.init.tile.container;
 
 import javax.annotation.Nonnull;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,6 +14,7 @@ import sweetmagic.init.tile.cook.TileFreezer;
 import sweetmagic.init.tile.slot.SlotPredicates;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
+@ChestContainer(rowSize = 13)
 public class ContainerFreezer extends Container {
 
 	public final TileFreezer tile;
@@ -92,8 +94,7 @@ public class ContainerFreezer extends Container {
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void updateProgressBar(int par1, int par2) {
-	}
+	public void updateProgressBar(int par1, int par2) { }
 
 	@Nonnull
 	@Override
@@ -101,10 +102,12 @@ public class ContainerFreezer extends Container {
 
 		ItemStack stack = ItemStack.EMPTY;
 		Slot slot = this.getSlot(slotIndex);
-
-		int slotCount = this.tile.isTop() ? 14 : 104;
+		boolean isTop = this.tile.isTop();
+		int slotCount = isTop ? 14 : 104;
+		int startIndex = isTop ? 1 : 0;
 
 		if (slot != null && slot.getHasStack()) {
+
 			ItemStack stack1 = slot.getStack();
 			stack = stack1.copy();
 
@@ -112,13 +115,15 @@ public class ContainerFreezer extends Container {
 				return ItemStack.EMPTY;
 			}
 
-			if (slotIndex >= slotCount && !this.mergeItemStack(stack1, 0, slotCount, false)) {
+			if (slotIndex >= slotCount && !this.mergeItemStack(stack1, startIndex, slotCount, false)) {
 				return ItemStack.EMPTY;
 			}
 
 			if (stack1.isEmpty()) {
 				slot.putStack(ItemStack.EMPTY);
-			} else {
+			}
+
+			else {
 				slot.onSlotChanged();
 			}
 		}

@@ -2,6 +2,7 @@ package sweetmagic.init.tile.container;
 
 import javax.annotation.Nonnull;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.init.tile.slot.ValidatedSlot;
 
+@ChestContainer(rowSize = 13)
 public class ContainerKichenChest extends Container {
 
 	final TileWoodChest tile;

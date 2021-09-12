@@ -34,7 +34,7 @@ public class TileAetherFurnace extends TileMFBase {
 
 		super.serverUpdate();
 
-		if (this.getTime() % 50 != 0) { return; }
+		if (this.getTime() % 50 != 0 || !this.isActive(this.world, this.pos)) { return; }
 
 		// MF量が最大に足してなかったら動かす
 		if (this.canMFChange()) {

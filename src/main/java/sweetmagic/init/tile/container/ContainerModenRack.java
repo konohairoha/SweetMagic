@@ -50,7 +50,13 @@ public class ContainerModenRack extends Container {
 			break;
 		case 2:
 		case 3:
+		case 4:
+		case 5:
 			this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), 0, 79, 25, s -> true));
+			break;
+		case 6:
+			for (int i = 0; i < 2; i++)
+				this.addSlotToContainer(new ValidatedSlot(this.tile.getChest(), i, 79, 11 + 18 * i, s -> true));
 			break;
 		}
 	}

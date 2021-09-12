@@ -7,10 +7,12 @@ import java.util.Random;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -79,15 +81,50 @@ public class TilePedalCreate extends TileMFBase {
 		// アイテムスポーン
 		if (!this.world.isRemote) {
 
+			AxisAlignedBB aabb =new AxisAlignedBB(this.pos.add(-7.5D, -3D, -7.5D), this.pos.add(7.5D, 3D, 7.5D));
+			List<EntityPlayer> entityList = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+			boolean isInPlayer = !entityList.isEmpty();
+			double dX = 0, dY= 0, dZ = 0, dist = 0, vel = 0;
+
+			// 範囲にプレイヤーがいるなら
+			if (isInPlayer) {
+
+				float distance = 50F;
+				EntityPlayer player = null;
+
+				// リスト分回す
+				for (EntityPlayer p : entityList) {
+
+					float dis = this.getDistance(p, this.pos);
+
+					// プレイヤーとの距離が近いなら
+					if (distance > dis) {
+						distance = dis;
+						player = p;
+					}
+				}
+
+				dX = player.posX - this.pos.getX() + 0.5D;
+				dY = player.posY - this.pos.getY() + 1D;
+				dZ = player.posZ - this.pos.getZ() + 0.5D;
+				dist = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+				vel = 1.0 - dist / 15;
+			}
+
 			for (int i = 0; i < 8; i++) {
 
 				ItemStack stack = this.getoutPutItem(i);
-				EntityItem entity = new EntityItem(this.world, this.pos.getX(), this.pos.getY() + 1, this.pos.getZ(), stack.copy());
+				EntityItem entity = new EntityItem(this.world, this.pos.getX() + 0.5D, this.pos.getY() + 1, this.pos.getZ() + 0.5D, stack.copy());
 				entity.setNoDespawn();
-				entity.setPickupDelay(20);
-				entity.motionY += 0.2F;
-				entity.motionX += this.world.rand.nextFloat() * 0.01F - this.world.rand.nextFloat() * 0.01F;
-				entity.motionZ += this.world.rand.nextFloat() * 0.01F - this.world.rand.nextFloat() * 0.01F;
+				entity.setPickupDelay(13);
+
+				if (isInPlayer && vel > 0D) {
+					vel *= vel;
+					entity.motionX += dX / dist * vel * 0.5;
+					entity.motionY += dY / dist * vel * 0.35;
+					entity.motionZ += dZ / dist * vel * 0.5;
+				}
+
 				this.world.spawnEntity(entity);
 
 				stack.shrink(stack.getCount());
@@ -102,14 +139,14 @@ public class TilePedalCreate extends TileMFBase {
 			}
 
 			this.markDirty();
-			this.world.notifyBlockUpdate(this.pos, this.getState(pos), this.getState(pos), 3);
+			this.world.notifyBlockUpdate(this.pos, this.getState(this.pos), this.getState(this.pos), 3);
 			this.world.playEvent(2003, new BlockPos(this.pos.add(0, 2.5, 0)), 0);
 		}
 
 		ParticleHelper.spawnBoneMeal(this.world, this.pos.up(1), EnumParticleTypes.FIREWORKS_SPARK);
-		for (int i = 0; i < 4; i++) {
-			Random rand = this.world.rand;
+		Random rand = this.world.rand;
 
+		for (int i = 0; i < 4; i++) {
 			float f1 = (float) (this.pos.getX() - 0.75F + rand.nextFloat() * 1.5F);
 			float f2 = (float) (this.pos.getY() + 2F + rand.nextFloat() * 0.5);
 			float f3 = (float) (this.pos.getZ() - 0.75F + rand.nextFloat() * 1.5F);
@@ -117,6 +154,10 @@ public class TilePedalCreate extends TileMFBase {
 		}
 
 		this.playSound(this.pos, SoundEvents.ENTITY_PLAYER_LEVELUP, 0.5F, 1F);
+	}
+
+	public float getDistance (EntityPlayer player, BlockPos pos) {
+		return Math.abs((float) (player.posX - pos.getX() + 0.5F + player.posY - pos.getY() + 1F + player.posZ - pos.getZ() + 0.5F) );
 	}
 
 	// パーティクルスポーン
@@ -226,6 +267,12 @@ public class TilePedalCreate extends TileMFBase {
 	// インプットスロットのアイテムを取得
 	public ItemStack getoutPutItem(int i) {
 		return this.getOutPut().getStackInSlot(i);
+	}
+
+	// 最大MF量を取得
+	@Override
+	public int getMaxMF() {
+		return 1;
 	}
 
 	public int getInputCount () {

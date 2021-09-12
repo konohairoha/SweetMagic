@@ -35,8 +35,8 @@ import sweetmagic.util.ItemHelper;
 public class TileMFFurnace extends TileMFBase {
 
 	public final ItemStackHandler inputInv = new StackHandler(this, this.getInvSize());
-	private final ItemStackHandler outInv = new StackHandler(this, this.getInvSize());
-	private final ItemStackHandler fuelInv = new StackHandler(this, 1);
+	public final ItemStackHandler outInv = new StackHandler(this, this.getInvSize());
+	public final ItemStackHandler fuelInv = new StackHandler(this, 1);
 	public int maxMagiaFlux = 200000;
 	public int needMF = 60;
 	public int maxSmeltTime = 60;
@@ -93,7 +93,7 @@ public class TileMFFurnace extends TileMFBase {
 		if (this.getMF() >= this.getNeedMF()) {
 
 			// 精錬可能かつ精錬時間が最大に達したら精錬
-			if (this.incrementSmeltTime() /*&& !this.world.isRemote*/ && this.getSmeltTime() >= this.getMaxSmeltTime()) {
+			if (this.incrementSmeltTime() && this.getSmeltTime() >= this.getMaxSmeltTime()) {
 				this.smeltItem();
 			}
 		}
@@ -147,9 +147,11 @@ public class TileMFFurnace extends TileMFBase {
 		ItemStack stack = this.getFuelItem();
 		if (!this.isMFItem(stack)) { return; }
 
-		// 燃焼アイテムのMFを取得してMFに加算してクライアント通知
-		this.setMF(this.getMF() + this.getItemBurnTime(stack));
-		this.sentClient();
+		// MFの消費とクライアント通知
+		if (!this.world.isRemote) {
+			this.setMF(this.getMF() + this.getItemMF(stack.getItem()));
+			this.sentClient();
+		}
 
 		stack.shrink(1);
 	}
@@ -205,8 +207,7 @@ public class TileMFFurnace extends TileMFBase {
 
 	@Override
 	public NBTTagCompound writeNBT(NBTTagCompound tags) {
-		if (this.getMF() != 0) { tags.setInteger("magiaFlux", this.getMF()); }
-		tags.setShort("BurnTime", (short) this.getMF());
+		super.writeNBT(tags);
 		tags.setShort("CookTime", (short) this.smeltTime);
 		tags.setTag("Input", this.inputInv.serializeNBT());
 		tags.setTag("Output", this.outInv.serializeNBT());
@@ -216,8 +217,7 @@ public class TileMFFurnace extends TileMFBase {
 
 	@Override
 	public void readNBT(NBTTagCompound tags) {
-		this.setMF(tags.getInteger("magiaFlux"));
-		this.setMF(tags.getShort("BurnTime"));
+		super.readNBT(tags);
 		this.smeltTime = tags.getShort("CookTime");
 		this.inputInv.deserializeNBT(tags.getCompoundTag("Input"));
 		this.outInv.deserializeNBT(tags.getCompoundTag("Output"));
