@@ -15,7 +15,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.ItemInit;
 
-public class SMPick extends ItemPickaxe{
+public class SMPick extends ItemPickaxe {
 
 	public SMPick(String name, ToolMaterial material) {
 		super(material);

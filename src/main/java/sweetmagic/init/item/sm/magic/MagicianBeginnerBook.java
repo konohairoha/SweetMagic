@@ -25,7 +25,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -107,7 +106,7 @@ public class MagicianBeginnerBook extends SMItem {
 		IBlockState state = world.getBlockState(pos);
 		if (state.getBlockHardness(world, pos) <= 0.0D) { return EnumActionResult.FAIL; }
 
-		if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+		if (!player.isCreative()) { stack.shrink(1); }
 
 		if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
 			this.genHouse(world, pos, tags);
@@ -234,27 +233,18 @@ public class MagicianBeginnerBook extends SMItem {
 			break;
 		}
 
-  		String tipFace = new TextComponentTranslation("tip.sm_face.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN + tipFace + " : " + face));
-
-  		String tipFixe = new TextComponentTranslation("tip.sm_fixed.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN + tipFixe + " : " + tags.getBoolean(SNEAK)));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.sm_face.name") + " : " + face));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.sm_fixed.name") + " : " + tags.getBoolean(SNEAK)));
 
 		// シフトを押したとき
 		if (Keyboard.isKeyDown(42)) {
-
-	  		String tipLeft = new TextComponentTranslation("tip.sm_mbleftclick.name", new Object[0]).getFormattedText();
-			tooltip.add(I18n.format(TextFormatting.GOLD + tipLeft));
-
-	  		String tipSneak = new TextComponentTranslation("tip.sm_sneakclick.name", new Object[0]).getFormattedText();
-			tooltip.add(I18n.format(TextFormatting.GOLD + tipSneak));
-
-	  		String tipRight = new TextComponentTranslation("tip.sm_rightclick.name", new Object[0]).getFormattedText();
-			tooltip.add(I18n.format(TextFormatting.GOLD + tipRight));
+			tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_mbleftclick.name")));
+			tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_sneakclick.name")));
+			tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_rightclick.name")));
 		}
 
 		else {
-			tooltip.add(I18n.format(TextFormatting.RED + new TextComponentTranslation("tip.shift.name", new Object[0]).getFormattedText()));
+			tooltip.add(I18n.format(TextFormatting.RED + this.getTip("tip.shift.name")));
 		}
 	}
 }

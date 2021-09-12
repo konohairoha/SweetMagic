@@ -46,8 +46,8 @@ public class SMShears extends ItemShears {
 		if (!target.isShearable(stack, world, pos)) { return true; }
 
         List<ItemStack> drops = target.onSheared(stack, world, pos, EnchantmentHelper.getEnchantmentLevel(Enchantments.FORTUNE, stack) + 2);
-
 		Random rand = new Random();
+
 		for (ItemStack stack1 : drops) {
 			stack1.setCount(stack.getCount() + world.rand.nextInt(2) + 1);
 			EntityItem ent = entity.entityDropItem(stack1, 1.0F);

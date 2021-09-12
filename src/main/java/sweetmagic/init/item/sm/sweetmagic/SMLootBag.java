@@ -16,7 +16,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -75,7 +74,6 @@ public class SMLootBag extends SMItem {
 
 		// ルートテーブルをリストに入れる
 		List<ItemStack> seedList = SMUtil.getOreList(ore);
-//		player.setActiveHand(hand);
 
 		for (int i = 0; i < value; i ++) {
 			this.spawnItem(world, pos, seedList.get(rand.nextInt(seedList.size())));
@@ -106,6 +104,6 @@ public class SMLootBag extends SMItem {
   			break;
   		}
 
-  		tooltip.add(I18n.format(TextFormatting.BLUE + new TextComponentTranslation(text, new Object[0]).getFormattedText()));
+  		tooltip.add(I18n.format(TextFormatting.BLUE + this.getTip(text)));
   	}
 }

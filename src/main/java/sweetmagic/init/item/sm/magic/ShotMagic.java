@@ -27,6 +27,7 @@ import sweetmagic.init.entity.projectile.EntityFrostMagic;
 import sweetmagic.init.entity.projectile.EntityGravityMagic;
 import sweetmagic.init.entity.projectile.EntityLightMagic;
 import sweetmagic.init.entity.projectile.EntityPoisonMagic;
+import sweetmagic.init.entity.projectile.EntityRockBlast;
 import sweetmagic.init.entity.projectile.EntityShinigFlare;
 import sweetmagic.init.entity.projectile.EntitySuperNova;
 import sweetmagic.init.item.sm.eitem.SMElement;
@@ -89,6 +90,8 @@ public class ShotMagic extends MFSlotItem {
 	 * 28 = ブレイズエンド魔法
 	 * 29 = ブラックホール魔法
 	 * 30 = 連鎖爆発魔法
+	 * 31 = ロックブラスト魔法
+	 * 32 = 巨石落とし魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -192,6 +195,12 @@ public class ShotMagic extends MFSlotItem {
 			break;
 		case 30:
 			toolTip.add("tip.magic_supernova.name");
+			break;
+		case 31:
+			toolTip.add("tip.magic_rockblast.name");
+			break;
+		case 32:
+			toolTip.add("tip.magic_hugerock_fall.name");
 			break;
 		}
 
@@ -342,6 +351,14 @@ public class ShotMagic extends MFSlotItem {
 				entity = new EntitySuperNova(world, player, stack, 3);
 				entity.setDamage(5);
 				flag = true;
+				break;
+			case 31:
+				entity = new EntityRockBlast(world, player, stack, 0);
+				entity.setDamage(3);
+				break;
+			case 32:
+				entity = new EntityRockBlast(world, player, stack, 1);
+				entity.setDamage(5);
 				break;
 			}
 

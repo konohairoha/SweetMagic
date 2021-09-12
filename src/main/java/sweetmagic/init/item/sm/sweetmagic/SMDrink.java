@@ -41,6 +41,7 @@ public class SMDrink extends ItemFood {
      * 2 = MF消費ダウン
      * 3 = 吐き気
      * 4 = デバフ解除
+     * 5 = 燃焼解除
      */
 
 	//食べた際にポーション効果を付加
@@ -75,6 +76,10 @@ public class SMDrink extends ItemFood {
 					player.removePotionEffect(potion);
 				}
 			}
+			break;
+		// 燃焼解除
+		case 5:
+			player.extinguish();
 			break;
 		}
 	}
@@ -115,6 +120,9 @@ public class SMDrink extends ItemFood {
     	case 4:
     		tipname = "tip.food2.name";
     		break;
+    	case 5:
+    		tipname = "tip.watercup.name";
+    		break;
   		}
 
 		if (!tipname.equals("")) {
@@ -125,11 +133,14 @@ public class SMDrink extends ItemFood {
   			switch (this.data) {
   			case 1:
   			case 4:
-  				tip = new TextComponentTranslation("tip.food.name", new Object[0]).getFormattedText() + " " + name;
+  				tip = new TextComponentTranslation("", new Object[0]).getFormattedText() + " " + name;
   				break;
   			case 2:
   			case 3:
   				tip = new TextComponentTranslation("tip.food.name", new Object[0]).getFormattedText() + " " + name + " (" + tipTime + "sec)";
+  				break;
+  			case 5:
+  				tip = new TextComponentTranslation("tip.food.name", new Object[0]).getFormattedText() + name;
   				break;
   			}
 

@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,33 +31,34 @@ public class SMDropItem extends SMItem {
 
   		switch (this.name) {
   		case "stray_soul":
-			tipEntity = new TextComponentTranslation("entity.endershadow.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.endershadow.name";
   			break;
   		case "mysterious_page":
-			tipEntity = new TextComponentTranslation("entity.Witch.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.Witch.name";
   			break;
   		case "electronic_orb":
-			tipEntity = new TextComponentTranslation("entity.electriccube.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.electriccube.name";
   			break;
   		case "poison_bottle":
-			tipEntity = new TextComponentTranslation("entity.archspider.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.archspider.name";
   			break;
   		case "unmeltable_ice":
-			tipEntity = new TextComponentTranslation("entity.skullfrost.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.skullfrost.name";
   			break;
   		case "grav_powder":
-			tipEntity = new TextComponentTranslation("entity.creepercalamity.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.creepercalamity.name";
   			break;
   		case "tiny_feather":
-			tipEntity = new TextComponentTranslation("entity.blazetempest.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.blazetempest.name";
   			break;
   		case "witch_tears":
-			tipEntity = new TextComponentTranslation("entity.witchmadameverre.name", new Object[0]).getFormattedText();
+			tipEntity = "entity.witchmadameverre.name";
   			break;
   		}
 
   		if (!tipEntity.equals("")) {
-  	  		String tip = new TextComponentTranslation("tip.drop.name", new Object[0]).getFormattedText() + " " + tipEntity;
+  			tipEntity = this.getTip(tipEntity);
+  	  		String tip = this.getTip("tip.drop.name") + " " + tipEntity;
   			tooltip.add(I18n.format(TextFormatting.GREEN + tip));
   		}
   	}

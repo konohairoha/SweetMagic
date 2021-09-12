@@ -16,7 +16,6 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -89,11 +88,13 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 
 
 		if (!world.isRemote) {
-			String tip = new TextComponentTranslation("tip.posregi.name", new Object[0]).getFormattedText();
-			player.sendMessage(new TextComponentString(tip));
-		} else {
+			player.sendMessage(new TextComponentString(this.getTip("tip.posregi.name")));
+		}
+
+		else {
 			player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 		}
+
 		return new ActionResult(EnumActionResult.SUCCESS, stack);
 	}
 
@@ -115,8 +116,7 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 
 		NBTTagCompound tags = stack.getTagCompound();
 		if (tags != null && tags.hasKey("posX")) {
-			String pos = new TextComponentTranslation("tip.pos.name", new Object[0]).getFormattedText();
-			tooltip.add(I18n.format(TextFormatting.GREEN + pos + " : " + tags.getInteger("posX") + ", " + tags.getInteger("posY") + ", " + tags.getInteger("posZ")));
+			tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.pos.name") + " : " + tags.getInteger("posX") + ", " + tags.getInteger("posY") + ", " + tags.getInteger("posZ")));
 		}
 	}
 }

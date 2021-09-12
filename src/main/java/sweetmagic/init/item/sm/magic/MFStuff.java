@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -54,21 +53,17 @@ public class MFStuff extends SMItem {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 
 		NBTTagCompound tags = stack.getTagCompound();
-		String click = new TextComponentTranslation("tip.mfstuff.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.RED + click));
+		tooltip.add(I18n.format(TextFormatting.RED + this.getTip("tip.mfstuff.name")));
 
 		if (tags != null && tags.hasKey("X")) {
 
-			String pos = new TextComponentTranslation("tip.pos.name", new Object[0]).getFormattedText();
 			int x = tags.getInteger("X");
 			int y = tags.getInteger("Y");
 			int z = tags.getInteger("Z");
-			tooltip.add(I18n.format(TextFormatting.GREEN + pos + " : " + x + ", " + y + ", " + z));
+			tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.pos.name") + " : " + x + ", " + y + ", " + z));
 
-			Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
-			String blockTip = new TextComponentTranslation(block.getUnlocalizedName() + ".name", new Object[0]).getFormattedText();
-			String tip = new TextComponentTranslation("tip.registerblock.name", new Object[0]).getFormattedText();
-			tooltip.add(I18n.format(TextFormatting.GREEN + tip + " ： " + blockTip));
+			String block = (new ItemStack(world.getBlockState(new BlockPos(x, y, z)).getBlock())).getDisplayName();
+			tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.registerblock.name") + " ： " + block));
 		}
 	}
 }

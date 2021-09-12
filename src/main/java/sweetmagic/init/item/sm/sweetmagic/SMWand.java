@@ -359,7 +359,7 @@ public class SMWand extends SMItem implements IWand {
 	//壊すブロックの採掘速度を変更
 	@Override
 	public float getDestroySpeed(ItemStack stack, IBlockState state) {
-		return super.getDestroySpeed(stack, state) * 0.75F;
+		return super.getDestroySpeed(stack, state) * (0.6F + this.tier * 0.2F);
 	}
 
 	//全てのブロック（マテリアル）を破壊可能に

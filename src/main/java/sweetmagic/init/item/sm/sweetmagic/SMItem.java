@@ -9,6 +9,7 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import sweetmagic.init.ItemInit;
 
@@ -34,5 +35,9 @@ public class SMItem extends Item {
 
 	public EnumActionResult useStack (World world, EntityPlayer player, ItemStack stack, BlockPos pos, EnumFacing face) {
 		return EnumActionResult.PASS;
+	}
+
+	public String getTip (String tip) {
+		return new TextComponentTranslation(tip, new Object[0]).getFormattedText();
 	}
 }

@@ -8,7 +8,6 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -38,8 +37,6 @@ public class SMFuel extends SMItem {
   	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag){
   		super.addInformation(stack, world, tooltip, flag);
-  		//xx_xx.langファイルから文字を取得する方法
-  		String text = new TextComponentTranslation("tip.burntick.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.YELLOW + text +" : " + time));
+		tooltip.add(I18n.format(TextFormatting.YELLOW + this.getTip("tip.burntick.name") +" : " + time));
   	}
 }

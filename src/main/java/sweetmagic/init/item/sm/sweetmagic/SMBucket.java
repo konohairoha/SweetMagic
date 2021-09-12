@@ -26,7 +26,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
@@ -227,9 +226,8 @@ public class SMBucket extends SMItem {
 
 	// ツールチップの表示
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		NBTTagCompound tags = stack.getTagCompound();
-		String text = new TextComponentTranslation("tip.bkt.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN + text + " : " + (tags == null ? 0 : tags.getInteger("amount"))));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.bkt.name") + " : " + (tags == null ? 0 : tags.getInteger("amount"))));
 	}
 }

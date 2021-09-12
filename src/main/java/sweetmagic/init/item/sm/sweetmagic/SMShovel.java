@@ -1,6 +1,7 @@
 package sweetmagic.init.item.sm.sweetmagic;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -28,6 +29,10 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.util.WorldHelper;
 
 public class SMShovel extends ItemSpade {
+
+	private static final List<Material> materialList = Arrays.<Material> asList(
+			Material.GROUND, Material.GRASS, Material.SAND
+	);
 
 	public SMShovel(String name, ToolMaterial material) {
 		super(material);
@@ -70,25 +75,17 @@ public class SMShovel extends ItemSpade {
     		//リストの作成（めっちゃ大事）
     		List<ItemStack> drop = new ArrayList<>();
 
-			//渡された座標から再開
-			for (int x = -area + xa; x <= area + xa; x++) {
-				for (int z = -area + za; z <= area + za; z++) {
-					for (int y = 0; y <= area * 2; y++) {
+			for (BlockPos blockPos : BlockPos.getAllInBox(pos.add(-area + xa, 0, -area + za), pos.add(area + xa, area * 2, area + za))) {
 
-						//ブロックを取得するための定義
-						BlockPos blockPos = pos.add(x, y, z);
-						IBlockState target = world.getBlockState(blockPos);
-						Block block = target.getBlock();
+				IBlockState target = world.getBlockState(blockPos);
+				Block block = target.getBlock();
 
-						//空気ブロックとたいるえんちちーなら何もしない
-						if(block == Blocks.AIR || block.hasTileEntity(target)){ continue; }
-						if (target.getMaterial() != Material.GROUND && target.getMaterial() != Material.GRASS) { continue; }
+				//空気ブロックとたいるえんちちーなら何もしない
+				if(block == Blocks.AIR || block.hasTileEntity(target)){ continue; }
+				if (!materialList.contains(target.getMaterial())) { continue; }
 
-						drop.addAll(WorldHelper.getBlockDrops(world, player, target, block, blockPos, canSilk, FOURTUNE));
-						world.setBlockToAir(blockPos);
-
-					}
-				}
+				drop.addAll(WorldHelper.getBlockDrops(world, player, target, block, blockPos, canSilk, FOURTUNE));
+				world.setBlockToAir(blockPos);
 			}
 
 			//リストに入れたアイテムをドロップさせる

@@ -12,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -23,15 +22,15 @@ import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.SoundHelper;
 
-public class SMBook extends SMReturn {
+public class SMBook extends SMReturn{
 
 	public SMBook(String name) {
 		super(name);
 	}
 
 	@Override
-    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if (!world.isRemote){
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		if (!world.isRemote) {
 			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.SMBOOK_GUI, world, 0, -1, -1);
 			// クライアント（プレイヤー）へ送りつける
 			PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_PAGE, 1F, 0.33F), (EntityPlayerMP) player);
@@ -42,12 +41,9 @@ public class SMBook extends SMReturn {
 
 	//ツールチップの表示
   	@Override
-  	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag){
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
   		super.addInformation(stack, world, tooltip, flag);
-
-  		//xx_xx.langファイルから文字を取得する方法
-  		String text =  new TextComponentTranslation("tip.magicbook.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.BLUE + text ));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.magicbook.name") ));
   	}
 }

@@ -41,6 +41,7 @@ public class SMFood extends ItemFood {
      *  3 = HP + 2
      *  4 = デバフ解除
      *  5 = 体力増強
+     *  6 = HP + 20%
      */
 
 	//食べた際にポーション効果を付加
@@ -64,6 +65,9 @@ public class SMFood extends ItemFood {
 		// 火炎耐性
 		case 5:
 			player.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 3600, 2));
+			break;
+		case 6:
+			player.heal(player.getMaxHealth() * 0.3F);
 			break;
 		}
 	}
@@ -92,6 +96,9 @@ public class SMFood extends ItemFood {
     		tipname = "potion.effect.health_boost";
     		tipTime = "180";
     		break;
+  		case 6:
+  			tipname = "tip.heal_value.name";
+  			break;
   		}
 
   		if (!tipname.equals("")) {
@@ -103,6 +110,7 @@ public class SMFood extends ItemFood {
   				tip = new TextComponentTranslation("tip.food.name", new Object[0]).getFormattedText() + " " + name + " (" + tipTime + "sec)";
   				break;
   			case 3:
+  			case 6:
   				tip = new TextComponentTranslation("tip.food.name", new Object[0]).getFormattedText() + " " + name;
   				break;
   			case 5:
@@ -120,6 +128,17 @@ public class SMFood extends ItemFood {
     }
 
 	public int getMaxItemUseDuration(ItemStack stack) {
-    	return this.data == 1 ? 20 : 32;
+
+		if (this.data == 1) {
+			return 20;
+		}
+
+		else if (this.data == 6) {
+			return 42;
+		}
+
+		else {
+			return 32;
+		}
     }
 }

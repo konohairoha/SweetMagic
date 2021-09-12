@@ -1,10 +1,5 @@
 package sweetmagic.init.item.sm.magic;
 
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,8 +11,6 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityNomal;
@@ -90,11 +83,5 @@ public class CardMagic extends SMItem {
 	@Override
 	public EnumAction getItemUseAction(ItemStack stack) {
 		return EnumAction.BOW;
-	}
-
-	//ツールチップの表示
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
 	}
 }

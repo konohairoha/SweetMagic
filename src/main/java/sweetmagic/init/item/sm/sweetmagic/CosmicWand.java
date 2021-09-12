@@ -30,7 +30,7 @@ public class CosmicWand extends SMWand {
 		int enchaLevel = this.addWandLevel(world, player, stack, smItem, EnchantInit.wandAddPower);
 
 		// 杖と魔法の属性一致してるなら
-		if (this.isNotElement() && smItem.getElement() == this.getWandElement()) {
+		if (this.isElementEqual(smItem)) {
 			enchaLevel += 2;
 		}
 

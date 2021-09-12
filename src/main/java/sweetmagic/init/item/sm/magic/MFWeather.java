@@ -11,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -87,14 +86,13 @@ public class MFWeather extends MFSlotItem implements IElementItem {
 
 	//ツールチップの表示
   	@Override
-  	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag){
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
+
   		super.addInformation(stack, world, tooltip, flag);
 
   		if (this.burnTime != 0) {
-  		  	//xx_xx.langファイルから文字を取得する方法
-  	  		String text = new TextComponentTranslation("tip.burntick.name", new Object[0]).getFormattedText();
-  			tooltip.add(I18n.format(TextFormatting.YELLOW + text +" : " + this.burnTime));
+  			tooltip.add(I18n.format(TextFormatting.YELLOW + this.getTip("tip.burntick.name") +" : " + this.burnTime));
   		}
   	}
 }

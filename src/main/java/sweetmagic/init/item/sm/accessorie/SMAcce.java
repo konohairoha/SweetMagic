@@ -1,31 +1,45 @@
 package sweetmagic.init.item.sm.accessorie;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IPouch;
+import sweetmagic.config.SMConfig;
+import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.item.sm.eitem.SMAcceType;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.util.ItemHelper;
 import sweetmagic.util.WorldHelper;
 
@@ -53,9 +67,16 @@ public class SMAcce extends SMItem implements IAcce {
 	 * 5 = エメラルドピアス
 	 * 6 = フォーチュンリング
 	 * 7 = 夜の帳
-	 * 8 = 魔術師のグローブ
-	 * 9
+	 * 8 = 守護のペンダント
+	 * 9 = 魔術師のグローブ
+	 * 10 = 魔法使いの羽ペン
+	 * 11 = アブソープペンダント
 	 * 12 = 毒牙
+	 * 13 = ペンデュラムネックレス
+	 * 14 = 不屈の炎
+	 * 15 = フロストチェーン
+	 * 16 = ホーリーチャーム
+	 * 17 = 風のレリーフ
 	 */
 
 	@Override
@@ -101,6 +122,21 @@ public class SMAcce extends SMItem implements IAcce {
 		case 12:
 			toolTip.add("tip.poison_fang.name");
 			break;
+		case 13:
+			toolTip.add("tip.pendulum_necklace.name");
+			break;
+		case 14:
+			toolTip.add("tip.unyielding_fire.name");
+			break;
+		case 15:
+			toolTip.add("tip.frosted_chain.name");
+			break;
+		case 16:
+			toolTip.add("tip.holly_charm.name");
+			break;
+		case 17:
+			toolTip.add("tip.wind_relief.name");
+			break;
 		}
 
 		return toolTip;
@@ -112,7 +148,7 @@ public class SMAcce extends SMItem implements IAcce {
 		switch (this.data) {
 		// 血吸の指輪
 		case 4:
-			return player.getHealth() > 1;
+			return player.getHealth() > 1F;
 		// 守護のペンダント
 		case 8:
 			return player.getHealth() <= 6 && !player.getCooldownTracker().hasCooldown(stack.getItem());
@@ -152,9 +188,28 @@ public class SMAcce extends SMItem implements IAcce {
 			player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 200, 1));
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 200, 4));
 			player.getCooldownTracker().setCooldown(stack.getItem(), 12000);
+			break;
 		case 11:
 			// アブソープペンダント
 			this.gravityEffext(world, player, stack);
+			break;
+		case 12:
+			// 重力状態なら重力解除
+			this.checkDebuf(player, PotionInit.deadly_poison, MobEffects.POISON);
+			break;
+		case 14:
+			// 不屈の炎
+			if (player.isBurning()) {
+				player.extinguish();
+			}
+
+			// やけど状態ならやけどを除去
+			this.checkDebuf(player, PotionInit.flame);
+			break;
+		case 15:
+			// フロストチェーン
+			this.checkDebuf(player, PotionInit.frosty);
+			break;
 		}
 	}
 
@@ -227,11 +282,13 @@ public class SMAcce extends SMItem implements IAcce {
 
 		// アイテム吸引
 		List<EntityItem> itemList = world.getEntitiesWithinAABB(EntityItem.class, aabb);
+		Random rand = world.rand;
+		boolean isRender = SMConfig.isRender;
 
 		if (!itemList.isEmpty()) {
 			for (EntityItem item : itemList) {
 				if (ItemHelper.hasSpace(player.inventory.mainInventory, item.getItem())) {
-					WorldHelper.gravitateEntityTowards(item, player.posX, player.posY, player.posZ);
+					WorldHelper.gravitateEntityTowards(world, rand, item, player.posX, player.posY, player.posZ, true, isRender);
 				}
 			}
 		}
@@ -240,7 +297,7 @@ public class SMAcce extends SMItem implements IAcce {
 		List<EntityXPOrb> expList = world.getEntitiesWithinAABB(EntityXPOrb.class, aabb);
 		if (!expList.isEmpty()) {
 			for (EntityXPOrb xpOrb : expList) {
-				WorldHelper.gravitateEntityTowards(xpOrb, player.posX, player.posY, player.posZ);
+				WorldHelper.gravitateEntityTowards(world, rand, xpOrb, player.posX, player.posY, player.posZ, false, false);
 			}
 		}
 
@@ -257,8 +314,10 @@ public class SMAcce extends SMItem implements IAcce {
 		case 0:
 			player.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 600, 1, true, false));
 			return true;
+
 		case 4:
 
+			// 血吸の指輪
 			float health = player.getHealth();
 
 			// クリエじゃなければ体力を減らす
@@ -266,6 +325,38 @@ public class SMAcce extends SMItem implements IAcce {
 				player.setHealth(health - 0.5F);
 			}
 
+			return true;
+		case 15:
+
+			// フロストチェーン
+
+			// 範囲内のえんちちーを取得
+			AxisAlignedBB aabb = player.getEntityBoundingBox().grow(7.5D, 7.5D, 7.5D);
+			List<EntityLivingBase> entityList = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+
+			for (EntityLivingBase entity : entityList) {
+
+				if (!(entity instanceof IMob)) { continue; }
+
+				if (entity.isNonBoss() && entity.isPotionActive(PotionInit.refresh_effect)) {
+					entity.removePotionEffect(PotionInit.refresh_effect);
+				}
+
+				entity.addPotionEffect(new PotionEffect(PotionInit.frosty, 200, 2));
+				world.playSound(null, entity.getPosition(), SMSoundEvent.FROST, SoundCategory.NEUTRAL, 0.25F, 1F);
+			}
+
+			return true;
+
+		case 16:
+
+			// ホーリーチャーム
+			player.addPotionEffect(new PotionEffect(PotionInit.holly_charm, 600, 0, true, false));
+			return true;
+		case 17:
+
+			// 風のレリーフ
+			player.addPotionEffect(new PotionEffect(PotionInit.wind_relief, 600, 0, true, false));
 			return true;
 		}
 
@@ -313,10 +404,12 @@ public class SMAcce extends SMItem implements IAcce {
   	}
 
   	// デバフチェック
-  	public void checkDebuf (EntityPlayer player, Potion potion) {
-		if (player.isPotionActive(potion)) {
-			player.removePotionEffect(potion);
-		}
+  	public void checkDebuf (EntityPlayer player, Potion... potion) {
+  		for (Potion p : potion) {
+  			if (player.isPotionActive(p)) {
+  				player.removePotionEffect(p);
+  			}
+  		}
   	}
 
 	@Override
@@ -334,5 +427,35 @@ public class SMAcce extends SMItem implements IAcce {
 	@Override
 	public boolean isDuplication () {
 		return this.isDup;
+	}
+
+	//右クリックをした際の処理
+	@Override
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+
+		player.setActiveHand(hand);
+		ItemStack stack = player.getHeldItem(hand);
+		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch)) { return new ActionResult(EnumActionResult.PASS, stack); }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		IItemHandlerModifiable inv = neo.inventory;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (!st.isEmpty()) { continue; }
+
+			inv.insertItem(i, stack.copy(), false);
+			neo.writeBack();
+			stack.shrink(1);
+			world.playSound(null, new BlockPos(player), SMSoundEvent.ROBE, SoundCategory.NEUTRAL, 0.3F, 1F);
+			return new ActionResult(EnumActionResult.SUCCESS, stack);
+		}
+
+		return new ActionResult(EnumActionResult.PASS, stack);
 	}
 }
