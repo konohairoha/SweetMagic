@@ -1,32 +1,67 @@
 package sweetmagic.event;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
+import net.minecraft.block.BlockDoor;
+import net.minecraft.block.BlockStairs;
+import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BlockRendererDispatcher;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.structure.template.PlacementSettings;
+import net.minecraft.world.gen.structure.template.Template;
+import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.config.SMConfig;
 import sweetmagic.handlers.PacketHandler;
+import sweetmagic.init.BlockInit;
+import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.block.blocks.FlowerBuscket;
 import sweetmagic.init.item.sm.magic.MagicianBeginnerBook;
 import sweetmagic.packet.LeftClickPKT;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.ItemHelper;
 import sweetmagic.util.RenderUtils;
+import sweetmagic.util.SMUtil;
 import sweetmagic.util.SoundHelper;
 
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = SweetMagicCore.MODID)
@@ -41,40 +76,44 @@ public class MagicianBeginnerEvent {
 	public final static String Z = "posZ";
 	public final static String SMSTARTER = "smStarter";
 
-    @SubscribeEvent
-    public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
+	private static final List<Block> itemList = Arrays.<Block> asList(
+			Blocks.AIR, BlockInit.goldcrest, BlockInit.table_modernlamp_on, BlockInit.modenlanp
+	);
 
-    	// マジシャンズビギナーを持ってないなら終了
-        EntityPlayer player = event.getEntityPlayer();
-        ItemStack stack = player.getHeldItemMainhand();
-        if (!(stack.getItem() instanceof MagicianBeginnerBook)) { return; }
+	@SubscribeEvent
+	public static void onLeftClick(PlayerInteractEvent.LeftClickEmpty event) {
 
-        // NBTに登録してサーバーに通知
-        NBTTagCompound tags = changeFace(player, stack);
-    	PacketHandler.sendToServer(new LeftClickPKT(tags.getBoolean(SNEAK), tags.getInteger(FACING), tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z)));
-    }
+		// マジシャンズビギナーを持ってないなら終了
+		EntityPlayer player = event.getEntityPlayer();
+		ItemStack stack = player.getHeldItemMainhand();
+		if (!(stack.getItem() instanceof MagicianBeginnerBook)) { return; }
 
-    @SubscribeEvent
-    public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
+		// NBTに登録してサーバーに通知
+		NBTTagCompound tags = changeFace(player, stack);
+		PacketHandler.sendToServer(new LeftClickPKT(tags.getBoolean(SNEAK), tags.getInteger(FACING), tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z)));
+	}
 
-        if (event.isCanceled()) { return; }
+	@SubscribeEvent
+	public static void onLeftClickBlock(PlayerInteractEvent.LeftClickBlock event) {
 
-    	// マジシャンズビギナーを持ってないなら終了
-        EntityPlayer player = event.getEntityPlayer();
-        ItemStack stack = player.getHeldItemMainhand();
-        Item item = stack.getItem();
-        if (!(item instanceof MagicianBeginnerBook) || player.getCooldownTracker().hasCooldown(item)) { return; }
+		if (event.isCanceled()) { return; }
 
-        event.setCanceled(true);
-        if (!player.world.isRemote) { return; }
+		// マジシャンズビギナーを持ってないなら終了
+		EntityPlayer player = event.getEntityPlayer();
+		ItemStack stack = player.getHeldItemMainhand();
+		Item item = stack.getItem();
+		if (!(item instanceof MagicianBeginnerBook) || player.getCooldownTracker().hasCooldown(item)) { return; }
 
-        // NBTに登録してサーバーに通知
+		event.setCanceled(true);
+		if (!player.world.isRemote) { return; }
+
+		// NBTに登録してサーバーに通知
 		player.getCooldownTracker().setCooldown(stack.getItem(), 5);
-        NBTTagCompound tags = changeFace(player, stack);
-    	PacketHandler.sendToServer(new LeftClickPKT(tags.getBoolean(SNEAK), tags.getInteger(FACING), tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z)));
-    }
+		NBTTagCompound tags = changeFace(player, stack);
+		PacketHandler.sendToServer(new LeftClickPKT(tags.getBoolean(SNEAK), tags.getInteger(FACING), tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z)));
+	}
 
-    public static NBTTagCompound changeFace (EntityPlayer player, ItemStack stack) {
+	public static NBTTagCompound changeFace (EntityPlayer player, ItemStack stack) {
 
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
 
@@ -95,7 +134,7 @@ public class MagicianBeginnerEvent {
 		}
 
 		return tags;
-    }
+	}
 
 	@SubscribeEvent
 	public static void onOverlay(DrawBlockHighlightEvent event) {
@@ -104,7 +143,7 @@ public class MagicianBeginnerEvent {
 		ItemStack stack = player.getHeldItem(EnumHand.MAIN_HAND);
 		if (!isMBBook(stack)) { stack = player.getHeldItem(EnumHand.OFF_HAND); }
 
-    	// マジシャンズビギナーを持ってないなら終了
+		// マジシャンズビギナーを持ってないなら終了
 		if (!isMBBook(stack)) { return; }
 
 		World world = player.getEntityWorld();
@@ -147,14 +186,129 @@ public class MagicianBeginnerEvent {
 			pos = new BlockPos(tags.getInteger(X), tags.getInteger(Y) + 1, tags.getInteger(Z));
 		}
 
-		// 座標がnull以外なら生成範囲をレンダー
-		if (pos != null) {
-			addHeldToRenderList(world, stack, pos, stack.getItem());
-			RenderUtils.drawCube(renderList);
+		// レンダーを軽減するなら
+		if (!SMConfig.isRender) {
+
+			// 座標がnull以外なら生成範囲をレンダー
+			if (pos != null) {
+				addHeldToRenderList(world, stack, pos, stack.getItem());
+				RenderUtils.drawCube(renderList);
+			}
+
+			renderList.clear();
 		}
 
-		// AABBリストの初期化
-		renderList.clear();
+		// レンダーを軽減しないなら
+		else {
+
+			if (pos == null) { return; }
+
+			Template template = getTemplateToJar(new ResourceLocation(SweetMagicCore.MODID, "house"));
+			List<Template.BlockInfo> list = (List<Template.BlockInfo>) SMUtil.callPrivateField(Template.class, template, "field_186270_a", "blocks");
+			if (list == null || list.isEmpty()) { return; }
+
+			PlacementSettings place = new PlacementSettings();
+			Minecraft mine = Minecraft.getMinecraft();
+			BlockRendererDispatcher render = mine.getBlockRendererDispatcher();
+			TextureManager tex = mine.getTextureManager();
+			RenderManager mane = mine.getRenderManager();
+			EnumFacing face = EnumFacing.SOUTH;
+			int pX = 0;
+			int pZ = 0;
+
+			switch (tags.getInteger(FACING)) {
+			case 0:
+				place.setRotation(Rotation.NONE);
+				pos = pos.south(pX).east(pZ);
+				break;
+			case 90:
+				place.setRotation(Rotation.COUNTERCLOCKWISE_90);
+				pos = pos.north(pZ).east(pX);
+				face = EnumFacing.EAST;
+				break;
+			case 180:
+				place.setRotation(Rotation.CLOCKWISE_180);
+				pos = pos.south(pX).east(pZ);
+				face = EnumFacing.NORTH;
+				break;
+			case 270:
+				place.setRotation(Rotation.CLOCKWISE_90);
+				pos = pos.south(pZ).west(pX);
+				face = EnumFacing.WEST;
+				break;
+			}
+
+			for (Template.BlockInfo info : list) {
+
+				IBlockState state = info.blockState;
+				Block block = state.getBlock();
+				if ( itemList.contains(block) || block instanceof BlockBush || block instanceof FlowerBuscket) { continue; }
+
+				if (state.getRenderType() != EnumBlockRenderType.INVISIBLE) {
+
+					if (block instanceof BlockDoor) {
+						state = state.withProperty(BlockDoor.FACING, face);
+					}
+
+					else if (block instanceof BlockStairs) {
+						state = state.withProperty(BlockStairs.FACING, place.getRotation().rotate(state.getValue(BlockStairs.FACING)));
+					}
+
+					else if (block instanceof BlockTrapDoor) {
+						state = state.withProperty(BlockTrapDoor.FACING, place.getRotation().rotate(state.getValue(BlockTrapDoor.FACING)));
+					}
+
+					else if (block instanceof BaseFaceBlock) {
+						state = state.withProperty(BaseFaceBlock.FACING, place.getRotation().rotate(state.getValue(BaseFaceBlock.FACING)));
+					}
+
+					GlStateManager.pushMatrix();
+
+					GlStateManager.translate( -mane.viewerPosX, -mane.viewerPosY + 0.1F, -mane.viewerPosZ );
+					GlStateManager.color(1F, 1F, 1F, 1F);
+					GlStateManager.depthMask(false);
+					RenderHelper.disableStandardItemLighting();
+					GlStateManager.enableLighting();
+					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+					tex.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+					GlStateManager.shadeModel(Minecraft.isAmbientOcclusionEnabled() ? GL11.GL_SMOOTH : GL11.GL_FLAT);
+
+					Tessellator tes = Tessellator.getInstance();
+					BufferBuilder buf = tes.getBuffer();
+					buf.begin(7, DefaultVertexFormats.BLOCK);
+					BlockPos p = Template.transformedBlockPos(place, info.pos);
+					render.renderBlock(state, pos.add(p.getX(), p.getY() - 1D, p.getZ()), world, buf);
+
+					GlStateManager.disableLighting();
+					RenderHelper.enableStandardItemLighting();
+					GlStateManager.depthMask(true);
+
+					tes.draw();
+					GlStateManager.popMatrix();
+				}
+
+				ForgeHooksClient.setRenderLayer(null);
+			}
+		}
+	}
+
+	public static Template getTemplateToJar(ResourceLocation rl) {
+
+		//ファイル読み込み
+		InputStream input = FMLCommonHandler.instance().getClass().getClassLoader()
+				.getResourceAsStream("assets/" + rl.getResourceDomain() + "/structures/" + rl.getResourcePath() + ".nbt");
+
+		NBTTagCompound tags = null;
+
+		try {
+			tags = CompressedStreamTools.readCompressed(input);
+		} catch (IOException e) { }
+
+		//Template生成
+		Template template = new Template();
+		template.read(tags);
+
+		return template;
 	}
 
 	// 座標固定かどうか

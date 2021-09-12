@@ -39,8 +39,6 @@ public class WandRenderEvent {
 		Item item = stack.getItem();						// Itemを取得
 		if (stack.isEmpty() || !(item instanceof IWand)) { return; }
 
-		IWand wand = (IWand) item;
-
 		// 画面サイズの高さを取得
 		int height = event.getResolution().getScaledHeight();
 
@@ -48,6 +46,7 @@ public class WandRenderEvent {
 		int weight = event.getResolution().getScaledWidth();
 
 		// 選択中のアイテムを取得
+		IWand wand = (IWand) item;
 		ItemStack slotStack = wand.getSlotItem(player, stack, wand.getNBT(stack));
 		ISMItem smItem = null;
 		Item slotItem = slotStack.getItem();
@@ -194,7 +193,7 @@ public class WandRenderEvent {
 	// 杖のMFをテキスト描画
 	public void renderMFText (Minecraft mc, int height, int weight, ItemStack stack, IWand wand, boolean isLeftSide) {
 		FontRenderer font = mc.fontRenderer;
-		String text = wand.getMF(stack) + "MF";
+		String text = String.format("%,d", wand.getMF(stack)) + "MF";
 		int posX = isLeftSide ? 72 : weight - 40;
 		DrawHeleper.drawScaledStringToWidth(font, text, posX, height - 33, 1, 0xffffff, weight, true, false);
 	}

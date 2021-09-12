@@ -25,7 +25,8 @@ public class HasItemEvent {
 	private int tickTime = 0;
 
 	private static final List<Item> itemList = Arrays.<Item> asList(
-			ItemInit.magic_light, ItemInit.magic_starburst, ItemInit.magic_sacredbuster, Item.getItemFromBlock(BlockInit.magiclight));
+		ItemInit.magic_light, ItemInit.magic_starburst, ItemInit.magic_sacredbuster, Item.getItemFromBlock(BlockInit.magiclight)
+	);
 
 	@SideOnly(Side.CLIENT)
 	@SubscribeEvent

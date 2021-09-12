@@ -5,13 +5,20 @@ import java.util.Random;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
+import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import sweetmagic.init.EnchantInit;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityMagicItem;
+import sweetmagic.init.item.sm.sweetmagic.SMBookCosmic;
 
 public class EntityItemTossEvent {
 
@@ -63,5 +70,40 @@ public class EntityItemTossEvent {
 	// エンチャがついてないか確認
 	public boolean checkEncha (ItemStack stack) {
 		return EnchantmentHelper.getEnchantmentLevel(EnchantInit.aetherCharm, stack) > 0;
+	}
+
+	@SubscribeEvent
+	public void onEntityItemPickupEvent(EntityItemPickupEvent event) {
+
+		// えんちちーの取得してしてるなら終了
+		EntityItem entity = event.getItem();
+		if (entity.isDead || entity instanceof EntityMagicItem) { return; }
+
+		// エーテルクリスタルかエーテルクリスタルシャード以外なら終了
+		ItemStack stack = entity.getItem();
+		Item item = stack.getItem();
+		if (item != ItemInit.aether_crystal && item != ItemInit.aether_crystal_shard) { return; }
+
+		// プレイヤー取得
+		EntityPlayer player = event.getEntityPlayer();
+		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
+
+		// インベントリの数だけ回す
+		for (int i = 0; i < pInv.size(); i++) {
+
+			// アイテムスタックを取得し空なら終了
+			ItemStack bookStack = pInv.get(i);
+			if (stack.isEmpty() || bookStack.getItem() != ItemInit.magic_book_cosmic) { continue; }
+
+			// アイテムを拾う設定をしてないなら次へ
+			SMBookCosmic book = (SMBookCosmic) bookStack.getItem();
+			if (!book.isPickUp(bookStack)) { continue; }
+
+			book.insetMF(bookStack, book.getItemMF(stack));
+			entity.setDead();
+	        event.setCanceled(true);
+			player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.33F, 1.7F);
+	        return;
+		}
 	}
 }
