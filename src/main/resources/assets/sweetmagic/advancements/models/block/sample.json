@@ -3,7 +3,7 @@
 	"textures": {
 		"2": "sweetmagic:block/a_top_dia",
 		"3": "sweetmagic:block/hexagram_pastelcolor",
-		"particle": "sweetmagic:block/a_top_dia",
+		"particle": "sweetmagic:block/water_still",
 		"top": "sweetmagic:block/mf_water_still",
 		"side": "sweetmagic:block/smbrick_on"
 	},
