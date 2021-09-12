@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cross",
+        "textures": {
+          "cross": "sweetmagic:block/bread_basket",
+          "layer0": "sweetmagic:block/bread_basket"
+        },
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "normal": [{}],
+     "inventory": [{ "model": "builtin/generated" }]
+  }
+}

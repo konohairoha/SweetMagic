@@ -1,0 +1,10 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+    	"model": "sweetmagic:glass_cup"
+    },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cross",
+    	"textures": {
+      		"cross": "sweetmagic:block/basket_chain_middle",
+          "layer0": "sweetmagic:block/basket_chain_middle"
+    	},
+    "transform": "forge:default-item"
+    },
+"variants": {
+	"top=true": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_middle" } },
+	"top=false": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_top" } },
+
+     "inventory": [{ "model": "builtin/generated" }]
+    }
+}

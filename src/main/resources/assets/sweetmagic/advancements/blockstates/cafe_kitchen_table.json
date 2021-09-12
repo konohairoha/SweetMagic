@@ -1,15 +1,17 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:cafe_kitchen_table"
-  },
-  "variants": {
-    "facing": {
-      "north": {},
-      "south": { "y": 180 },
-      "west": { "y": 270 },
-      "east": { "y": 90 }
-    },
-        "inventory": [{}]
-  }
+	"forge_marker": 1,
+	"defaults": {
+    	"model": "sweetmagic:cafe_kitchen_table"
+	},
+	"variants": {
+		"facing=north,top=false": { "model": "sweetmagic:cafe_kitchen_table" },
+		"facing=north,top=true": { "model": "sweetmagic:cafe_kitchen_table_under" },
+		"facing=south,top=false": { "y": 180, "model": "sweetmagic:cafe_kitchen_table" },
+		"facing=south,top=true": { "y": 180, "model": "sweetmagic:cafe_kitchen_table_under" },
+		"facing=west,top=false": { "y": 270, "model": "sweetmagic:cafe_kitchen_table" },
+		"facing=west,top=true": { "y": 270, "model": "sweetmagic:cafe_kitchen_table_under" },
+		"facing=east,top=false": { "y": 90, "model": "sweetmagic:cafe_kitchen_table" },
+		"facing=east,top=true": { "y": 90, "model": "sweetmagic:cafe_kitchen_table_under" },
+		"inventory": [{}]
+	}
 }

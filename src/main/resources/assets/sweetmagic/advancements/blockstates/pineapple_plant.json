@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "cross",
+    "textures": {
+      "cross": "sweetmagic:block/pineapple_stage4"
+    }
+  },
+  "variants": {
+    "stage": {
+      "0": { "model": "cross", "textures": { "cross": "sweetmagic:block/pineapple_stage0" }},
+      "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/pineapple_stage1" }},
+      "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/pineapple_stage2" }},
+      "3": { "model": "cross", "textures": { "cross": "sweetmagic:block/pineapple_stage3" }},
+      "4": { "model": "cross", "textures": { "cross": "sweetmagic:block/pineapple_stage4" }}
+    },
+     "inventory": [{}]
+  }
+}
