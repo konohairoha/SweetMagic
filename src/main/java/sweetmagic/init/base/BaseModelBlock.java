@@ -17,6 +17,7 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -32,8 +33,7 @@ public class BaseModelBlock extends Block {
 
 	// 右クリックの処理
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand,
-			EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
 		return this.actionBlock(world, state, pos, player, player.getHeldItem(hand));
 	}
 
@@ -96,7 +96,7 @@ public class BaseModelBlock extends Block {
 	// アイテムのスポーン
 	public void spawnItem (World world, EntityPlayer player, ItemStack stack) {
 		BlockPos pos = new BlockPos(player);
-		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY() + 0.5, pos.getZ(), stack));
+		world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack));
 	}
 
 	// ブロック破壊処理
@@ -113,5 +113,9 @@ public class BaseModelBlock extends Block {
 		}
 
 		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+	}
+
+	public String getTip (String tip) {
+		return new TextComponentTranslation(tip, new Object[0]).getFormattedText();
 	}
 }

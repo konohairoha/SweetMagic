@@ -38,6 +38,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.IMFBlock;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.ItemInit;
@@ -71,9 +72,11 @@ public class BaseMFBlock extends BlockContainer {
 		NBTTagCompound tags = stack.getTagCompound();
 
 		if (tags == null || !tags.hasKey("X")) {
+
 			if (stack.getItem() == ItemInit.mf_stuff) {
 				return this.setBlockPos(tags, stack, player, pos);
 			}
+
 			this.actionBlock(world, pos, player, stack);
 			return true;
 		}
@@ -93,11 +96,13 @@ public class BaseMFBlock extends BlockContainer {
 
 			if (!world.isRemote) {
 				player.sendMessage(new TextComponentTranslation("tip.posregi.name", new Object[0]));
-			} else {
+			}
+
+			else {
 				player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 			}
-			actionFlag = true;
 
+			actionFlag = true;
 			tags.removeTag("X");
 			tags.removeTag("Y");
 			tags.removeTag("Z");
@@ -166,6 +171,21 @@ public class BaseMFBlock extends BlockContainer {
         super.breakBlock(world, pos, state);
     }
 
+    // 向き変更対応
+	public boolean rotateBlock(World world, BlockPos pos, EnumFacing face) {
+
+		TileMFBase tile = (TileMFBase) world.getTileEntity(pos);
+		boolean flag = super.rotateBlock(world, pos, face);
+
+		if (tile != null) {
+            tile.validate();
+            world.setTileEntity(pos, tile);
+        }
+
+		return flag;
+	}
+
+
 	// List<ItemStack>をnbt保存
 	public NBTTagCompound saveStackList (NBTTagCompound tag, List<ItemStack> stackList, String name) {
 
@@ -194,8 +214,7 @@ public class BaseMFBlock extends BlockContainer {
 	}
 
 	// ブロックでのアクション
-	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) {
-	}
+	public void actionBlock (World world, BlockPos pos, EntityPlayer player, ItemStack stack) { }
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -204,12 +223,12 @@ public class BaseMFBlock extends BlockContainer {
 
 	@Override
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return this.getCollisionBox(blockState, worldIn, pos);
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return this.getCollisionBox(state, world, pos);
 	}
 
-	public AxisAlignedBB getCollisionBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
-		return blockState.getBoundingBox(worldIn, pos);
+	public AxisAlignedBB getCollisionBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return state.getBoundingBox(world, pos);
 	}
 
 	@Override
@@ -233,12 +252,12 @@ public class BaseMFBlock extends BlockContainer {
 	}
 
 	// フェンスとかにつながないように
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState base_state, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return false;
 	}
 
@@ -259,21 +278,6 @@ public class BaseMFBlock extends BlockContainer {
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
-
-//	@Override
-//	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-//		TileMFBase tile = (TileMFBase) world.getTileEntity(pos);
-//		NBTTagCompound tag = stack.getTagCompound();
-//		if (tag != null) {
-//
-////			System.out.println("magiaFlux" + tag.getInteger("magiaFlux"));
-//			tile.writeNBT(tag);
-//			tile.readNBT(tag);
-////			tile.setMF(tag.getInteger("magiaFlux"));
-////			System.out.println("mf" + tile.getMF());
-////			tile.markDirty();
-//		}
-//	}
 
     @Override
 	public boolean hasTileEntity(IBlockState state) {
@@ -301,23 +305,26 @@ public class BaseMFBlock extends BlockContainer {
 	}
 
 	@Override
-	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-		return Container.calcRedstone(worldIn.getTileEntity(pos));
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+		return Container.calcRedstone(world.getTileEntity(pos));
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return state;
 	}
 
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, @Nullable World playerIn, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 
 		NBTTagCompound tags = stack.getTagCompound();
+
 		if (tags != null) {
 			String mf = String.format("%,d", tags.getInteger("mf"));
 			tooltip.add(I18n.format(TextFormatting.GREEN + mf + "MF"));
-		} else {
+		}
+
+		else {
 			tooltip.add(I18n.format(TextFormatting.GREEN + "0MF"));
 		}
 	}
@@ -340,5 +347,13 @@ public class BaseMFBlock extends BlockContainer {
 	// サウンド
 	public void playerSound (World world, EntityPlayer player, SoundEvent sound, float vol, float pit) {
 		this.playerSound(world, new BlockPos(player), sound, vol, pit);
+	}
+
+	public String getTip (String tip) {
+		return new TextComponentTranslation(tip, new Object[0]).getFormattedText();
+	}
+
+	public void openGui (World world, EntityPlayer player, BlockPos pos, int guiId) {
+		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 }
