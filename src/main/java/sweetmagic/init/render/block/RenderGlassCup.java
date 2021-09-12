@@ -1,5 +1,9 @@
 package sweetmagic.init.render.block;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -8,15 +12,18 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import sweetmagic.init.tile.magic.TileMFTank;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import sweetmagic.init.tile.chest.TileGlassCup;
+import sweetmagic.init.tile.magic.TilePedalCreate.RGB;
 
-public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
+public class RenderGlassCup extends TileEntitySpecialRenderer<TileGlassCup> {
 
-	// テクスチャ
-	protected TextureAtlasSprite sprite = null;
+	//マナテクスチャ
+	private TextureAtlasSprite sprite = null;
 
 	@Override
-	public void render(TileMFTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileGlassCup te, double x, double y, double z, float parTick, int stage, float alpha) {
 		GlStateManager.pushMatrix();
 		GlStateManager.translate((float) x, (float) y, (float) z);
         this.renderFluid(te, x, y, z);
@@ -24,14 +31,18 @@ public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
 	}
 
 	// 液体描画
-	protected void renderFluid(TileMFTank te, double x, double y, double z) {
+	protected void renderFluid(TileGlassCup te, double x, double y, double z) {
+
+		//MFがない場合は描画しない
+		ItemStack stack = te.getChestItem(0);
+		if (stack.isEmpty()) { return; }
+
+		List<Integer> color = this.getRGB(new Random(Item.getIdFromItem(stack.getItem())));
+		GlStateManager.color(color.get(0) / 255F, color.get(1) / 255F, color.get(2) / 255F);
 
 		if (this.sprite == null) {
-			this.sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/mf_water_still");
+			this.sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/water_still");
 		}
-
-		// MFがない場合は描画しない
-		if (te.getMF() == 0) { return; }
 
         // テクスチャバインド
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
@@ -51,9 +62,10 @@ public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
         // jsonと同じように16x16で位置を設定調整する
         //  x,y,z
 		GlStateManager.translate(
-				0.25 / 16F - 0.001F,
-				0.25 / 16F - 0.001F,
-				0.25 / 16F - 0.001F);
+			6.5F / 16F - 0.001F,
+			0.5F / 16F - 0.001F,
+			6.5F / 16F - 0.001F
+		);
 
         // スプライトからUVを取得
         float minU = this.sprite.getMinU();
@@ -62,12 +74,12 @@ public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
         float maxV = this.sprite.getMaxV();
 
         // 基準の高さ
-        double vertX = 15.75 / 16.0;
-        double vertY = 15.75 / 16.0;
-        double vertZ = 15.75 / 16.0;
+        double vertX = 3D / 16D;
+        double vertY = 10D / 16D;
+        double vertZ = 3 / 16D;
 
         // 高さはさらに計算が必要
-        double manaCap = (double)te.getMF() / (double)te.getMaxMF();
+        double manaCap = 0.6D;
         vertY *= manaCap;
 
         // 最低値
@@ -152,5 +164,42 @@ public class RenderTileMFTank extends TileEntitySpecialRenderer<TileMFTank> {
         // GL11終了処理
         GL11.glEnable(GL11.GL_CULL_FACE);
         GL11.glFlush();
+	}
+
+	public float getColor (Random rand) {
+		return rand.nextInt(256) / 255F;
+	}
+
+	public List<Integer> getRGB (Random rand) {
+
+		RGB color = null;
+
+		switch (rand.nextInt(7)) {
+		case 0:
+			color = RGB.RED;
+			break;
+		case 1:
+			color = RGB.B;
+			break;
+		case 2:
+			color = RGB.C;
+			break;
+		case 3:
+			color = RGB.D;
+			break;
+		case 4:
+			color = RGB.E;
+			break;
+		case 5:
+			color = RGB.F;
+			break;
+		case 6:
+			color = RGB.G;
+			break;
+
+		}
+
+		return Arrays.asList(color.r, color.g, color.b);
+
 	}
 }

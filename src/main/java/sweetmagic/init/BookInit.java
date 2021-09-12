@@ -3,7 +3,6 @@ package sweetmagic.init;
 import java.util.ArrayList;
 import java.util.List;
 
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import sweetmagic.SweetMagicCore;
@@ -48,7 +47,8 @@ public class BookInit {
 
 	public static BookEntry key, flower_pot;
 
-	public static BookEntry ingot, star, quartz, gothic;
+//	public static BookEntry accelerator, ore_name, pendulum, bread, loot;
+	public static BookEntry plant, machete, chair, cos_book, un_fire, horse, blood, mb_book;
 
 	public static void init() {
 
@@ -92,10 +92,14 @@ public class BookInit {
 		key = new BookEntry("key", structure).setIcon(new ItemStack(ItemInit.magickey));
 		flower_pot = new BookEntry("flower_pot", structure).setIcon(new ItemStack(BlockInit.solid_star_pot));
 
-		ingot = new BookEntry("ingot", update).setIcon(new ItemStack(ItemInit.cosmos_light_ingot));
-		star = new BookEntry("star", update).setIcon(new ItemStack(ItemInit.startlight_wand));
-		quartz = new BookEntry("quartz", update).setIcon(new ItemStack(Items.QUARTZ));
-		gothic = new BookEntry("gothic", update).setIcon(new ItemStack(BlockInit.fance_gothic_white));
+		plant = new BookEntry("plant", update).setIcon(new ItemStack(BlockInit.sugarbell_plant));
+		machete = new BookEntry("machete", update).setIcon(new ItemStack(ItemInit.machete));
+		chair = new BookEntry("chair", update).setIcon(new ItemStack(BlockInit.counter_chair));
+		cos_book = new BookEntry("cos_book", update).setIcon(new ItemStack(ItemInit.magic_book_cosmic));
+		un_fire = new BookEntry("un_fire", update).setIcon(new ItemStack(ItemInit.unyielding_fire));
+		horse = new BookEntry("horse", update).setIcon(new ItemStack(ItemInit.magic_shadowhorse));
+		blood = new BookEntry("blood", update).setIcon(new ItemStack(ItemInit.blood_sucking_ring));
+		mb_book = new BookEntry("mb_book", update).setIcon(new ItemStack(ItemInit.magicianbeginner_book));
 
 		sugarbell.addPage(new BookPageText(sugarbell, "sugarbell").addRelatedEntries(sannyflower, moonblossom, alstroemeria));
 		sannyflower.addPage(new BookPageText(sannyflower, "sannyflower").addRelatedEntries(moonblossom, alstroemeria));
@@ -129,10 +133,13 @@ public class BookInit {
 		key.addPage(new BookPageText(key, "key"));
 		flower_pot.addPage(new BookPageText(flower_pot, "flower_pot"));
 
-		ingot.addPage(new BookPageText(ingot, "ingot"));
-		star.addPage(new BookPageText(star, "star"));
-		quartz.addPage(new BookPageText(quartz, "quartz"));
-		gothic.addPage(new BookPageText(gothic, "gothic"));
-
+		plant.addPage(new BookPageText(plant, "plant"));
+		machete.addPage(new BookPageText(machete, "machete"));
+		chair.addPage(new BookPageText(chair, "chair"));
+		cos_book.addPage(new BookPageText(cos_book, "cos_book"));
+		un_fire.addPage(new BookPageText(un_fire, "un_fire"));
+		horse.addPage(new BookPageText(horse, "horse"));
+		blood.addPage(new BookPageText(blood, "blood"));
+		mb_book.addPage(new BookPageText(mb_book, "mb_book"));
 	}
 }

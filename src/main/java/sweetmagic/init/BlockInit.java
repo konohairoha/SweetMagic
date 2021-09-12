@@ -16,14 +16,20 @@ import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iblock.ISmeltItemBlock;
 import sweetmagic.init.block.blocks.AntiqueBrick;
+import sweetmagic.init.block.blocks.AntiqueLantern;
 import sweetmagic.init.block.blocks.AntiqueSlab;
 import sweetmagic.init.block.blocks.AntiqueStairs;
+import sweetmagic.init.block.blocks.BlockBreadbasket;
 import sweetmagic.init.block.blocks.BlockCafeBoard;
+import sweetmagic.init.block.blocks.BlockCafeKitchen;
 import sweetmagic.init.block.blocks.BlockCandle;
 import sweetmagic.init.block.blocks.BlockFermenter;
 import sweetmagic.init.block.blocks.BlockFlourMill;
 import sweetmagic.init.block.blocks.BlockFreezer;
 import sweetmagic.init.block.blocks.BlockFryPan;
+import sweetmagic.init.block.blocks.BlockFryPan.CookingType;
+import sweetmagic.init.block.blocks.BlockGlassCup;
+import sweetmagic.init.block.blocks.BlockIronChain;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
 import sweetmagic.init.block.blocks.BlockKanban;
 import sweetmagic.init.block.blocks.BlockLanp;
@@ -43,6 +49,7 @@ import sweetmagic.init.block.blocks.BlockSMOre;
 import sweetmagic.init.block.blocks.BlockStendGlass;
 import sweetmagic.init.block.blocks.BlockStove;
 import sweetmagic.init.block.blocks.BlockTableLanp;
+import sweetmagic.init.block.blocks.BlockWallTowel;
 import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.init.block.blocks.ChestnutPlank;
 import sweetmagic.init.block.blocks.ChestnutSlab;
@@ -54,6 +61,7 @@ import sweetmagic.init.block.blocks.FruitLeaves;
 import sweetmagic.init.block.blocks.GoldCrest;
 import sweetmagic.init.block.blocks.IronFence;
 import sweetmagic.init.block.blocks.MagicBook;
+import sweetmagic.init.block.blocks.MenuList;
 import sweetmagic.init.block.blocks.ObMagia;
 import sweetmagic.init.block.blocks.PlantPot;
 import sweetmagic.init.block.blocks.SMBlockItem;
@@ -155,6 +163,7 @@ public class BlockInit {
 	public static Block stove_off, stove_on;
 	public static Block pot_off, pot_on, pot_re;
 	public static Block frypan_off, frypan_on, frypan_re;
+	public static Block frypan_red_off, frypan_red_on, frypan_red_re;
 	public static Block juicemaker_off, juicemaker_on;
 	public static Block freezer_top, freezer_bottom;
 	public static Block matured_bottle;
@@ -164,12 +173,14 @@ public class BlockInit {
 	public static Block clerodendrum, clerolanp, cosmos, blackrose, snowdrop, turkey_balloonflower;
 	public static Block iberis_umbellata, ultramarine_rose, solid_star, zinnia, hydrangea, carnation_crayola;
 	public static Block campanula, primula_polyansa, christmas_rose, portulaca;
+	public static Block pansy_blue, pansy_yellowmazenta, surfinia;
 
 	// 花瓶
 	public static Block flower_vese_o, flower_vese_b, flower_vese_p, flower_vese_s, flower_vese_w, flower_vese_y;
 
 	// バスケット
 	public static Block iberis_umbellata_basket, campanula_basket, primula_polyansa_basket, christmas_rose_basket, portulaca_basket;
+	public static Block surfinia_basket, pansy_blue_basket, pansy_yellowmazenta_basket;
 
 	// 鉱石
 	public static Block ac_ore, alt_block, cosmos_light_block, cosmic_crystal_ore;
@@ -187,7 +198,7 @@ public class BlockInit {
 	public static Block mfpot, twilightalstroemeria_pot, turkey_balloonflower_pot, snowdrop_pot, ultramarine_rose_pot;
 	public static Block solid_star_pot, zinnia_pot, hydrangea_pot, carnation_crayola_pot;
 	public static Block tool_repair, magia_rewrite, gravity_chest, aether_hopper, magia_successor;
-	public static Block aether_lanp, arcane_table;
+	public static Block aether_lanp, arcane_table, magia_accelerator;
 
 	// 光源
 	public static Block magiclight, glow_light, antique_candle, gorgeous_lamp, glow_lamp, magic_circle, twilightlight;
@@ -242,7 +253,7 @@ public class BlockInit {
 
 	// ドア
 	public static Block black_moderndoor, brown_2paneldoor, brown_5paneldoor, brown_elegantdoor, brown_arch_door, brown_arch_plantdoor;
-	public static Block woodgold_3, whitewoodgold_3;
+	public static Block woodgold_3, whitewoodgold_3, simple_door_1, simple_door_2;
 
 	// トラップドア
 	public static Block white_woodtrapdoor;
@@ -255,7 +266,7 @@ public class BlockInit {
 	public static Block tomato_plant, egg_plant,  j_radish_plant, lettuce_plant, cabbage_plant;
 	public static Block azuki_plant, onion_plant, raspberry_plant, glowflower_plant, cotton_plant;
 	public static Block banana_plant, coffee_plant, spinach_plant;
-	public static Block quartz_plant;
+	public static Block quartz_plant, pineapple_plant, greenpepper_plant;
 
 	// 街頭
 	public static Block pole_down, pole, lantern, lantern_side1, lantern_side2;
@@ -268,6 +279,12 @@ public class BlockInit {
 	public static Block moden_stair, plate, wood_plate, iron_plate, magicbook;
 	public static Block cafe_chair, cafe_table;
 	public static Block balcony_chair, balcony_table;
+	public static Block bread_wood_tray, bread_basket, showcase;
+	public static Block tong_stand;
+	public static Block antique_lantern, iron_chain, counter_chair;
+	public static Block glass_cup;
+	public static Block bread_baskets, hard_bread_basket, tinplate_bucket;
+	public static Block wall_towel, wall_none;
 
 	public static Block rattan_chair_y, rattan_chair_b, rattan_chair_d;
 	public static Block rattan_basket_y, rattan_basket_b, rattan_basket_d;
@@ -277,6 +294,7 @@ public class BlockInit {
 	public static Block treasure_chest;
 	public static Block wallboard, wallboard_black, corkboard, shopboard;
 	public static Block cafe_kitchen_table, cafe_kitchen_sink, cafe_wallrack;
+	public static Block menu_list, menu_list_w;
 
 	// 草
 	public static Block goldcrest;
@@ -433,17 +451,30 @@ public class BlockInit {
 		pot_off = new BlockPot("pot_off",0, 0, blockList);
 		pot_on = new BlockPot("pot_on",0.8F, 1, noTabList);
 		pot_re = new BlockPot("pot_re",0, 1, noTabList);
-		frypan_off = new BlockFryPan("frypan_off",0, blockList);
-		frypan_on = new BlockFryPan("frypan_on",0.8f, noTabList);
-		frypan_re = new BlockFryPan("frypan_re",0, noTabList);
+		frypan_off = new BlockFryPan("frypan_off", 0, CookingType.PRE, 0, blockList);
+		frypan_on = new BlockFryPan("frypan_on",0.8F, CookingType.COOKING, 0, noTabList);
+		frypan_re = new BlockFryPan("frypan_re", 0, CookingType.FIN, 0, noTabList);
+		frypan_red_off = new BlockFryPan("frypan_red_off", 0, CookingType.PRE, 1, blockList);
+		frypan_red_on = new BlockFryPan("frypan_red_on",0.8F, CookingType.COOKING, 1, noTabList);
+		frypan_red_re = new BlockFryPan("frypan_red_re", 0, CookingType.FIN, 1, noTabList);
 		juicemaker_off = new BlockJuiceMaker("juicemaker_off", blockList);
 		juicemaker_on = new BlockJuiceMaker("juicemaker_on", noTabList);
 		freezer_top = new BlockFreezer("freezer_top", true, noTabList);
 		freezer_bottom = new BlockFreezer("freezer_bottom", false, blockList);
 		matured_bottle = new BlockFermenter("matured_bottle", blockList);
+		glass_cup = new BlockGlassCup("glass_cup");
 		plate = new BlockModenRack("plate", 2);
 		wood_plate = new BlockModenRack("wood_plate", 3);
 		iron_plate = new BlockModenRack("iron_plate", 2);
+		bread_wood_tray = new BlockModenRack("bread_wood_tray", 4);
+		bread_basket = new BlockModenRack("bread_basket", 5);
+		showcase = new BlockModenRack("showcase", 6);
+		tong_stand = new BlockCafeBoard("tong_stand", 1);
+		tinplate_bucket = new BlockBreadbasket("tinplate_bucket", 1);
+		bread_baskets = new BlockBreadbasket("bread_baskets", 0);
+		hard_bread_basket = new BlockBreadbasket("hard_bread_basket", 0);
+		wall_towel = new BlockWallTowel("wall_towel", 0, blockList);
+		wall_none = new BlockWallTowel("wall_none", 1, noTabList);
 
 		// 花
 		twilight_alstroemeria = new BlockAlstroemeria("twilight_alstroemeria");
@@ -456,6 +487,9 @@ public class BlockInit {
 		primula_polyansa_basket = new FlowerBuscket("primula_polyansa_basket");
 		christmas_rose_basket = new FlowerBuscket("christmas_rose_basket");
 		portulaca_basket = new FlowerBuscket("portulaca_basket");
+		pansy_yellowmazenta_basket = new FlowerBuscket("pansy_yellowmazenta_basket");
+		pansy_blue_basket = new FlowerBuscket("pansy_blue_basket");
+		surfinia_basket = new FlowerBuscket("surfinia_basket");
 
 		flower_vese_o = new WandPedal("flower_vese_o", 3);
 		flower_vese_b = new WandPedal("flower_vese_b", 3);
@@ -503,6 +537,9 @@ public class BlockInit {
 		carnation_crayola = new BlockCornFlower("carnation_crayola", 15);
 		christmas_rose = new BlockCornFlower("christmas_rose", 16);
 		portulaca = new BlockCornFlower("portulaca", 17);
+		surfinia = new BlockCornFlower("surfinia", 18);
+		pansy_blue = new BlockCornFlower("pansy_blue", 19);
+		pansy_yellowmazenta = new BlockCornFlower("pansy_yellowmazenta", 20);
 
 		// MFブロック(花瓶)
 		mfpot = new MFPot("mfpot", 0);
@@ -530,24 +567,27 @@ public class BlockInit {
 		magia_rewrite = new ToolRepairBlock("magia_rewrite", 1);
 		magia_successor = new ToolRepairBlock("magia_successor", 2);
 		arcane_table = new ToolRepairBlock("arcane_table", 3);
+		magia_accelerator = new ToolRepairBlock("magia_accelerator", 4);
 		gravity_chest = new GravityChest("gravity_chest", 0);
 		aether_hopper = new AetherHopper("aether_hopper", 0);
 
 		// 光源
+		iron_chain = new BlockIronChain("iron_chain");
+		antique_lantern = new AntiqueLantern("antique_lantern");
 		antique_candle = new BlockCandle("antique_candle");
-		glow_lamp = new BlockLanp("glow_lamp", 0, 32F, 0, 1, 0.5F, SoundType.METAL, blockList);
-		magic_circle = new BlockLanp("magic_circle", 0, 32F, 0, 1, 0.5F, SoundType.GLASS, noTabList);
-		glow_light = new BlockLight("glow_light");
-		gorgeous_lamp = new BlockLight("gorgeous_lamp");
 		modenlanp = new BlockModenLanp("modenlanp");
-		stendglass_lamp_g_off = new BlockStendGlass("stendglass_lamp_g_off", false, 0, blockList);
-		stendglass_lamp_g_on = new BlockStendGlass("stendglass_lamp_g_on", true, 1, noTabList);
-		stendglass_lamp_off = new BlockStendGlass("stendglass_lamp_off", false, 2, blockList);
-		stendglass_lamp_on = new BlockStendGlass("stendglass_lamp_on", true, 3, noTabList);
 		table_modernlamp_off = new BlockTableLanp("table_modernlamp_off", 0, true, blockList);
 		table_modernlamp_on = new BlockTableLanp("table_modernlamp_on", 1, true, noTabList);
 		table_lamp = new BlockTableLanp("table_lamp", 1, false, blockList);
 		table_lantern = new BlockTableLanp("table_lantern", 1, false, blockList);
+		glow_lamp = new BlockLanp("glow_lamp", 0, 32F, 0, 1, 0.5F, SoundType.METAL, blockList);
+		magic_circle = new BlockLanp("magic_circle", 0, 32F, 0, 1, 0.5F, SoundType.GLASS, noTabList);
+		glow_light = new BlockLight("glow_light");
+		gorgeous_lamp = new BlockLight("gorgeous_lamp");
+		stendglass_lamp_g_off = new BlockStendGlass("stendglass_lamp_g_off", false, 0, blockList);
+		stendglass_lamp_g_on = new BlockStendGlass("stendglass_lamp_g_on", true, 1, noTabList);
+		stendglass_lamp_off = new BlockStendGlass("stendglass_lamp_off", false, 2, blockList);
+		stendglass_lamp_on = new BlockStendGlass("stendglass_lamp_on", true, 3, noTabList);
 
 		// レンガ
 		antique_brick_0 = new AntiqueBrick("antique_brick_0", 1.25F, 1024F, 0, 0);
@@ -686,6 +726,8 @@ public class BlockInit {
 		brown_arch_plantdoor = new SMDoor("brown_arch_plantdoor", 5, Material.WOOD, SoundType.WOOD);
 		woodgold_3 = new SMDoor("woodgold_3", 6, Material.WOOD, SoundType.WOOD);
 		whitewoodgold_3 = new SMDoor("whitewoodgold_3", 7, Material.WOOD, SoundType.WOOD);
+		simple_door_1 = new SMDoor("simple_door_1", 8, Material.WOOD, SoundType.WOOD);
+		simple_door_2 = new SMDoor("simple_door_2", 9, Material.WOOD, SoundType.WOOD);
 
 		// 作物
 		sannyflower_plant = new MagiaFlower("sannyflower_plant", 0);
@@ -701,6 +743,7 @@ public class BlockInit {
 		glowflower_plant = new SweetCrops_STAGE4("glowflower_plant", 6, 1, 6.8F);
 		cotton_plant = new SweetCrops_STAGE4("cotton_plant", 8, 1, 6.8F);
 		spinach_plant = new SweetCrops_STAGE4("spinach_plant", 10, 1, 6.8F);
+		greenpepper_plant = new SweetCrops_STAGE4("greenpepper_plant", 11, 1, 6.8F);
 		blueberry_plant = new SweetCrops_STAGE5("blueberry_plant", 0, 1, 7.5F);
 		sticky_stuff_plant = new SweetCrops_STAGE5("sticky_stuff_plant", 4, 1, 5.0F);
 		rice_plant = new SweetCrops_STAGE6("rice_plant", 1, 0, 6.0F);
@@ -715,6 +758,7 @@ public class BlockInit {
 		vannila_plant = new SweetCrops_STAGE5("vannila_plant",2 ,0, 6.3F);
 		onion_plant = new SweetCrops_STAGE5("onion_plant", 3, 0, 5.6F);
 		coffee_plant = new SweetCrops_STAGE5("coffee_plant", 5, 0, 5.6F);
+		pineapple_plant = new SweetCrops_STAGE5("pineapple_plant", 6, 0, 5.6F);
 		raspberry_plant = new SweetCrops_STAGE6("raspberry_plant",0, 1, 6.0F);
 		quartz_plant = new SweetCrops_STAGE6("quartz_plant",4, 1, 6.0F);
 		chestnut_plant = new BlockChestnut("chestnut_plant", 0);
@@ -740,6 +784,8 @@ public class BlockInit {
 		wallboard = new WandPedal("wallboard", 1);
 		wallboard_black = new WandPedal("wallboard_black", 1);
 		shopboard = new WandPedal("shopboard", 2);
+		menu_list = new MenuList("menu_list", 0);
+		menu_list_w = new MenuList("menu_list_w", 0);
 
 		// 光源
 		pole_down = new BlockPole("pole_down", blockList, 0);
@@ -748,8 +794,8 @@ public class BlockInit {
 		lantern_side1 = new BlockLantern("lantern_side1", 0, blockList);
 		lantern_side2 = new BlockLantern("lantern_side2", 1, noTabList);
 
-		cafeboard = new BlockCafeBoard("cafeboard");
-		cafeboard_w = new BlockCafeBoard("cafeboard_w");
+		cafeboard = new BlockCafeBoard("cafeboard", 0);
+		cafeboard_w = new BlockCafeBoard("cafeboard_w", 0);
 		kanban_top = new BlockKanban("kanban_top", noTabList);
 		kanban_bot = new BlockKanban("kanban_bot", blockList);
 		smchair = new SMChair("smchair", 0);
@@ -764,6 +810,8 @@ public class BlockInit {
 
 		balcony_table = new SMTableDot("balcony_table");
 		balcony_chair = new SMChair("balcony_chair", 3);
+
+		counter_chair = new SMChair("counter_chair", 4);
 
 		// チェスト系
 		moden_rack = new BlockModenRack("moden_rack", 0);
@@ -780,7 +828,7 @@ public class BlockInit {
 		treasure_chest = new BlockWoodChest("treasure_chest", 1);
 		parallel_interfere = new BlockParallelInterfere("parallel_interfere", 0);
 		stardust_wish = new BlockParallelInterfere("stardust_wish", 1);
-		cafe_kitchen_table = new BlockWoodChest("cafe_kitchen_table", 2);
+		cafe_kitchen_table = new BlockCafeKitchen("cafe_kitchen_table", 2);
 		cafe_kitchen_sink = new BlockWoodChest("cafe_kitchen_sink", 2);
 		cafe_wallrack = new BlockModenRack("cafe_wallrack", 1);
 

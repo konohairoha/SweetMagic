@@ -2,11 +2,13 @@ package sweetmagic.init.render.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextFormatting;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.blocks.BlockModenRack;
 import sweetmagic.init.tile.chest.TileModenRack;
@@ -35,6 +37,11 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 		catch (Throwable e) { }
 
         GlStateManager.popMatrix();
+        int data = te.getRackData();
+
+        if (data == 4 || data == 5) {
+        	this.renderItemName(te, data, (float) x, (float) y, (float) z);
+        }
 	}
 
 	protected void renderItem(TileModenRack te, double x, double y, double z, float partialTicks) {
@@ -71,6 +78,10 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 			break;
         }
 
+        if (data == 4) {
+        	rot += 180F;
+        }
+
         GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
 
         switch (data) {
@@ -83,6 +94,13 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
         case 2:
         case 3:
         	this.renderPlate(te, render, data);
+        	break;
+        case 4:
+        case 5:
+        	this.renderBreadHolder(te, render, data, (float) x, (float) y, (float) z);
+        	break;
+        case 6:
+        	this.renderShowcase(te, render, data, (float) x, (float) y, (float) z);
         	break;
         }
 	}
@@ -176,5 +194,106 @@ public class RenderModenRack extends TileEntitySpecialRenderer<TileModenRack> {
 
             RenderUtils.renderItem(render, stack, posX, posY, posZ, 0, 1, 0, 0);
         }
+	}
+
+	// パン置き
+	public void renderBreadHolder (TileModenRack te, RenderItem render, int data, float x, float y, float z ) {
+
+    	ItemStack stack = te.getChestItem(0);
+    	if (stack.isEmpty()) { return; }
+
+    	float posY = data == 5 ? 0.435F: 0.75F;
+
+    	// 3DアイテムならY座標を低く
+        if (render.shouldRenderItemIn3D(stack)) {
+        	posY -= 0.2F;
+        }
+
+    	for (int posX = 0; posX <= 1; posX++) {
+    		for (int posZ = 0; posZ <= 1; posZ++) {
+    	        RenderUtils.renderItem(render, stack, posX - 0.5F, posY, posZ - 0.25F, 0, 1, 0, 0);
+        	}
+    	}
+	}
+
+	// ショーケース
+	public void renderShowcase (TileModenRack te, RenderItem render, int data, float x, float y, float z ) {
+
+    	float posY = 1.65F;
+
+		for (int i = 0; i <= te.getInvSize(); i++) {
+
+	    	ItemStack stack = te.getChestItem(i);
+	    	if (stack.isEmpty()) { continue; }
+
+	    	// 3DアイテムならY座標を低く
+	        if (render.shouldRenderItemIn3D(stack)) {
+	        	posY -= 0.2F;
+	        }
+
+	    	for (int posX = 0; posX <= 1; posX++) {
+	    		for (int posZ = 0; posZ <= 1; posZ++) {
+	    	        RenderUtils.renderItem(render, stack, posX - 0.5F, posY - i * 1F, posZ - 0.25F, 0, 1, 0, 0);
+	        	}
+	    	}
+		}
+	}
+
+	public void renderItemName (TileModenRack te, int data, float x, float y, float z ) {
+
+    	ItemStack stack = te.getChestItem(0);
+    	if (stack.isEmpty()) { return; }
+
+		GlStateManager.pushMatrix();
+
+        float rot = 0;
+
+        // ブロックの向きでアイテムの向きも変える
+        switch (te.getFace()) {
+        case NORTH:
+        	rot = 180F;
+        	x += 0.5F;
+        	z += data == 5 ? 0.04F : 0.95F;
+        	break;
+        case SOUTH:
+        	rot = 0F;
+        	x += 0.5F;
+        	z += data == 5 ? 0.9625F : 0.05F;
+        	break;
+        case EAST:
+        	rot = 90F;
+        	x += data == 5 ? 0.9625F : 0.05F;
+        	z += 0.5F;
+        	break;
+        case WEST:
+        	rot = 270F;
+        	x += data == 5 ? 0.04F : 0.95F;
+        	z += 0.5F;
+        	break;
+		default:
+			break;
+        }
+
+        String color = TextFormatting.BOLD.toString();
+
+        if (data == 5) {
+        	y -= 0.6F;
+        	color = TextFormatting.WHITE.toString();
+        }
+
+		GlStateManager.translate((float) x, (float) y + 0.725F, (float) z);
+        GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
+
+		FontRenderer font = this.getFontRenderer();
+		GlStateManager.scale(0.005F, -0.0075F, 0.0075F);
+		GlStateManager.glNormal3f(0.0F, 0.0F, -0.015F);
+		GlStateManager.depthMask(false);
+
+		String name = color + stack.getDisplayName();
+		font.drawString(name, -font.getStringWidth(name) / 2, 0, 0x000000);
+
+		GlStateManager.depthMask(true);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.popMatrix();
 	}
 }

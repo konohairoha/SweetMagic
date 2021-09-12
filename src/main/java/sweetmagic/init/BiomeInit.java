@@ -13,6 +13,7 @@ import sweetmagic.worldgen.biome.BiomeBigPlate;
 import sweetmagic.worldgen.biome.BiomeCoconutDesert;
 import sweetmagic.worldgen.biome.BiomeDryFruitForest;
 import sweetmagic.worldgen.biome.BiomeFlowerGarden;
+import sweetmagic.worldgen.biome.BiomeFrozenDeep;
 import sweetmagic.worldgen.biome.BiomeFrozenForest;
 import sweetmagic.worldgen.biome.BiomeFruitForest;
 import sweetmagic.worldgen.biome.BiomePrismBerg;
@@ -23,7 +24,9 @@ public class BiomeInit {
 
     public static Biome FLUITFOREST = new BiomeFruitForest();
     public static Biome FLUITFORESTHILL = new BiomeFruitForest("FluitForestHill",
-    		new BiomeProperties("FluitForestHill").setTemperature(1F).setBaseHeight(0.1F).setHeightVariation(0.8F).setRainfall(0.6F).setSnowEnabled());
+    		new BiomeProperties("FluitForestHill").setTemperature(1F).setBaseHeight(0.1F).setHeightVariation(0.8F).setRainfall(0.6F).setSnowEnabled(), false);
+    public static Biome FLUITTOWERFOREST = new BiomeFruitForest("FluitTowerForest",
+    		new BiomeProperties("FluitTowerForest").setTemperature(1F).setBaseHeight(0.1F).setHeightVariation(0.4F).setRainfall(0.2F).setSnowEnabled(), true);
 
     public static Biome FLOWERGARDEN = new BiomeFlowerGarden();
     public static Biome FLOWERVALLEY = new BiomeFlowerGarden("FlowerValley",
@@ -52,72 +55,37 @@ public class BiomeInit {
     public static Biome FROZENFORESTHILL = new BiomeFrozenForest("FrozenForestHill",
     		new BiomeProperties("FrozenForestHill").setTemperature(-0.1F).setBaseHeight(0.4F).setHeightVariation(0.9F).setRainfall(0.6F));
 
+    public static Biome FROZENDEEP = new BiomeFrozenDeep();
+
     public static void init(IForgeRegistry<Biome> registry) {
-
-        registry.register(FLUITFOREST);
-		BiomeManager.addSpawnBiome(FLUITFOREST);
-        BiomeDictionary.addTypes(FLUITFOREST, Type.FOREST);
-
-        registry.register(FLUITFORESTHILL);
-		BiomeManager.addSpawnBiome(FLUITFORESTHILL);
-        BiomeDictionary.addTypes(FLUITFORESTHILL, Type.HILLS);
-
-        registry.register(ESTORFOREST);
-		BiomeManager.addSpawnBiome(ESTORFOREST);
-        BiomeDictionary.addTypes(ESTORFOREST, Type.FOREST);
-
-        registry.register(PRISMFOREST);
-		BiomeManager.addSpawnBiome(PRISMFOREST);
-        BiomeDictionary.addTypes(PRISMFOREST, Type.FOREST);
-
-        registry.register(FLOWERGARDEN);
-		BiomeManager.addSpawnBiome(FLOWERGARDEN);
-        BiomeDictionary.addTypes(FLOWERGARDEN, Type.PLAINS);
-
-        registry.register(FLOWERVALLEY);
-		BiomeManager.addSpawnBiome(FLOWERVALLEY);
-        BiomeDictionary.addTypes(FLOWERVALLEY, Type.HILLS);
-
-        registry.register(COCONUTBEACH);
-		BiomeManager.addSpawnBiome(COCONUTBEACH);
-        BiomeDictionary.addTypes(COCONUTBEACH, Type.SANDY);
-
-        registry.register(COCONUTBEACHHILL);
-		BiomeManager.addSpawnBiome(COCONUTBEACHHILL);
-        BiomeDictionary.addTypes(COCONUTBEACHHILL, Type.SANDY);
-
-        registry.register(PRISMBERG);
-		BiomeManager.addSpawnBiome(PRISMBERG);
-        BiomeDictionary.addTypes(PRISMBERG, Type.MOUNTAIN);
-
-        registry.register(PRISMHILL);
-		BiomeManager.addSpawnBiome(PRISMHILL);
-        BiomeDictionary.addTypes(PRISMHILL, Type.MOUNTAIN);
-
-        registry.register(SLIVERBERG);
-		BiomeManager.addSpawnBiome(SLIVERBERG);
-        BiomeDictionary.addTypes(SLIVERBERG, Type.MOUNTAIN);
-
-        registry.register(BIGPLATE);
-		BiomeManager.addSpawnBiome(BIGPLATE);
-        BiomeDictionary.addTypes(BIGPLATE, Type.PLAINS);
-
-        registry.register(DRYLAND);
-		BiomeManager.addSpawnBiome(DRYLAND);
-        BiomeDictionary.addTypes(DRYLAND, Type.FOREST);
-
-        registry.register(FROZENFOREST);
-		BiomeManager.addSpawnBiome(FROZENFOREST);
-        BiomeDictionary.addTypes(FROZENFOREST, Type.FOREST);
-
-        registry.register(FROZENFORESTHILL);
-		BiomeManager.addSpawnBiome(FROZENFORESTHILL);
-        BiomeDictionary.addTypes(FROZENFORESTHILL, Type.FOREST);
+        registerBiome(registry, FLUITFOREST, Type.FOREST);
+        registerBiome(registry, FLUITFORESTHILL, Type.HILLS);
+        registerBiome(registry, FLUITTOWERFOREST, Type.FOREST);
+        registerBiome(registry, ESTORFOREST, Type.FOREST);
+        registerBiome(registry, PRISMFOREST, Type.FOREST);
+        registerBiome(registry, FLOWERGARDEN, Type.PLAINS);
+        registerBiome(registry, FLOWERVALLEY, Type.HILLS);
+        registerBiome(registry, COCONUTBEACH, Type.SANDY);
+        registerBiome(registry, COCONUTBEACHHILL, Type.SANDY);
+        registerBiome(registry, PRISMBERG, Type.MOUNTAIN);
+        registerBiome(registry, PRISMHILL, Type.MOUNTAIN);
+        registerBiome(registry, SLIVERBERG, Type.MOUNTAIN);
+        registerBiome(registry, BIGPLATE, Type.PLAINS);
+        registerBiome(registry, DRYLAND, Type.FOREST);
+        registerBiome(registry, FROZENFOREST, Type.FOREST);
+        registerBiome(registry, FROZENFORESTHILL, Type.FOREST);
+        registerBiome(registry, FROZENDEEP, Type.OCEAN);
 
         // バイオームを生成するなら
         if (SMConfig.genBiome) {
         	genBiome();
         }
+    }
+
+    public static void registerBiome (IForgeRegistry<Biome> registry, Biome biome, Type type) {
+        registry.register(biome);
+		BiomeManager.addSpawnBiome(biome);
+        BiomeDictionary.addTypes(biome, type);
     }
 
     public static void genBiome () {

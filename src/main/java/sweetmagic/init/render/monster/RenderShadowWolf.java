@@ -26,5 +26,6 @@ public class RenderShadowWolf extends RenderWolf {
 		super.preRenderCallback(entity, parTick);
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.color(1, 1, 1, 0.875F);
 	}
 }

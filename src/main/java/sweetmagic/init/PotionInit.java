@@ -27,9 +27,12 @@ public class PotionInit {
 	public static Potion mind_control;
 	public static Potion resistance_blow;
 	public static Potion aether_shield;
+	public static Potion magic_array;
+	public static Potion holly_charm;
+	public static Potion wind_relief;
 
 	public static List<Potion> buffList = new ArrayList<>();		// バフリスト
-	public static List<Potion> deBuffList = new ArrayList<>();	// デバフリスト
+	public static List<Potion> deBuffList = new ArrayList<>();		// デバフリスト
 
 	public static void init() {
 
@@ -53,6 +56,9 @@ public class PotionInit {
 		mind_control = new PotionSM(false, 0, "mind_control", "textures/items/stray_soul.png", true);
 		resistance_blow = new PotionResitanceBlow(false, 0, "resistance_blow", "textures/items/magic_heal.png");
 		aether_shield = new PotionSM(false, 0, "aether_shield", "textures/items/magic_aether_shield.png", false);
+		magic_array = new PotionSM(false, 0, "magic_array", "textures/block/mahoujin.png", false);
+		holly_charm = new PotionSM(false, 0, "holly_charm", "textures/items/holly_charm.png", false);
+		wind_relief = new PotionSM(false, 0, "wind_relief", "textures/items/wind_relief.png", false);
 	}
 
 	// リストを設定
@@ -69,6 +75,9 @@ public class PotionInit {
 		buffList.add(mf_down);
 		buffList.add(resistance_blow);
 		buffList.add(aether_shield);
+		buffList.add(magic_array);
+		buffList.add(holly_charm);
+		buffList.add(wind_relief);
 		buffList.add(MobEffects.SPEED);
 		buffList.add(MobEffects.STRENGTH);
 		buffList.add(MobEffects.INSTANT_HEALTH);

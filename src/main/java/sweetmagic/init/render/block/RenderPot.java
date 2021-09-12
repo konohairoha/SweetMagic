@@ -1,6 +1,7 @@
 package sweetmagic.init.render.block;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -16,29 +17,35 @@ import sweetmagic.util.RenderUtils;
 
 public class RenderPot extends TileEntitySpecialRenderer<TilePot> {
 
+	private static final List<Block> cookBlockList = Arrays.<Block> asList(
+		BlockInit.pot_re, BlockInit.frypan_on, BlockInit.frypan_re, BlockInit.frypan_red_on, BlockInit.frypan_red_re
+	);
+
 	@Override
-	public void render(TilePot te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TilePot te, double x, double y, double z, float parTick, int stage, float alpha) {
 
 		IBlockState state =te.getWorld().getBlockState(te.getPos());
 		Block block = state.getBlock();
 
-		if (block == BlockInit.pot_re || block == BlockInit.frypan_on || block == BlockInit.frypan_re) {
+		if (cookBlockList.contains(block)) {
 	        GlStateManager.pushMatrix();
 	        GlStateManager.color(1F, 1F, 1F, 1F);
 	        GlStateManager.translate(x + 0.5F, y + 0.3F, z + 0.5F);
 	        GlStateManager.rotate(RenderUtils.getFacingAngle(state) + 180F, 0F, 1F, 0F);
-	        this.renderItem(te, block, x, y - 0.5, z, partialTicks);
+	        this.renderItem(te, block, x, y - 0.5, z, parTick);
 	        GlStateManager.popMatrix();
 		}
 	}
 
-	protected void renderItem(TilePot te, Block block, double x, double y, double z, float partialTicks) {
+	protected void renderItem(TilePot te, Block block, double x, double y, double z, float parTick) {
 
 		List<ItemStack> stackList = new ArrayList();
 
-		if (block == BlockInit.pot_re || block == BlockInit.frypan_re) {
+		if (block == BlockInit.pot_re || block == BlockInit.frypan_re || block == BlockInit.frypan_red_re) {
 			stackList.addAll(te.outPutList);
-		} else {
+		}
+
+		else {
 			stackList.add(te.handItem);
 			stackList.addAll(te.inPutList);
 		}
