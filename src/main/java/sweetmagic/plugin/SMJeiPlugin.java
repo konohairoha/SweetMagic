@@ -85,12 +85,10 @@ public class SMJeiPlugin implements IModPlugin {
 	}
 
 	@Override
-	public void registerItemSubtypes(ISubtypeRegistry subtypeRegistry) {
-	}
+	public void registerItemSubtypes(ISubtypeRegistry registry) { }
 
 	@Override
-	public void registerIngredients(IModIngredientRegistration registry) {
-	}
+	public void registerIngredients(IModIngredientRegistration registry) { }
 
 	@Override
 	public void registerCategories(IRecipeCategoryRegistration registry) {

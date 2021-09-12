@@ -47,10 +47,9 @@ public class FermenteRecipeCategory implements IRecipeCategory<FermenteRecipeWra
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, FermenteRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout layout, FermenteRecipeWrapper wrapper, IIngredients ingredients) {
 
-		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
+		IGuiItemStackGroup stackFroup = layout.getItemStacks();
 
 		//アイテムの配列順番、Inputかどうか、X座標、Y座標
 		stackFroup.init(0, true, 48, 20);
@@ -62,14 +61,14 @@ public class FermenteRecipeCategory implements IRecipeCategory<FermenteRecipeWra
 		}
 
 		//手に持ってるアイテム
-		stackFroup.set(0, recipeWrapper.handList);
+		stackFroup.set(0, wrapper.handList);
 		//完成品
-		stackFroup.set(1, recipeWrapper.outputs[0]);
+		stackFroup.set(1, wrapper.outputs[0]);
 
 		//レシピアイテム
 		for(int i = 2; i <= 19; i++) {
-			if ((i - 2) < recipeWrapper.inputList.size()) {
-				stackFroup.set(i, recipeWrapper.inputList.get(i - 2));
+			if ((i - 2) < wrapper.inputList.size()) {
+				stackFroup.set(i, wrapper.inputList.get(i - 2));
 			}
 		}
 	}

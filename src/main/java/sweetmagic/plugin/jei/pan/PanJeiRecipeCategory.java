@@ -47,8 +47,7 @@ public class PanJeiRecipeCategory implements IRecipeCategory<PanJeiRecipeWrapper
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, PanJeiRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, PanJeiRecipeWrapper recipeWrapper, IIngredients ingredients) {
 
 		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
 
@@ -56,9 +55,10 @@ public class PanJeiRecipeCategory implements IRecipeCategory<PanJeiRecipeWrapper
 		stackFroup.init(0, true, 48, 20);
 		stackFroup.init(1, false, 108, 20);
 
-		for (int i = 2; i <= 19; i++) {
-			int x = 7 + (i - 2) * 18;
-			stackFroup.init(i, true, x, 109);
+		for (int x = 0; x <= 8; x++) {
+			for (int y = 0; y <= 1; y++) {
+				stackFroup.init(2 + x + y * 9, true, 7 + x * 18, 109 + y * 18);
+			}
 		}
 
 		//手に持ってるアイテム
@@ -67,7 +67,7 @@ public class PanJeiRecipeCategory implements IRecipeCategory<PanJeiRecipeWrapper
 		stackFroup.set(1, recipeWrapper.outputs[0]);
 
 		//レシピアイテム
-		for(int i = 2; i <= 19; i++) {
+		for(int i = 2; i <= 20; i++) {
 			if ((i - 2) < recipeWrapper.inputList.size()) {
 				stackFroup.set(i, recipeWrapper.inputList.get(i - 2));
 			}

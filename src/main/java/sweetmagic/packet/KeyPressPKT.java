@@ -14,7 +14,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.magic.StarLightWand;
+import sweetmagic.init.item.sm.sweetmagic.SMBookCosmic;
 import sweetmagic.key.SMKeybind;
 import sweetmagic.util.ItemHelper;
 
@@ -50,7 +52,6 @@ public class KeyPressPKT implements IMessage {
 
 					EntityPlayerMP player = ctx.getServerHandler().player;
 					ItemStack stack = player.getHeldItemMainhand();
-
 					Item item = stack.getItem();
 
 					// 押したキーで処理
@@ -101,6 +102,12 @@ public class KeyPressPKT implements IMessage {
 							((StarLightWand) item).repaceMode(stack);
 							player.sendMessage(ItemHelper.getNBT(stack).getBoolean(StarLightWand.REPLACE) ? this.getTip("tip.starlightwand_replace.name") : this.getTip("tip.starlightwand_inst.name"));
 							player.world.playSound(null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 0.5F, 1F);
+						}
+
+						// 宇宙と魔術書を持っているなら
+						else if (item == ItemInit.magic_book_cosmic) {
+							SMBookCosmic book = (SMBookCosmic) item;
+							book.setPickUp(stack);
 						}
 
 						return;

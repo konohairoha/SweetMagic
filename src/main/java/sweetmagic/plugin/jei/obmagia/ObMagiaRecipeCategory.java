@@ -48,34 +48,28 @@ public class ObMagiaRecipeCategory implements IRecipeCategory<ObMagiaRecipeWrapp
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, ObMagiaRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout layout, ObMagiaRecipeWrapper wrapper, IIngredients ingredients) {
 
-		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
+		IGuiItemStackGroup stackFroup = layout.getItemStacks();
 
 		// アイテムの配列順番、Inputかどうか、X座標、Y座標
-		stackFroup.init(0, true, 48, 20);
+		stackFroup.init(0, false, 48, 20);
+		stackFroup.set(0, wrapper.handList);
 
 		for (int i = 1; i <= 9; i++) {
-			int x = 7 + (i - 2) * 18;
+
+			int x = 7 + (i - 1) * 18;
 			stackFroup.init(i, true, x, 109);
-		}
 
-		stackFroup.init(10, true, 108, 20);
-
-		// 手にもってるアイテム
-		stackFroup.set(0, recipeWrapper.handList);
-
-		//レシピアイテム
-		for(int i = 2; i <= 19; i++) {
-			if ((i - 2) < recipeWrapper.inputList.size()) {
-				stackFroup.set(i, recipeWrapper.inputList.get(i - 2));
+			if ((i - 1) < wrapper.inputList.size()) {
+				stackFroup.set(i, wrapper.inputList.get(i - 1));
 			}
 		}
 
 		// 完成品アイテム ※今後のためFor文で記述してます　ごめん
 		for(int i = 10; i <= 10; i++) {
-			ItemStack item = recipeWrapper.outputs[i-10];
+			ItemStack item = wrapper.outputs[i - 10];
+			stackFroup.init(10, true, 108, 20);
 			stackFroup.set(i, item);
 		}
 	}

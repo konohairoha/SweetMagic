@@ -7,6 +7,8 @@ import com.google.common.collect.Lists;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.Particle;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -27,13 +29,52 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.Biome;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.DimensionInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.ISMMob;
 
 public class WorldHelper {
+
+	// アイテム引き寄せ
+	public static void gravitateEntityTowards(World world, Random rand, Entity ent, double x, double y, double z, boolean isItem, boolean isRender) {
+
+		double dX = x - ent.posX;
+		double dY = y - ent.posY;
+		double dZ = z - ent.posZ;
+		double dist = Math.sqrt(dX * dX + dY * dY + dZ * dZ);
+		double vel = 1.0 - dist / 15.0;
+		if (vel > 0.0D) {
+			vel *= vel;
+			ent.motionX += dX / dist * vel * 0.175;
+			ent.motionY += dY / dist * vel * 0.25;
+			ent.motionZ += dZ / dist * vel * 0.175;
+		}
+
+		// パーティクルスポーン
+		if (world.isRemote && isItem && isRender) {
+
+			float randX = getRandFloat(rand, 1.5F);
+			float randY = getRandFloat(rand, 1.5F);
+			float randZ = getRandFloat(rand, 1.5F);
+			float f1 = (float) ent.posX - 0.0F + randX + (float) ent.motionX * 1.5F;
+			float f2 = (float) (ent.posY + randY) + (float) ent.motionY * 1.5F;
+			float f3 = (float) ent.posZ - 0.0F + randZ + (float) ent.motionZ * 1.5F;
+			float xSpeed = -randX * 0.125F;
+			float ySpeed = -randY * 0.125F;
+			float zSpeed = -randZ * 0.125F;
+			Particle particle = new ParticleNomal.Factory().createParticle(0, world, f1, f2, f3, xSpeed, ySpeed, zSpeed);
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
+		}
+	}
+
+	// 乱数取得
+	public static float getRandFloat (Random rand, float rate) {
+		return (rand.nextFloat() - rand.nextFloat()) * rate;
+	}
 
 	// プレイヤーを取得
 	public static void attackEntity(World world, AxisAlignedBB aabb) {
@@ -146,12 +187,14 @@ public class WorldHelper {
 
 		for (EntityLivingBase ent : list) {
 
-			if (ent instanceof IMob || ent.isPotionActive(potion)) { continue; }
+			if (ent instanceof IMob) { continue; }
 
 			ent.addPotionEffect(new PotionEffect(potion, time, level, true, true));
 
 			// パーティクルスポーン
-			ParticleHelper.spawnHeal(ent, particle, 16, 1, 4);
+			if (particle != null) {
+				ParticleHelper.spawnHeal(ent, particle, 16, 1, 4);
+			}
 		}
 	}
 

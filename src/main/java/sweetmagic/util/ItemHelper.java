@@ -10,11 +10,32 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemHandlerHelper;
 import net.minecraftforge.oredict.OreDictionary;
 
 public class ItemHelper {
+
+	public static boolean hasSpace(NonNullList<ItemStack> inv, ItemStack stack) {
+		for (ItemStack invStack : inv) {
+			if (invStack.isEmpty()) { return true; }
+			if (areItemStacksEqual(stack, invStack) && invStack.getCount() < invStack.getMaxStackSize()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public static boolean areItemStacksEqual(ItemStack stack1, ItemStack stack2) {
+		return ItemStack.areItemStacksEqual(getNormalizedStack(stack1), getNormalizedStack(stack2));
+	}
+
+	public static ItemStack getNormalizedStack(ItemStack stack) {
+		ItemStack result = stack.copy();
+		result.setCount(1);
+		return result;
+	}
 
 	public static ItemStack stateToStack(IBlockState state, int stackSize) {
 		return new ItemStack(state.getBlock(), stackSize, state.getBlock().getMetaFromState(state));

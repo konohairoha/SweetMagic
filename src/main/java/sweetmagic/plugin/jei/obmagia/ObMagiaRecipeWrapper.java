@@ -3,6 +3,8 @@ package sweetmagic.plugin.jei.obmagia;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.ingredients.IIngredients;
@@ -19,25 +21,30 @@ public class ObMagiaRecipeWrapper implements IRecipeWrapper {
 	private int extraLines;
 	public List<ItemStack> handList;
 	public List<List<ItemStack>> inputList;
+	public List<List<ItemStack>> prevList;
 	public ItemStack[] outputs;
 	public IDrawable item;
 	private IGuiHelper guiHelper;
 
 	public ObMagiaRecipeWrapper(ObMagiaRecipes recipe) {
+
 		this.handList = recipe.getHandList();
 		this.outputs = recipe.getOutputIngArray();
+
+		this.prevList = Lists.newArrayList();
+		this.prevList.add(this.handList);
 
 		this.inputList = new ArrayList<List<ItemStack>>();
 		for (List<ItemStack> stackList : recipe.getInputList()) {
 			this.inputList.add(stackList);
+			this.prevList.add(stackList);
 		}
 	}
 
 	//ここでセットすることが必ず必要っぽい…？でも未検証
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInput(ItemStack.class, this.handList);
-		ingredients.setInputLists(ItemStack.class, this.inputList);
+		ingredients.setInputLists(ItemStack.class, this.prevList);
 		ingredients.setOutput(ItemStack.class, outputs[0]);
 	}
 
@@ -57,7 +64,8 @@ public class ObMagiaRecipeWrapper implements IRecipeWrapper {
 		if(outputs.length > 1) {
             minecraft.fontRenderer.drawString(String.valueOf(outputs.length), recipeWidth / 2 + 33, 30, 0xFFFFFF, true);
         }
-		drawStrings(spInv, minecraft);
+
+		this.drawStrings(spInv, minecraft);
 
 	}
 

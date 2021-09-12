@@ -48,10 +48,9 @@ public class AlstroemeriaJeiRecipeCategory implements IRecipeCategory<Alstroemer
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, AlstroemeriaJeiRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout layout, AlstroemeriaJeiRecipeWrapper wrapper, IIngredients ingredients) {
 
-		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
+		IGuiItemStackGroup stackFroup = layout.getItemStacks();
 
 		//アイテムの配列順番、Inputかどうか、X座標、Y座標
 		stackFroup.init(0, true, 48, 45);
@@ -64,17 +63,17 @@ public class AlstroemeriaJeiRecipeCategory implements IRecipeCategory<Alstroemer
 		stackFroup.init(10, false, 108, 45);
 
 		//手にもってるアイテム
-		stackFroup.set(0, recipeWrapper.handList);
+		stackFroup.set(0, wrapper.handList);
 
 		for (int i = 1; i <= 9; i++) {
-			if ((i - 1) < recipeWrapper.inputList.size()) {
-				stackFroup.set(i, recipeWrapper.inputList.get(i - 1));
+			if ((i - 1) < wrapper.inputList.size()) {
+				stackFroup.set(i, wrapper.inputList.get(i - 1));
 			}
 		}
 
 		//完成品アイテム ※今後のためFor文で記述してます　ごめん
 		for(int i = 10; i <= 10; i++) {
-			ItemStack item = recipeWrapper.outputs[i-10];
+			ItemStack item = wrapper.outputs[i-10];
 			stackFroup.set(i, item);
 		}
 	}

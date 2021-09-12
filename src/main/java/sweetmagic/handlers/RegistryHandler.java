@@ -19,16 +19,13 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.config.SMConfig;
-import sweetmagic.event.BlockBreakEvent;
 import sweetmagic.event.EntityItemTossEvent;
 import sweetmagic.event.HasItemEvent;
-import sweetmagic.event.LivingDamageEvent;
 import sweetmagic.event.LivingDethEvent;
 import sweetmagic.event.LivingPotionEvent;
-import sweetmagic.event.MobDropEvent;
 import sweetmagic.event.SMHarvestEvent;
+import sweetmagic.event.SMLivingDamageEvent;
 import sweetmagic.event.SMLoottableEvent;
-import sweetmagic.event.TeleportEvent;
 import sweetmagic.event.XPPickupEvent;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
@@ -37,6 +34,7 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.layer.LayerBarrier;
 import sweetmagic.init.entity.layer.LayerEffectBase;
+import sweetmagic.init.entity.layer.LayerMagicArray;
 import sweetmagic.init.entity.layer.LayerRefresh;
 import sweetmagic.init.entity.layer.LayerRegen;
 import sweetmagic.init.entity.layer.LayerRenderWand;
@@ -50,6 +48,7 @@ import sweetmagic.init.entity.monster.EntityIfritVerre;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
+import sweetmagic.init.tile.chest.TileGlassCup;
 import sweetmagic.init.tile.chest.TileGravityChest;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.chest.TileModenWallRack;
@@ -62,10 +61,12 @@ import sweetmagic.init.tile.cook.TileFreezer;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 import sweetmagic.init.tile.cook.TilePlate;
 import sweetmagic.init.tile.cook.TilePot;
+import sweetmagic.init.tile.cook.TileShocase;
 import sweetmagic.init.tile.cook.TileStove;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherHopper;
 import sweetmagic.init.tile.magic.TileFlyishForer;
+import sweetmagic.init.tile.magic.TileMFAccelerator;
 import sweetmagic.init.tile.magic.TileMFAetherLanp;
 import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFChanger;
@@ -133,7 +134,6 @@ import sweetmagic.worldgen.gen.WorldVillageGen;
 public class RegistryHandler {
 
 	private static final String MODID = SweetMagicCore.MODID;
-
 
 	public static void Common(FMLPreInitializationEvent event) {
 
@@ -258,6 +258,9 @@ public class RegistryHandler {
 		registerTile(TileMFSuccessor.class, "MFSuccessor");
 		registerTile(TileMFAetherLanp.class, "MFAetherLanp");
 		registerTile(TileMFArcaneTable.class, "MFArcaneTable");
+		registerTile(TileMFAccelerator.class, "MFAccelerator");
+		registerTile(TileShocase.class, "Showcase");
+		registerTile(TileGlassCup.class, "GlassCup");
 	}
 
 	// 草から種の追加
@@ -274,6 +277,8 @@ public class RegistryHandler {
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.onion), 5);
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.cotton_seed), 5);
 		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.spinach_seed), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.pineapple_seed), 5);
+		MinecraftForge.addGrassSeed(new ItemStack(ItemInit.greenpepper_seed), 5);
 	}
 
 	// イベント登録
@@ -282,14 +287,11 @@ public class RegistryHandler {
     	MinecraftForge.EVENT_BUS.register(new SMLoottableEvent());
     	MinecraftForge.EVENT_BUS.register(new SMHarvestEvent());
     	MinecraftForge.EVENT_BUS.register(new LivingPotionEvent());
-    	MinecraftForge.EVENT_BUS.register(new LivingDamageEvent());
+    	MinecraftForge.EVENT_BUS.register(new SMLivingDamageEvent());
 		MinecraftForge.EVENT_BUS.register(new HasItemEvent());
 		MinecraftForge.EVENT_BUS.register(new LivingDethEvent());
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
-		MinecraftForge.EVENT_BUS.register(new BlockBreakEvent());
 		MinecraftForge.EVENT_BUS.register(new EntityItemTossEvent());
-		MinecraftForge.EVENT_BUS.register(new TeleportEvent());
-		MinecraftForge.EVENT_BUS.register(new MobDropEvent());
 	}
 
 	// レイヤー登録
@@ -300,6 +302,7 @@ public class RegistryHandler {
 			LayerEffectBase.initialiseLayers(LayerRenderWand::new);
 			LayerEffectBase.initialiseLayers(LayerRegen::new);
 			LayerEffectBase.initialiseLayers(LayerWandSandryon::new);
+			LayerEffectBase.initialiseLayers(LayerMagicArray::new);
 		}
 	}
 
@@ -329,8 +332,8 @@ public class RegistryHandler {
 				EntityRegistry.addSpawn(EntityCreeperCal.class, 25, 1, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityEnderShadow.class, 10, 1, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityElectricCube.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
-				EntityRegistry.addSpawn(EntityBlazeTempest.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
-				EntityRegistry.addSpawn(EntityArchSpider.class, 10, 0, 1, EnumCreatureType.MONSTER, bio);
+				EntityRegistry.addSpawn(EntityBlazeTempest.class, 10, 1, 1, EnumCreatureType.MONSTER, bio);
+				EntityRegistry.addSpawn(EntityArchSpider.class, 10, 1, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityWitchMadameVerre.class, 15, 1, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityWindineVerre.class, 10, 1, 1, EnumCreatureType.MONSTER, bio);
 				EntityRegistry.addSpawn(EntityIfritVerre.class, 10, 1, 1, EnumCreatureType.MONSTER, bio);

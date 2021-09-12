@@ -49,7 +49,7 @@ public class RenderUtils {
         GlStateManager.translate(x, y, z);
         GlStateManager.rotate(angle, xr, yr, zr);
         if (!renderer.shouldRenderItemIn3D(stack)) {
-            GlStateManager.rotate(180f, 0f, 1f, 0f);
+            GlStateManager.rotate(180F, 0F, 1F, 0F);
         }
         GlStateManager.pushAttrib();
         RenderHelper.enableStandardItemLighting();
@@ -81,7 +81,6 @@ public class RenderUtils {
 	        wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
 	        wr.pos(b.minX, b.minY, b.maxZ).endVertex();
 	        wr.pos(b.minX, b.minY, b.minZ).endVertex();
-
 
 	        wr.pos(b.minX, b.maxY, b.minZ).endVertex();
 	        wr.pos(b.maxX, b.maxY, b.minZ).endVertex();

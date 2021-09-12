@@ -2,8 +2,15 @@ package sweetmagic.util;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraftforge.items.IItemHandlerModifiable;
+import sweetmagic.api.iitem.IAcce;
+import sweetmagic.api.iitem.IPouch;
+import sweetmagic.init.ItemInit;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 
 public class PlayerHelper {
 
@@ -29,12 +36,48 @@ public class PlayerHelper {
 
 	// ポーション付加
 	public static void addPotion (EntityLivingBase entiy, Potion potion, int time, int level) {
+		entiy.removePotionEffect(potion);
 		entiy.addPotionEffect(new PotionEffect(potion, time, level));
 	}
 
 	// ポーション付加
-	public static void addPotion (EntityLivingBase entiy, Potion potion, int time, int level, boolean flag) {
-		entiy.addPotionEffect(new PotionEffect(potion, time, level, true, true));
+	public static void addPotion (EntityLivingBase entity, Potion potion, int time, int level, boolean notDamage) {
+
+		// プレイヤーかつバフなら
+		if (entity instanceof EntityPlayer && !potion.isBadEffect() && notDamage) {
+			time = addBuffTime((EntityPlayer) entity, time);
+		}
+
+		entity.removePotionEffect(potion);
+		entity.addPotionEffect(new PotionEffect(potion, time, level, true, true));
+	}
+
+	// 追加するバフ時間
+	public static int addBuffTime (EntityPlayer entity, int time) {
+
+		// 防具の取得
+		ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (stack.isEmpty() || !(stack.getItem() instanceof IPouch) ) { return time; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(entity);
+		IItemHandlerModifiable inv = neo.inventory;
+		float addTime = 1F;
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			// ペンデュラムネックレスなら
+			if (st.getItem() == ItemInit.pendulum_necklace) {
+				addTime += 0.1F;
+			}
+		}
+
+		return (int) (time * addTime);
 	}
 
     public static void addExperience (EntityPlayer player, int amount) {

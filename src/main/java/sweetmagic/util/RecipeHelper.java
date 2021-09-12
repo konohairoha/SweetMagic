@@ -21,6 +21,7 @@ import sweetmagic.api.recipe.oven.OvenRecipeInfo;
 import sweetmagic.api.recipe.pan.PanRecipeInfo;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.api.recipe.pot.PotRecipeInfo;
+import sweetmagic.init.ItemInit;
 
 public class RecipeHelper {
 
@@ -669,13 +670,19 @@ public class RecipeHelper {
 	public static RecipeUtil recipeSingleCraft (NormalRecipeInfo recipeInfo, EntityPlayer player, ItemStack hand) {
 
 		ItemStack handitem = recipeInfo.getHandList().get(0);
+		Item handStack = handitem.getItem();
 		ItemStack copy = hand.copy();
 		List<ItemStack> inputs = new ArrayList<ItemStack>();
 		List<ItemStack> results = new ArrayList<ItemStack>();
 
 		// バケツチェック
-		if (isBucket(handitem.getItem())) {
+		if (isBucket(handStack)) {
 			results.add(new ItemStack(Items.BUCKET, handitem.getCount()));
+		}
+
+		// 上位魔術書
+		else if (handStack == ItemInit.magic_book_cosmic){
+			results.add(new ItemStack(ItemInit.magic_book_cosmic, handitem.getCount()));
 		}
 
 		// 手に持っているアイテムを処理する
@@ -686,12 +693,18 @@ public class RecipeHelper {
 
 			// ItemStackの取得して個数設定 + リスト追加
 			ItemStack send = ((ItemStack) recipe[1]).copy();
+			Item sendItem = send.getItem();
 			send.setCount((int) recipe[2]);
 			inputs.add(send);
 
 			// バケツチェック
-			if (isBucket(send.getItem())) {
+			if (isBucket(sendItem)) {
 				results.add(new ItemStack(Items.BUCKET, send.getCount()));
+			}
+
+			// 上位魔術書
+			else if (sendItem == ItemInit.magic_book_cosmic){
+				results.add(new ItemStack(ItemInit.magic_book_cosmic, handitem.getCount()));
 			}
 		}
 

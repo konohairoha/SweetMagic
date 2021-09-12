@@ -47,8 +47,7 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 
 	// 表示する情報
 	@Override
-	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor,
-			IWailaConfigHandler config) {
+	public List<String> getWailaBody(ItemStack itemStack, List<String> currenttip, IWailaDataAccessor accessor, IWailaConfigHandler config) {
 
 		Block block = accessor.getBlock();
 

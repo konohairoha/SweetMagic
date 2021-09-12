@@ -44,7 +44,7 @@ public class MillJeiRecipeWrapper implements IRecipeWrapper {
 		minecraft.fontRenderer.drawString(rClick, recipeWidth / 2 - 20, 6, 0xFFFFFF, true);
 		minecraft.fontRenderer.drawString("milltime : 5sec", 58, 40, 0xFFFFFF, true);
 
-		drawStrings(spInv, minecraft);
+		this.drawStrings(spInv, minecraft);
 	}
 
 	// 複数個のアイテムを説明欄に記載するとき用楽メソッド

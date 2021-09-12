@@ -9,25 +9,25 @@ public class SMCoordinate {
 	public final int z;
 	public final int dim;
 
-	public SMCoordinate(int i, int j, int d) {
-		this.x = i;
-		this.z = j;
-		this.dim = d;
+	public SMCoordinate(int x, int y, int dim) {
+		this.x = x;
+		this.z = y;
+		this.dim = dim;
 	}
 
 	public Chunk getChunk(World world) {
 		return world.getChunkFromChunkCoords(this.x, this.z);
 	}
 
-	public boolean sameCood(int i, int j, int d) {
-		return i == this.x && j == this.z && this.dim == d;
+	public boolean sameCood(int x, int z, int dim) {
+		return x == this.x && z == this.z && this.dim == dim;
 	}
 
 	@Override
 	public boolean equals(Object obj) {
 		if (obj != null && obj instanceof SMCoordinate) {
 			SMCoordinate coord = (SMCoordinate) obj;
-			return coord.x == x && coord.z == this.z && coord.dim == this.dim;
+			return coord.x == this.x && coord.z == this.z && coord.dim == this.dim;
 		}
 		return false;
 	}

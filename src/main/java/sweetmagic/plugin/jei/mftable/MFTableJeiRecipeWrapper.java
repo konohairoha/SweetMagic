@@ -3,6 +3,8 @@ package sweetmagic.plugin.jei.mftable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.Lists;
+
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;
 import mezz.jei.api.ingredients.IIngredients;
@@ -20,6 +22,7 @@ public class MFTableJeiRecipeWrapper implements IRecipeWrapper {
 	private int extraLines;
 	public List<ItemStack> handList;
 	public List<List<ItemStack>> inputList;
+	public List<List<ItemStack>> prevList;
 	public ItemStack[] outputs;
 	public IDrawable item;
 	public int needLevel;
@@ -31,9 +34,13 @@ public class MFTableJeiRecipeWrapper implements IRecipeWrapper {
 		this.handList = recipe.getHandList();
 		this.outputs = recipe.getOutputIngArray();
 
+		this.prevList = Lists.newArrayList();
+		this.prevList.add(this.handList);
+
 		this.inputList = new ArrayList<List<ItemStack>>();
 		for (List<ItemStack> stackList : recipe.getInputList()) {
 			this.inputList.add(stackList);
+			this.prevList.add(stackList);
 		}
 
 		this.needLevel = recipe.getNeedLevel();
@@ -42,8 +49,7 @@ public class MFTableJeiRecipeWrapper implements IRecipeWrapper {
 	// ここでセットすることが必ず必要っぽい…？でも未検証
 	@Override
 	public void getIngredients(IIngredients ingredients) {
-		ingredients.setInput(ItemStack.class, this.handList);
-		ingredients.setInputLists(ItemStack.class, this.inputList);
+		ingredients.setInputLists(ItemStack.class, this.prevList);
 		ingredients.setOutput(ItemStack.class, this.outputs[0]);
 	}
 

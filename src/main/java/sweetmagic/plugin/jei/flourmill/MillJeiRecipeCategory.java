@@ -47,10 +47,9 @@ public class MillJeiRecipeCategory implements IRecipeCategory<MillJeiRecipeWrapp
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, MillJeiRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout layout, MillJeiRecipeWrapper wrapper, IIngredients ingredients) {
 
-		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
+		IGuiItemStackGroup stackFroup = layout.getItemStacks();
 
 		// アイテムの配列順番、Inputかどうか、X座標、Y座標
 		stackFroup.init(0, false, 108, 20);
@@ -61,18 +60,14 @@ public class MillJeiRecipeCategory implements IRecipeCategory<MillJeiRecipeWrapp
 		}
 
 		stackFroup.init(10, true, 48, 20);
-
-		// 手に持ってるアイテム
-		stackFroup.set(10, recipeWrapper.inputs);
+		stackFroup.set(10, wrapper.inputs);
 
 		// 完成品
 		for(int i = 0; i <= 9; i++) {
 
-			if(i+1 > recipeWrapper.outputs.size()) {
-				break;
-			}
+			if (i + 1 > wrapper.outputs.size()) { break; }
 
-			ItemStack item = recipeWrapper.outputs.get(i);
+			ItemStack item = wrapper.outputs.get(i);
 			stackFroup.set(i, item);
 		}
 	}
