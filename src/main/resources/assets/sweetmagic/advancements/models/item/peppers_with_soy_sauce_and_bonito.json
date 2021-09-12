@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures":{
+        "layer0": "sweetmagic:items/peppers_with_soy_sauce_and_bonito"
+    }
+}

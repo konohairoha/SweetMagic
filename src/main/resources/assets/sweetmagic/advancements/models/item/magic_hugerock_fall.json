@@ -2,6 +2,6 @@
     "parent": "sweetmagic:item/basemagic",
     "textures":{
         "1":"sweetmagic:items/frame_3",
-        "0":"sweetmagic:items/magic_summon"
+        "0":"sweetmagic:items/magic_rockblast"
     }
 }
