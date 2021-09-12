@@ -68,7 +68,7 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
 		super.onLivingUpdate();
 
-		if (!this.world.isRemote) { return; }
+		if (!this.world.isRemote || !this.isRender()) { return; }
 
 		this.tickTime++;
 		if (this.tickTime % 16 != 0) { return; }
@@ -160,7 +160,7 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 			int coolTime = this.isUnique() ? 35 : 50;
 			this.randTime = this.rand.nextInt(coolTime);
 
-			EntityBaseMagicShot magic = new EntityRockBlast(this.world, this, ItemStack.EMPTY);
+			EntityBaseMagicShot magic = new EntityRockBlast(this.world, this, ItemStack.EMPTY, 2);
 	        double x = entity.posX - this.posX;
 	        double y = entity.getEntityBoundingBox().minY - entity.height / 2  - this.posY;
 	        double z = entity.posZ - this.posZ;

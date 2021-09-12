@@ -41,7 +41,7 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 
 	public EntitySkullFrost(World world) {
 		super(world);
-		this.experienceValue = 40;
+		this.experienceValue = 60;
 		this.isImmuneToFire = true;
 	}
 
@@ -147,7 +147,7 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 	public void onLivingUpdate() {
 
 		super.onLivingUpdate();
-		if (!this.world.isRemote) { return; }
+		if (!this.world.isRemote || !this.isRender()) { return; }
 
 		this.tickTime++;
 		if (this.tickTime % 60 != 0) { return; }

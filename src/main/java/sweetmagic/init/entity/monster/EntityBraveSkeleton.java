@@ -27,6 +27,7 @@ import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
@@ -147,6 +148,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		this.pY = (int) this.posY;
 		this.pZ = (int) this.posZ;
 		this.setHardHealth(this);
+		this.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 99999, 0));
 
     	return super.onInitialSpawn(dif, living);
 	}
@@ -238,21 +240,19 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	// ブロック破壊
 	public void breakBlock () {
 
-        int x = MathHelper.floor(this.posY);
-        int y = MathHelper.floor(this.posX);
+        int x = MathHelper.floor(this.posX);
+        int y = MathHelper.floor(this.posY);
         int z = MathHelper.floor(this.posZ);
 
-		for (int y2 = -1; y2 <= 3; ++y2) {
+		for (int y2 = 0; y2 <= 3; ++y2) {
 			for (int z2 = -2; z2 <= 2; ++z2) {
-				for (int x2 = 0; x2 <= 5; ++x2) {
-					int y3 = y + y2;
-					int x3 = x + x2;
-					int z3 = z + z2;
-					BlockPos pos = new BlockPos(y3, x3, z3);
+				for (int x2 = -2; x2 <= 2; ++x2) {
+
+					BlockPos pos = new BlockPos(x + x2, y + y2, z + z2);
 					IBlockState state = this.world.getBlockState(pos);
 					Block block = state.getBlock();
 
-					if (!block.isAir(state, this.world, pos) && block.canEntityDestroy(state, world, pos, this) &&
+					if (block != Blocks.AIR && block.canEntityDestroy(state, this.world, pos, this) &&
 							ForgeEventFactory.onEntityDestroyBlock(this, pos, state)) {
 						this.world.destroyBlock(pos, true);
 					}
@@ -292,7 +292,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		Vec3d vec3d = new Vec3d(this.posX - entity.posX, getEntityBoundingBox().minY + this.height / 2.0F - entity.posY + entity.getEyeHeight( ), this.posZ - entity.posZ);
 		vec3d = vec3d.normalize();
 		double targetX = this.posX + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.x * 16.0;
-		double targetY = this.posY + (this.rand.nextInt(8) - 2) - vec3d.y * 16.0;
+		double targetY = this.posY + (this.rand.nextInt(8) + 2) - vec3d.y * 16.0;
 		double targetZ = this.posZ + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.z * 16.0;
 		this.spawnParticle();
 		return this.teleportTo(targetX, targetY, targetZ);
@@ -362,12 +362,13 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		this.deathTicks++;
 		if (!this.world.isRemote) {
 
-			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(24) + 24);
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
 			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 6);
 			this.dropItem(this.world, this, ItemInit.pure_crystal, this.rand.nextInt(7) + 1);
 			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(32) + 12);
 			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
 			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 16);
+			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(3) + 1);
 
 			if (this.rand.nextFloat() <= 0.5F) {
 				this.dropItem(this.world, this, ItemInit.warrior_bracelet, 1);
@@ -510,14 +511,19 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
     	}
 
     	if (this.isHalfHelth()) {
+
     		amount *= 0.75;
+        	amount = Math.min(amount, 15);
 
     		if (this.rand.nextBoolean()) {
 				this.teleportRandomly(this.rand);
     		}
     	}
 
-    	amount = Math.min(amount, 20);
+    	else {
+        	amount = Math.min(amount, 20);
+    	}
+
 		return super.attackEntityFrom(src, amount);
 	}
 
@@ -654,9 +660,12 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 				BlockPos pos = new BlockPos(this.brave);
 				ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.VILLAGER_ANGRY);
+				Random rand = this.world.rand;
+				float chance = this.brave.isRender() ? 0.083F : 0.03F;
 
 				for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 0, -8), pos.add(8, 5, 8))) {
-					if (this.world.rand.nextInt(12) != 0) { continue; }
+					if (rand.nextFloat() > chance) { continue; }
+
 					ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.FLAME, 1, 0.075D);
 				}
 

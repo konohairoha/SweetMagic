@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -206,12 +205,14 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
-			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(36) + 16);
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(36) + 16), 0F);
 			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(7) + 3);
 			this.dropItem(this.world, this, ItemInit.pure_crystal, 4);
 			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(40) + 8);
 			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(20) + 4);
 			this.dropItem(this.world, this, new ItemStack(BlockInit.sturdust_crystal_bot));
+			this.dropItem(this.world, this, ItemInit.mf_magiabottle, 1);
+			this.dropItem(this.world, this, ItemInit.b_mf_magiabottle, this.rand.nextInt(8) + 1);
 		}
     }
 
@@ -515,25 +516,10 @@ public class EntityZombieHora extends EntitySpellcasterIllager implements ISMMob
 				double xRand = entity.posX + (rand.nextDouble() - 0.5) * 20.0;
 				double zRand = entity.posZ + (rand.nextDouble() - 0.5) * 20.0;
 				living.setLocationAndAngles(xRand, entity.posY, zRand, entity.rotationYaw, 0.0F);
+				living.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 				world.spawnEntity(living);
 				SMUtil.tameAIAnger((EntityLiving) living, liv); // タゲをnullに書き換え
 
-				if (world.isRemote) {
-					this.spawnParticl(world, pos);
-				}
-			}
-		}
-
-		public void spawnParticl (World world, BlockPos pos) {
-
-			Random rand = world.rand;
-
-			for (int i = 0; i < 8; i++) {
-				float f1 = (float) pos.getX() - 0.5F + rand.nextFloat();
-				float f2 = (float) (pos.getY() + 0.25F + rand.nextFloat() * 1.5);
-				float f3 = (float) pos.getZ() - 0.5F + rand.nextFloat();
-				Particle particl = new ParticleNomal.Factory().createParticle(0, world, f1, f2, f3, 0, 0, 0);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(particl);
 			}
 		}
 

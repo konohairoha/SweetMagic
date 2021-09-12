@@ -106,7 +106,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		super.onUpdate();
 		this.setNoGravity(true);
 
-		if (!this.isVex) { return; }
+		if (!this.isVex || !this.isRender()) { return; }
 
 		if (this.world.isRemote) {
 
@@ -200,7 +200,13 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		float y = (float) (-this.motionY / 80);
 		float z = (float) (-this.motionZ / 80);
 
-		switch (this.getData()) {
+		int data = 0;
+
+		try {
+			data = this.getData();
+		} catch (Throwable e) { }
+
+		switch (data) {
 		case 0:
 			for (int i = 0; i < 3; i++) {
 				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);

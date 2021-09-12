@@ -117,4 +117,9 @@ public interface ISMMob {
 		entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(maxHealth);
 		entity.setHealth(maxHealth);
 	}
+
+	// レンダーを軽減かどうか
+	default boolean isRender () {
+		return SMConfig.isRender;
+	}
 }

@@ -299,6 +299,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 					entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(health);
 					entity.setHealth(entity.getMaxHealth());
 					entity.setPosition(x, y, z);
+					entity.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 					this.world.spawnEntity(entity);
 					SMUtil.tameAIAnger(entity, this.getAttackTarget());
 				}
@@ -709,6 +710,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 			this.dropItem(this.world, this, ItemInit.cosmic_crystal, this.rand.nextInt(2));
 			this.dropItem(this.world, this, ItemInit.magician_quillpen, 1);
 			this.dropItem(this.world, this, ItemInit.accebag, 3);
+			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(4) + 2);
 		}
 
 		super.onDeath(cause);

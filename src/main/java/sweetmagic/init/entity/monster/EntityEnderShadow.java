@@ -46,9 +46,10 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 
 	public EntityEnderShadow(World world) {
 		super(world);
-        this.experienceValue = 80;
+        this.experienceValue = 100;
         this.setSize(0.6F, 2.9F);
         this.stepHeight = 2.0F;
+		this.isImmuneToFire = true;
 	}
 
 	public float getEyeHeight() {
@@ -72,7 +73,7 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	@Override
 	public void onLivingUpdate() {
 		super.onLivingUpdate();
-		if (!this.world.isRemote) { return; }
+		if (!this.world.isRemote || !this.isRender()) { return; }
 
 		for (int i = 0; i < 2; ++i) {
 			double f1 = this.posX + (this.rand.nextDouble() - 0.5D) * this.width;
@@ -96,17 +97,16 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 
 	// スポーンした時にデフォルトで持たせる情報
 	@Override
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance dif) {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
-    	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(Items.IRON_HELMET));
     	this.setChild(false);
 	}
 
 	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData entity) {
 		this.setHardHealth(this);
-		return livingdata;
+		return super.onInitialSpawn(dif, entity);
 	}
 
 	// 死んだとき

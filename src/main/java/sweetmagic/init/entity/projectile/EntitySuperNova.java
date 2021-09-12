@@ -36,18 +36,27 @@ public class EntitySuperNova extends EntityExplosionMagic {
 		this.isHit = true;
 	}
 
+	// パーティクルスポーン
+	@Override
+	protected void spawnParticle() {
+		if (this.motionX != 0 || this.motionZ != 0) {
+			super.spawnParticle();
+		}
+	}
+
 	public void onUpdate() {
 
 		super.onUpdate();
+		if (this.world.isRemote) { return; }
 
-		if (this.ticksInAir >= 7 && !this.isFix) {
+		if (this.ticksInAir >= 9 && !this.isFix) {
 			this.ticksInAir = 0;
 			this.tickTime++;
 			this.isFix = true;
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
-			this.createExplo(this.getWandLevel() * 1.25F);
+			this.createExplo(this.getWandLevel() * 1F);
 		}
 
 		// 一定時間が経ったら
@@ -58,15 +67,13 @@ public class EntitySuperNova extends EntityExplosionMagic {
 			this.motionX = 0;
 			this.motionY = 0;
 			this.motionZ = 0;
-//			System.out.println("|||||" + this.tickTime);
 
 			if (this.tickTime % 9 == 0) {
 
-//				System.out.println("=======");
 				Random rand = this.world.rand;
-				float explo = this.getWandLevel() * 0.5F;
+				float explo = this.getWandLevel() * 0.35F;
 
-				for (int i = 0; i < 4; i++) {
+				for (int i = 0; i < 3; i++) {
 					int pX = (int) (this.posX + rand.nextInt(24) - rand.nextInt(24));
 					int pZ = (int) (this.posZ + rand.nextInt(24) - rand.nextInt(24));
 					this.createExplo(explo, new BlockPos(pX, this.posY, pZ));
@@ -81,10 +88,8 @@ public class EntitySuperNova extends EntityExplosionMagic {
 
 	public void createExplo (float explo, BlockPos pos) {
 
-        AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-explo, -explo / 2, -explo), pos.add(explo, explo / 2, explo));
+        AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-explo, -explo, -explo), pos.add(explo, explo, explo));
 		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
-		if (list.isEmpty()) { return; }
-
 		boolean isIMob = this.getThrower() instanceof IMob;
 
 		for (EntityLivingBase entity : list ) {
@@ -98,7 +103,7 @@ public class EntitySuperNova extends EntityExplosionMagic {
 			entity.hurtResistantTime = 0;
 		}
 
-		this.world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.25F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
+		this.world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.75F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
 		ParticleHelper.spawnBoneMeal(this.world, pos, EnumParticleTypes.EXPLOSION_HUGE);
 	}
 
@@ -110,9 +115,11 @@ public class EntitySuperNova extends EntityExplosionMagic {
 			this.setPosition(this.posX, this.posY + 1.25D, this.posZ);
 		}
 
-		this.ticksInAir = 0;
-		this.tickTime++;
-		this.isFix = true;
+		if (!this.world.isRemote && !this.isFix) {
+			this.ticksInAir = 0;
+			this.tickTime++;
+			this.isFix = true;
+		}
 	}
 
 	// えんちちーに当たった時の処理
@@ -121,28 +128,4 @@ public class EntitySuperNova extends EntityExplosionMagic {
 		living.hurtResistantTime = 0;
 		this.createExplo(this.getWandLevel() * 0.75F);
 	}
-
-//	// 死亡時
-//	public void setDead() {
-//
-//		super.setDead();
-//
-//		int level = this.getWandLevel();
-//		double range = 5D + this.getWandLevel();
-//		List<EntityLivingBase> entityList = this.getEntityList(range, range * 0.75, range);
-//
-//		for (EntityLivingBase entity : entityList) {
-//
-//			if (!(entity instanceof IMob)) { continue; }
-//
-//			this.attackDamage(entity, (float) (range + this.getDamage()) );
-//			entity.hurtResistantTime = 0;
-//			this.checkShadow(entity);
-//
-//			entity.addPotionEffect(new PotionEffect(PotionInit.frosty, 40 * (level + 1), 2));
-//			this.playSound(entity, SMSoundEvent.FROST, 0.25F, 1F);
-//		}
-//
-//		this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
-//	}
 }

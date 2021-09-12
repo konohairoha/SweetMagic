@@ -26,27 +26,27 @@ public class EntitySittableBlock extends Entity {
 		this.setPosition(x + 0.5D, y + y0ffset, z + 0.5D);
 	}
 
-	public EntitySittableBlock(World world, double x, double y, double z, double y0ffset, int rotation, double rotationOffset) {
+	public EntitySittableBlock(World world, double x, double y, double z, double y0ffset, int rot, double offset) {
 		this(world);
 		this.blockPosX = (int) x;
 		this.blockPosY = (int) y;
 		this.blockPosZ = (int) z;
-		this.setPostionConsideringRotation(x + 0.5D, y + y0ffset, z + 0.5D, rotation, rotationOffset);
+		this.setPostionConsideringRotation(x + 0.5D, y + y0ffset, z + 0.5D, rot, offset);
 	}
 
-	public void setPostionConsideringRotation(double x, double y, double z, int rotation, double rotationOffset) {
-		switch (rotation) {
+	public void setPostionConsideringRotation(double x, double y, double z, int rot, double offset) {
+		switch (rot) {
 		case 2:
-			z += rotationOffset;
+			z += offset;
 			break;
 		case 0:
-			z -= rotationOffset;
+			z -= offset;
 			break;
 		case 3:
-			x -= rotationOffset;
+			x -= offset;
 			break;
 		case 1:
-			x += rotationOffset;
+			x += offset;
 			break;
 		}
 		this.setPosition(x, y, z);
@@ -54,7 +54,7 @@ public class EntitySittableBlock extends Entity {
 
 	@Override
 	public double getMountedYOffset() {
-		return this.height * 0.0D;
+		return this.height * 0D;
 	}
 
 	@Override
@@ -75,7 +75,7 @@ public class EntitySittableBlock extends Entity {
 	@Override
 	protected void entityInit() {}
 	@Override
-	public void readEntityFromNBT(NBTTagCompound nbttagcompound) {}
+	public void readEntityFromNBT(NBTTagCompound tags) {}
 	@Override
-	public void writeEntityToNBT(NBTTagCompound nbttagcompound) {}
+	public void writeEntityToNBT(NBTTagCompound tags) {}
 }

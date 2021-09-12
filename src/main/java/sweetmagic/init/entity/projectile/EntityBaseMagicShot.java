@@ -18,12 +18,14 @@ import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
@@ -43,10 +45,13 @@ import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityShadowGolem;
 import sweetmagic.init.tile.inventory.InventoryPouch;
+import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMDamage;
 
@@ -74,6 +79,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
     public UUID throwerId;
     public int data = 0;
     public int mobPower = 3;
+    public boolean isCritical = false;
 
 	public EntityBaseMagicShot(World world) {
 		super(world);
@@ -311,6 +317,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 					this.entityHit(target);
 					target.hurtResistantTime = 0;
+					this.criticalEffect(target);
 
 					if (this.getThrower() != null && target != this.getThrower()
 							&& target instanceof EntityPlayer && this.getThrower() instanceof EntityPlayerMP) {
@@ -333,6 +340,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 						this.setEntityDead();
 						this.entityHit((EntityLivingBase) entity);
 						entity.hurtResistantTime = 0;
+						this.criticalEffect((EntityLivingBase) entity);
 					}
 				}
 
@@ -379,6 +387,13 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		return entity.attackEntityFrom(damage, dame);
 	}
 
+	public void criticalEffect (EntityLivingBase target) {
+		if (this.isCritical) {
+			ParticleHelper.spawnParticle(this.world, new BlockPos(target).add(0, 1.5D, 0), EnumParticleTypes.SPELL_WITCH, 16, 0.5D);
+			this.playSound(this.getThrower(), SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.125F, 1.25F);
+		}
+	}
+
 	// 地面についたときの処理
 	protected void inGround(RayTraceResult result) {
 		this.setEntityDead();
@@ -390,8 +405,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	}
 
 	// 重力加速度及び空中時のonUpdateの追加
-	protected void isGravity() {
-	}
+	protected void isGravity() { }
 
 	// 水中での速度減衰
 	protected float inWaterSpeed(RayTraceResult raytraceresult) {
@@ -544,7 +558,54 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public void onCollideWithPlayer(EntityPlayer entity) {}
 
 	public void setDamage(double damage) {
-		this.damage = damage;
+		boolean isCritical = this.isCritical = this.isCritical();
+		this.damage = (isCritical ? damage * 1.5D : damage) * SMConfig.damageRate;
+	}
+
+	// クリティカル判定
+	public boolean isCritical () {
+
+		EntityLivingBase entity = this.getThrower();
+
+		// 幸運が付いてるならバフレベル * 5%の確率でクリティカル判定
+		if (entity != null && entity.isPotionActive(MobEffects.LUCK)) {
+			int level = entity.getActivePotionEffect(MobEffects.LUCK).getAmplifier() + 1;
+			return this.world.rand.nextFloat() <= level * 0.05F + this.getCriticalChance(entity);
+		}
+
+		return false;
+	}
+
+	// 毒牙のチャンス
+	public float getCriticalChance (EntityLivingBase entity) {
+
+		ItemStack leg = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+		if (!(leg.getItem() instanceof IPouch) || !(entity instanceof EntityPlayer) || entity.getHealth() > (entity.getMaxHealth() / 2)) { return 0F; }
+
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch((EntityPlayer) entity);
+		IItemHandlerModifiable inv = neo.inventory;
+		float criticalRate = 0F;
+
+		// ホーリーチャームが付いてるなら
+		if (entity.isPotionActive(PotionInit.holly_charm)) {
+			criticalRate += 0.5F;
+		}
+
+		// インベントリの分だけ回す
+		for (int i = 0; i < inv.getSlots(); i++) {
+
+			// アイテムを取得し空かアクセサリー以外なら次へ
+			ItemStack st = inv.getStackInSlot(i);
+			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+
+			// エメラルドピアスを持ってるならダメージ増加
+			if (st.getItem() == ItemInit.poison_fang) {
+				return criticalRate + 0.5F;
+			}
+		}
+
+		return 0F;
 	}
 
 	public double getDamage() {
@@ -579,7 +640,6 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 				// 経験値の計算
 				int addExp = this.smItem != null ? this.getExp(this.smItem) : 10;
-				System.out.println("========" + (addExp *= this.acceValue()));
 
 				// 経験値の追加
 				wand.levelUpCheck(this.world, (EntityPlayer) this.getThrower(), this.stack, addExp *= this.acceValue());
@@ -694,5 +754,10 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 	public int getTick () {
 		return this.ticksInAir;
+	}
+
+	// 乱数取得
+	public float getRandFloat (float rate) {
+		return (this.rand.nextFloat() - this.rand.nextFloat()) * rate;
 	}
 }

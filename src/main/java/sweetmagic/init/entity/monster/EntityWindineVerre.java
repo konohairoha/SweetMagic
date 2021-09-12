@@ -120,10 +120,13 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 
 	public void onLivingUpdate() {
 
-		this.tickTime++;
+		if (!this.isNonBoss()) {
+			this.tickTime++;
+		}
+
 		if (this.damageCoolTime > 0) { this.damageCoolTime--; }
 
-		if (this.tickTime % 5 == 0 && !this.isInWater()) {
+		if (!this.isNonBoss() && this.tickTime % 5 == 0 && !this.isInWater()) {
 
 			int range = 2;
 
@@ -274,14 +277,15 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 		}
 
     	// 光か雷ならリジェネ解除
-    	Entity entity = src.getImmediateSource();
-    	if (entity instanceof EntityLightMagic || entity instanceof EntityElectricMagic) {
-			this.removePotionEffect(PotionInit.regene);
-			this.playSound(SoundEvents.ITEM_SHIELD_BREAK, 0.5F, 1F);
-			PacketHandler.sendToClient(new EntityRemovePKT(this, 0, 0, 0, false));
-    	}
-
     	boolean isRegene = this.isPotionActive(PotionInit.regene);
+    	Entity entity = src.getImmediateSource();
+
+    	if ( !this.isNonBoss() && isRegene && (entity instanceof EntityLightMagic || entity instanceof EntityElectricMagic) ) {
+			this.removePotionEffect(PotionInit.regene);
+			ParticleHelper.spawnParticle(this.world, this.getPosition().add(0, 1.5D, 0), EnumParticleTypes.END_ROD, 64, 0.15D);
+			PacketHandler.sendToClient(new EntityRemovePKT(this, 0, 0, 0, false));
+			isRegene = false;
+    	}
 
 		// ダメージ倍処理
     	if (!this.isUnique() && !isRegene) {
@@ -337,9 +341,12 @@ public class EntityWindineVerre extends EntityMob implements IRangedAttackMob, I
 			this.entityDropItem(new ItemStack(ItemInit.blank_magic, this.rand.nextInt(2)), 0F);
 			this.entityDropItem(new ItemStack(ItemInit.blank_page, this.rand.nextInt(4) + 1), 0F);
 			this.entityDropItem(new ItemStack(ItemInit.witch_tears, this.rand.nextInt(2) + 1), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.b_mf_bottle, this.rand.nextInt(2) + 1), 0F);
 
 			if (this.isUnique()) {
 				this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4);
+				this.dropItem(this.world, this, ItemInit.mf_magiabottle, 1);
+				this.dropItem(this.world, this, ItemInit.b_mf_magiabottle, this.rand.nextInt(8) + 1);
 
 				if (this.rand.nextBoolean()) {
 					this.dropItem(this.world, this, ItemInit.mermaid_veil, 1);

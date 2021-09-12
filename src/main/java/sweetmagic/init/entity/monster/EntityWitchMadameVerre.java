@@ -274,9 +274,12 @@ public class EntityWitchMadameVerre extends EntityMob implements IRangedAttackMo
 			this.entityDropItem(new ItemStack(ItemInit.blank_magic, this.rand.nextInt(2)), 0F);
 			this.entityDropItem(new ItemStack(ItemInit.blank_page, this.rand.nextInt(4) + 1), 0F);
 			this.entityDropItem(new ItemStack(ItemInit.witch_tears, this.rand.nextInt(2) + 1), 0F);
+			this.entityDropItem(new ItemStack(ItemInit.b_mf_bottle, this.rand.nextInt(2) + 1), 0F);
 
 			if (this.isUnique()) {
 				this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4);
+				this.dropItem(this.world, this, ItemInit.mf_magiabottle, 1);
+				this.dropItem(this.world, this, ItemInit.b_mf_magiabottle, this.rand.nextInt(8) + 1);
 
 				if (this.rand.nextBoolean()) {
 					this.dropItem(this.world, this, ItemInit.witch_scroll, 1);

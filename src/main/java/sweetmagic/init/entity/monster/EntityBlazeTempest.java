@@ -85,9 +85,9 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
 	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData entity) {
 		this.setHardHealth(this);
-		return livingdata;
+		return super.onInitialSpawn(dif, entity);
 	}
 
 	protected SoundEvent getAmbientSound() {
@@ -135,7 +135,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 		}
 
 		// パーティクルスポーン
-		if (this.world.isRemote) {
+		if (this.world.isRemote && this.isRender()) {
 			this.spawnParticle(this, this.world, 1);
 		}
 

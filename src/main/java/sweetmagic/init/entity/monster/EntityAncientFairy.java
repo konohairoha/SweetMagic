@@ -21,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -113,7 +114,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 			if (this.world.isRemote) {
 				for(int k = 0; k <= 3; k++) {
 					float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-					float f2 = (float) (this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+					float f2 = (float) this.posY + 0.25F + this.rand.nextFloat() * 1.5F;
 					float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
 					FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
 				}
@@ -174,6 +175,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 			entity.setPosition(x, this.posY + this.rand.nextDouble() * 2, z);
 			entity.setData(this.rand.nextInt(3));
 			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 2400, 0, true, false));
+			entity.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 			this.world.spawnEntity(entity);
 		}
 
@@ -261,25 +263,23 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
     	// 風魔法チェック
     	if (this.checkMagicCyclone(src)) {
-    		amount *= 0.05F;
+			this.teleportRandomly(this.rand);
+    		amount *= 0.03F;
     	}
 
     	// 光魔法チェック
     	if (this.checkMagicLight(src)) {
     		amount *= 0.3F;
+			this.teleportRandomly(this.rand);
     	}
 
     	if (this.isHalfHelth()) {
-
     		amount =  Math.min(amount, 15);
-
-    		if (this.rand.nextBoolean()) {
-				this.teleportRandomly(this.rand);
-    		}
+			this.teleportRandomly(this.rand);
     	}
 
     	else {
-    		amount =  Math.min(amount, 30);
+    		amount =  Math.min(amount, 25);
     	}
 
 		return super.attackEntityFrom(src, amount);
@@ -334,12 +334,13 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 		this.deathTicks++;
 		if (!this.world.isRemote) {
 
-			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(24) + 24);
+			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
 			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 5);
 			this.dropItem(this.world, this, ItemInit.pure_crystal, this.rand.nextInt(7) + 1);
 			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(32) + 12);
 			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
 			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 6);
+			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(3) + 1);
 
 			if (this.rand.nextFloat() <= 0.5F) {
 				this.dropItem(this.world, this, ItemInit.varrier_pendant, 1);
@@ -485,6 +486,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 		public void updateTask() {
 
+			Random rand = this.vex.rand;
 			BlockPos pos = this.vex.getBoundOrigin();
 
 			if (pos == null) {
@@ -493,17 +495,17 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 			for (int i = 0; i < 3; ++i) {
 
-				BlockPos pos1 = pos.add(this.vex.rand.nextInt(15) - 7, this.vex.rand.nextInt(11) - 5, this.vex.rand.nextInt(15) - 7);
+				BlockPos pos1 = pos.add(rand.nextInt(15) - 7, rand.nextInt(11) - 5, rand.nextInt(15) - 7);
 
-				if (this.vex.world.isAirBlock(pos1)) {
-					this.vex.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
+				if (!this.vex.world.isAirBlock(pos1)) { continue; }
 
-					if (this.vex.getAttackTarget() == null) {
-						this.vex.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
-					}
+				this.vex.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
 
-					break;
+				if (this.vex.getAttackTarget() == null) {
+					this.vex.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
 				}
+
+				break;
 			}
 		}
 	}

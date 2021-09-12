@@ -107,20 +107,20 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	}
 
 	// サイズに合わして攻撃力を増やす
-	public int getDamage (int size) {
-		int damage = 1;
+	public float getDamage (int size) {
+		float damage = 1;
 		switch (size) {
 		case 1:
-			damage = 1;
+			damage = 0.5F;
 			break;
 		case 2:
-			damage = 2;
+			damage = 1.5F;
 			break;
 		case 4:
-			damage = 3;
+			damage = 2.5F;
 			break;
 		case 8:
-			damage = 4;
+			damage = 3F;
 			break;
 		}
 		return damage;
@@ -222,7 +222,7 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	}
 
 	// ダメージを与える
-	public void electricAttack (EntityLivingBase entitiy, int dama) {
+	public void electricAttack (EntityLivingBase entitiy, float dama) {
 		entitiy.attackEntityFrom(DamageSource.causeMobDamage(this), dama);
 	}
 
@@ -239,8 +239,11 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.electronic_orb, 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(2)), 0F);
+
+			if (this.getSlimeSize() * 0.35F >= this.rand.nextFloat()) {
+				this.entityDropItem(new ItemStack(ItemInit.electronic_orb, 1), 0.0F);
+				this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(2)), 0F);
+			}
 		}
 	}
 

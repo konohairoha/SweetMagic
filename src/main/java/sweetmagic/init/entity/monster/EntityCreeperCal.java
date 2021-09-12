@@ -39,7 +39,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 
 	public EntityCreeperCal(World world) {
 		super(world);
-        this.experienceValue = 70;
+        this.experienceValue = 80;
 	}
 
 	// えんちちーのステータス設定
@@ -83,7 +83,7 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 
 				WorldHelper.suctionPlayer(world, this.getEntityBoundingBox().grow(1.5D), this.posX, this.posY, this.posZ, this, 0.0775D);
 
-				if (this.world.isRemote) {
+				if (this.world.isRemote && this.isRender()) {
 					for(int k = 0; k <= (this.timeSinceIgnited / 4); k++) {
 
 						float randX = (this.rand.nextFloat() - this.rand.nextFloat()) * 2.5F;
@@ -131,8 +131,8 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 	        entity.addEffect(new PotionEffect(PotionInit.gravity, 201, 0));
 	        this.world.spawnEntity(entity);
 
-	        float explo = this.isDayElapse(this.world, 5) ? 2.5F : 4F;
-			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.getPowered() ? explo * 2 : explo, false);
+	        float explo = 1.5F;
+			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.getPowered() ? explo * 3F : explo, false);
 			this.setDead();
 			this.dead = true;
 		}
