@@ -428,7 +428,10 @@ item.unyielding_fire.name=不屈之火
 item.frosted_chain.name=冰霜吊坠
 item.holly_charm.name=神圣护符
 item.wind_relief.name=风浮雕
-item.magic_shadowhorse.name=召唤『暗影驹』
+item.magic_shadowhorse.name=召唤『幻影驹』
+item.magic_refresh_gift.name=刷新礼物
+
+
 
 
 ＃-方块-
@@ -935,6 +938,8 @@ tile.tinplate_bucket.name=马口铁桶
 tile.frypan_red_off.name=平底锅
 tile.frypan_red_on.name=平底锅
 tile.frypan_red_re.name=平底锅
+tile.showcase_stand.name=展示柜底座
+tile.magia_light.name=闪耀台灯
 
 
 ＃--gui-
@@ -1018,11 +1023,11 @@ tip.magic_randheal.name=恢复范围内的玩家
 tip.magic_shaodw.name=降低生命值和饱食度，并给予攻击伤害增加buff
 tip.magic_heal.name=恢复自己
 tip.magic_barrier.name=为自己增加伤害减免增益（效果时间根据所受到的伤害量而减少）
-tip.magic_poison.name=增加一个buff，使其在攻击时对致命的毒药减益
+tip.magic_poison.name=增加一个buff，使其在攻击时对致命的毒药debuff
 tip.magic_cyclon.name=发射多阵风
 tip.magic_elec.name=伤害你周围的敌人
 tip.magic_fire.name=射击降落在生物身上时燃烧的魔法
-tip.fro.name=射击魔法，增加了减益效果，使降落在生物身上时减慢了移动速度
+tip.fro.name=射击魔法，使降落在生物身上时减慢了移动速度
 tip.magic_light.name=接触方块时设置光源
 tip.magic_dig.name=接触方块时破坏方块
 tip.magic_tamagotti.name=接触方块时爆炸
@@ -1040,7 +1045,7 @@ tip.magic_shadowwolf.name=每位玩家最多召唤3只狼
 tip.magic_flamenova.name=接触时增加燃烧范围
 tip.magic_rangepoison.name=接触方块时在该区域产生有毒的薄雾
 tip.magic_elecarmor.name=将你受到的伤害返还给敌人（取决于你的魔杖等级）
-tip.magic_refresh.name=在范围内治愈伙伴的减益
+tip.magic_refresh.name=在范围内治愈伙伴的debuff
 tip.magic_healingwish.name=完全治愈自身
 tip.magic_lightningbolt.name=直线攻击
 tip.machete.name=增加生物掉落物
@@ -1144,14 +1149,14 @@ tip.magic_creative.name=魔杖等级提高1.
 tip.magic_avoid.name=提高移动速度并给予周围玩家概率攻击闪避buff。
 tip.seedbag.name=随机获得5个种子
 tip.magia_successor.name=让另一个魔杖通过消耗MF来继承插槽中魔杖的水平，并继承一半的水平。
-tip.magic_absolute_zero.name=使玩家防御一段时间，同时对周围的敌人造成冰霜伤害。实体消失时对周围敌人的生物造成巨大伤害+冰霜减益
-tip.magic_blaze_end.name=使玩家在一定时间内对周围环境造成火焰伤害的同时提高攻击强度。当实体消失时，对周围敌方生物造成巨大伤害+燃烧减益
+tip.magic_absolute_zero.name=使玩家防御一段时间，同时对周围的敌人造成冰霜伤害。实体消失时对周围敌人的生物造成巨大伤害+冰霜debuff
+tip.magic_blaze_end.name=使玩家在一定时间内对周围环境造成火焰伤害的同时提高攻击强度。当实体消失时，对周围敌方生物造成巨大伤害+燃烧debuff
 tip.magic_healing_hightlow.name=在范围内的生物身上添加去污药水+完全恢复生命力+减震
 tip.magic_absorphealth.name=吸收敌对生物的生命来回复自身
 tip.magic_mind_control.name=操纵一个生物攻击另一个生物
 tip.magic_creative.name=将魔杖等级提高1。
 tip.eggbag.name=获得4-12个鸡蛋
-tip.magician_quillpen.name=抑制被以太屏障等击中时减少的效果时间。
+tip.magician_quillpen.name=抑制受到攻击时持续时间的减少,让需要蓄力使用的魔法不再需要蓄力
 tip.gravity_pendant.name=吸引周围的物品和经验点
 tip.accebag.name=随机获得1件装备
 tip.magic_blackhole.name=在一段时间内吸引你周围的生物并在一段时间后对他们造成伤害。
@@ -1180,11 +1185,11 @@ tip.starlightwand_mode.name=方块放置类型：
 tip.quartz_seed.name=仅从“种子袋”获得
 tip.magic_mining_enchant.name=获得急迫Ⅲbuff
 tip.magic_rockblast.name=对敌人的护甲造成额外伤害。
-tip.magic_hugerock_fall.name=基于敌人的护甲 + 弱点造成额外伤害
-tip.mf_amount.name=MF 数量：
-tip.magia_accelerator.name=消耗 MF 来加速 5 格半径内的方块
+tip.magic_hugerock_fall.name=基于敌人的护甲+弱点造成额外伤害
+tip.mf_amount.name=MF数量：
+tip.magia_accelerator.name=消耗MF来加速5格半径内的方块
 tip.sm_redstone.name=可以被红石控制
-tip.magic_expand_barrier.name=为周围的友方生物提供以太屏障 + 再生。
+tip.magic_expand_barrier.name=为周围的友方生物提供以太屏障+再生。
 tip.heal_value.name=根据最大生命恢复生命。
 tip.pendulum_necklace.name=增加魔法提供的buff的时间。
 tip.magicbook_cosmic.name=用于特殊合成时不消耗此物品
@@ -1201,6 +1206,10 @@ tip.magicbook_cosmic_pick.name=收集水晶：
 tip.magicmeal_flower.name=右键对甜蜜魔法的花使用进行增产。
 tip.walltowel.name=右键切换毛巾样式。
 tip.magicbook_cosmic_shift.name=潜行右键将MF转换成以太水晶。
+tip.magic_refresh_gift.name=使同一维度中的所有玩家都能获得debuff无效化效果。
+tip.magia_light.name=消耗MF来抑制范围内敌对生物的生成。
+tip.magia_light_range.name=效果区域：
+
 
 ＃-药水-
 sweetmagic.effect.frosted=冻结
@@ -1313,18 +1322,18 @@ smguid.entry.mftank=存储MF
 smguid.entry.lantan=收集MF
 smguid.entry.succesor=魔杖等级继承
 smguid.entry.arcana=为普通物品附魔
+smguid.entry.cos_book=新魔法书
+smguid.entry.un_fire=高级装备
 
 smguid.entry.key=地牢专属物品
 smguid.entry.flower_pot=添加七彩花朵
 
-smguid.entry.plant=调整作物的高度
-smguid.entry.machete=增加物品掉落
-smguid.entry.chair=两种使用椅子的方法
-smguid.entry.cos_book=新魔法书
-smguid.entry.un_fire=高级装备
-smguid.entry.horse=第三个召唤咒语
-smguid.entry.blood=终极祭品
-smguid.entry.mb_book=改变渲染过程
+smguid.entry.bucket=魔法水桶的强化
+smguid.entry.magia_light=敌对生物的抑制
+smguid.entry.showcase=甜点展示柜的外观变化及展示柜底座
+smguid.entry.quill_pen=魔法师的羽毛笔的効果追加
+
+
 
 ＃--GUID文本-
 smguid.text.aether_crystal=以太水晶是可以通过在铁以上的工具开采以太矿石而获得的物品，它是重要的魔法材料。
@@ -1356,17 +1365,17 @@ smguid.text.seedbag=<t><t>由于通常很难获得各种种子，所以我们添
 smguid.text.lantan=<t><t>为了简化注册MF发送/接收的操作，我们添加了一个特殊的灯笼来收集周围花瓶产生的MF，检测花瓶的范围为12个块，您可以一次处理大量花瓶。
 smguid.text.succesor=<t><t>可以在一定程度上提高Wand的级别，上升的Wand级别是继承源的一半，但是使用它时要小心，因为它需要大量MF。
 smguid.text.arcana=<t><t>附魔桌可以为那些非甜蜜魔法的装备附上“以太魅力”和“以太修复”。<br>一次花费200,000MF。
+smguid.text.cos_book=<t><t>添加了具有特殊功能的高级法术书。<br>这本书可以用于特殊合成，可以存储以太水晶，或转换为MF。<br>有关详细的功能说明，请参阅工具提示。
+smguid.text.un_fire=<t><t>一些高端装备的效果比平时更强。<br>只能在特殊合成中使用，虽然条件有限，但很多效果都非常好。
+
 smguid.text.key=<t><t>魔法钥匙只能在地下城中获得，用魔法钥匙右键魔法屏障玻璃以将其打开。
 smguid.text.flower_pot=<t><t>添加了很多花，这次添加的所有花都是在平原上生成的，都可以用作染料，只有雪花莲是在雪地等寒冷的生物群落中产生的。可以在花瓶中使用鲜花来生产MF，如果不想让鲜花生成，可以在配置中将其禁用。
+smguid.text.mb_book=<t><t>在使用魔法初学者之家时会有预览。
 
-smguid.text.plant=<t> <t> 将花盆中种植的甜蜜魔法花朵和农作物的高度降低以匹配花盆。
-smguid.text.machete=<t> <t> 砍刀效果从之前的效果重新设计，增加了用砍刀击败生物时的掉落物数量。 <br> 当然，数量会随着附魔进一步增加。
-smguid.text.chair=<t> <t> 添加了一个可以用于两种场景的椅子。 <br> 平时是1格高的椅子，但是放台阶上就会变成1.5格高的椅子。
-smguid.text.cos_book=<t> <t> 添加了具有特殊功能的高级法术书。 <br> 这本书可以用于特殊合成，可以存储以太水晶，或转换为MF。 <br> 有关详细的功能说明，请参阅工具提示。
-smguid.text.un_fire=<t> <t> 一些高端装备的效果比平时更强。 <br> 只能在特殊合成中使用，虽然条件有限，但很多效果都非常好。
-smguid.text.horse=<t> <t> 添加了新的召唤魔法。 <br> 召唤一匹的擅长奔跑和跳跃的暗影驹，请在初期作为伙伴使用。
-smguid.text.blood=<t> <t> 增加嗜血魔戒效果。 <br> 现在，当你用魔法击败敌对生物时可以恢复一点点生命值。
-smguid.text.mb_book=<t> <t> 在使用魔法初学者之家时会有预览。
+smguid.text.bucket=<t><t>现在多元水桶更加方便。可以为其他mod的液体罐填充水，批量制作水杯，并将其用于烹饪。
+smguid.text.magia_light=<t><t>闪耀台灯可以通过消耗MF来抑制敌对生物的生成<br>抑制区域的默认半径为128个块，但这可以在配置文件中更改<br>消耗的MF取决于要抑制区域的面积。
+smguid.text.showcase=<t><t>现在甜点展示柜可以进行材质连接，我添加这个是因为甜点展示柜需要一个底座。我认为这使得甜点展示柜在很多地方能装饰更加容易，所以请使用它。
+smguid.text.quill_pen=<t><t>为魔法羽毛笔添加新效果。<br>通过装备它，您将可以不需要蓄力而使用需要蓄力的魔法，例如闪电魔法。<br>随着效果的加入，它现在只能作为生物掉落获得。
 
 
 ＃--ADVENT-
@@ -1436,6 +1445,13 @@ smadbent.advanced_magician.title=高级魔法师
 smadbent.advanced_magician.text=将你的魔杖等级提高到30
 smadbent.maestro_magician.title=大魔法师
 smadbent.maestro_magician.text=将你的魔杖等级提高到40
+smadbent.magic_book_cosmic.title=新魔法书
+smadbent.magic_book_cosmic.text=创造一本“宇宙魔法”
+smadbent.witch_craft.title=巫术
+smadbent.witch_craft.text=在魔力合成台上进行合成
+smadbent.guide_book.title=这是关于“开始”的故事
+smadbent.guide_book.text=创造一本甜蜜魔法指南
+
 
 
 ＃--deth-
