@@ -4,6 +4,7 @@ import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -23,11 +24,13 @@ import net.minecraft.world.World;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityFrostRain;
 import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
+import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
@@ -82,6 +85,7 @@ public class AirMagic extends MFSlotItem {
 	 * 22 = 透明化魔法
 	 * 23 = 採掘速アップ魔法
 	 * 24 = 拡散バリア魔法
+	 * 25 = ディメンション・デバフ解除
 	 */
 
 	// テクスチャのリソースを取得
@@ -163,6 +167,9 @@ public class AirMagic extends MFSlotItem {
 			break;
 		case 24:
 			toolTip.add("tip.magic_expand_barrier.name");
+			break;
+		case 25:
+			toolTip.add("tip.magic_refresh_gift.name");
 			break;
 		}
 
@@ -264,6 +271,8 @@ public class AirMagic extends MFSlotItem {
 			// 拡散バリア魔法
 			flag = this.expandBarrierAction(world, player, stack, tags);
 			break;
+		case 25:
+			flag = this.refreshGiftAction(world, player, stack, tags);
 		}
 
 		return flag;
@@ -271,7 +280,7 @@ public class AirMagic extends MFSlotItem {
 
 	// 範囲回復
 	public boolean rangeHealAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
-		world.playSound(null, new BlockPos(player), SMSoundEvent.HEAL, SoundCategory.NEUTRAL, 0.175F, 1);
+		world.playSound(null, player.getPosition(), SMSoundEvent.HEAL, SoundCategory.NEUTRAL, 0.175F, 1);
 		WorldHelper.PlayerHeal(world, player.getEntityBoundingBox().grow(7D, 5D, 7D), player, stack, false);
 		return false;
 	}
@@ -309,7 +318,6 @@ public class AirMagic extends MFSlotItem {
 		// デバフ解除
 		player.removePotionEffect(MobEffects.HUNGER);
 		player.removePotionEffect(MobEffects.WEAKNESS);
-		world.playSound(null, new BlockPos(player), SMSoundEvent.HEAL, SoundCategory.NEUTRAL, 0.175F, 1F);
 		this.playSound(world, player, SMSoundEvent.HEAL, 0.175F, 1F);
 
 		return true;
@@ -622,19 +630,54 @@ public class AirMagic extends MFSlotItem {
 		return true;
 	}
 
+	// 持続デバフ解除魔法
+	public boolean refreshGiftAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+		level += 2;
+
+		// ワールド内のプレイヤー取得
+		List<EntityPlayer> playerList = world.playerEntities;
+
+		for (EntityPlayer entity : playerList) {
+			this.addPotion(entity, PotionInit.refresh_effect, (int) (this.effectTime(level) * 1.5), 0, true);
+			ParticleHelper.spawnHeal(entity, EnumParticleTypes.WATER_SPLASH, 16, 1, 4);
+		}
+
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(level, level, level);
+		List<EntityLivingBase> entityList = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+
+		for (EntityLivingBase entity : entityList) {
+
+			if (!(entity instanceof EntityZombie) && !entity.getName().equals("lich")) { continue; }
+
+			entity.heal(level + 3);
+			entity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_HEALTH, level * 2, 0, true, false));
+			world.playSound(null, entity.getPosition(), SMSoundEvent.HEAL, SoundCategory.NEUTRAL, 0.175F, 1);
+		}
+
+
+		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+		return true;
+	}
+
 	// 魔法が使えるかチェック
 	@Override
 	public boolean canItemMagic (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+
 		switch (this.data) {
 		case 9:
 	        // 空が見えるなら打てる
-	        return world.canSeeSky(new BlockPos(player));
+	        return world.canSeeSky(player.getPosition()) || wand.isEquipment(player, ItemInit.magician_quillpen);
 		case 21:
-			// 杖の取得
-			IWand wand = IWand.getWand(stack);
 			return wand.getLevel(stack) < wand.getMaxLevel();
 		}
+
 		return true;
 	}
 

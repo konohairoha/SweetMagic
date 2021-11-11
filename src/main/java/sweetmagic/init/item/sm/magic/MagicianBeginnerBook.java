@@ -79,7 +79,7 @@ public class MagicianBeginnerBook extends SMItem {
 			if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
 				this.genHouse(world, pos, tags);
 			}
-			if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+			if (!player.isCreative()) { stack.shrink(1); }
 			return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
 		}
 

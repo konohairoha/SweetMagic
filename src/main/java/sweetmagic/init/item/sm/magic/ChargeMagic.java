@@ -26,6 +26,7 @@ import net.minecraft.world.World;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.block.crop.MagiaFlower;
 import sweetmagic.init.entity.projectile.EntityElectricMagic;
@@ -363,7 +364,7 @@ public class ChargeMagic extends MFSlotItem {
 		int level = IWand.getLevel(wand, stack) + 4;
 		this.rangeGrow(world, new BlockPos(player), level);
 		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
-		return this.rangeGrow(world, new BlockPos(player), level);
+		return this.rangeGrow(world, player.getPosition(), level);
 	}
 
 
@@ -386,7 +387,8 @@ public class ChargeMagic extends MFSlotItem {
 			return true;
 		}
 
-		return IWand.getWand(stack).getChargeTick() >= 1;
+		IWand wand = IWand.getWand(stack);
+		return wand.getChargeTick() >= 1 || wand.isEquipment(player, ItemInit.magician_quillpen);
 	}
 
 	public void onUpdate (World world, EntityPlayer player, ItemStack stack) {
