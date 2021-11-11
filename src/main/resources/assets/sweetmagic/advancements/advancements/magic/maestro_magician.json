@@ -15,10 +15,9 @@
     "criteria": {
         "magic_book": {
             "trigger": "sweetmagic:maestro_magician"
-            }
-        }
-    },
+		}
+	},
    "rewards": {
- 		"experience": 4000
+ 		"experience": 400
 	}
 }

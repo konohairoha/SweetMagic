@@ -12,11 +12,10 @@
     },
     "parent": "sweetmagic:magic/twilight_alstroemeria",
     "criteria": {
-        "magic_book": {
+        "criteria_0": {
             "trigger": "sweetmagic:astral_craft"
-            }
-        }
-    },
+		}
+	},
    "rewards": {
  		"experience": 50
 	}

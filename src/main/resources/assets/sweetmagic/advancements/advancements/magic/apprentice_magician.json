@@ -14,9 +14,8 @@
     "criteria": {
         "magic_book": {
             "trigger": "sweetmagic:apprentice_magician"
-            }
-        }
-    },
+		}
+	},
    "rewards": {
  		"experience": 500
 	}

@@ -1,0 +1,23 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:guide_book"
+        },
+        "title": {
+            "translate": "smadbent.guide_book.title"
+        },
+        "description": {
+            "translate": "smadbent.guide_book.text"
+        },
+		"hidden": true
+    },
+    "parent": "sweetmagic:magic/sugarbell",
+    "criteria": {
+        "guide_book": {
+            "trigger": "sweetmagic:guide_book"
+		}
+	},
+	"rewards": {
+ 		"loot": ["sweetmagic:guide_book"]
+	}
+}

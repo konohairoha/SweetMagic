@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:pedestal_creat"
+        },
+        "title": {
+            "translate": "smadbent.witch_craft.title"
+        },
+        "description": {
+            "translate": "smadbent.witch_craft.text"
+        }
+    },
+    "parent": "sweetmagic:magic/astral_craft",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:witch_craft"
+		}
+	},
+   "rewards": {
+ 		"experience": 75
+	}
+}

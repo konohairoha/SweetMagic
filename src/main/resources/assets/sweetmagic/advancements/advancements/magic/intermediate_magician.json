@@ -14,9 +14,8 @@
     "criteria": {
         "magic_book": {
             "trigger": "sweetmagic:intermediate_magician"
-            }
-        }
-    },
+		}
+	},
    "rewards": {
  		"experience": 750
 	}
