@@ -8,12 +8,14 @@
       		"side": "sweetmagic:block/glass_green4panel_normal"
     	}
     },
-"variants": {
-	"bot=false,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_normal" } },
-	"bot=true,top=false": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_down" } },
-	"bot=true,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_middle" } },
-	"bot=false,top=true": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_up" } },
+	"variants": {
+		"local": {
+			"normal": { },
+			"top": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_up" } },
+			"center": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_middle" } },
+			"bottom": { "model": "sweetmagic:basewood", "textures": { "side": "sweetmagic:block/glass_green4panel_down" } }
+		},
 
-     "inventory": [{ }]
+    	 "inventory": [{ }]
     }
 }

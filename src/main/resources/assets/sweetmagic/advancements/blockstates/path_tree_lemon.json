@@ -1,0 +1,18 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:path_tree",
+    "textures": {
+      "0": "sweetmagic:block/lemon_normal_trapdoor"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": {},
+      "south": { "y": 180 },
+      "west": { "y": 270 },
+      "east": { "y": 90 }
+    },
+    "inventory": [{}]
+  }
+}

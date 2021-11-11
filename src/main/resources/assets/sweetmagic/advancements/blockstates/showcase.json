@@ -4,12 +4,26 @@
     "model": "sweetmagic:showcase"
   },
   "variants": {
-    "facing": {
-      "north": {},
-      "south": { "y": 180 },
-      "west": { "y": 270 },
-      "east": { "y": 90 }
-    },
-    "inventory": [{}]
-  }
+	"facing=north,left=false,right=false": { "model": "sweetmagic:showcase"},
+	"facing=north,left=true,right=false": { "model": "sweetmagic:showcase_left"},
+	"facing=north,left=false,right=true": { "model": "sweetmagic:showcase_right"},
+	"facing=north,left=true,right=true": { "model": "sweetmagic:showcase_both"},
+
+	"facing=south,left=false,right=false": { "y": 180, "model": "sweetmagic:showcase"},
+	"facing=south,left=true,right=false": { "y": 180, "model": "sweetmagic:showcase_left"},
+	"facing=south,left=false,right=true": { "y": 180, "model": "sweetmagic:showcase_right"},
+	"facing=south,left=true,right=true": { "y": 180, "model": "sweetmagic:showcase_both"},
+
+	"facing=west,left=false,right=false": { "y": 270, "model": "sweetmagic:showcase"},
+	"facing=west,left=true,right=false": { "y": 270, "model": "sweetmagic:showcase_left"},
+	"facing=west,left=false,right=true": { "y": 270, "model": "sweetmagic:showcase_right"},
+	"facing=west,left=true,right=true": { "y": 270, "model": "sweetmagic:showcase_both"},
+
+	"facing=east,left=false,right=false": { "y": 90, "model": "sweetmagic:showcase"},
+	"facing=east,left=true,right=false": { "y": 90, "model": "sweetmagic:showcase_left"},
+	"facing=east,left=false,right=true": { "y": 90, "model": "sweetmagic:showcase_right"},
+	"facing=east,left=true,right=true": { "y": 90, "model": "sweetmagic:showcase_both"},
+
+     "inventory": [{ }]
+    }
 }

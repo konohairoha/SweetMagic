@@ -26,6 +26,12 @@
             "true": { "submodel": { "east_side": { "model": "pane_side", "y": 90 } } },
             "false": { "submodel": { "east_side": { "model": "pane_noside_alt" } } }
         },
+		"local": {
+			"normal": { },
+			"top": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_green4panel_up", "edge": "sweetmagic:block/empty" } },
+			"center": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_green4panel_middle", "edge": "sweetmagic:block/empty" } },
+			"bottom": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_green4panel_down", "edge": "sweetmagic:block/empty" } }
+		},
      "inventory": [{ "model": "builtin/generated" }]
     }
 }

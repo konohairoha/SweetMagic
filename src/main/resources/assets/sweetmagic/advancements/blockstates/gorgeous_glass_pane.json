@@ -3,9 +3,9 @@
     "defaults": {
         "model": "pane_post",
         "textures": {
-            "edge": "sweetmagic:block/glass_darkbrown4panel_edge",
-            "pane": "sweetmagic:block/glass_darkbrown4panel_normal",
-            "layer0": "sweetmagic:block/glass_darkbrown4panel_normal"
+            "edge": "sweetmagic:block/glass_gorgeous_middle",
+            "pane": "sweetmagic:block/glass_gorgeous_normal",
+            "layer0": "sweetmagic:block/glass_gorgeous_normal"
         },
     	"transform": "forge:default-item"
     },
@@ -28,9 +28,9 @@
         },
 		"local": {
 			"normal": { },
-			"top": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_darkbrown4panel_up", "edge": "sweetmagic:block/empty" } },
-			"center": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_darkbrown4panel_middle", "edge": "sweetmagic:block/empty" } },
-			"bottom": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_darkbrown4panel_down", "edge": "sweetmagic:block/empty" } }
+			"top": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_gorgeous_up", "edge": "sweetmagic:block/empty" } },
+			"center": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_gorgeous_middle", "edge": "sweetmagic:block/empty" } },
+			"bottom": { "model": "pane_post", "textures": { "pane": "sweetmagic:block/glass_gorgeous_down", "edge": "sweetmagic:block/empty" } }
 		},
      "inventory": [{ "model": "builtin/generated" }]
     }

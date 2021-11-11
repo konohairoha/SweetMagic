@@ -1,0 +1,30 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:fence_both",
+		"textures": {
+			"0": "sweetmagic:block/prism_log_side",
+			"1": "sweetmagic:block/prism_log_top",
+			"2": "sweetmagic:block/orange_planks_w_90"
+		}
+    },
+    "variants": {
+        "forward": {
+            "true": { "submodel": { "north_side": { "model": "sweetmagic:fence_side_normal" } } },
+            "false": { }
+        },
+        "back": {
+            "true": { "submodel": { "south_side": { "model": "sweetmagic:fence_side_normal", "y": 180 } } },
+            "false": { }
+        },
+        "left": {
+            "true": { "submodel": { "west_side": { "model": "sweetmagic:fence_side_normal", "y": 270 } } },
+            "false": { }
+        },
+        "right": {
+            "true": { "submodel": { "east_side": { "model": "sweetmagic:fence_side_normal", "y": 90 } } },
+            "false": { }
+        },
+     "inventory": [{ "submodel": { "west_side": { "model": "sweetmagic:fence_side_normal", "y": 270 }, "east_side": { "model": "sweetmagic:fence_side_normal", "y": 90 } } }]
+    }
+}

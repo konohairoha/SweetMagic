@@ -1,0 +1,38 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:counter_table",
+		"textures": {
+			"0": "sweetmagic:block/smstone_down",
+			"1": "sweetmagic:block/whiteline_brick_y"
+		}
+  },
+  "variants": {
+
+		"center=0,facing=north": { "model": "sweetmagic:counter_table" },
+		"center=1,facing=north": { "model": "sweetmagic:counter_table_in", "y": 90 },
+		"center=2,facing=north": { "model": "sweetmagic:counter_table_in" },
+		"center=3,facing=north": { "model": "sweetmagic:counter_table_out" },
+		"center=4,facing=north": { "model": "sweetmagic:counter_table_out", "y": 270 },
+
+		"center=0,facing=south": { "model": "sweetmagic:counter_table", "y": 180 },
+		"center=1,facing=south": { "model": "sweetmagic:counter_table_in", "y": 270 },
+		"center=2,facing=south": { "model": "sweetmagic:counter_table_in", "y": 180 },
+		"center=3,facing=south": { "model": "sweetmagic:counter_table_out", "y": 180 },
+		"center=4,facing=south": { "model": "sweetmagic:counter_table_out", "y": 90 },
+
+		"center=0,facing=west": { "model": "sweetmagic:counter_table", "y": 270 },
+		"center=1,facing=west": { "model": "sweetmagic:counter_table_in", "y": 0 },
+		"center=2,facing=west": { "model": "sweetmagic:counter_table_in", "y": 270 },
+		"center=3,facing=west": { "model": "sweetmagic:counter_table_out", "y": 270 },
+		"center=4,facing=west": { "model": "sweetmagic:counter_table_out", "y": 180 },
+
+		"center=0,facing=east": { "model": "sweetmagic:counter_table", "y": 90 },
+		"center=1,facing=east": { "model": "sweetmagic:counter_table_in", "y": 180 },
+		"center=2,facing=east": { "model": "sweetmagic:counter_table_in", "y": 90 },
+		"center=3,facing=east": { "model": "sweetmagic:counter_table_out", "y": 90 },
+		"center=4,facing=east": { "model": "sweetmagic:counter_table_out", "y": 0 },
+
+        "inventory": [{ }]
+  }
+}

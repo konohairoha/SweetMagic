@@ -1,18 +1,23 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:pot_off",
-    "textures": {
-      "3": "sweetmagic:block/empty"
-    }
-  },
-  "variants": {
-    "facing": {
-      "north": { "y": 90 },
-      "south": { "y": 270 },
-      "west": { },
-      "east": { "y": 180 }
-    },
-    "inventory": [{}]
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:pot_off",
+		"textures": {
+			"3": "sweetmagic:block/empty"
+		}
+	},
+	"variants": {
+    	"facing": {
+			"north": { "y": 90 },
+			"south": { "y": 270 },
+			"west": { },
+			"east": { "y": 180 }
+		},
+    	"cook": {
+			"off": { },
+			"on": { "model": "sweetmagic:pot_on" },
+			"fin": { "model": "sweetmagic:pot_off", "textures": { "3": "minecraft:blocks/water_still" } }
+		},
+		"inventory": [{}]
+	}
 }
