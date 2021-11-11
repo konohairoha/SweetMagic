@@ -17,9 +17,9 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.api.magiaflux.MagiaFluxManager;
 import sweetmagic.config.SMConfig;
+import sweetmagic.handlers.CapabilityHandler;
 import sweetmagic.handlers.OreDictionaryHandler;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.RecipeHandler;
@@ -46,7 +46,8 @@ public class SweetMagicCore {
     // GUIを考えてMODのインスタンスを作っておく
     @Instance(SweetMagicCore.MODID)
   	public static SweetMagicCore INSTANCE;
-  	public static CreativeTabs SMTab = new SMTab("sweetmagicTab"), SMMagicTab = new SMMagicTab("sweetmagicMagicTab"), SMFoodTab = new SMFoodTab("sweetmagicFoodTab");
+  	public static CreativeTabs SMTab = new SMTab("sweetmagicTab"), SMFurnitureTab = new SMFurnitureTab("sweetmagicFurnitureTab"),
+  								SMMagicTab = new SMMagicTab("sweetmagicMagicTab"), SMFoodTab = new SMFoodTab("sweetmagicFoodTab");
   	@SidedProxy(clientSide = SweetMagicCore.CLIENTPROXY, serverSide = SweetMagicCore.COMMONPROXY)
   	public static CommonProxy proxy;
   	public static Logger logger;
@@ -82,6 +83,9 @@ public class SweetMagicCore {
 
 		// 進捗読み込み
 		AdvancedInit.register();
+
+		// 能力の読み込み
+		CapabilityHandler.registerModCaps();
 
     }
 
@@ -137,9 +141,7 @@ public class SweetMagicCore {
 	// バイオーム読み込み
     @SubscribeEvent
     public void registerBiomes(RegistryEvent.Register<Biome> event) {
-        IForgeRegistry<Biome> registry = event.getRegistry();
-        RegistryHandler.biomeRegster(registry);
-
+        RegistryHandler.biomeRegster(event.getRegistry());
     }
 
 	public static ResourceLocation prefix(String name) {

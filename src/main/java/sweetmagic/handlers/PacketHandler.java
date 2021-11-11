@@ -13,6 +13,7 @@ import sweetmagic.packet.LeftClickPKT;
 import sweetmagic.packet.MouseSclorPKT;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.packet.RemovePotion;
+import sweetmagic.packet.SMBucketPKT;
 import sweetmagic.packet.ScrollPagePKT;
 import sweetmagic.packet.StarLightPKT;
 import sweetmagic.packet.TileMFBlockPKT;
@@ -35,6 +36,7 @@ public class PacketHandler {
 		HANDLER.registerMessage(TileMFBlockPKT.Handler.class, TileMFBlockPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(EntityRemovePKT.Handler.class, EntityRemovePKT.class, disc++, Side.CLIENT);
 		HANDLER.registerMessage(StarLightPKT.Handler.class, StarLightPKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(SMBucketPKT.Handler.class, SMBucketPKT.class, disc++, Side.SERVER);
 	}
 
 	public static void sendToServer(IMessage msg) {

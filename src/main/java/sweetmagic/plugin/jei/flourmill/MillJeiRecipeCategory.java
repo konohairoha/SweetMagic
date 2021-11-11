@@ -22,7 +22,7 @@ public class MillJeiRecipeCategory implements IRecipeCategory<MillJeiRecipeWrapp
 
 	public MillJeiRecipeCategory(IGuiHelper helper) {
 		this.background = helper.createDrawable(TEX, 0, 0, 176, 134);
-		this.icon = helper.createDrawableIngredient(new ItemStack(BlockInit.flourmill_re));
+		this.icon = helper.createDrawableIngredient(new ItemStack(BlockInit.flourmill_off));
 		this.localizedName = I18n.format("sweetmagic.jei.mill.title");
 	}
 

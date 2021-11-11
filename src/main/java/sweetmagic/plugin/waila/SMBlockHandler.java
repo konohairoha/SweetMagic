@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.enumblock.EnumCook;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -100,17 +101,18 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 
 			// 必要情報の取得
 			TilePot tile = (TilePot) accessor.getTileEntity();
+			EnumCook cook = tile.getCook(accessor.getBlockState());
 			List<ItemStack> stackList = new ArrayList<>();
 			String renderStr = "";
 
 			// 稼働中
-			if (block == BlockInit.pot_on) {
+			if (cook.isON()) {
 				stackList.add(tile.handItem);
 				stackList.addAll(tile.inPutList);
 			}
 
 			// 稼働後
-			else if (block == BlockInit.pot_re) {
+			else if (cook.isFIN()) {
 				stackList.addAll(tile.outPutList);
 			}
 
@@ -126,17 +128,20 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 
 			// 必要情報の取得
 			TilePot tile = (TilePot) accessor.getTileEntity();
+			EnumCook cook = tile.getCook(accessor.getBlockState());
+			if (cook == null || cook.isOFF()) { return currenttip; }
+
 			List<ItemStack> stackList = new ArrayList<>();
 			String renderStr = "";
 
 			// 稼働中
-			if (block == BlockInit.frypan_on) {
+			if (cook.isON()) {
 				stackList.add(tile.handItem);
 				stackList.addAll(tile.inPutList);
 			}
 
 			// 稼働後
-			else if (block == BlockInit.frypan_re) {
+			else if (cook.isFIN()) {
 				stackList.addAll(tile.outPutList);
 			}
 
@@ -152,19 +157,22 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 
 			// 必要情報の取得
 			TileFlourMill tile = (TileFlourMill) accessor.getTileEntity();
+			EnumCook cook = tile.getCook(accessor.getBlockState());
+			if (cook == null || cook.isOFF()) { return currenttip; }
+
 			List<ItemStack> stackList = new ArrayList<>();
 			String renderStr = "";
 
 			// 稼働状態なら
-			if (block == BlockInit.oven_on || block == BlockInit.flourmill_on) {
-				if (block == BlockInit.oven_on) {
+			if (cook.isON()) {
+				if (tile.isOven(block)) {
 					stackList.add(tile.handItem);
 				}
 				stackList.addAll(tile.inPutList);
 			}
 
 			// 稼働後なら
-			else if (block == BlockInit.oven_re || block == BlockInit.flourmill_re) {
+			else if (cook.isFIN()) {
 				stackList.addAll(tile.outPutList);
 			}
 

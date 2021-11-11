@@ -11,6 +11,9 @@ public class OreDictionaryHandler {
 	//鉱石辞書にある素材名と自分のMODの素材を紐付けする
 	public static void registerOreDictionary() {
 		OreDictionary.registerOre("slimeball", ItemInit.sticky_stuff_petal);
+		OreDictionary.registerOre("slimeball", ItemInit.electronic_orb);
+		OreDictionary.registerOre("ice", ItemInit.unmeltable_ice);
+		OreDictionary.registerOre("ice", Blocks.ICE);
 		OreDictionary.registerOre("plankWood", BlockInit.chestnut_planks);
 		OreDictionary.registerOre("slabWood", BlockInit.chestnut_slab);
 		OreDictionary.registerOre("logWood", BlockInit.chestnut_log);
@@ -28,6 +31,7 @@ public class OreDictionaryHandler {
         OreDictionary.registerOre("treeSapling",BlockInit.orange_sapling);
 		OreDictionary.registerOre("plankWood", BlockInit.coconut_planks);
 		OreDictionary.registerOre("slabWood", BlockInit.coconut_slab);
+		OreDictionary.registerOre("logWood", BlockInit.coconut_log);
         OreDictionary.registerOre("treeLeaves",BlockInit.coconut_leaves);
         OreDictionary.registerOre("treeSapling",BlockInit.coconut_sapling);
 		OreDictionary.registerOre("logWood", BlockInit.prism_log);
@@ -78,6 +82,19 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("smPlanks", BlockInit.prism_planks);
 		OreDictionary.registerOre("smPlanks", BlockInit.estor_planks);
 		OreDictionary.registerOre("smPlanks", BlockInit.peach_planks);
+
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_estor);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_normal_estor);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_vertical_estor);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_slanted_estor);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_prism);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_normal_prism);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_vertical_prism);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_slanted_prism);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_peach);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_normal_peach);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_vertical_peach);
+		OreDictionary.registerOre("fenceWood", BlockInit.log_fence_slanted_peach);
 
 		OreDictionary.registerOre("dyeBlue", BlockInit.cornflower);
 		OreDictionary.registerOre("dyeBlue", BlockInit.pansy_blue);
@@ -235,11 +252,11 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("magicAccessori", ItemInit.veil_darkness);
 		OreDictionary.registerOre("magicAccessori", ItemInit.varrier_pendant);
 		OreDictionary.registerOre("magicAccessori", ItemInit.magicians_grobe);
-		OreDictionary.registerOre("magicAccessori", ItemInit.magician_quillpen);
 		OreDictionary.registerOre("magicAccessori", ItemInit.gravity_pendant);
 		OreDictionary.registerOre("magicAccessori", ItemInit.poison_fang);
 		OreDictionary.registerOre("magicAccessori", ItemInit.pendulum_necklace);
 
+		OreDictionary.registerOre("magiaAccessori", ItemInit.magician_quillpen);
 		OreDictionary.registerOre("magiaAccessori", ItemInit.unyielding_fire);
 		OreDictionary.registerOre("magiaAccessori", ItemInit.frosted_chain);
 		OreDictionary.registerOre("magiaAccessori", ItemInit.holly_charm);
@@ -270,6 +287,8 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("paneGlass", BlockInit.lightbrown4panel_glass_pane);
 		OreDictionary.registerOre("paneGlass", BlockInit.darkbrown4panel_glass_pane);
 		OreDictionary.registerOre("paneGlass", BlockInit.ami_glass_pane);
+		OreDictionary.registerOre("paneGlass", BlockInit.gorgeous_glass_pane);
+		OreDictionary.registerOre("paneGlass", BlockInit.gorgeous_glass_w_pane);
 
 		OreDictionary.registerOre("stone", BlockInit.old_brick);
 		OreDictionary.registerOre("stone", BlockInit.old_brick_b);
@@ -330,6 +349,7 @@ public class OreDictionaryHandler {
 		OreDictionary.registerOre("ironbar", BlockInit.fance_gothic_black);
 		OreDictionary.registerOre("ironbar", BlockInit.fance_gothic_white);
 		OreDictionary.registerOre("bucketWater", ItemInit.watercup);
+		OreDictionary.registerOre("bucketWater", ItemInit.alt_bucket_water);
 		OreDictionary.registerOre("cropStrawberry", ItemInit.strawberry);
 		OreDictionary.registerOre("cropSeaweed", ItemInit.seaweed);
 		OreDictionary.registerOre("cropApple", Items.APPLE);

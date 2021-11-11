@@ -19,6 +19,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.config.SMConfig;
+import sweetmagic.event.EntitiySpawnEvent;
 import sweetmagic.event.EntityItemTossEvent;
 import sweetmagic.event.HasItemEvent;
 import sweetmagic.event.LivingDethEvent;
@@ -82,6 +83,7 @@ import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.magic.TileMFTankAdvanced;
+import sweetmagic.init.tile.magic.TileMagiaLight;
 import sweetmagic.init.tile.magic.TileMagiaWrite;
 import sweetmagic.init.tile.magic.TileMagicBarrier;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
@@ -261,6 +263,7 @@ public class RegistryHandler {
 		registerTile(TileMFAccelerator.class, "MFAccelerator");
 		registerTile(TileShocase.class, "Showcase");
 		registerTile(TileGlassCup.class, "GlassCup");
+		registerTile(TileMagiaLight.class, "MagicLight");
 	}
 
 	// 草から種の追加
@@ -292,6 +295,7 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new LivingDethEvent());
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
 		MinecraftForge.EVENT_BUS.register(new EntityItemTossEvent());
+		MinecraftForge.EVENT_BUS.register(new EntitiySpawnEvent());
 	}
 
 	// レイヤー登録
