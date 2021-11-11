@@ -288,7 +288,7 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 
 		// プリズミウム
 		recipe.addRecipe(new ObMagiaRecipes(
-			new ItemStack(Items.GLOWSTONE_DUST, 4),
+			new OreItems("dustGlowstone", 4),
 			new ItemStack[] { new ItemStack(Items.IRON_NUGGET, 2), new ItemStack(Items.GOLD_NUGGET, 2), new ItemStack(ItemInit.clero_petal, 4)},
 			new ItemStack[] { new ItemStack(ItemInit.prizmium) }
 		));
@@ -531,10 +531,17 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 			new ItemStack[] { new ItemStack(ItemInit.magic_refresh) }
 		));
 
+		// ワールド内範囲デバフ解除魔法
+		recipe.addRecipe(new ObMagiaRecipes(
+			new ItemStack(ItemInit.magic_refresh),
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal), new ItemStack(Items.GHAST_TEAR, 4), new ItemStack(ItemInit.mystical_page) },
+			new ItemStack[] { new ItemStack(ItemInit.magic_refresh_gift) }
+		));
+
 		// 小範囲作物育成魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.sugarbell, 4),
-			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.mysterious_page) , new ItemStack(ItemInit.blank_magic)},
+			new ItemStack[] { new ItemStack(ItemInit.aether_crystal, 2), new ItemStack(ItemInit.mysterious_page) , new ItemStack(ItemInit.blank_magic) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_growth_effect) }
 		));
 
@@ -549,7 +556,8 @@ public class ObMagiaRecipePlugin implements IObMagiaRecipePlugin {
 		// 作物広範囲育成魔法
 		recipe.addRecipe(new ObMagiaRecipes(
 			new ItemStack(ItemInit.magic_growth_aura),
-			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 32), new ItemStack(ItemInit.mysterious_page, 6), new ItemStack(ItemInit.mystical_page, 6) },
+			new ItemStack[] { new ItemStack(ItemInit.pure_crystal, 2), new ItemStack(ItemInit.sugarbell, 32), new ItemStack(ItemInit.mysterious_page, 6)
+					, new ItemStack(ItemInit.mystical_page, 6) },
 			new ItemStack[] { new ItemStack(ItemInit.magic_growth_verre) }
 		));
 

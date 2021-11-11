@@ -22,7 +22,7 @@ public class ObMagiaRecipes {
         this.clear();
     }
 
-    public ObMagiaRecipes(ItemStack hand , Object[] inputs ,ItemStack[] outputs) {
+    public ObMagiaRecipes(Object hand , Object[] inputs ,ItemStack[] outputs) {
         this.clear();
         this.handList = SMUtil.getOreList(hand);
 

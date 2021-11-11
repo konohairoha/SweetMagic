@@ -84,6 +84,13 @@ public class PedalRecipePlugin implements IPedalRecipePlugin {
 			new ItemStack[] { new ItemStack(BlockInit.aether_hopper, 2) }
 		));
 
+		// マギアライト
+		recipe.addRecipe(new PedalRecipes(
+			new ItemStack(BlockInit.twilightlight),
+			new Object[] { new ItemStack(ItemInit.divine_crystal, 2), new ItemStack(ItemInit.alternative_ingot, 4), new OreItems("smLog", 4), new ItemStack(Items.GHAST_TEAR) },
+			new ItemStack[] { new ItemStack(BlockInit.magia_light) }
+		));
+
 		// パラレル・インターフィアー
 		recipe.addRecipe(new PedalRecipes(
 			new ItemStack(Items.BOOK),

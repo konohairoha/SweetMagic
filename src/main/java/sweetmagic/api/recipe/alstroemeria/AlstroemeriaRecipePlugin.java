@@ -469,5 +469,33 @@ public class AlstroemeriaRecipePlugin implements IAlstroemeriaRecipePlugin {
 				new ItemStack[] { new ItemStack(map.getKey(), 4) }
 			));
 		}
+
+		Map<Integer, String> concreteRecipe = new HashMap<>();
+		concreteRecipe.put(0, "dyeWhite");
+		concreteRecipe.put(1, "dyeOrange");
+		concreteRecipe.put(2, "dyeMagenta");
+		concreteRecipe.put(3, "dyeLightBlue");
+		concreteRecipe.put(4, "dyeYellow");
+		concreteRecipe.put(5, "dyeLime");
+		concreteRecipe.put(6, "dyePink");
+		concreteRecipe.put(7, "dyeGray");
+		concreteRecipe.put(8, "dyeLightGray");
+		concreteRecipe.put(9, "dyeCyan");
+		concreteRecipe.put(10, "dyePurple");
+		concreteRecipe.put(11, "dyeBlue");
+		concreteRecipe.put(12, "dyeBrown");
+		concreteRecipe.put(13, "dyeGreen");
+		concreteRecipe.put(14, "dyeRed");
+		concreteRecipe.put(15, "dyeBlack");
+
+		for (Entry<Integer, String> map : concreteRecipe.entrySet()) {
+
+			// コンクリート
+			recipe.addRecipe(new AlstroemeriaRecipes(
+				new ItemStack(Blocks.GRAVEL, 16),
+				new Object[] { new ItemStack(Blocks.SAND, 4), map.getValue() },
+				new ItemStack[] { new ItemStack(Blocks.CONCRETE, 64, map.getKey()) }
+			));
+		}
 	}
 }
