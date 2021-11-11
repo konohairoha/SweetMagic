@@ -68,12 +68,12 @@ public class SMLeaves extends BlockLeaves {
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs creativeTab, NonNullList<ItemStack> list) {
-		list.add(new ItemStack(this, 1, 0));
+	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+		list.add(new ItemStack(this));
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random random, int fortune) {
+	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Item.getItemFromBlock(this.getCrop());
 	}
 
@@ -98,7 +98,7 @@ public class SMLeaves extends BlockLeaves {
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
-		return new ItemStack(this, 1);
+		return new ItemStack(this);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public class SMLeaves extends BlockLeaves {
 
 	@Override
 	public List<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune) {
-		return NonNullList.withSize(1, new ItemStack(this, 1));
+		return NonNullList.withSize(1, new ItemStack(this));
 	}
 
 	@Override
@@ -146,9 +146,9 @@ public class SMLeaves extends BlockLeaves {
 
 	//テクスチャが透明で、重ねて表示したい場合
 	@SideOnly(Side.CLIENT)
-	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess access, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 
-		AxisAlignedBB aabb = state.getBoundingBox(access, pos);
+		AxisAlignedBB aabb = state.getBoundingBox(world, pos);
 
 		switch (side) {
 		case DOWN:
@@ -170,6 +170,6 @@ public class SMLeaves extends BlockLeaves {
 			if (aabb.maxX < 1D) { return true; }
 			break;
 		}
-		return !access.getBlockState(pos.offset(side)).doesSideBlockRendering(access, pos.offset(side), side.getOpposite());
+		return !world.getBlockState(pos.offset(side)).doesSideBlockRendering(world, pos.offset(side), side.getOpposite());
 	}
 }

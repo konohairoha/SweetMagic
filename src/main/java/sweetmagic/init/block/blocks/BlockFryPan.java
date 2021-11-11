@@ -9,20 +9,25 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.enumblock.EnumCook;
+import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
+import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.pan.PanRecipeInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
@@ -35,19 +40,17 @@ public class BlockFryPan extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.2D, 0.1D, 0.8D, 0D, 0.8D);
-	private final int data;
-	private final CookingType type;
+	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
 
-	public BlockFryPan(String name, float light, CookingType type, int data, List<Block> list) {
+	public BlockFryPan(String name) {
 		super(Material.IRON, name);
 		setHardness(0.1F);
 		setResistance(1024F);
 		setSoundType(SoundType.STONE);
-		this.setLightLevel(light);
+		setDefaultState(this.blockState.getBaseState()
+				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
 		disableStats();
-		this.type = type;
-		this.data = data;
-		list.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -70,25 +73,19 @@ public class BlockFryPan extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
-        if (this.type != CookingType.FIN) {
+        if (!this.getCook(state).isFIN()) {
 
             // 下のブロックがコンロではないなら終了
             Block uBlock = world.getBlockState(pos.down()).getBlock();
             if (!(uBlock instanceof BlockStove)) { return false;}
-
-    		TileStove stove = (TileStove) world.getTileEntity(pos.down());
-
-    		// 必要燃焼時間を超えていないまたはスロットに燃焼アイテムがないなら終了
-    		if (!stove.canCook() && !stove.canSmelt()) { return false; }
         }
 
+		// tileとプレイヤーのInventoryの取得
 		TilePot pot = (TilePot) world.getTileEntity(pos);
-
-		// プレイヤーのInventoryの取得
 		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
 
 		// 未起動
-		if (this.type == CookingType.PRE) {
+		if (this.getCook(state).isOFF()) {
 
 			// 手持ちアイテムからレシピと一致するかを検索
 			PanRecipeInfo recipeInfo = SweetMagicAPI.getPanRecipeInfo(stack, pInv);
@@ -102,10 +99,11 @@ public class BlockFryPan extends BaseFaceBlock {
 			if (!recipeInfo.canComplete) {
 
 				ItemStack smeltResult = FurnaceRecipes.instance().getSmeltingResult(stack).copy();
+				if (smeltResult.isEmpty() || !(smeltResult.getItem() instanceof ItemFood)) { return false; }
 
-				if (smeltResult.isEmpty() || !(smeltResult.getItem() instanceof ItemFood)) {
-					return false;
-				}
+	    		// 必要燃焼時間を超えていないまたはスロットに燃焼アイテムがないなら終了
+	    		TileStove stove = (TileStove) world.getTileEntity(pos.down());
+	    		if (!stove.canWork()) { return false; }
 
 				inputs.add(stack);
 				results.add(smeltResult);
@@ -115,6 +113,11 @@ public class BlockFryPan extends BaseFaceBlock {
 
 			// クラフト成功
 			else {
+
+	    		// 必要燃焼時間を超えていないまたはスロットに燃焼アイテムがないなら終了
+	    		TileStove stove = (TileStove) world.getTileEntity(pos.down());
+	    		if (!stove.canWork()) { return false; }
+
 
 				// クラフト処理
 				RecipeUtil recipeUtil = RecipeHelper.recipeAllCraft(recipeInfo, player, stack);
@@ -133,12 +136,9 @@ public class BlockFryPan extends BaseFaceBlock {
 		}
 
 		// 完成後
-		else if (this.type == CookingType.FIN) {
+		else if (this.getCook(state).isFIN()) {
 
-			for (ItemStack s : pot.outPutList) {
-				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
-			}
-
+			this.spawnItem(world, player, pot.outPutList);
 			this.setState(world, pos);
 
 			// ハンドアイテムとかの初期化
@@ -148,45 +148,10 @@ public class BlockFryPan extends BaseFaceBlock {
 		return true;
 	}
 
-    public void setState(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
+    public static void setState(World world, BlockPos pos) {
         TileEntity tile = world.getTileEntity(pos);
         keepInventory = true;
-
-        Block frypan = null;
-
-        // 通常フライパン
-        if (this.data == 0) {
-        	switch (this.type) {
-        	case PRE:
-        		frypan = BlockInit.frypan_on;
-        		break;
-        	case COOKING:
-        		frypan = BlockInit.frypan_re;
-        		break;
-        	case FIN:
-        		frypan = BlockInit.frypan_off;
-        		break;
-        	}
-        }
-
-        // フライパン(赤)
-        else if (this.data == 1) {
-        	switch (this.type) {
-        	case PRE:
-        		frypan = BlockInit.frypan_red_on;
-        		break;
-        	case COOKING:
-        		frypan = BlockInit.frypan_red_re;
-        		break;
-        	case FIN:
-        		frypan = BlockInit.frypan_red_off;
-        		break;
-        	}
-        }
-
-		world.setBlockState(pos, frypan.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-
+		world.setBlockState(pos, EnumCook.transitionCook(world.getBlockState(pos), COOK), 3);
 		keepInventory = false;
 		if (tile != null) {
             tile.validate();
@@ -194,25 +159,28 @@ public class BlockFryPan extends BaseFaceBlock {
         }
     }
 
+
+	public EnumCook getCook (IBlockState state) {
+		return state.getValue(COOK);
+	}
+
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
 		if (!keepInventory) {
 
-			ItemStack stack = new ItemStack(this.data == 0 ? BlockInit.frypan_off : BlockInit.frypan_red_off);
 			TilePot tile = (TilePot) world.getTileEntity(pos);
 
-			// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-			if (this.type != CookingType.PRE) {
-				for (ItemStack s : tile.inPutList) {
-					world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
-				}
-				world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), tile.handItem));
+			// オフ状態以外ならアイテム取り出し
+			if (!this.getCook(state).isOFF()) {
+				this.spawnItem(world, pos, tile.inPutList);
+				world.spawnEntity(tile.getEntityItem(pos, tile.handItem));
 			}
+
 			tile.startFlag = false;
-			spawnAsEntity(world, pos, stack);
+			spawnAsEntity(world, pos, new ItemStack(this));
 		}
 
-		if (world.getBlockState(pos.down()).getBlock() == BlockInit.stove_on) {
+		if (BlockStove.isStoveOn(world, pos.down())) {
 			BlockStove.setState(world, pos.down());
 		}
 	}
@@ -224,10 +192,19 @@ public class BlockFryPan extends BaseFaceBlock {
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return null;
     }
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING, COOK });
+	}
 
-    public enum CookingType {
-    	PRE,
-    	COOKING,
-    	FIN;
-    }
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex() + state.getValue(COOK).getMeta();
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		FaceCookMeta fcMeta = EnumCook.getMeta(meta);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(fcMeta.getMeta())).withProperty(COOK, fcMeta.getCook());
+	}
 }

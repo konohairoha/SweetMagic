@@ -3,12 +3,10 @@ package sweetmagic.init.block.blocks;
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockGlass;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
@@ -22,14 +20,15 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.api.enumblock.EnumLocal;
+import sweetmagic.api.enumblock.EnumLocal.PropertyLocal;
 import sweetmagic.init.BlockInit;
 
 public class WoodPaneGlass extends BlockGlass {
 
 	private final int data;
 	private boolean isPass;
-	private static final PropertyBool TOP = PropertyBool.create("top");
-	private static final PropertyBool BOT = PropertyBool.create("bot");
+	protected static final PropertyLocal LOCAL = new PropertyLocal("local", EnumLocal.getLocalList());
 
 	public WoodPaneGlass(String name, int data, boolean shading, boolean isPass) {
 		super(Material.GLASS, false);
@@ -41,9 +40,7 @@ public class WoodPaneGlass extends BlockGlass {
 		this.data = data;
 		//ブロックの光を透過する強さ　数値が高いほどブロックは不透明、光を通さないようになる。
 		this.setLightOpacity(shading ? 255 : 0);
-		setDefaultState(this.blockState.getBaseState()
-				.withProperty(TOP, false)
-				.withProperty(BOT, false));
+		setDefaultState(this.blockState.getBaseState().withProperty(LOCAL, EnumLocal.NOR));
 		this.isPass = isPass;
 		BlockInit.blockList.add(this);
     }
@@ -54,12 +51,12 @@ public class WoodPaneGlass extends BlockGlass {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 
-	public int quantityDropped(Random random) {
+	public int quantityDropped(Random rand) {
         return 1;
     }
 
 	// フェンスとかにつながないように
-	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
 
@@ -72,16 +69,9 @@ public class WoodPaneGlass extends BlockGlass {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		Block block = world.getBlockState(pos.down()).getBlock();
-		boolean bot = block == this;
-		boolean top = world.getBlockState(pos.up()).getBlock() == this;
-		return state.withProperty(TOP, bot).withProperty(BOT, top);
-	}
-
-	// 一番下か
-	public boolean isBot (IBlockState state) {
-		return state == state.withProperty(TOP, false).withProperty(BOT, true) ||
-				state == state.withProperty(TOP, false).withProperty(BOT, false);
+		boolean top = world.getBlockState(pos.down()).getBlock() == this;
+		boolean bot = world.getBlockState(pos.up()).getBlock() == this;
+		return state.withProperty(LOCAL, EnumLocal.getLocal(top, bot));
 	}
 
 	@Override
@@ -96,6 +86,6 @@ public class WoodPaneGlass extends BlockGlass {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { TOP, BOT });
+		return new BlockStateContainer(this, new IProperty[] { LOCAL });
 	}
 }

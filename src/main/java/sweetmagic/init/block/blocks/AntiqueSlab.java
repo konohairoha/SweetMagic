@@ -22,7 +22,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import sweetmagic.init.BlockInit;
-import sweetmagic.util.PlayerHelper;
 
 public class AntiqueSlab extends Block {
 
@@ -74,9 +73,9 @@ public class AntiqueSlab extends Block {
     }
 
     @Override
-    public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float x, float y, float z, int meta, EntityLivingBase placer) {
         IBlockState state = getStateFromMeta(meta);
-        return state.getValue(HALF).equals(EnumBlockSlab.FULL) ? state : (facing != EnumFacing.DOWN && (facing == EnumFacing.UP || (double) hitY <= 0.5D) ? state.withProperty(HALF, EnumBlockSlab.BOTTOM) : state.withProperty(HALF, EnumBlockSlab.TOP));
+        return state.getValue(HALF).equals(EnumBlockSlab.FULL) ? state : (face != EnumFacing.DOWN && (face == EnumFacing.UP || (double) y <= 0.5D) ? state.withProperty(HALF, EnumBlockSlab.BOTTOM) : state.withProperty(HALF, EnumBlockSlab.TOP));
     }
 
     @Override
@@ -91,8 +90,7 @@ public class AntiqueSlab extends Block {
 
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        EnumBlockSlab half = state.getValue(HALF);
-        switch (half) {
+        switch (state.getValue(HALF)) {
             case TOP:    return AABB_TOP_HALF;
             case BOTTOM: return AABB_BOTTOM_HALF;
             default:     return FULL_BLOCK_AABB;
@@ -106,11 +104,16 @@ public class AntiqueSlab extends Block {
 
     @Override
     public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
+
         if (state.getValue(HALF) == EnumBlockSlab.FULL) {
             return BlockFaceShape.SOLID;
-        } else if (face == EnumFacing.UP && state.getValue(HALF) == EnumBlockSlab.TOP) {
+        }
+
+        else if (face == EnumFacing.UP && state.getValue(HALF) == EnumBlockSlab.TOP) {
             return BlockFaceShape.SOLID;
-        } else {
+        }
+
+        else {
             return face == EnumFacing.DOWN && state.getValue(HALF) == EnumBlockSlab.BOTTOM ? BlockFaceShape.SOLID : BlockFaceShape.UNDEFINED;
         }
     }
@@ -125,7 +128,7 @@ public class AntiqueSlab extends Block {
             if (stack.getItem() == Item.getItemFromBlock(this)) {
 
                 world.setBlockState(pos, state.withProperty(HALF, EnumBlockSlab.FULL));
-                if (!PlayerHelper.isCleative(player)) { stack.setCount(stack.getCount() - 1); }
+                if (!player.isCreative()) { stack.setCount(stack.getCount() - 1); }
 
                 SoundType sound = this.getSoundType(state, world, pos, player);
                 world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
@@ -137,7 +140,7 @@ public class AntiqueSlab extends Block {
 
     @Override
     public IBlockState getStateFromMeta(int meta) {
-        return getDefaultState().withProperty(HALF, EnumBlockSlab.byMetadata(meta));
+        return this.getDefaultState().withProperty(HALF, EnumBlockSlab.byMetadata(meta));
     }
 
     @Override

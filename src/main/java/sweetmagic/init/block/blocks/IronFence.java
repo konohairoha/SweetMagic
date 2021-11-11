@@ -3,14 +3,18 @@ package sweetmagic.init.block.blocks;
 import java.util.List;
 import java.util.Random;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.IMob;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -28,6 +32,11 @@ public class IronFence extends BaseModelBlock {
 	private static final PropertyBool FORWARD = PropertyBool.create("forward");
 	private static final PropertyBool LEFT = PropertyBool.create("left");
 	private static final PropertyBool RIGHT = PropertyBool.create("right");
+	public static final AxisAlignedBB PILLAR_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.375D, 0.625D, 1.5D, 0.625D);
+    public static final AxisAlignedBB SOUTH_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.625D, 0.625D, 1.5D, 1.0D);
+    public static final AxisAlignedBB WEST_AABB = new AxisAlignedBB(0.0D, 0.0D, 0.375D, 0.375D, 1.5D, 0.625D);
+    public static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.375D, 0.0D, 0.0D, 0.625D, 1.5D, 0.375D);
+    public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.625D, 0.0D, 0.375D, 1.0D, 1.5D, 0.625D);
 	private static final AxisAlignedBB[] AABB_BY_INDEX = new AxisAlignedBB[] {
 		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 0.5625D),
 		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 1D),
@@ -57,36 +66,75 @@ public class IronFence extends BaseModelBlock {
 				.withProperty(FORWARD, false)
 				.withProperty(LEFT, false)
 				.withProperty(RIGHT, false));
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean bool) {
 
 		state = this.getActualState(state, world, pos);
-		addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[0]);
 
-		if (state.getValue(FORWARD)) {
-			addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.NORTH)]);
+		if (!(entity instanceof IMob)) {
+
+			addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[0]);
+
+			if (state.getValue(FORWARD)) {
+				addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[this.getAABBIndex(EnumFacing.NORTH)]);
+			}
+
+			if (state.getValue(BACK)) {
+				addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[this.getAABBIndex(EnumFacing.SOUTH)]);
+			}
+
+			if (state.getValue(LEFT)) {
+				addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[this.getAABBIndex(EnumFacing.WEST)]);
+			}
+
+			if (state.getValue(RIGHT)) {
+				addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[this.getAABBIndex(EnumFacing.EAST)]);
+			}
 		}
-		if (state.getValue(BACK)) {
-			addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.SOUTH)]);
+
+		else {
+
+			addCollisionBoxToList(pos, aabb, aabbList, PILLAR_AABB);
+
+			if (state.getValue(FORWARD)) {
+				addCollisionBoxToList(pos, aabb, aabbList, NORTH_AABB);
+			}
+
+			if (state.getValue(BACK)) {
+				addCollisionBoxToList(pos, aabb, aabbList, SOUTH_AABB);
+			}
+
+			if (state.getValue(LEFT)) {
+				addCollisionBoxToList(pos, aabb, aabbList, WEST_AABB);
+			}
+
+			if (state.getValue(RIGHT)) {
+				addCollisionBoxToList(pos, aabb, aabbList, EAST_AABB);
+			}
 		}
-		if (state.getValue(LEFT)) {
-			addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.WEST)]);
-		}
-		if (state.getValue(RIGHT)) {
-			addCollisionBoxToList(pos, aabb, aabbList, AABB_BY_INDEX[getBoundingBoxIndex(EnumFacing.EAST)]);
+	}
+
+	protected static void addCollisionBoxToList(BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, @Nullable AxisAlignedBB aabb2) {
+
+		if (aabb2 != NULL_AABB) {
+			AxisAlignedBB aabb3 = aabb2.offset(pos);
+
+			if (aabb.intersects(aabb3)) {
+				aabbList.add(aabb3);
+			}
 		}
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB_BY_INDEX[getBoundingBoxIndex(this.getActualState(state, source, pos))];
+		return AABB_BY_INDEX[this.getBoundingBoxIndex(this.getActualState(state, source, pos))];
 	}
 
-	public int getBoundingBoxIndex(EnumFacing facing) {
-		return 1 << facing.getHorizontalIndex();
+	public int getAABBIndex(EnumFacing face) {
+		return 1 << face.getHorizontalIndex();
 	}
 
 	public int getBoundingBoxIndex(IBlockState state) {
@@ -94,16 +142,16 @@ public class IronFence extends BaseModelBlock {
 		int i = 0;
 
 		if (state.getValue(FORWARD)) {
-			i |= getBoundingBoxIndex(EnumFacing.NORTH);
+			i |= this.getAABBIndex(EnumFacing.NORTH);
 		}
 		if (state.getValue(RIGHT)) {
-			i |= getBoundingBoxIndex(EnumFacing.EAST);
+			i |= this.getAABBIndex(EnumFacing.EAST);
 		}
 		if (state.getValue(BACK)) {
-			i |= getBoundingBoxIndex(EnumFacing.SOUTH);
+			i |= this.getAABBIndex(EnumFacing.SOUTH);
 		}
 		if (state.getValue(LEFT)) {
-			i |= getBoundingBoxIndex(EnumFacing.WEST);
+			i |= this.getAABBIndex(EnumFacing.WEST);
 		}
 
 		return i;
@@ -132,6 +180,11 @@ public class IronFence extends BaseModelBlock {
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
+	}
+
+	// フェンスとかにつながないように
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
+		return BlockFaceShape.SOLID;
 	}
 
 	public int quantityDropped(Random rand) {

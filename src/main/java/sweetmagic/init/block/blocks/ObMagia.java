@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -77,13 +76,10 @@ public class ObMagia extends BaseFaceBlock {
 		RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
 		AdvancedInit.magic_craft.triggerFor(player);
 
-		for (ItemStack result : recipeUtil.getResult()) {
-			world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, result));
-			ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.LAVA);
-		}
-
 		// 変換時の音
 		this.playerSound(world, pos, SMSoundEvent.WRITE, 1F, 1F);
+		this.spawnItem(world, player, recipeUtil.getResult());
+		ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.LAVA);
 
 		return true;
 	}

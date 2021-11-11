@@ -21,7 +21,7 @@ public class BlockCafeBoard extends BaseFaceBlock {
         setHardness(0.4F);
         setResistance(1024F);
 		this.setSoundType(data == 0 ? SoundType.WOOD : SoundType.GLASS);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override

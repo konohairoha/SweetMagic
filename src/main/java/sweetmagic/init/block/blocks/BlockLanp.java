@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -36,7 +35,7 @@ public class BlockLanp extends BlockEncPower {
 			block.dropBlockAsItem(world, pos, state, 0);
 		}
 
-		spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(this)));
+		spawnAsEntity(world, pos, new ItemStack(this));
 
 		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 	}

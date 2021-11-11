@@ -11,7 +11,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
@@ -41,6 +40,7 @@ public class BlockWallTowel extends BaseFaceBlock {
 		setHardness(0F);
 		setResistance(1024F);
 		setSoundType(SoundType.CLOTH);
+		this.setEmptyAABB();
 		this.data = data;
 		list.add(this);
 	}
@@ -82,9 +82,6 @@ public class BlockWallTowel extends BaseFaceBlock {
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {
 		return new ItemStack(BlockInit.wall_towel);
 	}
-
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) { }
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {

@@ -58,7 +58,7 @@ public class WandPedal extends BaseFaceBlock {
 		setResistance(99999F);
 		setSoundType(SoundType.STONE);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	/**
@@ -174,7 +174,7 @@ public class WandPedal extends BaseFaceBlock {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
     	TileWandPedal tile = (TileWandPedal) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		ItemStack stack = new ItemStack(this);
 
 		if (tile.isSlotEmpty()) {
 			spawnAsEntity(world, pos, stack);

@@ -6,18 +6,23 @@ import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.enumblock.EnumCook;
+import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
+import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.flourmill.FlourMillRecipeInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
@@ -26,14 +31,17 @@ import sweetmagic.init.tile.cook.TileFlourMill;
 public class BlockFlourMill extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
+	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
 
-	public BlockFlourMill(String name, List<Block> list) {
+	public BlockFlourMill(String name) {
 		super(Material.IRON, name);
 		setHardness(0.2F);
 		setResistance(1024F);
 		setSoundType(SoundType.STONE);
+		setDefaultState(this.blockState.getBaseState()
+				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
 		disableStats();
-		list.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override
@@ -45,12 +53,6 @@ public class BlockFlourMill extends BaseFaceBlock {
 	@Override
 	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
 		return new TileFlourMill();
-	}
-
-	//Tick更新処理が必要なブロックには必ず入れること
-	@Override
-	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand) {
-		super.updateTick(worldIn, pos, state, rand);
 	}
 
 	// 副産物計算用メソッド　ランダムに３分の１の確率で個数を計上する
@@ -73,18 +75,14 @@ public class BlockFlourMill extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
-		TileFlourMill tile = (TileFlourMill) world.getTileEntity(pos);
-
 		//プレイヤーのInventoryの取得
+		TileFlourMill tile = (TileFlourMill) world.getTileEntity(pos);
 		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
-		Block block = state.getBlock();
 
-		if (block == BlockInit.flourmill_off) {
+		if (this.getCook(state).isOFF()) {
 
-			//製粉機レシピ情報を取得
+			//製粉機レシピ情報を取得し、失敗したら終了
 			FlourMillRecipeInfo recipeinfo = SweetMagicAPI.getFlourMillRecipeInfo(stack, pInv);
-
-			// canComplete = Falseの場合レシピ処理をしない
 			if (!recipeinfo.canComplete) { return false; }
 
 			ItemStack handitem = stack.copy();
@@ -130,9 +128,10 @@ public class BlockFlourMill extends BaseFaceBlock {
 						// 合計個数が0以下なら終了
 						finishFlag = stackCount <= 0;
 					}
+				}
 
 				//副産物
-				} else {
+				else {
 
 					int ret = this.decMainStack(amt, world);
 					if (ret > 0) {
@@ -150,8 +149,9 @@ public class BlockFlourMill extends BaseFaceBlock {
 
 			//ブロックをON用に置き換え　※起動処理
 			this.setState(world, pos);
+		}
 
-		} else if (block == BlockInit.flourmill_re) {
+		else if (this.getCook(state).isFIN()) {
 
 			//TileEntityの完成品リストからアイテムをスポーンさせる
 			this.spawnItem(world, player, tile.outPutList);
@@ -167,17 +167,9 @@ public class BlockFlourMill extends BaseFaceBlock {
 	}
 
     public static void setState(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
         TileEntity tile = world.getTileEntity(pos);
-        Block block = state.getBlock();
         keepInventory = true;
-		if (block == BlockInit.flourmill_off) {
-			world.setBlockState(pos, BlockInit.flourmill_on.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.flourmill_on) {
-			world.setBlockState(pos, BlockInit.flourmill_re.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.flourmill_re) {
-			world.setBlockState(pos, BlockInit.flourmill_off.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		}
+		world.setBlockState(pos, EnumCook.transitionCook(world.getBlockState(pos), COOK), 3);
 		keepInventory = false;
 		if (tile != null) {
             tile.validate();
@@ -189,9 +181,9 @@ public class BlockFlourMill extends BaseFaceBlock {
 
 		if (keepInventory) { return; }
 
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(BlockInit.flourmill_off));
+		ItemStack stack = new ItemStack(this);
 		// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-		if (state.getBlock() == BlockInit.flourmill_re || state.getBlock() == BlockInit.flourmill_on) {
+		if (!this.getCook(state).isOFF()) {
 			TileFlourMill tile = (TileFlourMill) world.getTileEntity(pos);
 			this.spawnItem(world, pos, tile.inPutList);
 		}
@@ -205,4 +197,24 @@ public class BlockFlourMill extends BaseFaceBlock {
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return null;
     }
+
+	public EnumCook getCook (IBlockState state) {
+		return state.getValue(COOK);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING, COOK });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex() + state.getValue(COOK).getMeta();
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		FaceCookMeta fcMeta = EnumCook.getMeta(meta);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(fcMeta.getMeta())).withProperty(COOK, fcMeta.getCook());
+	}
 }

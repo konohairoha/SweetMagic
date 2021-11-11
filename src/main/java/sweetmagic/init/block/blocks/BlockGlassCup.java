@@ -39,7 +39,7 @@ public class BlockGlassCup extends BaseModelBlock {
 
 	public BlockGlassCup (String name) {
 		super(Material.GLASS, name);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -102,7 +102,7 @@ public class BlockGlassCup extends BaseModelBlock {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
     	TileGlassCup tile = (TileGlassCup) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		ItemStack stack = new ItemStack(this);
 
 		if (tile.isSlotEmpty()) {
 			spawnAsEntity(world, pos, stack);

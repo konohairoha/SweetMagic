@@ -3,7 +3,6 @@ package sweetmagic.init.block.blocks;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -24,15 +23,13 @@ public class MenuList extends BaseFaceBlock {
 		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 
-		EnumFacing face = state.getValue(FACING);
-
-		switch (face) {
+		switch (state.getValue(FACING)) {
 		case NORTH: return WALL_NORTH;
 		case SOUTH: return WALL_SOUTH;
 		case EAST:  return WALL_EAST;

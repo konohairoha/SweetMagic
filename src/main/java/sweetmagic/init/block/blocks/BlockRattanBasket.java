@@ -36,7 +36,7 @@ public class BlockRattanBasket extends BaseModelBlock {
 		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	/**

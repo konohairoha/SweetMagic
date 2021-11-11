@@ -67,19 +67,15 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 		super.breakBlock(world, pos, state);
 
 		// チャンクのローダーを削除
-		int coordX = pos.getX() >> 4;
-		int coordZ = pos.getZ() >> 4;
 		int d = world.provider.getDimension();
-		SMChunkLoader.getInstance().deleteBlockTicket(world, pos.getX(), pos.getY(), pos .getZ(), coordX, coordZ, d);
+		SMChunkLoader.getInstance().deleteBlockTicket(world, pos.getX(), pos.getY(), pos .getZ(), pos.getX() >> 4, pos.getZ() >> 4, d);
 	}
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		super.onBlockAdded(world, pos, state);
-		int coordX = pos.getX() >> 4;
-		int coordZ = pos.getZ() >> 4;
 		int d = world.provider.getDimension();
-		SMChunkLoader.getInstance().setBlockTicket(world, pos.getX(), pos.getY(), pos.getZ(), coordX, coordZ, d);
+		SMChunkLoader.getInstance().setBlockTicket(world, pos.getX(), pos.getY(), pos.getZ(), pos.getX() >> 4, pos.getZ() >> 4, d);
 	}
 
 	@Override
@@ -88,9 +84,9 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		IBlockState state = super.getStateForPlacement(world, pos, facing, hitX, hitY, hitZ, meta, placer);
-		return state.withProperty(FACING, facing);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		IBlockState state = super.getStateForPlacement(world, pos, face, hitX, hitY, hitZ, meta, placer);
+		return state.withProperty(FACING, face);
 	}
 
 	@Override

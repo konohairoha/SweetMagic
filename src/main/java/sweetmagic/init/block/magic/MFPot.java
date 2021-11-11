@@ -49,8 +49,8 @@ public class MFPot extends BaseMFBlock {
 
 	public final int data;
     private Map<Enchantment, Integer> initEnchant;
-    public final int expCost = 1000;
-	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.4D, 0.0D, 0.4D, 0.6D, 0.5D, 0.6D);
+    private final int expCost = 1000;
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(0.4D, 0D, 0.4D, 0.6D, 0.5D, 0.6D);
 
     public MFPot(String name, int data) {
         super(name);

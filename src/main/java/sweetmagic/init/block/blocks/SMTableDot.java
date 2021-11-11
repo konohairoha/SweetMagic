@@ -13,7 +13,7 @@ public class SMTableDot extends BaseFaceBlock {
 		setSoundType(SoundType.WOOD);
 		setHardness(0.5F);
         setResistance(1024F);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override

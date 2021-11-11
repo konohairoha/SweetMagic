@@ -40,7 +40,7 @@ public class BlockModenRack extends BaseFaceBlock {
 		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	/**
@@ -88,7 +88,6 @@ public class BlockModenRack extends BaseFaceBlock {
 		return flag;
 	}
 
-
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 
@@ -125,7 +124,7 @@ public class BlockModenRack extends BaseFaceBlock {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
     	TileModenRack tile = (TileModenRack) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		ItemStack stack = new ItemStack(this);
 
 		if (tile.isSlotEmpty()) {
 			spawnAsEntity(world, pos, stack);

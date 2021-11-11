@@ -9,7 +9,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -43,7 +42,7 @@ public class SMDoor extends BlockDoor {
         return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? null : this.getItem();
     }
     @Override
-    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
+    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
         return new ItemStack(this.getItem());
     }
 
@@ -92,11 +91,10 @@ public class SMDoor extends BlockDoor {
 
 		if ( (this.data == 6 || this.data == 7) && this.isTop(state) ) {
 
-			EnumFacing face = (EnumFacing) state.getValue(FACING);
 			boolean flag = !((Boolean) state.getValue(OPEN)).booleanValue();
 			boolean flag1 = state.getValue(HINGE) == BlockDoor.EnumHingePosition.RIGHT;
 
-			switch (face) {
+			switch (state.getValue(FACING)) {
 			case EAST:
 			default:
 				return flag ? T_EAST : (flag1 ? T_NORTH : T_SOUTH);
@@ -110,7 +108,6 @@ public class SMDoor extends BlockDoor {
 		}
 
 		return super.getBoundingBox(state, source, pos);
-
 	}
 
     @Override

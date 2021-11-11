@@ -9,12 +9,14 @@ import javax.annotation.Nonnull;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -24,6 +26,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.SweetMagicAPI;
+import sweetmagic.api.enumblock.EnumCook;
+import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
+import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.pot.PotRecipeInfo;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
@@ -35,18 +40,18 @@ import sweetmagic.util.RecipeUtil;
 public class BlockPot extends BaseFaceBlock {
 
 	public static boolean keepInventory = false;
-	private final int data;
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.19D, 0.38D, 0.19D, 0.81D, 0.0D, 0.81D);
+	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
 
-	public BlockPot(String name, float light, int data, List<Block> list) {
+	public BlockPot(String name) {
 		super(Material.IRON, name);
 		setHardness(0.1F);
         setResistance(1024F);
 		setSoundType(SoundType.STONE);
-		this.setLightLevel(light);
 		disableStats();
-		this.data = data;
-		list.add(this);
+		setDefaultState(this.blockState.getBaseState()
+				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -69,25 +74,19 @@ public class BlockPot extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
-        if (world.getBlockState(pos).getBlock() != BlockInit.pot_re) {
+        if (!this.getCook(state).isFIN()) {
 
             // 下のブロックがコンロではないなら終了
             Block uBlock = world.getBlockState(pos.down()).getBlock();
             if (!(uBlock instanceof BlockStove)) { return false;}
-
-    		TileStove stove = (TileStove) world.getTileEntity(pos.down());
-
-    		// 必要燃焼時間を超えていないまたはスロットに燃焼アイテムがないなら終了
-    		if (!stove.canCook() && !stove.canSmelt()) { return false; }
         }
 
+		// tileとプレイヤーのInventoryの取得
 		TilePot pot = (TilePot) world.getTileEntity(pos);
-
-		// プレイヤーのInventoryの取得
 		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
 
 		// 未起動
-		if (state.getBlock() == BlockInit.pot_off) {
+		if (this.getCook(state).isOFF()) {
 
 			// 手持ちアイテムからレシピと一致するかを検索
 			PotRecipeInfo recipeInfo = SweetMagicAPI.getPotRecipeInfo(stack, pInv);
@@ -102,6 +101,10 @@ public class BlockPot extends BaseFaceBlock {
 
 			// クラフトに成功
 			else {
+
+	    		// 必要燃焼時間を超えていないまたはスロットに燃焼アイテムがないなら終了
+	    		TileStove stove = (TileStove) world.getTileEntity(pos.down());
+	    		if (!stove.canWork()) { return false; }
 
 				// クラフト処理
 				RecipeUtil recipeUtil = RecipeHelper.recipeAllCraft(recipeInfo, player, stack);
@@ -120,12 +123,9 @@ public class BlockPot extends BaseFaceBlock {
 		}
 
 		//完成後
-		else if (state.getBlock() == BlockInit.pot_re) {
+		else if (this.getCook(state).isFIN()) {
 
-			for (ItemStack s : pot.outPutList) {
-				world.spawnEntity(new EntityItem(world, player.posX, player.posY, player.posZ, s));
-			}
-
+			this.spawnItem(world, player, pot.outPutList);
 			this.setState(world, pos);
 
 			// ハンドアイテムとかの初期化
@@ -136,18 +136,9 @@ public class BlockPot extends BaseFaceBlock {
 	}
 
     public static void setState(World world, BlockPos pos) {
-        IBlockState state = world.getBlockState(pos);
         TileEntity tile = world.getTileEntity(pos);
-        Block block = state.getBlock();
         keepInventory = true;
-		if (block == BlockInit.pot_on) {
-			world.setBlockState(pos, BlockInit.pot_re.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.pot_re) {
-			world.setBlockState(pos, BlockInit.pot_off.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-		} else if (block == BlockInit.pot_off) {
-			world.setBlockState(pos, BlockInit.pot_on.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
-			BlockStove.setState(world, pos.down());
-		}
+		world.setBlockState(pos, EnumCook.transitionCook(world.getBlockState(pos), COOK), 3);
 		keepInventory = false;
 		if (tile != null) {
             tile.validate();
@@ -159,23 +150,19 @@ public class BlockPot extends BaseFaceBlock {
 
 		if (!keepInventory) {
 
-			ItemStack stack = new ItemStack(Item.getItemFromBlock(BlockInit.pot_off));
 			TilePot tile = (TilePot) world.getTileEntity(pos);
 
-			// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-			if (state.getBlock() == BlockInit.pot_on || state.getBlock() == BlockInit.pot_re) {
-
-				for (ItemStack s : tile.inPutList) {
-					world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
-				}
-
-				world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), tile.handItem));
+			// オフ状態以外ならアイテム取り出し
+			if (!this.getCook(state).isOFF()) {
+				this.spawnItem(world, pos, tile.inPutList);
+				world.spawnEntity(tile.getEntityItem(pos, tile.handItem));
 			}
+
 			tile.startFlag = false;
-			spawnAsEntity(world, pos, stack);
+			spawnAsEntity(world, pos, new ItemStack(this));
 		}
 
-		if (world.getBlockState(pos.down()).getBlock() == BlockInit.stove_on) {
+		if (BlockStove.isStoveOn(world, pos.down())) {
 			BlockStove.setState(world, pos.down());
 		}
 	}
@@ -193,14 +180,34 @@ public class BlockPot extends BaseFaceBlock {
 		return false;
 	}
 
+	public EnumCook getCook (IBlockState state) {
+		return state.getValue(COOK);
+	}
+
+	@Override
+	protected BlockStateContainer createBlockState() {
+		return new BlockStateContainer(this, new IProperty[] { FACING, COOK });
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		return state.getValue(FACING).getHorizontalIndex() + state.getValue(COOK).getMeta();
+	}
+
+	@Override
+	public IBlockState getStateFromMeta(int meta) {
+		FaceCookMeta fcMeta = EnumCook.getMeta(meta);
+		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(fcMeta.getMeta())).withProperty(COOK, fcMeta.getCook());
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random rand) {
 
-		if (this.data == 0 || ( this.data == 2 && rand.nextInt(4) != 0 ) ) { return; }
+		EnumCook cook = this.getCook(state);
+		if (cook.isOFF() || (cook.isFIN() && rand.nextInt(4) != 0)) { return; }
 
-		int count = this.data == 1 ? 4 : 1;
-
+		int count = cook == EnumCook.ON ? 4 : 1;
 		float x = pos.getX() + 0.1F;
 		float y = pos.getY() + 0.75F;
 		float z = pos.getZ() + 0.1F;

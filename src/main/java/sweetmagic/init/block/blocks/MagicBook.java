@@ -19,7 +19,7 @@ public class MagicBook extends BaseFaceBlock {
 		setHardness(1.0F);
         setResistance(1024F);
 		setSoundType(SoundType.WOOD);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {

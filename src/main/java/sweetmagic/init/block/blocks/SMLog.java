@@ -22,8 +22,8 @@ public class SMLog extends BlockLog implements ISmeltItemBlock {
     }
 
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(LOG_AXIS, SMLog.EnumAxis.values()[meta]);
+	public IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(LOG_AXIS, SMLog.EnumAxis.values()[meta]);
     }
 
     @Override

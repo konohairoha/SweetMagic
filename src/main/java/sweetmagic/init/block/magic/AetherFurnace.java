@@ -6,9 +6,6 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.properties.IProperty;
-import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -21,7 +18,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,14 +28,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseMFBlock;
+import sweetmagic.init.base.BaseMFFace;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileMFBase;
 
-public class AetherFurnace extends BaseMFBlock {
+public class AetherFurnace extends BaseMFFace {
 
 	private static final AxisAlignedBB TOP = new AxisAlignedBB(0.2, 0, 0.2, 0.8, 1, 0.8);
-	private static final PropertyDirection FACING = PropertyDirection.create("facing", EnumFacing.Plane.HORIZONTAL);
 	private final boolean isTop;
 	private final boolean isAdvanced;
 
@@ -47,7 +42,6 @@ public class AetherFurnace extends BaseMFBlock {
         super(name);
         this.isTop = isTop;
         this.isAdvanced = isAdvanced;
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
 		list.add(this);
     }
 
@@ -160,10 +154,7 @@ public class AetherFurnace extends BaseMFBlock {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-
-		if (this.isTop) { return null; }
-
-    	return new TileAetherFurnace();
+    	return this.isTop ? null : new TileAetherFurnace();
 	}
 
 	public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
@@ -175,30 +166,6 @@ public class AetherFurnace extends BaseMFBlock {
 		return null;
 	}
 
-	// getOppositeでプレイヤーの向きを取得
-	@Override
-	public IBlockState getStateForPlacement(World worldIn, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-	}
-
-	// IBlockStateからItemStackのmetadataを生成。ドロップ時とテクスチャ・モデル参照時に呼ばれる
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getHorizontalIndex();
-	}
-
-	// ItemStackのmetadataからIBlockStateを生成。設置時に呼ばれる
-	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(meta));
-	}
-
-	// 初期BlockStateContainerの生成
-	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getBlockLayer() {
@@ -208,17 +175,7 @@ public class AetherFurnace extends BaseMFBlock {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
-
-		String tip = "";
-
-		if (this.isAdvanced) {
-			tip = "tip.advanced_aether_furnace.name";
-		}
-
-		else {
-			tip = "tip.aether_furnace.name";
-		}
-
+		String tip = this.isAdvanced ? "tip.advanced_aether_furnace.name" : "tip.aether_furnace.name";
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_redstone.name")));
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip(tip)));
 		super.addInformation(stack, world, tooltip, advanced);

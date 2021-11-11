@@ -39,7 +39,6 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
 import sweetmagic.util.ParticleHelper;
-import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.SweetState;
 
@@ -268,7 +267,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 	//右クリックの処理
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
 		if (world.isRemote) { return true; }
 
@@ -299,7 +298,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
             ItemStack stackB = new ItemStack(Items.DYE,1,15);
             if(ItemStack.areItemsEqual(stack, stackB)) {
             	ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-            	if (!PlayerHelper.isCleative(player)) { stack.shrink(1); }
+            	if (!player.isCreative()) { stack.shrink(1); }
                 world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
             }
         }

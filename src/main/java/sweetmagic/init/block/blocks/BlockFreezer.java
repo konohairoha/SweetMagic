@@ -11,8 +11,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -69,9 +69,19 @@ public class BlockFreezer extends BaseFaceBlock {
 	// ブロックをこわしたとき(下のブロックを指定)
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
-		this.breakBlock(!this.isTop ? pos.up() : pos.down(), world, true);
-		pos = !this.isTop ? pos.up() : pos.down();
-        world.removeTileEntity(pos);
+
+		if (this.isTop) {
+			this.breakBlock(pos.down(), world, true);
+		}
+
+		else {
+			if (!world.isRemote) {
+				this.breakBlock(world, pos, state);
+				world.setBlockState(pos.up(), Blocks.AIR.getDefaultState(), 3);
+			}
+		}
+
+        world.removeTileEntity(!this.isTop ? pos.up() : pos.down());
 	}
 
 	@Override
@@ -86,30 +96,25 @@ public class BlockFreezer extends BaseFaceBlock {
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
-    	// 上のブロックなら
-		if (this.isTop) {
+    	if (this.isTop) { return; }
 
-			TileFreezer tile2 = (TileFreezer) world.getTileEntity(pos);
+		TileFreezer tile2 = (TileFreezer) world.getTileEntity(pos.up());
 
-			if (tile2 == null) { return; }
-
-			// スロットに入れているアイテムをスポーン
+		// スロットに入れているアイテムをスポーン
+		if (tile2 != null) {
 			for (ItemStack s : tile2.allSlotItem()) {
-				world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
+				world.spawnEntity(tile2.getEntityItem(pos, s));
 			}
-			return;
 		}
 
 		ItemStack stack = new ItemStack(this);
 		TileFreezer tile = (TileFreezer) world.getTileEntity(pos);
+		if (tile == null) { return; }
+
 		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
+
 		NBTTagCompound tags = new NBTTagCompound();
 		tags.setTag("BlockEntityTag", tileTags);
-
-		// 製粉機（オフ状態）か製粉機（稼働状態）のときtileの入力リストを取り出す
-		for (ItemStack s : tile.inPutList) {
-			world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), s));
-		}
 
 		if (tags != null) {
 			tags.removeTag("inPutList");

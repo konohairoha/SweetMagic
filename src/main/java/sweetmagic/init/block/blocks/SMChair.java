@@ -32,7 +32,7 @@ public class SMChair extends BaseFaceBlock {
 		setResistance(1024F);
         setSoundType(SoundType.WOOD);
         this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
     }
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {

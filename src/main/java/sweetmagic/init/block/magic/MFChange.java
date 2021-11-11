@@ -56,7 +56,7 @@ public class MFChange extends BaseMFBlock {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
+	public TileEntity createNewTileEntity(World world, int meta) {
 
 		switch (this.data) {
 		case 0:	return new TileMFChanger();
@@ -69,8 +69,8 @@ public class MFChange extends BaseMFBlock {
 	//===========================
 	// blockstate持たせるための必要なソース
 
-	public int getComparatorInputOverride(IBlockState blockState, World worldIn, BlockPos pos) {
-		return ((Integer) blockState.getValue(LEVEL)).intValue();
+	public int getComparatorInputOverride(IBlockState state, World world, BlockPos pos) {
+		return ((Integer) state.getValue(LEVEL)).intValue();
 	}
 
 	public IBlockState getStateFromMeta(int meta) {

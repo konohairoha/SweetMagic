@@ -12,6 +12,6 @@ public class BlockPlant extends BaseModelBlock {
         setHardness(1.0F);
         setResistance(1024F);
         setSoundType(SoundType.PLANT);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
     }
 }

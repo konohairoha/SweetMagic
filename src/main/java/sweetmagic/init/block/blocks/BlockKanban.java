@@ -7,7 +7,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,6 +32,7 @@ public class BlockKanban extends BaseFaceBlock {
         setHardness(0.4F);
         setResistance(1024);
 		this.setSoundType(SoundType.WOOD);
+		this.setEmptyAABB();
 		list.add(this);
 	}
 
@@ -51,10 +51,6 @@ public class BlockKanban extends BaseFaceBlock {
 	@Override
 	public void onBlockHarvested(World world, BlockPos pos, IBlockState state, EntityPlayer player) {
 		this.breakBlock(this == BlockInit.kanban_bot ? pos.up() : pos.down(), world, true);
-	}
-
-	@Override
-	public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
 	}
 
 	@Override

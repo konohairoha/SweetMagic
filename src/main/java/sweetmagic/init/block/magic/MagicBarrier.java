@@ -53,9 +53,7 @@ public class MagicBarrier extends BaseModelBlock {
 		world.setBlockState(pos, BlockInit.magicbarrier_off.getDefaultState(), 2);
 		if (!player.isCreative()) { stack.shrink(1); }
 
-//		int range = 64;
-//        AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-range, -range / 2, -range), pos.add(range, range / 2, range));
-//		List<EntityPlayer> entityList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+		// ワールド内のプレイヤー取得
 		List<EntityPlayer> entityList = world.playerEntities;
 
 		for (EntityPlayer entity : entityList) {

@@ -39,7 +39,7 @@ public class BlockModenLanp extends BaseModelBlock {
 				.withProperty(TOP, false)
 				.withProperty(BOT, false));
 		setLightLevel(1F);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -75,7 +75,7 @@ public class BlockModenLanp extends BaseModelBlock {
     }
 
 	@Override
-	public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return side == EnumFacing.UP;
 	}
 

@@ -18,7 +18,7 @@ public class AntiqueLantern extends BaseModelBlock {
         setResistance(1024F);
         setSoundType(SoundType.METAL);
         setLightLevel(1F);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
     }
 
 	@Deprecated

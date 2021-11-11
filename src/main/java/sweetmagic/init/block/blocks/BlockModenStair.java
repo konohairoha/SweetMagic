@@ -32,7 +32,7 @@ public class BlockModenStair extends BaseFaceBlock {
 		setHardness(0.5F);
 		setResistance(1024F);
 		setSoundType(SoundType.WOOD);
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	@Override

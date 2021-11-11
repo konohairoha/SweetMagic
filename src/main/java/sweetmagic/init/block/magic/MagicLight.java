@@ -33,7 +33,7 @@ public class MagicLight extends BaseModelBlock {
 
 	public MagicLight(String name, int data, List<Block> list) {
 		super(Material.GLASS, name);
-		this.setHardness(0.2F);
+		this.setHardness(data == 0 ? 0F : 0.2F);
 		this.setResistance(99999F);
 		setLightLevel(1F);
 		this.data = data;
@@ -51,7 +51,7 @@ public class MagicLight extends BaseModelBlock {
 	}
 
 	@Nullable
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return NULL_AABB;
 	}
 

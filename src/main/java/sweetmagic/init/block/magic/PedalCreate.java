@@ -20,6 +20,7 @@ import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.base.BaseMFBlock;
@@ -30,8 +31,8 @@ import sweetmagic.util.RecipeUtil;
 
 public class PedalCreate extends BaseMFBlock {
 
-	public static final String MF = "mf";
-	public static final AxisAlignedBB AABB = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.7D, 0.925D);
+	private static final String MF = "mf";
+	private static final AxisAlignedBB AABB = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.7D, 0.925D);
 
     public PedalCreate(String name) {
 		super(name);
@@ -61,6 +62,7 @@ public class PedalCreate extends BaseMFBlock {
 			RecipeUtil recipeUtil = RecipeHelper.recipeSingleCraft(recipeInfo, player, stack);
 			copy.setCount(recipeInfo.getHandList().get(0).getCount());
 			ItemHandlerHelper.insertItemStacked(tile.handInv, copy, false);
+			AdvancedInit.witch_craft.triggerFor(player);
 
 			for (ItemStack input : recipeUtil.getInput()) {
 				ItemHandlerHelper.insertItemStacked(tile.inputInv, input, false);
@@ -163,7 +165,7 @@ public class PedalCreate extends BaseMFBlock {
 		TilePedalCreate tile = (TilePedalCreate) world.getTileEntity(pos);
 
 		for (ItemStack s : tile.getList()) {
-			world.spawnEntity(new EntityMagicItem(world, pos.getX(), pos.getY(), pos.getZ(), s.copy()));
+			world.spawnEntity(new EntityMagicItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, s.copy()));
 			s.shrink(s.getCount());
 		}
 

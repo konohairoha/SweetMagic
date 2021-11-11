@@ -43,7 +43,7 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 		setSoundType(SoundType.STONE);
 		disableStats();
 		this.data = data;
-		BlockInit.blockList.add(this);
+		BlockInit.magicList.add(this);
 	}
 
 	@Override
@@ -60,10 +60,8 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 	public TileEntity createTileEntity(World world, IBlockState state) {
 
 		switch (this.data) {
-		case 0:
-			return new TileParallelInterfere();
-		case 1:
-			return new TileStardustWish();
+		case 0: return new TileParallelInterfere();
+		case 1: return new TileStardustWish();
 		}
 
 		return null;
@@ -107,7 +105,7 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
     	TileParallelInterfere tile = (TileParallelInterfere) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		ItemStack stack = new ItemStack(this);
 		NBTTagCompound tags = new NBTTagCompound();
 		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
 		tags.setTag("BlockEntityTag", tileTags);

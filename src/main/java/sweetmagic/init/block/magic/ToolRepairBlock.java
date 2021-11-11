@@ -30,9 +30,9 @@ import sweetmagic.init.tile.magic.TileToolRepair;
 public class ToolRepairBlock extends BaseMFFace {
 
 	public final int data;
-	public static final AxisAlignedBB TOOL = new AxisAlignedBB(0.2D, 0D, 0.2D, 0.8D, 0.65D, 0.8D);
-	public static final AxisAlignedBB WRITE = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.875D, 0.925D);
-	public static final AxisAlignedBB SUCCESSOR = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.4375D, 1D);
+	private static final AxisAlignedBB TOOL = new AxisAlignedBB(0.2D, 0D, 0.2D, 0.8D, 0.65D, 0.8D);
+	private static final AxisAlignedBB WRITE = new AxisAlignedBB(0.075D, 0D, 0.075D, 0.925D, 0.875D, 0.925D);
+	private static final AxisAlignedBB SUCCESSOR = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.4375D, 1D);
 
     public ToolRepairBlock(String name, int data) {
 		super(name);

@@ -1,14 +1,11 @@
 package sweetmagic.init.block.blocks;
 
-import java.util.List;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -31,8 +28,9 @@ public class BlockIronChain extends BaseModelBlock {
         setHardness(0F);
         setResistance(1024F);
         setSoundType(SoundType.METAL);
+		this.setEmptyAABB();
 		setDefaultState(this.blockState.getBaseState().withProperty(TOP, false));
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
     }
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -44,20 +42,18 @@ public class BlockIronChain extends BaseModelBlock {
     public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
 
         ItemStack stack = player.getHeldItem(hand);
+		if (!this.checkBlock(stack)) { return false;}
 
-		if (this.checkBlock(stack)) {
+		for (int i = 1; i < 10; i++) {
 
-			for (int i = 1; i < 10; i++) {
+			if (!world.isAirBlock(pos.down(i))) { continue; }
 
-				if (!world.isAirBlock(pos.down(i))) { continue; }
+        	world.setBlockState(pos.down(i), this.getDefaultState(), 3);
+            if (!player.isCreative()) { stack.shrink(1); }
 
-	        	world.setBlockState(pos.down(i), this.getDefaultState(), 3);
-	            if (!player.isCreative()) { stack.shrink(1); }
-
-	            SoundType sound = this.getSoundType(state, world, pos.down(i), player);
-	            this.playerSound(world, pos.down(i), sound.getPlaceSound(),(sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-	        	return true;
-			}
+            SoundType sound = this.getSoundType(state, world, pos.down(i), player);
+            this.playerSound(world, pos.down(i), sound.getPlaceSound(),(sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+        	return true;
 		}
 
     	return false;
@@ -86,7 +82,4 @@ public class BlockIronChain extends BaseModelBlock {
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { TOP });
 	}
-
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) { }
 }

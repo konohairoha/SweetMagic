@@ -1,6 +1,5 @@
 package sweetmagic.init.block.blocks;
 
-import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -10,7 +9,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -35,8 +33,9 @@ public class GoldCrest extends BaseModelBlock {
 		setSoundType(SoundType.PLANT);
 		setHardness(0F);
         setResistance(1024F);
+		this.setEmptyAABB();
 		setDefaultState(this.blockState.getBaseState().withProperty(TOP, false).withProperty(BOT, false));
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	//土、草、耕地に置いても壊れないようにする
@@ -50,15 +49,12 @@ public class GoldCrest extends BaseModelBlock {
 		return AABB;
 	}
 
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) { }
-
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		world.scheduleUpdate(pos, this, this.tickRate(world));
 	}
 
-	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+		world.scheduleUpdate(pos, this, this.tickRate(world));
 	}
 
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {

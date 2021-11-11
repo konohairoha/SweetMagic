@@ -28,12 +28,12 @@ import sweetmagic.init.base.BaseModelBlock;
 public class SMGlassPane extends BaseModelBlock {
 
 	private final int data;
-	private static final PropertyBool BACK = PropertyBool.create("back");
-	private static final PropertyBool FORWARD = PropertyBool.create("forward");
-	private static final PropertyBool LEFT = PropertyBool.create("left");
-	private static final PropertyBool RIGHT = PropertyBool.create("right");
+	protected static final PropertyBool BACK = PropertyBool.create("back");
+	protected static final PropertyBool FORWARD = PropertyBool.create("forward");
+	protected static final PropertyBool LEFT = PropertyBool.create("left");
+	protected static final PropertyBool RIGHT = PropertyBool.create("right");
 
-    private static final AxisAlignedBB[] AABB_BY_INDEX = new AxisAlignedBB[]{
+    private static final AxisAlignedBB[] AABB_BY_INDEX = new AxisAlignedBB[] {
 		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 0.5625D),
 		new AxisAlignedBB(0.4375D, 0D, 0.4375D, 0.5625D, 1D, 1D),
 		new AxisAlignedBB(0D, 0D, 0.4375D, 0.5625D, 1D, 0.5625D),

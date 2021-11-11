@@ -14,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -41,8 +40,7 @@ public class BlockLantern extends BaseFaceBlock {
 
 		if (!world.isRemote && player.isSneaking()) {
 			Block block = this.data == 0 ? BlockInit.lantern_side2 : BlockInit.lantern_side1;
-			IBlockState setState = block.getDefaultState();
-			world.setBlockState(pos, setState.withProperty(FACING, state.getValue(FACING)), 2);
+			world.setBlockState(pos, block.getDefaultState().withProperty(FACING, state.getValue(FACING)), 2);
 			this.playerSound(world, pos, SoundEvents.UI_BUTTON_CLICK, 0.5F, world.rand.nextFloat() * 0.1F + 1.2F);
 		}
 
@@ -53,7 +51,6 @@ public class BlockLantern extends BaseFaceBlock {
   	@Override
   	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
-	  	String tip = new TextComponentTranslation("tip.lantern_side.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.lantern_side.name")));
   	}
 }

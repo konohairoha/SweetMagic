@@ -33,7 +33,7 @@ public class SMTable extends BaseModelBlock {
 				.withProperty(FORWARD, false)
 				.withProperty(LEFT, false)
 				.withProperty(RIGHT, false));
-		BlockInit.blockList.add(this);
+		BlockInit.furniList.add(this);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -41,7 +41,7 @@ public class SMTable extends BaseModelBlock {
 	}
 
 	@Override
-	public boolean isSideSolid(IBlockState baseState, IBlockAccess world, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
 		return side == EnumFacing.UP;
 	}
 
