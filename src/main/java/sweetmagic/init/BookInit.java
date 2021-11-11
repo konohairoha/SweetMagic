@@ -44,11 +44,12 @@ public class BookInit {
 	public static BookEntry seaweed, seedbag;
 	public static BookEntry lantan, succesor;
 	public static BookEntry arcana;
+	public static BookEntry un_fire;
+	public static BookEntry cos_book, magia_light;
 
-	public static BookEntry key, flower_pot;
+	public static BookEntry key, flower_pot, mb_book;
 
-//	public static BookEntry accelerator, ore_name, pendulum, bread, loot;
-	public static BookEntry plant, machete, chair, cos_book, un_fire, horse, blood, mb_book;
+	public static BookEntry awning_tent, pane_glass, fence;
 
 	public static void init() {
 
@@ -88,18 +89,17 @@ public class BookInit {
 		lantan = new BookEntry("lantan", magic).setIcon(new ItemStack(BlockInit.aether_lanp));
 		succesor = new BookEntry("succesor", magic).setIcon(new ItemStack(BlockInit.magia_successor));
 		arcana = new BookEntry("arcana", magic).setIcon(new ItemStack(BlockInit.arcane_table));
+		un_fire = new BookEntry("un_fire", magic).setIcon(new ItemStack(ItemInit.unyielding_fire));
+		cos_book = new BookEntry("cos_book", magic).setIcon(new ItemStack(ItemInit.magic_book_cosmic));
+		magia_light = new BookEntry("magia_light", magic).setIcon(new ItemStack(BlockInit.magia_light));
 
 		key = new BookEntry("key", structure).setIcon(new ItemStack(ItemInit.magickey));
 		flower_pot = new BookEntry("flower_pot", structure).setIcon(new ItemStack(BlockInit.solid_star_pot));
+		mb_book = new BookEntry("mb_book", structure).setIcon(new ItemStack(ItemInit.magicianbeginner_book));
 
-		plant = new BookEntry("plant", update).setIcon(new ItemStack(BlockInit.sugarbell_plant));
-		machete = new BookEntry("machete", update).setIcon(new ItemStack(ItemInit.machete));
-		chair = new BookEntry("chair", update).setIcon(new ItemStack(BlockInit.counter_chair));
-		cos_book = new BookEntry("cos_book", update).setIcon(new ItemStack(ItemInit.magic_book_cosmic));
-		un_fire = new BookEntry("un_fire", update).setIcon(new ItemStack(ItemInit.unyielding_fire));
-		horse = new BookEntry("horse", update).setIcon(new ItemStack(ItemInit.magic_shadowhorse));
-		blood = new BookEntry("blood", update).setIcon(new ItemStack(ItemInit.blood_sucking_ring));
-		mb_book = new BookEntry("mb_book", update).setIcon(new ItemStack(ItemInit.magicianbeginner_book));
+		awning_tent = new BookEntry("awning_tent", update).setIcon(new ItemStack(BlockInit.awning_tent_r));
+		pane_glass = new BookEntry("pane_glass", update).setIcon(new ItemStack(BlockInit.brown4panel_glass_pane));
+		fence = new BookEntry("fence", update).setIcon(new ItemStack(BlockInit.white_ironfence));
 
 		sugarbell.addPage(new BookPageText(sugarbell, "sugarbell").addRelatedEntries(sannyflower, moonblossom, alstroemeria));
 		sannyflower.addPage(new BookPageText(sannyflower, "sannyflower").addRelatedEntries(moonblossom, alstroemeria));
@@ -129,17 +129,16 @@ public class BookInit {
 		lantan.addPage(new BookPageText(lantan, "lantan"));
 		succesor.addPage(new BookPageText(succesor, "succesor"));
 		arcana.addPage(new BookPageText(arcana, "arcana"));
+		un_fire.addPage(new BookPageText(un_fire, "un_fire"));
+		cos_book.addPage(new BookPageText(cos_book, "cos_book"));
+		magia_light.addPage(new BookPageText(magia_light, "magia_light"));
 
 		key.addPage(new BookPageText(key, "key"));
 		flower_pot.addPage(new BookPageText(flower_pot, "flower_pot"));
-
-		plant.addPage(new BookPageText(plant, "plant"));
-		machete.addPage(new BookPageText(machete, "machete"));
-		chair.addPage(new BookPageText(chair, "chair"));
-		cos_book.addPage(new BookPageText(cos_book, "cos_book"));
-		un_fire.addPage(new BookPageText(un_fire, "un_fire"));
-		horse.addPage(new BookPageText(horse, "horse"));
-		blood.addPage(new BookPageText(blood, "blood"));
 		mb_book.addPage(new BookPageText(mb_book, "mb_book"));
+
+		awning_tent.addPage(new BookPageText(awning_tent, "awning_tent"));
+		pane_glass.addPage(new BookPageText(pane_glass, "pane_glass"));
+		fence.addPage(new BookPageText(fence, "fence"));
 	}
 }

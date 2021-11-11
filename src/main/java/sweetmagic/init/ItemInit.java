@@ -150,7 +150,7 @@ public class ItemInit {
 	public static Item magic_absorphealth, magic_mind_control, magic_creative;
 	public static Item magic_blackhole, magic_invisible, magic_aether_shield, magic_aether_shield2;
 	public static Item magic_supernova, magic_mining_enchant, magic_rockblast, magic_hugerock_fall;
-	public static Item magic_expand_barrier, magic_shadowhorse;
+	public static Item magic_expand_barrier, magic_shadowhorse, magic_refresh_gift;
 
     // 簡易魔法
 	public static Item card_normal, card_heal;
@@ -217,6 +217,7 @@ public class ItemInit {
     public static List<Item> itemList = new ArrayList();
     public static List<Item> foodList = new ArrayList();
     public static List<Item> magicList = new ArrayList();
+    public static List<Item> furniList = new ArrayList();
     public static List<Item> noTabList = new ArrayList();
 
 	// アイテムにデータを入れる
@@ -369,24 +370,24 @@ public class ItemInit {
 		aether_boot = new AngelHarness("aether_boot", ArmorInit.angel_harness, 1, EntityEquipmentSlot.FEET, 1, 20000);
 
 		// 装備品
-		warrior_bracelet = new SMAcce("warrior_bracelet", SMAcceType.TERMS, false, 0);
-		witch_scroll = new SMAcce("witch_scroll", SMAcceType.TERMS, false, 1);
-		scorching_jewel = new SMAcce("scorching_jewel", SMAcceType.UPDATE, true, 2);
-		mermaid_veil = new SMAcce("mermaid_veil", SMAcceType.UPDATE, true, 3);
-		blood_sucking_ring = new SMAcce("blood_sucking_ring", SMAcceType.TERMS, true, 4);
-		emelald_pias = new SMAcce("emelald_pias", SMAcceType.TERMS, true, 5);
-		fortune_ring = new SMAcce("fortune_ring", SMAcceType.UPDATE, false, 6);
-		veil_darkness = new SMAcce("veil_darkness", SMAcceType.UPDATE, false, 7);
-		varrier_pendant = new SMAcce("varrier_pendant", SMAcceType.UPDATE, false, 8);
-		magicians_grobe = new SMAcce("magicians_grobe", SMAcceType.TERMS, true, 9);
-		magician_quillpen = new SMAcce("magician_quillpen", SMAcceType.TERMS, false, 10);
-		gravity_pendant = new SMAcce("gravity_pendant", SMAcceType.TERMS, true, 11);
-		poison_fang = new SMAcce("poison_fang", SMAcceType.TERMS, false, 12);
-		pendulum_necklace = new SMAcce("pendulum_necklace", SMAcceType.TERMS, true, 13);
-		unyielding_fire = new SMAcce("unyielding_fire", SMAcceType.TERMS, false, 14);
-		frosted_chain = new SMAcce("frosted_chain", SMAcceType.TERMS, false, 15);
-		holly_charm = new SMAcce("holly_charm", SMAcceType.TERMS, false, 16);
-		wind_relief = new SMAcce("wind_relief", SMAcceType.TERMS, false, 17);
+		warrior_bracelet = new SMAcce("warrior_bracelet", SMAcceType.TERMS, false, 0, 1);
+		witch_scroll = new SMAcce("witch_scroll", SMAcceType.TERMS, false, 1, 1);
+		scorching_jewel = new SMAcce("scorching_jewel", SMAcceType.UPDATE, true, 2, 1);
+		mermaid_veil = new SMAcce("mermaid_veil", SMAcceType.UPDATE, true, 3, 1);
+		blood_sucking_ring = new SMAcce("blood_sucking_ring", SMAcceType.TERMS, true, 4, 1);
+		emelald_pias = new SMAcce("emelald_pias", SMAcceType.TERMS, true, 5, 1);
+		fortune_ring = new SMAcce("fortune_ring", SMAcceType.UPDATE, false, 6, 1);
+		veil_darkness = new SMAcce("veil_darkness", SMAcceType.UPDATE, false, 7, 1);
+		varrier_pendant = new SMAcce("varrier_pendant", SMAcceType.UPDATE, false, 8, 1);
+		magicians_grobe = new SMAcce("magicians_grobe", SMAcceType.TERMS, true, 9, 1);
+		magician_quillpen = new SMAcce("magician_quillpen", SMAcceType.TERMS, false, 10, 2);
+		gravity_pendant = new SMAcce("gravity_pendant", SMAcceType.TERMS, true, 11, 1);
+		poison_fang = new SMAcce("poison_fang", SMAcceType.TERMS, false, 12, 1);
+		pendulum_necklace = new SMAcce("pendulum_necklace", SMAcceType.TERMS, true, 13, 1);
+		unyielding_fire = new SMAcce("unyielding_fire", SMAcceType.TERMS, false, 14, 2);
+		frosted_chain = new SMAcce("frosted_chain", SMAcceType.TERMS, false, 15, 2);
+		holly_charm = new SMAcce("holly_charm", SMAcceType.TERMS, false, 16, 2);
+		wind_relief = new SMAcce("wind_relief", SMAcceType.TERMS, false, 17, 2);
 
 		// ドア
 		black_moderndoor = new SMIDoor("black_moderndoor_i", BlockInit.black_moderndoor);
@@ -416,6 +417,7 @@ public class ItemInit {
 
         magic_effectremover = new AirMagic("magic_effectremover", 5, SMElement.WATER, 1, 600, 80);
         magic_refresh  = new AirMagic("magic_refresh", 7, SMElement.WATER, 2, 1600, 200, "magic_effectremover");
+        magic_refresh_gift  = new AirMagic("magic_refresh_gift", 25, SMElement.WATER, 3, 1200, 300, "magic_effectremover");
 
         magic_regene = new AirMagic("magic_regene", 2, SMElement.WATER, 1, 400, 100, "magic_heal");
         magic_heal = new AirMagic("magic_heal", 0, SMElement.WATER, 2, 800, 200);
@@ -435,7 +437,7 @@ public class ItemInit {
         magic_shadowwolf = new GrandMagic("magic_shadowwolf", 0, SMElement.DARK, 2, 6000, 200, "magic_summon");
         magic_shadowgolem = new GrandMagic("magic_shadowgolem", 1, SMElement.DARK, 3, 8000, 300, "magic_summon");
 
-        magic_absorphealth = new TouchMagic("magic_absorphealth", 0, SMElement.DARK, 1, 1200, 200, "magic_shadow");
+        magic_absorphealth = new TouchMagic("magic_absorphealth", 0, SMElement.DARK, 1, 300, 200, "magic_shadow");
         magic_mind_control = new TouchMagic("magic_mind_control", 1, SMElement.DARK, 2, 1200, 300, "magic_shadow");
         magic_shadow = new AirMagic("magic_shadow", 1, SMElement.DARK, 3, 1200, 300);
 
@@ -734,14 +736,22 @@ public class ItemInit {
 	//アイテムをクリエタブに追加
 	public static void register() {
 
+    	// 魔法
 		for (Item item : magicList) {
 			registerItem(item, 2);
 		}
 
+    	// 通常
 		for (Item item : itemList) {
 			registerItem(item, 0);
 		}
 
+    	// 家具
+		for (Item item : furniList) {
+			registerItem(item, 4);
+		}
+
+    	// 食べ物
 		for (Item item : foodList) {
 			registerItem(item, 1);
 		}
@@ -755,17 +765,29 @@ public class ItemInit {
 
     	ForgeRegistries.ITEMS.register(item);
 
-    	if (data == 0) {
+    	switch (data) {
+
+    	// 通常
+    	case 0:
     		item.setCreativeTab(SweetMagicCore.SMTab);
-    	}
+    		break;
 
-    	else if (data == 1) {
+        // 食べ物
+    	case 1:
     		item.setCreativeTab(SweetMagicCore.SMFoodTab);
+    		break;
+
+    	// 魔法
+    	case 2:
+    		item.setCreativeTab(SweetMagicCore.SMMagicTab);
+    		break;
+
+        // 家具
+    	case 4:
+    		item.setCreativeTab(SweetMagicCore.SMFurnitureTab);
+    		break;
     	}
 
-    	else if (data == 2) {
-    		item.setCreativeTab(SweetMagicCore.SMMagicTab);
-    	}
         if(FMLCommonHandler.instance().getSide() == Side.CLIENT)
         	ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
     }
