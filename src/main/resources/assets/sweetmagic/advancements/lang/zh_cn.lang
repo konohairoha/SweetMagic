@@ -432,8 +432,6 @@ item.magic_shadowhorse.name=召唤『幻影驹』
 item.magic_refresh_gift.name=刷新礼物
 
 
-
-
 ＃-方块-
 
 tile.sannyflower_plant.name=阳光花苗
@@ -457,7 +455,7 @@ tile.oven_re.name=烤箱
 tile.olive_plant.name=橄榄苗
 tile.vannila_plant.name=香草苗
 tile.flourmill_off.name=磨粉机
-tile.flourmill_on.name=磨机（运行中）
+tile.flourmill_on.name=磨粉机（运行中）
 tile.flourmill_re.name=磨粉机
 tile.raspberry_plant.name=覆盆子苗
 tile.lemon_leaves.name=柠檬叶
@@ -487,11 +485,11 @@ tile.mfpot.name=细雨勿忘我花瓶
 tile.chestnut_slab.name=栗木台阶
 tile.chestnut_stairs.name=栗木楼梯
 tile.antique_brick_0.name=红色仿古砖
-tile.antique_brick_1.name=红色仿古砖(青苔)
-tile.antique_brick_2.name=红色仿古砖(裂)
+tile.antique_brick_1.name=红色仿古砖（青苔）
+tile.antique_brick_2.name=红色仿古砖（裂）
 tile.antique_brick_0w.name=白色仿古砖
-tile.antique_brick_1w.name=白色仿古砖(青苔)
-tile.antique_brick_2w.name=白色仿古砖(裂)
+tile.antique_brick_1w.name=白色仿古砖（青苔）
+tile.antique_brick_2w.name=白色仿古砖（裂）
 tile.antique_brick_b.name=黑色仿古砖
 tile.antique_brick_slab.name=红色仿古砖台阶
 tile.antique_brick_stairs.name=红色仿古砖楼梯
@@ -614,7 +612,7 @@ tile.prism_leaves.name=棱镜木叶子
 tile.prism_sapling.name=棱镜木树苗
 tile.kanban_top.name=咖啡厅标志
 tile.kanban_bot.name=咖啡厅标志
-tile.prism_planks.name=棱镜木
+tile.prism_planks.name=棱镜木板
 tile.prism_slab.name=棱镜木台阶
 tile.prism_stairs.name=棱镜木楼梯
 tile.prism_plate.name=棱镜木压力板
@@ -689,7 +687,7 @@ tile.rattan_chair_d.name=深棕色藤条椅子
 tile.rattan_basket_y.name=黄色藤条废纸篓
 tile.rattan_basket_b.name=棕色藤条废纸篓
 tile.rattan_basket_d.name=深棕色藤条废纸篓
-tile.smtable_dot.name=仿古桌(圆点)
+tile.smtable_dot.name=仿古桌（圆点）
 tile.prism_woodchest.name=棱镜木箱
 tile.estor_woodchest.name=寒带苹果木箱
 tile.longtile_brick_o.name=橙色长瓷砖
@@ -940,7 +938,38 @@ tile.frypan_red_on.name=平底锅
 tile.frypan_red_re.name=平底锅
 tile.showcase_stand.name=展示柜底座
 tile.magia_light.name=闪耀台灯
-
+tile.path_tree_orange.name=木板路（橙木）
+tile.path_tree_lemon.name=木板路（柠檬木）
+tile.awning_tent_b.name=遮阳篷（蓝色）
+tile.awning_tent_o.name=遮阳篷（橙色）
+tile.awning_tent_p.name=遮阳篷（紫色）
+tile.awning_tent_r.name=遮阳篷（红色）
+tile.awning_tent_s.name=遮阳篷（天蓝色）
+tile.log_fence_normal_estor.name=栅栏（寒带苹果木）
+tile.log_fence_estor.name=横向栅栏（寒带苹果木）
+tile.log_fence_slanted_estor.name=斜面栅栏（寒带苹果木）
+tile.log_fence_vertical_estor.name=垂直栅栏（寒带苹果木）
+tile.log_fence_normal_prism.name=栅栏（棱镜木）
+tile.log_fence_prism.name=横向栅栏（棱镜木）
+tile.log_fence_slanted_prism.name=斜面栅栏（棱镜木）
+tile.log_fence_vertical_prism.name=垂直栅栏（棱镜木）
+tile.log_fence_normal_peach.name=栅栏（桃木）
+tile.log_fence_peach.name=横向栅栏（桃木）
+tile.log_fence_slanted_peach.name=斜面栅栏（桃木）
+tile.log_fence_vertical_peach.name=垂直栅栏（桃木）
+tile.counter_table_white_brick.name=白线砖吧台
+tile.counter_table_white_brick_y.name=白线砖吧台（黄色）
+tile.counter_table_white_brick_b.name=白线砖吧台（黑色）
+tile.counter_table_orange_planks.name=白橙木吧台
+tile.counter_table_modan.name=寒带苹果木吧台
+tile.antique_brick_pot_w.name=仿古砖花盆（白色）
+tile.antique_brick_pot_l.name=仿古砖花盆（棕色）
+tile.antique_brick_pot_g.name=仿古砖花盆（绿色）
+tile.whiteline_brick_pot_y.name=白线砖花盆（黄色）
+tile.whiteline_brick_pot_b.name=白线砖花盆（黑色）
+tile.gorgeous_glass_pane.name=华丽玻璃板（黑色）
+tile.gorgeous_glass_w_pane.name=华丽玻璃板（白色）
+tile.ventilation_fan.name=抽油烟机
 
 ＃--gui-
 gui.magiawrite.name=所需的MF数量：
@@ -971,6 +1000,7 @@ tile.mfchanger.name=魔力转换器
 itemGroup.sweetmagicTab=甜蜜与魔法✦物品
 itemGroup.sweetmagicFoodTab=甜蜜与魔法✦食物
 itemGroup.sweetmagicMagicTab=甜蜜与魔法✦魔法
+itemGroup.sweetmagicFurnitureTab=甜蜜与魔法✦家具
 
 
 ＃-工具提示-
@@ -1142,7 +1172,7 @@ tip.aether_choker.name=装备完毕后，每10秒钟消耗一次MF来恢复其�
 tip.angel_harness_dus.name=按下ctrl消耗MF加快飞行速度
 tip.gravity_chest.name=消耗MF收集半径为5方块内的物品
 tip.tool_repair.name=消耗MF以逐渐恢复物品的耐久
-tip.magia_rewrite.name=通过消耗MF来提高甜蜜魔法的附魔等级(上限等级10)
+tip.magia_rewrite.name=通过消耗MF来提高甜蜜魔法的附魔等级（上限等级10）
 tip.aether_hopper.name=用于远距离物品传输并带有区块加载功能
 tip.magic_bleb_burst.name=使击中的生物漂浮起来，附加窒息伤害并在气泡上升到一定程度爆炸。
 tip.magic_creative.name=魔杖等级提高1.
@@ -1206,9 +1236,11 @@ tip.magicbook_cosmic_pick.name=收集水晶：
 tip.magicmeal_flower.name=右键对甜蜜魔法的花使用进行增产。
 tip.walltowel.name=右键切换毛巾样式。
 tip.magicbook_cosmic_shift.name=潜行右键将MF转换成以太水晶。
-tip.magic_refresh_gift.name=使同一维度中的所有玩家都能获得debuff无效化效果。
+tip.magic_refresh_gift.name=使同一维度中的所有玩家都能获得debuff无效化效果andBuffsInstantHealthofsurroundingZombies.
 tip.magia_light.name=消耗MF来抑制范围内敌对生物的生成。
 tip.magia_light_range.name=效果区域：
+tip.mfrecover.name=当您获得经验时，<br>将其握在手中可以恢复您的耐力。
+tip.aether_charm.name=死亡时保留物品并且在处于物品状态时不会消失
 
 
 ＃-药水-
@@ -1271,7 +1303,7 @@ entity.pixievex.name=小妖精
 entity.ancientfairy.name=精灵
 entity.sandryon.name=源初魔女・桑德里恩
 entity.ancientfairy.name=湖中仙女・阿妮西莉特
-entity.shadowhorse.name=暗影驹
+entity.shadowhorse.name=幻影驹
 
 
 ＃-键位-
@@ -1324,16 +1356,15 @@ smguid.entry.succesor=魔杖等级继承
 smguid.entry.arcana=为普通物品附魔
 smguid.entry.cos_book=新魔法书
 smguid.entry.un_fire=高级装备
+smguid.entry.magia_light=敌对生物的抑制
 
 smguid.entry.key=地牢专属物品
 smguid.entry.flower_pot=添加七彩花朵
+smguid.entry.mb_book=改变渲染过程
 
-smguid.entry.bucket=魔法水桶的强化
-smguid.entry.magia_light=敌对生物的抑制
-smguid.entry.showcase=甜点展示柜的外观变化及展示柜底座
-smguid.entry.quill_pen=魔法师的羽毛笔的効果追加
-
-
+smguid.entry.awning_tent=添加家具和标签
+smguid.entry.pane_glass=改变平板玻璃的外观
+smguid.entry.fence=更改了围栏系统
 
 ＃--GUID文本-
 smguid.text.aether_crystal=以太水晶是可以通过在铁以上的工具开采以太矿石而获得的物品，它是重要的魔法材料。
@@ -1367,16 +1398,15 @@ smguid.text.succesor=<t><t>可以在一定程度上提高Wand的级别，上升�
 smguid.text.arcana=<t><t>附魔桌可以为那些非甜蜜魔法的装备附上“以太魅力”和“以太修复”。<br>一次花费200,000MF。
 smguid.text.cos_book=<t><t>添加了具有特殊功能的高级法术书。<br>这本书可以用于特殊合成，可以存储以太水晶，或转换为MF。<br>有关详细的功能说明，请参阅工具提示。
 smguid.text.un_fire=<t><t>一些高端装备的效果比平时更强。<br>只能在特殊合成中使用，虽然条件有限，但很多效果都非常好。
+smguid.text.magia_light=<t><t>闪耀台灯可以通过消耗MF来抑制敌对生物的生成<br>抑制区域的默认半径为128个块，但这可以在配置文件中更改<br>消耗的MF取决于要抑制区域的面积。
 
 smguid.text.key=<t><t>魔法钥匙只能在地下城中获得，用魔法钥匙右键魔法屏障玻璃以将其打开。
 smguid.text.flower_pot=<t><t>添加了很多花，这次添加的所有花都是在平原上生成的，都可以用作染料，只有雪花莲是在雪地等寒冷的生物群落中产生的。可以在花瓶中使用鲜花来生产MF，如果不想让鲜花生成，可以在配置中将其禁用。
 smguid.text.mb_book=<t><t>在使用魔法初学者之家时会有预览。
 
-smguid.text.bucket=<t><t>现在多元水桶更加方便。可以为其他mod的液体罐填充水，批量制作水杯，并将其用于烹饪。
-smguid.text.magia_light=<t><t>闪耀台灯可以通过消耗MF来抑制敌对生物的生成<br>抑制区域的默认半径为128个块，但这可以在配置文件中更改<br>消耗的MF取决于要抑制区域的面积。
-smguid.text.showcase=<t><t>现在甜点展示柜可以进行材质连接，我添加这个是因为甜点展示柜需要一个底座。我认为这使得甜点展示柜在很多地方能装饰更加容易，所以请使用它。
-smguid.text.quill_pen=<t><t>为魔法羽毛笔添加新效果。<br>通过装备它，您将可以不需要蓄力而使用需要蓄力的魔法，例如闪电魔法。<br>随着效果的加入，它现在只能作为生物掉落获得。
-
+smguid.text.awning_tent=<t><t>我们准备了几种可用作家具的方块。<br>此外，由于我们添加了很多家具，因此我们在创造物品栏准备了一个专门放家具的标签分类。
+smguid.text.pane_glass=<t><t>我们添加了一些新的可以垂直连接的华丽玻璃板。
+smguid.text.fence=<t><t>栅栏很低，僵尸会跳过它，所以我增加了对敌怪的行动检测，以防止它们跳过。
 
 ＃--ADVENT-
 smadbent.root.title=甜蜜与魔法
@@ -1387,7 +1417,7 @@ smadbent.aether_crystal.title=具有魔力的矿石
 smadbent.aether_crystal.text=开采并获得的以太矿石
 smadbent.sannyflower_petal.title=白天盛放的花朵
 smadbent.sannyflower_petal.text=获取阳光花瓣
-smadbent.moonblossom_petal.title=花瓣在深夜里盛开
+smadbent.moonblossom_petal.title=花朵在深夜里盛开
 smadbent.moonblossom_petal.text=获取月季花瓣
 smadbent.twilight_alstroemeria.title=黄昏时分盛放的花朵
 smadbent.twilight_alstroemeria.text=合成暮光六出
@@ -1451,7 +1481,8 @@ smadbent.witch_craft.title=巫术
 smadbent.witch_craft.text=在魔力合成台上进行合成
 smadbent.guide_book.title=这是关于“开始”的故事
 smadbent.guide_book.text=创造一本甜蜜魔法指南
-
+smadbent.bonuschest_open.title=开始时的同伴
+smadbent.bonuschest_open.text=打开在平原等地生成的神殿中的宝箱。
 
 
 ＃--deth-
