@@ -85,13 +85,21 @@ public class TileMFTank extends TileMFBase {
 		return this.inputInventory;
 	}
 
+	public ItemStack getInputStack() {
+		return this.getInput().getStackInSlot(0);
+	}
+
 	public IItemHandler getOutput() {
 		return this.outputInventory;
 	}
 
+	public ItemStack getOutputStack() {
+		return this.getOutput().getStackInSlot(0);
+	}
+
 	public boolean canSmelt() {
 
-		ItemStack toSmelt = this.inputInventory.getStackInSlot(0);
+		ItemStack toSmelt = this.getInputStack();
 		if (toSmelt.isEmpty()) { return false; }
 
 		Item item = toSmelt.getItem();
@@ -99,9 +107,9 @@ public class TileMFTank extends TileMFBase {
 	}
 
 	// 精錬後のアイテム
-	private void smeltItem() {
+	protected void smeltItem() {
 
-		ItemStack toSmelt = this.inputInventory.getStackInSlot(0);
+		ItemStack toSmelt = this.getInputStack();
 		ItemStack smeltResult = this.getSmeltItem(toSmelt);
 
 		// smeltResultがnullなら何もしない
@@ -143,7 +151,7 @@ public class TileMFTank extends TileMFBase {
 	// 必要MF
 	public int needMF () {
 
-		ItemStack toSmelt = inputInventory.getStackInSlot(0);
+		ItemStack toSmelt = this.getInputStack();
 		Item bottle = toSmelt.getItem();
 		int needMF = 0;
 
@@ -167,19 +175,16 @@ public class TileMFTank extends TileMFBase {
 
 	@Override
 	public List<ItemStack> getList() {
-
 		List<ItemStack> stackList = new ArrayList<>();
-
-		stackList.add(this.inputInventory.getStackInSlot(0));
-		stackList.add(this.outputInventory.getStackInSlot(0));
-
+		this.putList(stackList, this.getInputStack());
+		this.putList(stackList, this.getOutputStack());
 		return stackList;
 	}
 
     // 送信するMF量
 	@Override
     public int getUseMF () {
-		return 1000;
+		return 5000;
     }
 
 	private final IItemHandlerModifiable down = new WrappedItemHandler(this.outputInventory, WrappedItemHandler.WriteMode.OUT);

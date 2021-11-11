@@ -129,7 +129,7 @@ public class TileMFFisher extends TileMFBase {
 		this.setMF(this.getMF() - this.getNeedMF());
 		this.sentClient();
 
-		if (!this.world.isRemote) {
+		if (this.isSever()) {
 			LootContext.Builder lootcontext = new LootContext.Builder((WorldServer) this.world);
 
 			// ルートテーブルをリストに入れる

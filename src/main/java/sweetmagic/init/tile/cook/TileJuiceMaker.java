@@ -1,6 +1,7 @@
 package sweetmagic.init.tile.cook;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.init.Items;
@@ -15,7 +16,9 @@ import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.juicemaker.JuiceMakerRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
+import sweetmagic.init.item.sm.sweetmagic.SMBucket;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.util.ItemHelper;
@@ -45,11 +48,9 @@ public class TileJuiceMaker extends TileSMBase {
 	public void clear() {
 
 		// スロットリスト
-		List<ItemStack> list = new ArrayList<>();
-		list.add(this.getHandItem());
-		list.add(this.getInputItem(0));
-		list.add(this.getInputItem(1));
-		list.add(this.getInputItem(2));
+		List<ItemStack> list = Arrays.<ItemStack> asList(
+			this.getHandItem(), this.getInputItem(0), this.getInputItem(1), this.getInputItem(2)
+		);
 
 		for (ItemStack stack : list) {
 			stack.shrink(1);
@@ -72,7 +73,6 @@ public class TileJuiceMaker extends TileSMBase {
 			if (this.cookTime % 10 == 0) {
 				this.playSound(this.pos, SMSoundEvent.JMON, 0.1F, 1F);
 			}
-
 		}
 
 		// 1秒経つ
@@ -106,19 +106,33 @@ public class TileJuiceMaker extends TileSMBase {
 		// 水が最大に達していたら終了
 		if (this.isMaxWaterValue()) { return; }
 
+		// アイテムがバケツなら終了
 		ItemStack stack = this.getWaterItem();
 		Item item = stack.getItem();
-
-		// アイテムがバケツなら終了
-		if (item == Items.BUCKET) { return; }
+		if (item == Items.BUCKET || item == ItemInit.alt_bucket) { return; }
 
 		// 水バケツならバケツに置き換え
 		else if (item == Items.WATER_BUCKET) {
 			if (this.getWaterValue() > 1000) { return; }
 			this.setWaterValue(this.getWaterValue() + 1000);
-			ItemStack water = this.getWaterItem();
-			water.shrink(1);
+			stack.shrink(1);
 			ItemHandlerHelper.insertItemStacked(this.waterInventory, new ItemStack(Items.BUCKET), false);
+		}
+
+		// 水入りオルタナティブバケツなら
+		else if (item == ItemInit.alt_bucket_water) {
+
+			if (this.getWaterValue() > 1000) { return; }
+
+			// バケツの投入投入
+			stack = ((SMBucket) item).useBucket(stack);
+			this.setWaterValue(this.getWaterValue() + 1000);
+
+			// バケツの中身が空になったら入れ替える
+			if (stack.getItem() == ItemInit.alt_bucket) {
+				stack.shrink(1);
+				ItemHandlerHelper.insertItemStacked(this.waterInventory, new ItemStack(ItemInit.alt_bucket), false);
+			}
 		}
 
 		// 水カップなら
@@ -128,7 +142,6 @@ public class TileJuiceMaker extends TileSMBase {
 			ItemStack water = this.getWaterItem();
 			water.shrink(1);
 		}
-
 	}
 
 	// レシピ確認
@@ -174,9 +187,17 @@ public class TileJuiceMaker extends TileSMBase {
 
 			for (ItemStack s : inputs) {
 
-				if (send.getItem() != s.getItem() || send.getCount() > s.getCount()) { continue; }
+				Item item = s.getItem();
+				int sendCount = send.getCount();
+				if (send.getItem() != item || sendCount > s.getCount()) { continue; }
 
-				s.shrink(send.getCount());
+				if (item == ItemInit.alt_bucket_water) {
+					ItemStack copyStack = ((SMBucket) item).useBucket(s).copy();
+					s.shrink(sendCount);
+					ItemHandlerHelper.insertItemStacked(this.inputInventory, copyStack, false);
+				}
+
+				s.shrink(sendCount);
 				break;
 			}
 		}

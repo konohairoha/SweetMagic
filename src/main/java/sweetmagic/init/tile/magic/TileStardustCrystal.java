@@ -15,9 +15,7 @@ public class TileStardustCrystal extends TileSMBase {
 	public int nowY;
 	public boolean isNew = false;
 
-	public void update() {
-
-		if (!this.world.isRemote) { return; }
+	public void clientUpdate () {
 
 		this.tickTime++;
 		if (this.tickTime % 20 != 0) { return; }
@@ -34,9 +32,9 @@ public class TileStardustCrystal extends TileSMBase {
 		float posZ = this.pos.getZ();
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = posX - 0.0F + rand.nextFloat();
+			float f1 = posX + rand.nextFloat();
 			float f2 = posY + 0.3F + rand.nextFloat() * 0.5F;
-			float f3 = posZ - 0.0F + rand.nextFloat();
+			float f3 = posZ + rand.nextFloat();
 			float x = (rand.nextFloat() - rand.nextFloat()) * 0.09F;
 			float y = (rand.nextFloat() + rand.nextFloat()) * 0.08F;
 			float z = (rand.nextFloat() - rand.nextFloat()) * 0.09F;

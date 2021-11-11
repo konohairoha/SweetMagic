@@ -123,7 +123,7 @@ public class TileMFArcaneTable extends TileMFBase {
 
 	// エンチャント
 	public void addEnchant (ItemStack stack, Enchantment enchant) {
-		if (!this.world.isRemote) {
+		if (this.isSever()) {
 			stack.addEnchantment(enchant, 1);
 			this.setMF(this.getMF() - this.needMF);
 			this.sentClient();

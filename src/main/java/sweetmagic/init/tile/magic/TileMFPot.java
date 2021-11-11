@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.ForgeHooks;
@@ -87,9 +86,9 @@ public class TileMFPot extends TileMFBase {
 		long time = this.world.getWorldTime();
 		long worldTime = time % 24000;
 
-		if (worldTime >= 11000 && worldTime < 14000) {
+		if (worldTime >= 9500 && worldTime <= 15500) {
 
-			this.setMF(this.getMF() + 8);
+			this.setMF(this.getMF() + 10);
 
 			if (time % 20 == 0) {
 				this.sentClient();
@@ -105,18 +104,17 @@ public class TileMFPot extends TileMFBase {
 	public void snowdropPot () {
 
 		Biome biome = this.world.getBiomeForCoordsBody(this.pos);
-		if(biome.getDefaultTemperature() <= 0) {
+		if(biome.getDefaultTemperature() > 0 || this.pos.getY() <= 120) { return; }
 
-			long time = this.getTime();
+		long time = this.getTime();
 
-			if (time % 20 == 0) {
-				this.setMF(this.getMF() + 10);
-				this.sentClient();
-			}
+		if (time % 20 == 0) {
+			this.setMF(this.getMF() + 10);
+			this.sentClient();
+		}
 
-			if (time % 100 == 0) {
-				this.spawnParticles();
-			}
+		if (time % 100 == 0) {
+			this.spawnParticles();
 		}
 	}
 
@@ -127,6 +125,7 @@ public class TileMFPot extends TileMFBase {
 		if (time % 40 != 0) { return; }
 
 		boolean isCharge = true;
+		float sumEnchapower = 0F;
 
 		for (int x = -2; x <= 2; ++x) {
 			for (int z = -2; z <= 2; ++z) {
@@ -135,20 +134,21 @@ public class TileMFPot extends TileMFBase {
 
 				for (int y = 0; y <= 1; ++y) {
 
-					BlockPos bpos = pos.add(x, y, z);
+					BlockPos bpos = this.pos.add(x, y, z);
 					float power = ForgeHooks.getEnchantPower(this.world, bpos);
 					if (power <= 0) { continue; }
 
 					if (!this.world.isAirBlock(this.pos.add(x / 2, 0, z / 2))) { break; }
 
 					isCharge = true;
-					this.setMF((int) (this.getMF() + power));
-					this.sentClient();
+					sumEnchapower += power;
 				}
 			}
 		}
 
 		if (isCharge) {
+			this.setMF((int) (this.getMF() + sumEnchapower));
+			this.sentClient();
 			this.spawnParticles();
 		}
 	}
@@ -160,6 +160,7 @@ public class TileMFPot extends TileMFBase {
 		if (time % 40 != 0) { return; }
 
 		boolean isCharge = true;
+		float sumLightValue = 0F;
 
 		for (int x = -2; x <= 2; ++x) {
 			for (int z = -2; z <= 2; ++z) {
@@ -179,13 +180,14 @@ public class TileMFPot extends TileMFBase {
 					if (!this.world.isAirBlock(this.pos.add(x / 2, 0, z / 2))) { break; }
 
 					isCharge = true;
-					this.setMF((int) (this.getMF() + power));
-					this.sentClient();
+					sumLightValue += power;
 				}
 			}
 		}
 
 		if (isCharge) {
+			this.setMF((int) (this.getMF() + sumLightValue));
+			this.sentClient();
 			this.spawnParticles();
 		}
 	}
@@ -196,8 +198,7 @@ public class TileMFPot extends TileMFBase {
 		long time = this.getTime();
 		if (time % 10 != 0) { return; }
 
-        AxisAlignedBB aabb = new AxisAlignedBB(this.pos.add(-12.5, -4, -12.5), this.pos.add(12.5, 4, 12.5));
-		List<EntityLivingBase> entityList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, this.getAABB(12.5D, 4D, 12.5D));
 		if (entityList.isEmpty()) { return; }
 
 		int mfValue = 0;

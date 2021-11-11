@@ -15,7 +15,7 @@ import sweetmagic.init.tile.slot.StackHandler;
 
 public class TileToolRepair extends TileMFBase {
 
-	public int maxMagiaFlux = 200000; 	// 最大MF量を設定
+	public int maxMagiaFlux = 300000; 	// 最大MF量を設定
 	public BlockPos viewPos = this.pos;
 
 	// 杖スロット
@@ -149,6 +149,6 @@ public class TileToolRepair extends TileMFBase {
     // 送信するMF量
 	@Override
     public int getUseMF () {
-    	return 5000;
+    	return 10000;
     }
 }

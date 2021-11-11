@@ -5,11 +5,12 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
+import sweetmagic.api.enumblock.EnumCook;
 import sweetmagic.event.SMSoundEvent;
-import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.blocks.BlockFryPan;
 import sweetmagic.init.block.blocks.BlockPot;
 import sweetmagic.init.tile.magic.TileSMBase;
@@ -41,19 +42,25 @@ public class TilePot extends TileSMBase {
 		if (!this.startFlag) { return; }
 
 		this.tickTime++;
-		Block block = this.getBlock(this.pos);
+		IBlockState state = this.getState(this.pos);
+		EnumCook cook = this.getCook(state);
+		if (cook == null || !cook.isON()) { return; }
+
+		Block block = state.getBlock();
 
 		// 鍋
-		this.potSetBlock(block);
+		if (this.isPot(block)) {
+			this.potSetBlock(state);
+		}
 
 		// フライパン
-		this.frypanSetBlock(block);
+		else if (this.isFryPan(block)) {
+			this.frypanSetBlock(state);
+		}
 	}
 
 	// 鍋
-	public void potSetBlock(Block block) {
-
-		if (block != BlockInit.pot_on) { return; }
+	public void potSetBlock(IBlockState state) {
 
 		if(this.tickSet) {
 			this.clear();
@@ -77,9 +84,7 @@ public class TilePot extends TileSMBase {
 	}
 
 	// フライパン
-	public void frypanSetBlock(Block block) {
-
-		if (block != BlockInit.frypan_on && block != BlockInit.frypan_red_on) { return; }
+	public void frypanSetBlock(IBlockState state) {
 
 		if(this.tickSet) {
 			this.clear();
@@ -90,7 +95,7 @@ public class TilePot extends TileSMBase {
 			this.playSound(this.pos, SMSoundEvent.FRYPAN, 0.4F, 1F);
 		}
 
-		if (this.tickTime % 15 == 0 && this.world.isRemote) {
+		if (this.tickTime % 15 == 0 && !this.isSever()) {
 
 			Random rand = this.world.rand;
 
@@ -107,9 +112,9 @@ public class TilePot extends TileSMBase {
 			this.tickTime = 0;
 
 			//BlockStateを置き換え
-			if (!this.world.isRemote) {
+			if (this.isSever()) {
 				this.playSound(this.pos, SMSoundEvent.STOVE_OFF, 1F, 1F);
-				((BlockFryPan) this.getBlock(this.pos)).setState(this.world, this.pos);
+				BlockFryPan.setState(this.world, this.pos);
 				this.tickSet = true;
 			}
 		}
@@ -135,5 +140,28 @@ public class TilePot extends TileSMBase {
 		}
 		this.inPutList = loadAllItems(tags, "input");
 		this.outPutList = loadAllItems(tags, "output");
+	}
+
+	public boolean isPot (Block block) {
+		return block instanceof BlockPot;
+	}
+
+	public boolean isFryPan (Block block) {
+		return block instanceof BlockFryPan;
+	}
+
+	public EnumCook getCook (IBlockState state) {
+
+		Block block = state.getBlock();
+
+		if (this.isPot(block)) {
+			return ((BlockPot) block).getCook(state);
+		}
+
+		else if (this.isFryPan(block)) {
+			return ((BlockFryPan) block).getCook(state);
+		}
+
+		return null;
 	}
 }

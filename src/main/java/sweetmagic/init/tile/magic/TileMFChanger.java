@@ -41,13 +41,12 @@ public class TileMFChanger extends TileMFBase {
 
 		super.serverUpdate();
 
-		if (this.getTime() % 80 != 0) { return; }
+		if (this.getTime() % 40 != 0) { return; }
 
 		// MF量が最大に足してなかったら動かす
 		if (this.canMFChange()) {
 			this.changeMF();
 		}
-
 	}
 
 	// MFに変換
@@ -124,7 +123,7 @@ public class TileMFChanger extends TileMFBase {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-			stackList.add(this.getInputItem(i));
+			this.putList(stackList, this.getInputItem(i));
 		}
 
 		return stackList;
@@ -140,10 +139,14 @@ public class TileMFChanger extends TileMFBase {
 
 	@Override
 	public <T> T getCapability(@Nonnull Capability<T> cap, EnumFacing side) {
+
 		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+
 			if (side == null) {
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(this.top);
-			} else {
+			}
+
+			else {
 				switch (side) {
 				default:
 					return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(this.side);

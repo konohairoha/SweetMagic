@@ -13,6 +13,6 @@ public class TileMFMMTank extends TileMFTank {
     // 送信するMF量
 	@Override
     public int getUseMF () {
-    	return 20000;
+    	return 50000;
     }
 }

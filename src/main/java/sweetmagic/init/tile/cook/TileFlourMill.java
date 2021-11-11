@@ -4,10 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import sweetmagic.api.enumblock.EnumCook;
 import sweetmagic.event.SMSoundEvent;
-import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.blocks.BlockFlourMill;
 import sweetmagic.init.block.blocks.BlockOven;
 import sweetmagic.init.tile.magic.TileSMBase;
@@ -38,13 +39,21 @@ public class TileFlourMill extends TileSMBase {
 		this.tickTime++;
 		if (this.tickTime % this.time != 0) { return; }
 
+		IBlockState state = this.getState(this.pos);
+		EnumCook cook = this.getCook(state);
+		if (cook == null || !cook.isON()) { return; }
+
 		Block block = this.getBlock(this.pos);
 
 		//オーブン
-		this.ovenSetBlock(block);
+		if (this.isOven(block)) {
+			this.ovenSetBlock(block);
+		}
 
 		//製粉機
-		this.flourmillSetBlock(block);
+		else if (this.isFlourMill(block)) {
+			this.flourmillSetBlock(state);
+		}
 
 		if (this.tickTime % 105 == 0) {
 			this.tickTime = 0;
@@ -53,8 +62,6 @@ public class TileFlourMill extends TileSMBase {
 
 	// オーブン
 	public void ovenSetBlock(Block block) {
-
-		if (block != BlockInit.oven_on) { return; }
 
 		if(this.tickSet) {
 			this.clear();
@@ -80,9 +87,7 @@ public class TileFlourMill extends TileSMBase {
 	}
 
 	// 製粉機
-	public void flourmillSetBlock(Block block) {
-
-		if (block != BlockInit.flourmill_on) { return; }
+	public void flourmillSetBlock(IBlockState state) {
 
 		if(this.tickSet) {
 			this.clear();
@@ -125,5 +130,27 @@ public class TileFlourMill extends TileSMBase {
 		}
 		this.inPutList = loadAllItems(tags, "input");
 		this.outPutList = loadAllItems(tags, "output");
+	}
+	public boolean isFlourMill (Block block) {
+		return block instanceof BlockFlourMill;
+	}
+
+	public boolean isOven (Block block) {
+		return block instanceof BlockOven;
+	}
+
+	public EnumCook getCook (IBlockState state) {
+
+		Block block = state.getBlock();
+
+		if (this.isFlourMill(block)) {
+			return ((BlockFlourMill) block).getCook(state);
+		}
+
+		else if (this.isOven(block)) {
+			return ((BlockOven) block).getCook(state);
+		}
+
+		return null;
 	}
 }

@@ -177,11 +177,11 @@ public class TileAetherFurnace extends TileMFBase {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < 5; i++) {
-			stackList.add(this.getInputItem(i));
+			this.putList(stackList, this.getInputItem(i));
 		}
 
 		for (int i = 0; i < 18; i++) {
-			stackList.add(this.getCrystalItem(i));
+			this.putList(stackList, this.getCrystalItem(i));
 		}
 
 		return stackList;

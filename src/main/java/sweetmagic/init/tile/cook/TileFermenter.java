@@ -46,20 +46,19 @@ public class TileFermenter extends TileSMBase {
 	public void doWorking () {
 
 		// パーティクルすぽーん
-		if (this.world.isRemote) {
+		if (!this.isSever()) {
 			this.spawnParticle();
 		}
 
-		if (this.tickTime % 100 == 0) {
+		if (this.tickTime % 100 != 0) { return; }
 
-			this.isWorking = false;
-			this.isFinish = true;
-			this.playSound(this.pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F);
+		this.isWorking = false;
+		this.isFinish = true;
+		this.playSound(this.pos, SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F);
 
-			if (this.world.isRemote) {
-				for (int i = 0; i < 8; i++) {
-					this.spawnParticle();
-				}
+		if (!this.isSever()) {
+			for (int i = 0; i < 8; i++) {
+				this.spawnParticle();
 			}
 		}
 	}

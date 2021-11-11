@@ -94,8 +94,6 @@ public class TileMFAetherLanp extends TileMFBase {
 					Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
 					FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
 				}
-
-//				System.out.println("======" + p);
 			}
 		}
 

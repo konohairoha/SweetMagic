@@ -74,7 +74,7 @@ public class TileMFSuccessor extends TileMFBase {
 			this.successorWnad(useMF);
 		}
 
-		if (this.world.isRemote) {
+		if (!this.isSever()) {
 			this.spawnParticl();
 		}
 

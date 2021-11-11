@@ -7,6 +7,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -19,6 +21,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -193,5 +196,36 @@ public class TileSMBase extends TileEntity implements ITickable {
 	// サーバー側かどうか
 	public boolean isSever () {
 		return !this.world.isRemote;
+	}
+
+	// エンティティの一定距離内か
+	public boolean isEntityDistance (Entity entity, double x, double y, double z) {
+		return Math.abs(entity.posX - this.pos.getX()) <= x && Math.abs(entity.posY - this.pos.getY()) <= y && Math.abs(entity.posZ - this.pos.getZ()) <= z;
+	}
+
+	// EntityItemの取得
+	public EntityItem getEntityItem (BlockPos pos, ItemStack stack) {
+		return new EntityItem(this.world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, stack);
+	}
+
+	// AxisAlignedBBの取得
+	public AxisAlignedBB getAABB (double x, double y, double z) {
+		return this.getAABB(this.pos.add(-x, -y, -z), this.pos.add(x, y, z));
+	}
+
+	// AxisAlignedBBの取得
+	public AxisAlignedBB getAABB (BlockPos pos1, BlockPos pos2) {
+		return new AxisAlignedBB(pos1, pos2);
+	}
+
+	// えんちちーリストを取得
+	public <T extends Entity> List<T> getEntityList (Class <? extends T > entity, AxisAlignedBB aabb) {
+		return this.world.getEntitiesWithinAABB(entity, aabb);
+	}
+
+	// アイテムリストにアイテムを突っ込む
+	public void putList (List<ItemStack> stackList, ItemStack stack) {
+		if (stack.isEmpty()) { return; }
+		stackList.add(stack);
 	}
 }

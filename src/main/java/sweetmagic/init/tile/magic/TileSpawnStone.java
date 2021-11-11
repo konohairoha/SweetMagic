@@ -38,7 +38,6 @@ import sweetmagic.init.entity.monster.EntitySandryon;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
-import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
@@ -50,10 +49,10 @@ public class TileSpawnStone extends TileSMBase {
 	public EntityPlayer player = null;
 	public int isPowerUp = 0;
 
-	public void update() {
+	public void serverUpdate() {
 
 		this.tickTime++;
-		if (this.tickTime % 20 != 0 || this.world.isRemote || WorldHelper.isPeaceful(this.world)) { return; }
+		if (this.tickTime % 20 != 0 || WorldHelper.isPeaceful(this.world)) { return; }
 
 		this.tickTime = 0;
 
@@ -76,24 +75,38 @@ public class TileSpawnStone extends TileSMBase {
 			if (this.isBossSummon && block == BlockInit.ac_ore) {
 				this.data = 6;
 				isBoss = true;
-			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.PACKED_ICE) {
+			}
+
+			else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.PACKED_ICE) {
 				this.data = 7;
 				isBoss = true;
-			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.MAGMA) {
+			}
+
+			else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.MAGMA) {
 				this.data = 8;
 				isBoss = true;
-			} else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.SKULL) {
+			}
+
+			else if (this.isBossSummon && this.isPowerUp == 0 && block == Blocks.SKULL) {
 				this.data = 9;
 				isBoss = true;
-			} else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.poison_block) {
+			}
+
+			else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.poison_block) {
 				this.data = 10;
 				isBoss = true;
-			} else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.cosmic_crystal_ore) {
+			}
+
+			else if (this.isBossSummon && this.isPowerUp == 0 && block == BlockInit.cosmic_crystal_ore) {
 				this.data = 11;
 				isBoss = true;
-			} else if (this.isPowerUp == 0) {
+			}
+
+			else if (this.isPowerUp == 0) {
 				this.data = rand.nextInt(6);
-			} else {
+			}
+
+			else {
 				this.data = rand.nextInt(9);
 			}
 		}
@@ -334,15 +347,16 @@ public class TileSpawnStone extends TileSMBase {
 	// 範囲内にプレイヤーがいるかどうか
 	public boolean isRangePlayer () {
 
-        AxisAlignedBB aabb = new AxisAlignedBB(this.pos.add(-7, -1, -7), this.pos.add(7, 3, 7));
-		List<EntityPlayer> entityList = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+        AxisAlignedBB aabb = this.getAABB(this.pos.add(-7, -1, -7), this.pos.add(7, 3, 7));
+		List<EntityPlayer> entityList = this.getEntityList(EntityPlayer.class, aabb);
 		if (entityList.isEmpty()) { return false; }
 
 		for (EntityPlayer player : entityList) {
-			if (!PlayerHelper.isCleative(player)) {
-				this.player = player;
-				return true;
-			}
+
+			if (player.isCreative()) { continue; }
+
+			this.player = player;
+			return true;
 		}
 
 		return false;
@@ -351,9 +365,9 @@ public class TileSpawnStone extends TileSMBase {
 	// ブロック破壊処理
 	public boolean breakBlock(BlockPos pos, World world, boolean dropBlock) {
 
-		IBlockState state = world.getBlockState(pos);
+		IBlockState state = this.getState(pos);
 		Block block = state.getBlock();
-		if (block.isAir(state, world, pos)) { return false; }
+		if (block == Blocks.AIR) { return false; }
 
 		world.playEvent(2001, pos, Block.getStateId(state));
 

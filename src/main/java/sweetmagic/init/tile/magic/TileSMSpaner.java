@@ -26,7 +26,6 @@ import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
 import sweetmagic.init.entity.monster.ISMMob;
 import sweetmagic.util.ParticleHelper;
-import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.WorldHelper;
 
 public class TileSMSpaner extends TileSMBase {
@@ -103,14 +102,15 @@ public class TileSMSpaner extends TileSMBase {
 	// 範囲内にプレイヤーがいるかどうか
 	public boolean isRangePlayer () {
 
-		List<EntityPlayer> entityList = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getAABB());
+		List<EntityPlayer> entityList = this.getEntityList(EntityPlayer.class, this.getAABB());
 		if (entityList.isEmpty()) { return false; }
 
 		for (EntityPlayer player : entityList) {
-			if (!PlayerHelper.isCleative(player)) {
-				this.player = player;
-				return true;
-			}
+
+			if (player.isCreative()) { continue; }
+
+			this.player = player;
+			return true;
 		}
 
 		return false;
@@ -125,7 +125,7 @@ public class TileSMSpaner extends TileSMBase {
 	// 範囲にモブがいるか
 	public boolean checkEntity () {
 
-		List<EntityLivingBase> entityList = this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getAABB());
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, this.getAABB());
 		int count = 0;
 
 		for (EntityLivingBase entity : entityList) {

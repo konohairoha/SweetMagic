@@ -118,8 +118,7 @@ public class TileParallelInterfere extends TileSMBase {
 		FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
 	}
 
-	public void playSound () {
-	}
+	public void playSound () { }
 
 	private final IItemHandlerModifiable autoInput = new WrappedItemHandler(this.chestInv, WrappedItemHandler.WriteMode.IN) {
 

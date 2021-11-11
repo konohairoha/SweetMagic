@@ -12,7 +12,6 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -54,10 +53,9 @@ public class TilePedalCreate extends TileMFBase {
 		this.chargeTime++;
 
 		// パーティクルスポーン
-		if (this.world.isRemote) {
+		if (!this.isSever()) {
 			this.spawnParticle();
 		}
-
 
 		// クラフトしてないなら終了
 		if (this.chargeTime < 10) { return; }
@@ -79,10 +77,9 @@ public class TilePedalCreate extends TileMFBase {
 		this.isCharge = false;
 
 		// アイテムスポーン
-		if (!this.world.isRemote) {
+		if (this.isSever()) {
 
-			AxisAlignedBB aabb =new AxisAlignedBB(this.pos.add(-7.5D, -3D, -7.5D), this.pos.add(7.5D, 3D, 7.5D));
-			List<EntityPlayer> entityList = this.world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+			List<EntityPlayer> entityList = this.getEntityList(EntityPlayer.class, this.getAABB(7.5D, 3D, 7.5D));
 			boolean isInPlayer = !entityList.isEmpty();
 			double dX = 0, dY= 0, dZ = 0, dist = 0, vel = 0;
 
@@ -114,7 +111,7 @@ public class TilePedalCreate extends TileMFBase {
 			for (int i = 0; i < 8; i++) {
 
 				ItemStack stack = this.getoutPutItem(i);
-				EntityItem entity = new EntityItem(this.world, this.pos.getX() + 0.5D, this.pos.getY() + 1, this.pos.getZ() + 0.5D, stack.copy());
+				EntityItem entity = this.getEntityItem(this.pos, stack.copy());
 				entity.setNoDespawn();
 				entity.setPickupDelay(13);
 
@@ -209,11 +206,9 @@ public class TilePedalCreate extends TileMFBase {
 		case 6:
 			color = RGB.G;
 			break;
-
 		}
 
 		return Arrays.asList(color.r, color.g, color.b);
-
 	}
 
 	@Override
@@ -290,15 +285,10 @@ public class TilePedalCreate extends TileMFBase {
 	public List<ItemStack> getList() {
 
 		List<ItemStack> stackList = new ArrayList<ItemStack>();
-
-		stackList.add(this.getHandItem());
+		this.putList(stackList, this.getHandItem());
 
 		for (int i = 0; i < 8; i++) {
-
-			ItemStack stack = this.getInputItem(i);
-			if (stack.isEmpty()) { continue; }
-
-			stackList.add(stack);
+			this.putList(stackList, this.getInputItem(i));
 		}
 
 		return stackList;
@@ -314,9 +304,9 @@ public class TilePedalCreate extends TileMFBase {
 		F(138, 183, 255),
 		G(255, 138, 238);
 
-		public int r;
-		public int g;
-		public int b;
+		public final int r;
+		public final int g;
+		public final int b;
 
 		RGB (int r, int g, int b) {
 			this.r = r;

@@ -15,8 +15,10 @@ import net.minecraftforge.items.ItemStackHandler;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.freezer.FreezerRecipeInfo;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.blocks.BlockFreezer;
 import sweetmagic.init.block.blocks.BlockJuiceMaker;
+import sweetmagic.init.item.sm.sweetmagic.SMBucket;
 import sweetmagic.init.tile.magic.TileSMBase;
 import sweetmagic.init.tile.slot.StackHandler;
 import sweetmagic.util.ItemHelper;
@@ -42,16 +44,17 @@ public class TileFreezer extends TileSMBase {
 	public int cookTime = 0;
 
 	// 出力アイテム
-	public List<ItemStack> inPutList  = new ArrayList<>();
-	public List<ItemStack> outPutList  = new ArrayList<>();
+	public List<ItemStack> inPutList = new ArrayList<>();
+	public List<ItemStack> outPutList = new ArrayList<>();
 
 	public void clear() {
 
 		// スロットリスト
 		List<ItemStack> list = new ArrayList<>();
 		list.add(this.getHandItem());
+
 		for (int i = 0; i < 6; i++) {
-			list.add(this.getInputItem(i));
+			this.putList(list, this.getInputItem(i));
 		}
 
 		for (ItemStack stack : list) {
@@ -65,16 +68,22 @@ public class TileFreezer extends TileSMBase {
 	public List<ItemStack> allSlotItem () {
 
 		List<ItemStack> slotList = new ArrayList<>();
-		slotList.add(this.getWaterItem());
-		slotList.add(this.getIceItem(0));
-		slotList.add(this.getIceItem(1));
-		slotList.add(this.getHandItem());
+		this.putList(slotList, this.getWaterItem());
+		this.putList(slotList, this.getIceItem(0));
+		this.putList(slotList, this.getIceItem(1));
+		this.putList(slotList, this.getHandItem());
 
-		for (int i = 0; i < 6; i++)
-			slotList.add(this.getInputItem(i));
+		for (int i = 0; i < 6; i++) {
+			this.putList(slotList, this.getInputItem(i));
+		}
 
-		for (int i = 0; i < 4; i++)
-			slotList.add(this.getOutPutItem(i));
+		for (int i = 0; i < 4; i++) {
+			this.putList(slotList, this.getOutPutItem(i));
+		}
+
+		if (!this.inPutList.isEmpty()) {
+			slotList.addAll(this.inPutList);
+		}
 
 		return slotList;
 	}
@@ -115,7 +124,7 @@ public class TileFreezer extends TileSMBase {
 			}
 
 			// 入力スロットが空じゃないかつ
-			if (!this.isCooking && !this.getHandItem().isEmpty() && this.outPutList.size() <= 0) {
+			if (!this.isCooking && !this.getHandItem().isEmpty() && this.outPutList.size() <= 0 && this.isSever()) {
 				this.checkRecipe();
 			}
 
@@ -143,23 +152,39 @@ public class TileFreezer extends TileSMBase {
 		Item item = stack.getItem();
 
 		// アイテムがバケツなら終了
-		if (item == Items.BUCKET) { return; }
+		if (item == Items.BUCKET || item == ItemInit.alt_bucket) { return; }
 
 		// 水バケツならバケツに置き換え
 		else if (item == Items.WATER_BUCKET) {
-			if (this.getWaterValue() > 1000) { return; }
+
+			if (this.getWaterValue() > this.getWaterMaxValue() - 1000) { return; }
+
 			this.setWaterValue(this.getWaterValue() + 1000);
-			ItemStack water = this.getWaterItem();
-			water.shrink(1);
+			stack.shrink(1);
 			ItemHandlerHelper.insertItemStacked(this.waterInventory, new ItemStack(Items.BUCKET), false);
+		}
+
+		// 水入りオルタナティブバケツなら
+		else if (item == ItemInit.alt_bucket_water) {
+
+			if (this.getWaterValue() > this.getWaterMaxValue() - 1000) { return; }
+
+			// バケツの投入投入
+			stack = ((SMBucket) item).useBucket(stack);
+			this.setWaterValue(this.getWaterValue() + 1000);
+
+			// バケツの中身が空になったら入れ替える
+			if (stack.getItem() == ItemInit.alt_bucket) {
+				stack.shrink(1);
+				ItemHandlerHelper.insertItemStacked(this.waterInventory, new ItemStack(ItemInit.alt_bucket), false);
+			}
 		}
 
 		// 水カップなら
 		else {
 			if (this.getWaterValue() > this.getWaterMaxValue() - 125) { return; }
 			this.setWaterValue(this.getWaterValue() + 125);
-			ItemStack water = this.getWaterItem();
-			water.shrink(1);
+			stack.shrink(1);
 		}
 
 	}
@@ -185,10 +210,10 @@ public class TileFreezer extends TileSMBase {
 		// 投入リスト
 		List<ItemStack> inputs = new ArrayList<ItemStack>();
 		for (int i = 0; i < 6; i++) {
-			inputs.add(this.getInputItem(i));
+			this.putList(inputs, this.getInputItem(i));
 		}
 
-		//手持ちアイテムからレシピと一致するかを検索してしっぱしたら終了
+		//手持ちアイテムからレシピと一致するかを検索して失敗したら終了
 		FreezerRecipeInfo recipeInfo = SweetMagicAPI.getFreezRecipeInfo(stack, inputs);
 		if (!recipeInfo.canComplete) { return; }
 
@@ -220,9 +245,17 @@ public class TileFreezer extends TileSMBase {
 
 			for (ItemStack s : inputs) {
 
-				if (send.getItem() != s.getItem() || send.getCount() > s.getCount()) { continue; }
+				Item item = s.getItem();
+				int sendCount = send.getCount();
+				if (send.getItem() != item || sendCount > s.getCount()) { continue; }
 
-				s.shrink(send.getCount());
+				if (item == ItemInit.alt_bucket_water) {
+					ItemStack copyStack = ((SMBucket) item).useBucket(s).copy();
+					s.shrink(sendCount);
+					ItemHandlerHelper.insertItemStacked(this.inputInventory, copyStack, false);
+				}
+
+				s.shrink(sendCount);
 				break;
 			}
 		}
@@ -288,7 +321,6 @@ public class TileFreezer extends TileSMBase {
 	public boolean isEmptyWater () {
 		return this.getWaterValue() <= 0;
 	}
-
 
 	// 水が最大量かどうか
 	public boolean isMaxWaterValue () {

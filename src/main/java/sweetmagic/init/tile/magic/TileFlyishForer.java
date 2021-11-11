@@ -21,7 +21,7 @@ public class TileFlyishForer extends TileMFFisher {
 		this.setMF(this.getMF() - this.needMF);
 		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, this.getMF(), this.getTilePos()));
 
-		if (!this.world.isRemote) {
+		if (this.isSever()) {
 
 			// ルートテーブルをリストに入れる
 			List<ItemStack> meat = SMUtil.getOreList("listAllmeatraw");

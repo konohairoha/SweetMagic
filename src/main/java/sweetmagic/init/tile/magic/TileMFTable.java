@@ -92,7 +92,7 @@ public class TileMFTable extends TileMFBase {
 
 			// MFが最大になったときに通知
 			if (this.wandMaxMF(stack)) {
-				if (!this.world.isRemote) {
+				if (this.isSever()) {
 					this.world.playEvent(2003, new BlockPos(this.pos.add(0, 1.75, 0)), 0);
 				}
 				this.playSound(this.pos, SoundEvents.ENTITY_PLAYER_LEVELUP, 1F, 1F);
@@ -157,10 +157,10 @@ public class TileMFTable extends TileMFBase {
 		List<ItemStack> stackList = new ArrayList<>();
 
 		for (int i = 0; i < this.getInvSize(); i++) {
-			stackList.add(this.getWandItem(i));
+			this.putList(stackList, this.getWandItem(i));
 		}
 
-		stackList.add(this.getInputItem());
+		this.putList(stackList, this.getInputItem());
 		return stackList;
 	}
 }

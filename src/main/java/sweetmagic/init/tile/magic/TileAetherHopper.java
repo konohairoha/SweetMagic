@@ -64,14 +64,13 @@ public class TileAetherHopper extends TileMFBase {
 
 		super.serverUpdate();
 
-		if (!this.isActive(this.world, this.pos)  || this.getTime() % 40 != 0 || this.isMfEmpty()) { return; }
+		if (!this.isActive(this.world, this.pos) || this.getTime() % 40 != 0) { return; }
 
+		// ホッパーからアイテムをチェストに入れる
 		this.suctionItem();
 
-		// MFが空出なければ実行
-		if (!this.isMfEmpty()) {
-			this.extractItem();
-		}
+		// アイテム吸い込み
+		this.extractItem();
 
 		// MFが空出なければ実行
 		if (!this.isMfEmpty()) {
@@ -81,8 +80,6 @@ public class TileAetherHopper extends TileMFBase {
 
 	// ホッパーからアイテムをチェストに入れる
 	public void extractItem () {
-
-		int useMF = 0;
 
 		// 向きが取れないなら終了
 		EnumFacing face = this.getFace();
@@ -105,29 +102,14 @@ public class TileAetherHopper extends TileMFBase {
 
 			// 投入先のインベントリに入れる
             for (int targetSlot = 0; targetSlot < target.getSlots(); targetSlot++) {
-
-            	int cost = stack.getCount();
-            	if (this.getMF() < cost + useMF) { continue; }
-
             	ItemStack insertStack = ItemHandlerHelper.insertItemStacked(target, stack.copy(), false);
             	stack.setCount(insertStack.getCount());
-
-            	// コスト分加算
-            	useMF += this.getCostMF(cost, insertStack, 1);
             }
-		}
-
-		// MFを消費するなら
-		if (useMF > 0) {
-			this.setMF(this.getMF() - useMF);
-			this.sentClient();
 		}
 	}
 
 	// アイテム吸い込み
 	public void suctionItem () {
-
-		int useMF = 0;
 
 		// 向きを取得してその向きにチェストがあるかのチェック
 		EnumFacing face = this.getFace() == EnumFacing.UP ? EnumFacing.DOWN : EnumFacing.UP;
@@ -145,18 +127,8 @@ public class TileAetherHopper extends TileMFBase {
 			if (stack.isEmpty()) { continue; }
 
 			// ホッパーにアイテムを入れる
-        	int cost = stack.getCount();
         	ItemStack insertStack = ItemHandlerHelper.insertItemStacked(this.chestInv, stack.copy(), false);
         	stack.setCount(insertStack.getCount());
-
-        	// コスト分加算
-        	useMF += this.getCostMF(cost, insertStack, 1);
-		}
-
-		// MFを消費するなら
-		if (useMF > 0) {
-			this.setMF(this.getMF() - useMF);
-			this.sentClient();
 		}
 	}
 
@@ -204,16 +176,7 @@ public class TileAetherHopper extends TileMFBase {
 
 	// 消費MFの取得
 	public int getCostMF (int cost, ItemStack stack, int rate) {
-
-		// 全部入ったなら
-		if (stack.isEmpty()) {
-			return cost * rate;
-		}
-
-		// 残った分だけMF消費
-		else {
-			return (cost - stack.getCount() ) * rate;
-		}
+		return stack.isEmpty() ? cost * rate : (cost - stack.getCount() ) * rate;
 	}
 
 	// インベントリの取得
