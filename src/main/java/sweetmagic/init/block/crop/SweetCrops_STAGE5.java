@@ -308,7 +308,7 @@ public class SweetCrops_STAGE5 extends BlockBush implements IGrowable, ISMCrop  
 			if(ItemStack.areItemsEqual(stack, stackB)) {
 
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, this.getNowStateMeta(state) + 1), 2);
 			}
 		}

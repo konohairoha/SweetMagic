@@ -131,7 +131,7 @@ public interface ISMCrop {
 
 	// 作物回収時の音
 	default void playCropSound (World world, Random rand, BlockPos pos) {
-        world.playSound(null, pos,SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+        world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 	}
 
 	// 幸運での加算

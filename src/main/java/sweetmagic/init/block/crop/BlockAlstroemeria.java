@@ -44,7 +44,6 @@ import sweetmagic.init.item.sm.magic.MFTime;
 import sweetmagic.init.item.sm.magic.MFWeather;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
 import sweetmagic.util.ParticleHelper;
-import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
 import sweetmagic.util.SMUtil;
@@ -172,13 +171,13 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 	// ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(new ItemStack(Item.getItemFromBlock(BlockInit.twilight_alstroemeria), 1));
+		drops.add(new ItemStack(BlockInit.twilight_alstroemeria));
 	}
 
 	// 右クリックの処理
 	@Nonnull
 	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float x, float y, float z) {
 
 		if (!world.isRemote) {
 
@@ -211,7 +210,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 					tile.markDirty();
 					world.notifyBlockUpdate(pos, state, state, 3);
 
-					if (!PlayerHelper.isCleative(player)) { stack.shrink(1); }
+					if (!player.isCreative()) { stack.shrink(1); }
 				}
 
 				return true;
@@ -273,7 +272,7 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 
 			// 夕方設定
 			if (objMoon != null) {
-				this.setTime(world, 11000);
+				this.setTime(world, 9500);
 				SMUtil.decrPInvMin(player, 1, objSun[0], objMoon[0]);
 				tmFlg = true;
 			}
@@ -286,7 +285,6 @@ public class BlockAlstroemeria extends BlockBush implements IGrowable, ISMCrop {
 			}
 
 			container.detectAndSendChanges();
-
 		}
 
 		// 夜に設定

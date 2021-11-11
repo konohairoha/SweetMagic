@@ -101,7 +101,7 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 			ItemStack stackB = new ItemStack(Items.DYE, 1, 15);
 			if (ItemStack.areItemsEqual(stack, stackB)) {
             	ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, this.getNowStateMeta(state) + 1), 2);
 			}
 		}

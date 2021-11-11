@@ -104,7 +104,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 	}
 
 	@Override
-	public IBlockState getActualState(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return state;
 	}
 
@@ -287,7 +287,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	//右クリックの処理
 	@Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
 		if (world.isRemote) { return true; }
 
@@ -304,7 +304,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
         if(this.isMaxAge(state)) {
 
-            Random rand = new Random();
+            Random rand = world.rand;
             EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(2) + 1);
             world.spawnEntity(drop);
             world.setBlockState(pos, this.withStage(world, state, 1), 2);        //成長段階を2下げる
@@ -318,7 +318,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 	}
 
 	public void dAdd(NonNullList<ItemStack> drops) {
-		drops.add(new ItemStack(this.getCrop(), 1, 0));
+		drops.add(new ItemStack(this.getCrop()));
 	}
 
 	@Override

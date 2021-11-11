@@ -95,12 +95,12 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	// 成長できるか
 	@Override
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		return !this.isMaxAge(state);
 	}
 
 	//骨粉が使用できるかどうか
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		return true;
 	}
 
@@ -316,7 +316,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		int age = this.getNowStateMeta(state);
 
 		if (age >= this.getMaxBlockState()) {
-			Random rand = new Random();
+			Random rand = world.rand;
 			EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
 			world.spawnEntity(drop);
 			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
@@ -328,7 +328,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 			ItemStack stackB = this.metaCrop != 9 ? new ItemStack(Items.DYE, 1, 15) : new ItemStack(Items.FLINT);
 			if (ItemStack.areItemsEqual(stack, stackB)) {
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, this.getNowStateMeta(state) + 1), 2);
 			}
 		}

@@ -241,7 +241,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 
 			if (ItemStack.areItemsEqual(stack, stackB)) {
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
 			}
 		}
@@ -254,7 +254,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 	}
 
 	//骨粉が使用できるかどうか
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		return true;
 	}
 
@@ -263,7 +263,7 @@ public class BlockChestnut extends BlockBush implements IGrowable, ISMCrop {
 		return 1;
 	}
 
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		return !this.isMaxAge(state);
 	}
 

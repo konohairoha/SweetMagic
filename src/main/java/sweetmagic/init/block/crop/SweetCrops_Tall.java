@@ -68,7 +68,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 		// 最大成長かどうか
 		if (this.isMaxAge(state)) {
 
-			Random rand = new Random();
+			Random rand = world.rand;
 
 			// 作物をドロップ
 			this.doDropItem(world, pos, state, player, stack, rand, this.RC_SetStage);
@@ -106,9 +106,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 
 				// パーティクルスポーン
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-
-				// アイテム消費処理
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 
 				// 成長処理
 				world.setBlockState(pos, this.growStage(world, state, this.getNowStateMeta(state) + 1), 2);

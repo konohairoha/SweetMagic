@@ -292,7 +292,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 	// 右クリック
 	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
 
-		Random rand = new Random();
+		Random rand = world.rand;
 		int age = getNowStateMeta(state);
 
 		if (age >= this.getMaxBlockState()) {
@@ -316,7 +316,7 @@ public class SweetCrops_STAGE6 extends BlockBush implements IGrowable, ISMCrop {
 
 			if (ItemStack.areItemsEqual(stack, stackB)) {
 				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
+				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
 			}
 
