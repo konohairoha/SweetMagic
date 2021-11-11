@@ -29,10 +29,12 @@ public class SittableUtil {
 	}
 
 	public static boolean checkForExistingEntity(World world, double x, double y, double z, EntityPlayer player) {
-		List<EntitySittableBlock> listEMB = world.getEntitiesWithinAABB(EntitySittableBlock.class,
-				new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(1D, 1D, 1D));
+
+		AxisAlignedBB aabb = new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(1D, 1D, 1D);
+		List<EntitySittableBlock> listEMB = world.getEntitiesWithinAABB(EntitySittableBlock.class, aabb);
+
 		for (EntitySittableBlock mount : listEMB) {
-			if (mount.blockPosX == x && mount.blockPosY == y && mount.blockPosZ == z){
+			if (mount.blockPosX == x && mount.blockPosY == y && mount.blockPosZ == z) {
 				if (!mount.isBeingRidden()){
 					player.startRiding(mount);
 				}
@@ -43,8 +45,10 @@ public class SittableUtil {
 	}
 
 	public static boolean isSomeoneSitting(World world, double x, double y, double z) {
-		List<EntitySittableBlock> listEMB = world.getEntitiesWithinAABB(EntitySittableBlock.class,
-				new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(1D, 1D, 1D));
+
+		AxisAlignedBB aabb = new AxisAlignedBB(x, y, z, x + 1.0D, y + 1.0D, z + 1.0D).expand(1D, 1D, 1D);
+		List<EntitySittableBlock> listEMB = world.getEntitiesWithinAABB(EntitySittableBlock.class, aabb);
+
 		for (EntitySittableBlock mount : listEMB) {
 			if (mount.blockPosX == x && mount.blockPosY == y && mount.blockPosZ == z){
 				return mount.isBeingRidden();

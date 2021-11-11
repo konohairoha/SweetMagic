@@ -22,6 +22,7 @@ import sweetmagic.api.recipe.pan.PanRecipeInfo;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.api.recipe.pot.PotRecipeInfo;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.sm.sweetmagic.SMBucket;
 
 public class RecipeHelper {
 
@@ -592,10 +593,16 @@ public class RecipeHelper {
 		List<ItemStack> inputs = new ArrayList<ItemStack>();
 		List<ItemStack> results = new ArrayList<ItemStack>();
 		ItemStack copy = hand.copy();
+		Item handItem = hand.getItem();
 
 		// バケツチェック
 		if (isBucket(copy.getItem())) {
 			results.add(new ItemStack(Items.BUCKET, copy.getCount()));
+		}
+
+		// 水入りバケツ
+		else if (handItem == ItemInit.alt_bucket_water) {
+			results.add(((SMBucket) handItem).useBucket(hand));
 		}
 
 		// レシピに登録されてるメインアイテムの要求数
@@ -612,7 +619,6 @@ public class RecipeHelper {
 
 			// インベントリの個数
 			int inputAmount = player.inventory.mainInventory.get((int) input[0]).getCount();
-
 			int inputShrink = getRequestAmount(reInputAmount, inputAmount);
 
 			// インベントリのほうが消費個数が少ないなら消費個数を減らす
@@ -624,12 +630,18 @@ public class RecipeHelper {
 
 			// ItemStackの取得して個数設定 + リスト追加
 			ItemStack send = ((ItemStack) recipe[1]).copy();
+			Item sendItem = send.getItem();
 			send.setCount(shrinkAmount * (int) recipe[2]);
 			inputs.add(send);
 
 			// バケツチェック
-			if (isBucket(send.getItem())) {
+			if (isBucket(sendItem)) {
 				results.add(new ItemStack(Items.BUCKET));
+			}
+
+			// 水入りバケツ
+			else if (sendItem == ItemInit.alt_bucket_water) {
+				results.add(((SMBucket) sendItem).useBucket(send));
 			}
 		}
 
@@ -682,7 +694,14 @@ public class RecipeHelper {
 
 		// 上位魔術書
 		else if (handStack == ItemInit.magic_book_cosmic){
-			results.add(new ItemStack(ItemInit.magic_book_cosmic, handitem.getCount()));
+			ItemStack book = new ItemStack(ItemInit.magic_book_cosmic);
+			book.setTagCompound(ItemHelper.getNBT(handitem));
+			results.add(book);
+		}
+
+		// 水入りバケツ
+		else if (handStack == ItemInit.alt_bucket_water) {
+			results.add(((SMBucket) handStack).useBucket(hand));
 		}
 
 		// 手に持っているアイテムを処理する
@@ -704,7 +723,14 @@ public class RecipeHelper {
 
 			// 上位魔術書
 			else if (sendItem == ItemInit.magic_book_cosmic){
-				results.add(new ItemStack(ItemInit.magic_book_cosmic, handitem.getCount()));
+				ItemStack book = new ItemStack(ItemInit.magic_book_cosmic);
+				book.setTagCompound(ItemHelper.getNBT(send));
+				results.add(book);
+			}
+
+			// 水入りバケツ
+			else if (sendItem == ItemInit.alt_bucket_water) {
+				results.add(((SMBucket) sendItem).useBucket(send));
 			}
 		}
 

@@ -141,9 +141,8 @@ public class WorldHelper {
 				addExp++;
 			}
 
+			// 全回復
 			else {
-
-				// 全回復
 				ent.setHealth(ent.getMaxHealth());
 			}
 
@@ -270,7 +269,7 @@ public class WorldHelper {
 			entity.hurtResistantTime = 0;
 		}
 
-		world.playSound(null, new BlockPos(living), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 3F, 1F / (world.rand.nextFloat() * 0.2F + 0.9F));
+		world.playSound(null, living.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 3F, 1F / (world.rand.nextFloat() * 0.2F + 0.9F));
 		ParticleHelper.spawnBoneMeal(world, new BlockPos(living.posX, living.posY + 0.5, living.posZ), EnumParticleTypes.EXPLOSION_HUGE);
 	}
 

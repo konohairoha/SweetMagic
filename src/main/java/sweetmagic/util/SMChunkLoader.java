@@ -132,7 +132,6 @@ public class SMChunkLoader implements LoadingCallback {
 			int d = ticket.getModData().getInteger("d");
 
 			SMCoordinate cood1 = new SMCoordinate(i, j, d);
-
 			if (cood1.equals(cood)) { return ticket; }
 		}
 
@@ -141,7 +140,6 @@ public class SMChunkLoader implements LoadingCallback {
 
 	// worldがロードされた時に呼ばれる。trueを返すとChunkLoaderが始まる
 	public interface IChunkBlock {
-
 		public boolean canLoad(World world, int x, int y, int z);
 	}
 }

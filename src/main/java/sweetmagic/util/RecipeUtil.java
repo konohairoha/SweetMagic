@@ -7,10 +7,10 @@ import sweetmagic.api.recipe.NormalRecipeInfo;
 
 public class RecipeUtil {
 
-	public NormalRecipeInfo recipeInfo;
-	public ItemStack copy;
-	public List<ItemStack> inputs;
-	public List<ItemStack> results;
+	private NormalRecipeInfo recipeInfo;
+	private ItemStack copy;
+	private List<ItemStack> inputs;
+	private List<ItemStack> results;
 
 	public RecipeUtil (NormalRecipeInfo recipeInfo, ItemStack copy, List<ItemStack> inputs, List<ItemStack> results) {
 		this.recipeInfo = recipeInfo;

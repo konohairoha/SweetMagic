@@ -50,17 +50,17 @@ public class ItemHelper {
 
 	public static void compactItemListNoStacksize(List<ItemStack> list) {
 
-		for (int i = 0; i < list.size(); i++) {
+		for (int x = 0; x < list.size(); x++) {
 
-			ItemStack s = list.get(i);
-			if (s.isEmpty()) { continue; }
+			ItemStack stack = list.get(x);
+			if (stack.isEmpty()) { continue; }
 
-			for (int j = i + 1; j < list.size(); j++) {
+			for (int y = x + 1; y < list.size(); y++) {
 
-				ItemStack s1 = list.get(j);
-				if (ItemHandlerHelper.canItemStacksStack(s, s1)) {
-					s.grow(s1.getCount());
-					list.set(j, ItemStack.EMPTY);
+				ItemStack stack2 = list.get(y);
+				if (ItemHandlerHelper.canItemStacksStack(stack, stack2)) {
+					stack.grow(stack2.getCount());
+					list.set(y, ItemStack.EMPTY);
 				}
 			}
 		}

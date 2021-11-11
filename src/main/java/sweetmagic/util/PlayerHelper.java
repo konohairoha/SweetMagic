@@ -14,11 +14,6 @@ import sweetmagic.init.tile.inventory.InventoryPouch;
 
 public class PlayerHelper {
 
-	// クリエイティブかどうか
-	public static boolean isCleative (EntityPlayer player) {
-		return player.capabilities.isCreativeMode;
-	}
-
 	// プレイヤーかどうか
 	public static boolean isPlayer (EntityLivingBase entity) {
 		return entity != null && entity instanceof EntityPlayer;

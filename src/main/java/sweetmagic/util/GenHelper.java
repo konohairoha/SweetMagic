@@ -4,8 +4,8 @@ import net.minecraft.util.math.BlockPos;
 
 public class GenHelper {
 
-	public final int dimId;
-	public final BlockPos pos;
+	private final int dimId;
+	private final BlockPos pos;
 
 	public GenHelper (int dimId, BlockPos pos) {
 		this.dimId = dimId;
