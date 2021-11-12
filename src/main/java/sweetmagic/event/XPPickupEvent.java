@@ -100,11 +100,9 @@ public class XPPickupEvent {
 
 	public boolean healRepair (EntityPlayer player, ItemStack stack, int value) {
 
-		// MF回復エンチャがついていなかったら終了
+		// MF回復エンチャがついていないかエンチャが0以下かMFが最大値なら終了
 		IMFTool wand = (IMFTool) stack.getItem();
 		int level = this.getEnchantLevel(EnchantInit.mfRecover, stack);
-
-		// エンチャが0以下かMFが最大値なら終了
 		if (level <= 0 || wand.isMaxMF(stack)) { return false; }
 
 		// エンチャレベル分増やす
