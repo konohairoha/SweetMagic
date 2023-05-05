@@ -1,0 +1,20 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:basewood",
+		"textures": {
+			"particle": "sweetmagic:block/mfharvester_side",
+			"top": "sweetmagic:block/mffisher_top2",
+			"side": "sweetmagic:block/mfharvester_side"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+		"inventory": [{}]
+	}
+}
