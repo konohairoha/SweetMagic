@@ -15,10 +15,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.blocks.PlantPot;
 import sweetmagic.util.ParticleHelper;
@@ -50,7 +52,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 	 *　2 = ナス
 	 */
 
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
 		if (world.isRemote) { return true; }
 
@@ -71,10 +73,10 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 			Random rand = world.rand;
 
 			// 作物をドロップ
-			this.doDropItem(world, pos, state, player, stack, rand, this.RC_SetStage);
+			this.doDropItem(world, pos, state, player, stack, rand, this.RCSetState());
 
 			//成長段階をセット
-			world.setBlockState(pos, this.growStage(world, state, this.RC_SetStage), 2);
+			world.setBlockState(pos, this.growStage(world, state, this.RCSetState()), 2);
 
 			// 2段目かどうかで判断して上か下の座標を取得
 			BlockPos pos2 = !this.checkTopBlock(world, pos) ? pos.down() : pos.up();
@@ -84,28 +86,30 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 			if (state2.getBlock() != this && !this.isMaxAge(state2)) { return; }
 
 			// 作物をドロップ
-			this.doDropItem(world, pos2, state2, player, stack, rand, this.RC_SetStage);
+			this.doDropItem(world, pos2, state2, player, stack, rand, this.RCSetState());
 
 			// 上のブロックの処理
 			if (!this.checkTopBlock(world, pos)) {
 				this.breakBlock(world, pos2.up(), true);
-				world.setBlockState(pos2, this.growStage(world, state2, this.RC_SetStage), 2);
+				world.setBlockState(pos2, this.growStage(world, state2, this.RCSetState()), 2);
 			}
 
 			// 下のブロックの処理
 			else {
-				world.setBlockState(pos2, this.growStage(world, state2, this.RC_SetStage), 2);
+				world.setBlockState(pos2, this.growStage(world, state2, this.RCSetState()), 2);
 				this.breakBlock(world, pos2, true);
 			}
 
-		} else {
+		}
+
+		else {
 
 			ItemStack stackB = new ItemStack(Items.DYE, 1, 15);
 
 			if (ItemStack.areItemsEqual(stack, stackB)) {
 
 				// パーティクルスポーン
-				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+				ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
 				if (!player.isCreative()) { stack.shrink(1); }
 
 				// 成長処理
@@ -119,16 +123,44 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 		}
 	}
 
+	// 右クリック回収時に戻る成長段階
+	@Override
+	public int RCSetState () {
+		return this.RC_SetStage;
+	}
+
+	// ドロップ数
+	@Override
+	public int getDropValue (Random rand, int fortune) {
+		return Math.max(1, rand.nextInt(4) + 1 + SMConfig.glowthValue);
+	}
+
 	// 作物ドロップ
 	public void doDropItem (World world, BlockPos pos, IBlockState state, EntityPlayer player, ItemStack hand, Random rand, int setstage) {
+
 		// 作物ドロップ
-    	EntityItem drop = this.getDropItem(world, player, hand, this.getCrop(), rand.nextInt(2) + 1);
+    	EntityItem drop = this.getDropItem(world, player, hand, this.getCrop(), this.getDropValue(rand, setstage));
     	world.spawnEntity(drop);
 
 		// 音を鳴らす
 		this.playCropSound(world, rand, pos);
 	}
 
+	//ドロップ数を変更
+	@Override
+	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
+		int age = getNowStateMeta(state);
+		if (age >= this.getMaxBlockState()) {
+			drops.add(new ItemStack(this.getCrop(), Math.max(1, 2 + fortune + SMConfig.glowthValue), 0));
+			drops.add(new ItemStack(this.getSeed(), this.srand.nextInt(4) + 1, 0));
+		}
+
+		// 最大成長Ageではない場合、種を落とすようにするための処理
+		else {
+			drops.add(new ItemStack(this.getSeed(), 1, 0));
+		}
+	}
 
 	// ブロック破壊処理
 	public boolean breakBlock(World world, BlockPos pos, boolean dropBlock) {
@@ -177,8 +209,8 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 
 	//超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	//このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。
-	public static IBlockState withStage(World world, IBlockState state, int age) {
-		return state.getBlock().getDefaultState().withProperty(getSweetState(), age);
+	public IBlockState withStage(World world, IBlockState state, int age) {
+		return state.getBlock().getDefaultState().withProperty(this.getSweetState(), age);
 	}
 
 	//最大成長段階の取得（IBlockState用）
@@ -201,7 +233,7 @@ public class SweetCrops_Tall extends SweetCrops_STAGE5 {
 
 	//ドロップする作物
 	@Override
-	protected Item getCrop() {
+	public Item getCrop() {
 
 		switch (this.metaCrop) {
 		case 0:	return ItemInit.corn;

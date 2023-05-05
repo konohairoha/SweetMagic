@@ -15,6 +15,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.ItemInit;
 import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.SMUtil;
@@ -38,7 +39,7 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 
 	// ドロップする作物
 	@Override
-	protected Item getCrop() {
+	public Item getCrop() {
 		return ItemInit.whitenet;
 	}
 
@@ -71,7 +72,7 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 		return m == Material.ROCK || m == Material.GROUND || m == Material.WOOD;
 	}
 
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
 		if (world.isRemote) { return true; }
 
@@ -83,6 +84,18 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 		return true;
 	}
 
+	// 右クリック回収時に戻る成長段階
+	@Override
+	public int RCSetState () {
+		return 0;
+	}
+
+	// ドロップ数
+	@Override
+	public int getDropValue (Random rand, int fortune) {
+		return Math.max(1, rand.nextInt(4) + 1 + SMConfig.glowthValue);
+	}
+
 	// 右クリック
 	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
 
@@ -91,8 +104,8 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 		if (age >= this.getMaxBlockState()) {
 
 			Random rand = new Random();
-			world.spawnEntity(this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(2) + 1));
-			world.setBlockState(pos, this.withStage(world, state, 0), 1); //スティッキースタッフの成長段階を3下げる
+			world.spawnEntity(this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0)));
+			world.setBlockState(pos, this.withStage(world, state, this.RCSetState()), 1); //スティッキースタッフの成長段階を3下げる
 			this.playCropSound(world, rand, pos);
 		}
 
@@ -100,7 +113,7 @@ public class BlockWhitenet extends SweetCrops_STAGE4 {
 
 			ItemStack stackB = new ItemStack(Items.DYE, 1, 15);
 			if (ItemStack.areItemsEqual(stack, stackB)) {
-            	ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+            	ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
 				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, this.getNowStateMeta(state) + 1), 2);
 			}

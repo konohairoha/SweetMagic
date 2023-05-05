@@ -39,7 +39,6 @@ import sweetmagic.init.base.BaseMFBlock;
 import sweetmagic.init.item.sm.sweetmagic.SMFood;
 import sweetmagic.init.tile.magic.TileMFPot;
 import sweetmagic.packet.PlayerSoundPKT;
-import sweetmagic.packet.TileMFBlockPKT;
 import sweetmagic.util.EnchantUtil;
 import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.PlayerHelper;
@@ -68,6 +67,7 @@ public class MFPot extends BaseMFBlock {
      * 6 = ジニアの花瓶（光源でMF変換）
      * 7 = ハイドラシア（敵モブ倒してMF生産）
      * 8 = カーネーション（食べ物をMF変換）
+     * 9 = クリスマスローズエリックスミシィ（雪レイヤーをMF変換）
      *
      */
 
@@ -83,7 +83,7 @@ public class MFPot extends BaseMFBlock {
 		}
 
 		// 経験値をMFに変換
-		else if (this.data == 3 && PlayerHelper.getExperience(player) >= this.expCost && this.canMFChange(world, pos)) {
+		else if (this.data == 3 && PlayerHelper.getExpValue(player) >= this.expCost && this.canMFChange(world, pos)) {
 			this.removeExp(world, pos, player);
 		}
 
@@ -124,7 +124,14 @@ public class MFPot extends BaseMFBlock {
             final int level = entry.getValue() ;
 
             if (level > 0) {
-                cost += EnchantUtil.calculateNewEnchCost(enchant, level);
+
+                float rate = 12F - enchant.getRarity().getWeight();
+
+                if (enchant.getMaxLevel() == 1 && enchant.getRarity().getWeight() <= 1) {
+                	rate *= 3F;
+                }
+
+                cost += EnchantUtil.calculateNewEnchCost(enchant, level) * rate;
             }
 		}
 
@@ -133,7 +140,7 @@ public class MFPot extends BaseMFBlock {
 
 			TileMFPot tile = (TileMFPot) world.getTileEntity(pos);
 			tile.setMF(tile.getMF() + cost);
-			PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, tile.getMF(), tile.getTilePos()));
+			tile.sentClient();
 
 			if (stack.getItem() == Items.ENCHANTED_BOOK) {
 				stack.shrink(1);
@@ -155,12 +162,12 @@ public class MFPot extends BaseMFBlock {
 	// 経験値をMFに変換
 	public void removeExp (World world, BlockPos pos, EntityPlayer player) {
 
-		int expValue = this.expCost * 8;
-		PlayerHelper.addExperience(player, -this.expCost);
+		int expValue = this.expCost * 12;
+		PlayerHelper.addExp(player, -this.expCost);
 
 		TileMFPot tile = (TileMFPot) world.getTileEntity(pos);
 		tile.setMF(tile.getMF() + expValue);
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, tile.getMF(), tile.getTilePos()));
+		tile.sentClient();
 
 		// クライアント（プレイヤー）へ送りつける
 		if (player instanceof EntityPlayerMP) {
@@ -175,17 +182,17 @@ public class MFPot extends BaseMFBlock {
 		Item item = stack.getItem();
 		boolean isSMFood = item instanceof SMFood;
 		ItemFood food  = (ItemFood) stack.getItem();
-		int amount = food.getHealAmount(stack) * food.getHealAmount(stack) * 10;
+		int amount = food.getHealAmount(stack) * food.getHealAmount(stack) * 12;
 		float saturation = isSMFood ? food.getSaturationModifier(stack) * food.getSaturationModifier(stack) : 0.23F;
-		saturation = Math.max(saturation, 0.23F);
-		int mfValue = (int) (amount * (saturation + 0.1));
+		saturation = Math.max(saturation, 0.25F);
+		int mfValue = (int) (amount * (saturation + 0.1)) * stack.getCount();
 
-		stack.shrink(1);
+		stack.shrink(stack.getCount());
 
 		TileMFPot tile = (TileMFPot) world.getTileEntity(pos);
 		tile.setMF(tile.getMF() + mfValue);
-		PacketHandler.sendToClient(new TileMFBlockPKT (0, 0, tile.getMF(), tile.getTilePos()));
-		ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.CRIT);
+		tile.sentClient();
+		ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.CRIT);
 
 		// クライアント（プレイヤー）へ送りつける
 		if (player instanceof EntityPlayerMP) {
@@ -195,6 +202,42 @@ public class MFPot extends BaseMFBlock {
 
 	public boolean canMFChange (World world, BlockPos pos) {
 		return ((TileMFPot) world.getTileEntity(pos)).canMFChange();
+	}
+
+	@Override
+	public int getMaxMF() {
+		return 200000;
+	}
+
+    /**
+     * 0 = ドリズリィの花瓶（雨MF生産）
+     * 1 = 黄昏時の夢百合草（夕方MF生産）
+     * 2 = スノードロップの花瓶（雪地MF生産）
+     * 3 = トルコキキョウの花瓶（経験値吸収）
+     * 4 = 群青の薔薇の花瓶（エンチャントはがし）
+     * 5 = ソリッド・スターの花瓶（周囲のエンチャパワー回収）
+     * 6 = ジニアの花瓶（光源でMF変換）
+     * 7 = ハイドラシア（敵モブ倒してMF生産）
+     * 8 = カーネーション（食べ物をMF変換）
+     * 9 = クリスマスローズエリックスミシィ（雪レイヤーをMF変換）
+     *
+     */
+
+	@Override
+	public int getTier() {
+		switch (this.data) {
+		case 0:	  return 1;
+		case 1:	  return 3;
+		case 2:	  return 1;
+		case 3:	  return 2;
+		case 4:	  return 2;
+		case 5:	  return 2;
+		case 6:	  return 2;
+		case 7:	  return 2;
+		case 8:	  return 1;
+		case 9:	  return 1;
+		}
+		return super.getMaxMF();
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -231,6 +274,9 @@ public class MFPot extends BaseMFBlock {
 			break;
 		case 8:
 			tip = "tip.carnation_crayola_pot.name";
+			break;
+		case 9:
+			tip = "tip.christmarose_ericsmithii_pot.name";
 			break;
 		}
 

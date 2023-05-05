@@ -66,6 +66,24 @@ public class MFChange extends BaseMFBlock {
     	return null;
 	}
 
+	@Override
+	public int getMaxMF() {
+		switch (this.data) {
+		case 0:	  return 10000;
+		case 1:	  return 200000;
+		}
+		return super.getMaxMF();
+	}
+
+	@Override
+	public int getTier() {
+		switch (this.data) {
+		case 0:	  return 1;
+		case 1:	  return 2;
+		}
+		return super.getMaxMF();
+	}
+
 	//===========================
 	// blockstate持たせるための必要なソース
 

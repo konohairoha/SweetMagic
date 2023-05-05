@@ -4,23 +4,27 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseMFFace;
-import sweetmagic.init.tile.chest.TileGravityChest;
+import sweetmagic.init.tile.magic.TileGravityChest;
+import sweetmagic.init.tile.magic.TileMFBase;
 
 public class GravityChest extends BaseMFFace {
 
@@ -51,18 +55,47 @@ public class GravityChest extends BaseMFFace {
     public void breakBlock(World world, BlockPos pos, IBlockState state) {
 
     	TileGravityChest tile = (TileGravityChest) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
 
-		if (tile.isSlotEmpty() && tile.isMfEmpty()) {
-			spawnAsEntity(world, pos, stack);
+		if (tile.isSlotEmpty() && tile.isMfEmpty() && tile.range == 5) {
+			spawnAsEntity(world, pos, new ItemStack(this));
 			return;
 		}
 
         super.breakBlock(world, pos, state);
 	}
 
+	public ItemStack setTagStack (TileMFBase tile, ItemStack stack, NBTTagCompound tags) {
+
+		ItemStack stack2 = super.setTagStack(tile, stack, tags);
+		NBTTagCompound tagStack= stack2.getTagCompound();
+		tagStack.setInteger("range", ( (TileGravityChest)tile).range);
+
+		return stack2;
+	}
+
+	@Override
+	public int getMaxMF() {
+		return 100000;
+	}
+
+	// フェンスとかにつながないように
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.SOLID;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(I18n.format(TextFormatting.RED + this.getTip("tip.sm_redstone.name")));
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.gravity_chest.name")));
+
+		int range = 5;
+
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("range")) {
+			range = stack.getTagCompound().getInteger("range");
+		}
+
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_range.name") + "：" + TextFormatting.GREEN + range));
+		tooltip.add(I18n.format(""));
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

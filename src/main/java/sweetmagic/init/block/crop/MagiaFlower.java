@@ -58,14 +58,16 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SweetState.STAGE4, 0));
 		if (data == 0) {
 			this.setLightLevel(0.5F);
-		} else if (data == 1) {
+		}
+
+		else if (data == 1) {
 			this.setLightLevel(0.4F);
 		}
 	}
 
 	// 当たり判定
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return CROPS_AABB[getNowStateMeta(state)];
+		return CROPS_AABB[this.getNowStateMeta(state)];
 	}
 
 	public IBlockState getGrownState() { //最大成長段階の取得（IBlockState用）
@@ -121,7 +123,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	@Deprecated
 	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
+		return this.getVec(state, world, pos);
 	}
 
 	/**
@@ -145,7 +147,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 
 	//ドロップする作物
 	@Override
-	protected Item getCrop() {
+	public Item getCrop() {
 
 		switch (this.data) {
 		case 0: return ItemInit.sannyflower_petal;
@@ -173,7 +175,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 		return this.getDefaultState().withProperty(SweetState.STAGE4, age);
 	}
 
-	public static IBlockState withStage(World world, IBlockState state, int age) {
+	public IBlockState withStage(World world, IBlockState state, int age) {
 		return state.getBlock().getDefaultState().withProperty(SweetState.STAGE4, age);
 	}
 
@@ -222,7 +224,7 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 		if (this.isMaxAge(state)) {
 
 			boolean p1 = this.srand.nextBoolean();
-			int randInt = this.srand.nextInt(3) + fortune;
+			int randInt = this.srand.nextInt(3) + 1;
 
 			//サニーフラワー用、TileEntity側で世界の時間を取得してアイテムが出るようにする
 			if (this.isSanny()) {
@@ -238,31 +240,18 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 			}
 
 			else {
-				drops.add(new ItemStack(this.getSeed(), 1, 0));
+				drops.add(new ItemStack(this.getSeed(), 1));
 			}
 		}
 
 		else {
-			drops.add(new ItemStack(this.getSeed(), 1, 0));
+			drops.add(new ItemStack(this.getSeed(), 1));
 		}
 	}
 
 	public void addDrop (NonNullList<ItemStack> drops, int randInt, boolean p1) {
-
-		for (int i = randInt; i >= 0; i--) {
-			drops.add(new ItemStack(this.getSeed(), 1, 0));
-		}
-
-		if (p1) {
-
-			int count = this.srand.nextBoolean() ? 3 : 2;
-			for (int i = 0; i < count; i++) {
-				this.dAdd(drops);
-			}
-
-		} else {
-			this.dAdd(drops);
-		}
+		drops.add(new ItemStack(this.getSeed(), randInt));
+		drops.add(new ItemStack(this.getCrop(), this.srand.nextInt(p1 ? 6 : 4) + 1));
 	}
 
 	// 植木鉢用
@@ -299,26 +288,33 @@ public class MagiaFlower extends BaseMagicalCrops implements ISMCrop {
 		return true;
     }
 
+	// 右クリック回収時に戻る成長段階
+	@Override
+	public int RCSetState () {
+		return 1;
+	}
+
+	// ドロップ数
+	@Override
+	public int getDropValue (Random rand, int fortune) {
+		return Math.max(1, rand.nextInt(3) + 1);
+	}
+
 	// 右クリック
 	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
 
         if(this.isMaxAge(state)) {
 
             Random rand = world.rand;
-            EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(2) + 1);
+            EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
             world.spawnEntity(drop);
-            world.setBlockState(pos, this.withStage(world, state, 1), 2);        //成長段階を2下げる
-            //EntityPlayerでキャストし、Nullを返さないとマルチでホストプレイヤーに対し音がなるので注意
+            world.setBlockState(pos, this.withStage(world, state, this.RCSetState()), 2);        //成長段階を2下げる
 			this.playCropSound(world, rand, pos);
         }
 	}
 
 	public boolean isMaxAge(IBlockState state) {
 		return this.getNowStateMeta(state) >= this.getMaxBlockState();
-	}
-
-	public void dAdd(NonNullList<ItemStack> drops) {
-		drops.add(new ItemStack(this.getCrop()));
 	}
 
 	@Override

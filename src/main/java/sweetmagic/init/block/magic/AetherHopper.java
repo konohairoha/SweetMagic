@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.properties.PropertyEnum;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
@@ -16,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -55,10 +57,22 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 		return null;
 	}
 
+	@Override
+	public int getMaxMF() {
+		return 200000;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		tooltip.add(I18n.format(TextFormatting.RED + this.getTip("tip.sm_redstone.name")));
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.aether_hopper.name")));
+		tooltip.add(I18n.format(""));
 		super.addInformation(stack, world, tooltip, advanced);
+	}
+
+	// フェンスとかにつながないように
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.SOLID;
 	}
 
 	@Override
@@ -84,9 +98,8 @@ public class AetherHopper extends BaseMFBlock implements IChunkBlock {
 	}
 
 	@Override
-	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-		IBlockState state = super.getStateForPlacement(world, pos, face, hitX, hitY, hitZ, meta, placer);
-		return state.withProperty(FACING, face);
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float x, float y, float z, int meta, EntityLivingBase placer) {
+		return super.getStateForPlacement(world, pos, face, x, y, z, meta, placer).withProperty(FACING, face);
 	}
 
 	@Override

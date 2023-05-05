@@ -57,6 +57,7 @@ public class AetherLanp extends BaseMFFace {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.aether_lanp.name")));
+		tooltip.add(I18n.format(""));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

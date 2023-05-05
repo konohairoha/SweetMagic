@@ -64,9 +64,28 @@ public class MFFurnace extends BaseMFFace {
 	}
 
 	@Override
+	public int getMaxMF() {
+		switch (this.data) {
+		case 0:	  return 200000;
+		case 1:	  return 2000000;
+		}
+		return super.getMaxMF();
+	}
+
+	@Override
+	public int getTier() {
+		switch (this.data) {
+		case 0:	  return 1;
+		case 1:	  return 2;
+		}
+		return super.getMaxMF();
+	}
+
+	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.mffurnace.name")));
+		tooltip.add(I18n.format(""));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

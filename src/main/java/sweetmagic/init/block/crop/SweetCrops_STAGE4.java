@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
@@ -53,7 +54,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	//  当たり判定
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return CROPS_AABB[getNowStateMeta(state)];
+		return CROPS_AABB[this.getNowStateMeta(state)];
 	}
 
 	public SweetCrops_STAGE4(String name, int data, int grnd, float growVal) {
@@ -66,13 +67,13 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		this.disableStats();
 		this.stayGrnd = grnd;
 		this.metaCrop = data;
-		this.growValue = growVal;
+		this.growValue = growVal + SMConfig.glowthRate * 2.5F;
 		this.setCreativeTab(null);
 		BlockInit.noTabList.add(this);
 		//必ずメソッド含めすべてのBlockStateの上書きをすること。SweetStateのプロパティ入りBlockStateであるSTAGE(任意の数字)を使う。
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SweetState.STAGE4, 0));
 		this.RC_SetStage  = 1;
-		this.setLightLevel(this.metaCrop == 6 ? 0.6f : 0);
+		this.setLightLevel(this.metaCrop == 6 ? 0.6F : 0);
 	}
 
 	/**
@@ -85,7 +86,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		return new BlockStateContainer(this, new IProperty[] { SweetState.STAGE4 });
 	}
 
-	public static PropertyInteger getSweetState() {
+	public PropertyInteger getSweetState() {
 		return SweetState.STAGE4;
 	}
 
@@ -111,7 +112,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	@Deprecated
 	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
-		return new Vec3d(0D, this.getPosY(world, pos.down()), 0D);
+		return this.getVec(state, world, pos);
 	}
 
 	/**
@@ -155,7 +156,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 	}
 
 	// ドロップする作物
-	protected Item getCrop() {
+	public Item getCrop() {
 
 		switch (this.metaCrop) {
 		case 0:	return ItemInit.sugarbell;
@@ -192,8 +193,8 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 	//超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	//このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。
-	public static IBlockState withStage(World world, IBlockState state, int age) {
-		return state.getBlock().getDefaultState().withProperty(getSweetState(), age);
+	public IBlockState withStage(World world, IBlockState state, int age) {
+		return state.getBlock().getDefaultState().withProperty(this.getSweetState(), age);
 	}
 
 	//いじる必要なし
@@ -286,10 +287,8 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		int age = this.getNowStateMeta(state);
 
 		if (age >= this.getMaxBlockState()) {
-			drops.add(new ItemStack(this.getCrop(), 3 + fortune, 0));
-			for (int i = this.srand.nextInt(4) + 1; i > 0; i--) {
-				drops.add(new ItemStack(this.getSeed(), 1, 0));
-			}
+			drops.add(new ItemStack(this.getCrop(), Math.max(1, 3 + fortune + SMConfig.glowthValue), 0));
+			drops.add(new ItemStack(this.getSeed(), this.srand.nextInt(4) + 1, 0));
 		}
 
 		// 最大成長Ageではない場合、種を落とすようにするための処理
@@ -310,6 +309,18 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 		return true;
 	}
 
+	// 右クリック回収時に戻る成長段階
+	@Override
+	public int RCSetState () {
+		return this.RC_SetStage;
+	}
+
+	// ドロップ数
+	@Override
+	public int getDropValue (Random rand, int fortune) {
+		return Math.max(1, rand.nextInt(3) + 1 + SMConfig.glowthValue);
+	}
+
 	// 右クリック
 	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
 
@@ -317,9 +328,9 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 		if (age >= this.getMaxBlockState()) {
 			Random rand = world.rand;
-			EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), rand.nextInt(3) + 1);
+			EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, age));
 			world.spawnEntity(drop);
-			world.setBlockState(pos, this.withStage(world, state, this.RC_SetStage), 2); //指定の成長段階まで下げる
+			world.setBlockState(pos, this.withStage(world, state, this.RCSetState()), 2); //指定の成長段階まで下げる
 			this.playCropSound(world, rand, pos);
 		}
 
@@ -327,7 +338,7 @@ public class SweetCrops_STAGE4 extends BlockBush implements IGrowable, ISMCrop {
 
 			ItemStack stackB = this.metaCrop != 9 ? new ItemStack(Items.DYE, 1, 15) : new ItemStack(Items.FLINT);
 			if (ItemStack.areItemsEqual(stack, stackB)) {
-				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+				ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
 				if (!player.isCreative()) { stack.shrink(1); }
 				world.setBlockState(pos, this.withStage(world, state, this.getNowStateMeta(state) + 1), 2);
 			}

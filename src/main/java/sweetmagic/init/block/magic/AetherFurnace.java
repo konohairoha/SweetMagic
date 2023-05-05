@@ -6,6 +6,7 @@ import java.util.Random;
 import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,6 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -172,12 +174,28 @@ public class AetherFurnace extends BaseMFFace {
 		return BlockRenderLayer.CUTOUT;
 	}
 
+	// フェンスとかにつながないように
+	public BlockFaceShape getBlockFaceShape(IBlockAccess world, IBlockState state, BlockPos pos, EnumFacing face) {
+        return BlockFaceShape.SOLID;
+	}
+
+	@Override
+	public int getMaxMF() {
+		return 60000;
+	}
+
+	@Override
+	public int getTier() {
+		return this.isAdvanced ? 2 : 1;
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String tip = this.isAdvanced ? "tip.advanced_aether_furnace.name" : "tip.aether_furnace.name";
-		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_redstone.name")));
+		tooltip.add(I18n.format(TextFormatting.RED + this.getTip("tip.sm_redstone.name")));
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip(tip)));
+		tooltip.add(I18n.format(""));
 		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

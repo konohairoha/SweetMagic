@@ -14,7 +14,6 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumParticleTypes;
@@ -62,7 +61,7 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 		return new BlockStateContainer(this, new IProperty[] { SweetState.STAGE3 });
 	}
 
-	public static PropertyInteger getSweetState() {
+	public PropertyInteger getSweetState() {
 		return SweetState.STAGE3;
 	}
 
@@ -109,8 +108,8 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 	}
 
 	//現在の成長段階をintで取得するためのもの。
-	public static int getNowStateMeta(IBlockState state) {
-		return SweetState.getInt(state, getSweetState());
+	public int getNowStateMeta(IBlockState state) {
+		return SweetState.getInt(state, this.getSweetState());
 	}
 
 	/* IPlantable */
@@ -136,14 +135,14 @@ public class BlockLierRose extends BlockBush implements IGrowable, ISMCrop {
 
 	//超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	//このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。いじらなくてもよい
-	public static IBlockState withStage(World world, IBlockState state, int age) {
-		return state.getBlock().getDefaultState().withProperty(getSweetState(), age);
+	public IBlockState withStage(World world, IBlockState state, int age) {
+		return state.getBlock().getDefaultState().withProperty(this.getSweetState(), age);
 	}
 
 	//ドロップ数を変更
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
-		drops.add(new ItemStack(Item.getItemFromBlock(BlockInit.lier_rose), 1));
+		drops.add(new ItemStack(BlockInit.lier_rose));
 	}
 
 	@Override

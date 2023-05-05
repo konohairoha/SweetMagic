@@ -11,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.ItemHandlerHelper;
@@ -34,6 +33,7 @@ public class MFTable extends BaseMFBlock {
 		super(name);
 		this.data = data;
 		BlockInit.magicList.add(this);
+		BlockInit.mftableList.add(this);
     }
 
 	// ブロックでのアクション
@@ -63,12 +63,6 @@ public class MFTable extends BaseMFBlock {
 			this.openGui(world, player, pos);
 			return;
 		}
-
-		// レベルの取得
-//		int reLevel = wand.getMaxLevel();
-//
-//		// レベルが満たしていたら
-//		if (reLevel <= wand.getLevel(wandStack)) {
 
 		NonNullList<ItemStack> pInv = player.inventory.mainInventory;
 		MFTableRecipeInfo recipeInfo = SweetMagicAPI.getMFTableRecipeInfo(wandStack, pInv);
@@ -123,9 +117,7 @@ public class MFTable extends BaseMFBlock {
 		tile.markDirty();
 
 		// 変換時の音
-		world.playSound(null, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, SoundCategory.VOICE,
-				0.5F, 1F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
-
+		this.playerSound(world, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, 0.5F, 1F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 		this.openGui(world, player, pos);
 	}
 
@@ -159,5 +151,20 @@ public class MFTable extends BaseMFBlock {
 		}
 
 		return null;
+	}
+
+	@Override
+	public int getMaxMF() {
+		switch (this.data) {
+		case 0:	  return 20000;
+		case 1:	  return 400000;
+		case 2:	  return 1000000;
+		}
+		return super.getMaxMF();
+	}
+
+	@Override
+	public int getTier() {
+		return this.data + 1;
 	}
 }

@@ -13,12 +13,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.event.SMHarvestEvent.BrrierBreakEvent;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
@@ -51,6 +52,8 @@ public class MagicBarrier extends BaseModelBlock {
 
 		world.playEvent(2001, pos, Block.getStateId(state));
 		world.setBlockState(pos, BlockInit.magicbarrier_off.getDefaultState(), 2);
+		MinecraftForge.EVENT_BUS.register(new BrrierBreakEvent(pos, player, 1));
+
 		if (!player.isCreative()) { stack.shrink(1); }
 
 		// ワールド内のプレイヤー取得
@@ -61,19 +64,6 @@ public class MagicBarrier extends BaseModelBlock {
 		}
 
 		return true;
-	}
-
-	// ブロックを壊したときの処理
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-
-		for (EnumFacing face : EnumFacing.VALUES) {
-
-			BlockPos facePos =  pos.offset(face);
-			Block block = world.getBlockState(facePos).getBlock();
-			if (block != BlockInit.magicbarrier_off) { continue; }
-
-			this.breakBlock(facePos, world, true);
-		}
 	}
 
 	// アイテムをドロップ
@@ -107,4 +97,5 @@ public class MagicBarrier extends BaseModelBlock {
 	public BlockRenderLayer getBlockLayer() {
 		return this.data == 0 ? BlockRenderLayer.SOLID : BlockRenderLayer.TRANSLUCENT;
 	}
+
 }

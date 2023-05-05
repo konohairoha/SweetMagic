@@ -11,7 +11,6 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.common.EnumPlantType;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.block.blocks.PlantPot;
 
 public class BlockCornFlower extends BlockBush {
 
@@ -41,7 +40,8 @@ public class BlockCornFlower extends BlockBush {
 
 	@Deprecated
 	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {
-		double y = world.getBlockState(pos.down()).getBlock() instanceof PlantPot ? -0.0625D : 0D;
+		IBlockState under = world.getBlockState(pos.down());
+		double y = -1D + under.getBlock().getBoundingBox(under, world, pos.down()).maxY;
 		long i = MathHelper.getCoordinateRandom(pos.getX(), 0, pos.getZ());
 		return new Vec3d(((double) ((float) (i >> 16 & 15L) / 15.0F) - 0.5D) * 0.5D, y, ((double) ((float) (i >> 24 & 15L) / 15.0F) - 0.5D) * 0.5D);
 	}
