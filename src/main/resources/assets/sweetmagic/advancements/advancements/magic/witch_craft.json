@@ -1,7 +1,7 @@
 {
     "display": {
         "icon": {
-            "item": "sweetmagic:pedestal_creat"
+            "item": "sweetmagic:prompt_feather"
         },
         "title": {
             "translate": "smadbent.witch_craft.title"
@@ -10,13 +10,13 @@
             "translate": "smadbent.witch_craft.text"
         }
     },
-    "parent": "sweetmagic:magic/astral_craft",
+    "parent": "sweetmagic:magic/pedestal_creat",
     "criteria": {
         "magic_book": {
             "trigger": "sweetmagic:witch_craft"
 		}
 	},
    "rewards": {
- 		"experience": 75
+ 		"loot": ["sweetmagic:mf_sbottle"]
 	}
 }

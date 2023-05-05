@@ -1,23 +1,23 @@
 {
     "display": {
         "icon": {
-            "item": "sweetmagic:twilight_alstroemeria"
+            "item": "sweetmagic:figurine_af"
         },
         "title": {
-            "translate": "smadbent.twilight_alstroemeria.title"
+            "translate": "smadbent.figurine_af.title"
         },
         "description": {
-            "translate": "smadbent.twilight_alstroemeria.text"
+            "translate": "smadbent.figurine_af.text"
         }
     },
-    "parent": "sweetmagic:magic/moonblossom_petal",
+    "parent": "sweetmagic:magic/figurine_zh",
     "criteria": {
-        "twilight_alstroemeria": {
+        "figurine_af": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "sweetmagic:twilight_alstroemeria"
+                        "item": "sweetmagic:figurine_af"
                     }
                 ]
             }

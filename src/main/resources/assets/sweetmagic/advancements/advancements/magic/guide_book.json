@@ -14,7 +14,12 @@
     "parent": "sweetmagic:magic/sugarbell",
     "criteria": {
         "guide_book": {
-            "trigger": "sweetmagic:guide_book"
+            "trigger": "sweetmagic:item_use",
+            "conditions": {
+                "item": {
+                    "item": "sweetmagic:guide_book"
+				}
+			}
 		}
 	},
 	"rewards": {

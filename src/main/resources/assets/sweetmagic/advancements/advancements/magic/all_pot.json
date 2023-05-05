@@ -1,0 +1,49 @@
+{
+    "display": {
+		"icon": {
+		    "item": "sweetmagic:solid_star_pot"
+		},
+		"title": {
+		    "translate": "smadbent.all_pot.title"
+		},
+		"description": {
+		    "translate": "smadbent.all_pot.text"
+		}
+    },
+    "parent": "sweetmagic:magic/twilightalstroemeria_pot",
+    "criteria": {
+			"mfpot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:mfpot" } ] }
+		},
+			"twilightalstroemeria_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:twilightalstroemeria_pot" } ] }
+		},
+			"snowdrop_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:snowdrop_pot" } ] }
+		},
+			"turkey_balloonflower_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:turkey_balloonflower_pot" } ] }
+		},
+			"ultramarine_rose_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:ultramarine_rose_pot" } ] }
+		},
+			"solid_star_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:solid_star_pot" } ] }
+		},
+			"zinnia_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:zinnia_pot" } ] }
+		},
+			"hydrangea_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:hydrangea_pot" } ] }
+		},
+			"carnation_crayola_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:carnation_crayola_pot" } ] }
+		},
+			"christmarose_ericsmithii_pot": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:christmarose_ericsmithii_pot" } ] }
+		}
+    },
+   "rewards": {
+ 		"experience": 1000
+	}
+}

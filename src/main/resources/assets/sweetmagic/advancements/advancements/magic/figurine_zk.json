@@ -1,29 +1,30 @@
 {
     "display": {
         "icon": {
-            "item": "sweetmagic:aether_crystal"
+            "item": "sweetmagic:figurine_zk"
         },
         "title": {
-            "translate": "smadbent.aether_crystal.title"
+            "translate": "smadbent.figurine_zk.title"
         },
         "description": {
-            "translate": "smadbent.aether_crystal.text"
-        }
+            "translate": "smadbent.figurine_zk.text"
+        },
+    	"frame": "goal"
     },
-    "parent": "sweetmagic:magic/sugarbell",
+    "parent": "sweetmagic:magic/figurine_ec",
     "criteria": {
-        "aether_crystal": {
+        "figurine_zh": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "sweetmagic:aether_crystal"
+                        "item": "sweetmagic:figurine_zk"
                     }
                 ]
             }
         }
     },
    "rewards": {
- 		"loot": ["sweetmagic:mf_sbottle"]
+ 		"experience": 500
 	}
 }

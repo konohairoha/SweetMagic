@@ -1,29 +1,29 @@
 {
     "display": {
         "icon": {
-            "item": "sweetmagic:twilight_alstroemeria"
+            "item": "sweetmagic:twilightlight"
         },
         "title": {
-            "translate": "smadbent.twilight_alstroemeria.title"
+            "translate": "smadbent.twilightlight.title"
         },
         "description": {
-            "translate": "smadbent.twilight_alstroemeria.text"
+            "translate": "smadbent.twilightlight.text"
         }
     },
-    "parent": "sweetmagic:magic/moonblossom_petal",
+    "parent": "sweetmagic:magic/astral_craft",
     "criteria": {
         "twilight_alstroemeria": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "sweetmagic:twilight_alstroemeria"
+                        "item": "sweetmagic:twilightlight"
                     }
                 ]
             }
         }
     },
    "rewards": {
- 		"experience": 100
+ 		"loot": ["sweetmagic:mf_bottle"]
 	}
 }

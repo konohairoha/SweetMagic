@@ -1,29 +1,29 @@
 {
     "display": {
         "icon": {
-            "item": "sweetmagic:twilight_alstroemeria"
+            "item": "sweetmagic:figurine_ec"
         },
         "title": {
-            "translate": "smadbent.twilight_alstroemeria.title"
+            "translate": "smadbent.figurine_ec.title"
         },
         "description": {
-            "translate": "smadbent.twilight_alstroemeria.text"
+            "translate": "smadbent.figurine_ec.text"
         }
     },
-    "parent": "sweetmagic:magic/moonblossom_petal",
+    "parent": "sweetmagic:magic/figurine_rk",
     "criteria": {
-        "twilight_alstroemeria": {
+        "figurine_ec": {
             "trigger": "minecraft:inventory_changed",
             "conditions": {
                 "items": [
                     {
-                        "item": "sweetmagic:twilight_alstroemeria"
+                        "item": "sweetmagic:figurine_ec"
                     }
                 ]
             }
         }
     },
    "rewards": {
- 		"experience": 100
+ 		"experience": 300
 	}
 }

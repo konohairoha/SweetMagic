@@ -23,5 +23,15 @@
     "revertime": {"category": "ambient", "sounds": [ "sweetmagic:revertime"], "subtitle": "sweetmagic:sound.revertime"},
     "robe": {"category": "ambient", "sounds": [ "sweetmagic:robe"], "subtitle": "sweetmagic:sound.robe"},
     "write": {"category": "ambient", "sounds": [ "sweetmagic:write"], "subtitle": "sweetmagic:sound.write"},
-    "grow": {"category": "ambient", "sounds": [ "sweetmagic:grow"], "subtitle": "sweetmagic:sound.grow"}
+    "grow": {"category": "ambient", "sounds": [ "sweetmagic:grow"], "subtitle": "sweetmagic:sound.grow"},
+    "magic_craft": {"category": "ambient", "sounds": [ "sweetmagic:magic_craft"], "subtitle": "sweetmagic:magic_craft"},
+    "babule": {"category": "ambient", "sounds": [ "sweetmagic:babule"], "subtitle": "sweetmagic:babule"},
+    "stardust": {"category": "ambient", "sounds": [ "sweetmagic:stardust"], "subtitle": "sweetmagic:stardust"},
+    "avoid": {"category": "ambient", "sounds": [ "sweetmagic:avoid"], "subtitle": "sweetmagic:avoid"},
+    "ec_ambient": {"category": "ambient", "sounds": [ "sweetmagic:ec_ambient"], "subtitle": "sweetmagic:ec_ambient"},
+    "ec_death": {"category": "ambient", "sounds": [ "sweetmagic:ec_death"], "subtitle": "sweetmagic:ec_death"},
+    "ec_hurt": {"category": "ambient", "sounds": [ "sweetmagic:ec_hurt"], "subtitle": "sweetmagic:ec_hurt"},
+    "flash": {"category": "ambient", "sounds": [ "sweetmagic:flash"], "subtitle": "sweetmagic:flash"},
+    "storage": {"category": "ambient", "sounds": [ "sweetmagic:storage"], "subtitle": "sweetmagic:storage"},
+    "knockback": {"category": "ambient", "sounds": [ "sweetmagic:knockback"], "subtitle": "sweetmagic:knockback"}
 }

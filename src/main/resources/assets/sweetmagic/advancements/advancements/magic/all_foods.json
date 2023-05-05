@@ -501,9 +501,39 @@
 		},
 			"greenpepper": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:greenpepper" } ] }
+		},
+			"salad_caesar": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:salad_caesar" } ] }
+		},
+			"pine_smoothy": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:pine_smoothy" } ] }
+		},
+			"macaroon": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:macaroon" } ] }
+		},
+			"seaplant_soup": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:seaplant_soup" } ] }
+		},
+			"milkshake": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:milkshake" } ] }
+		},
+			"coconuts_cookie": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:coconuts_cookie" } ] }
+		},
+			"icing_cookies": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:icing_cookies" } ] }
+		},
+			"orange_tart": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:orange_tart" } ] }
+		},
+			"cup_cake": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:cup_cake" } ] }
+		},
+			"fish_and_chips": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:fish_and_chips" } ] }
 		}
     },
    "rewards": {
- 		"experience": 7750
+ 		"experience": 8000
 	}
 }

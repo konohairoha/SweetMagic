@@ -222,9 +222,39 @@
 		},
 			"magic_shadowhorse": { "trigger": "minecraft:inventory_changed",
 			"conditions": { "items": [ { "item": "sweetmagic:magic_shadowhorse" } ] }
+		},
+			"magic_refresh_gift": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_refresh_gift" } ] }
+		},
+			"magic_causality_prediction": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_causality_prediction" } ] }
+		},
+			"magic_growth_collect": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_growth_collect" } ] }
+		},
+			"magic_blackcat": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_blackcat" } ] }
+		},
+			"magic_vector_field": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_vector_field" } ] }
+		},
+			"magic_reflesh_field": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_reflesh_field" } ] }
+		},
+			"magic_avoid_tornado": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_avoid_tornado" } ] }
+		},
+			"magic_endpoison": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_endpoison" } ] }
+		},
+			"magic_thunderforce": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_thunderforce" } ] }
+		},
+			"magic_earthquake": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:magic_earthquake" } ] }
 		}
     },
-   "rewards": {
- 		"experience": 2300
+	"rewards": {
+ 		"experience": 2600
 	}
 }

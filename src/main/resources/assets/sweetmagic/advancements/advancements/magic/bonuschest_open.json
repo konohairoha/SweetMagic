@@ -13,8 +13,13 @@
     },
     "parent": "sweetmagic:magic/guide_book",
     "criteria": {
-        "guide_book": {
-            "trigger": "sweetmagic:bonuschest_open"
+        "treasure_chest": {
+            "trigger": "sweetmagic:item_use",
+            "conditions": {
+                "item": {
+                    "item": "sweetmagic:treasure_chest"
+				}
+			}
 		}
 	},
 	"rewards": {
