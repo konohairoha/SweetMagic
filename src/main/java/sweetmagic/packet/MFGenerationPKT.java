@@ -8,23 +8,19 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import sweetmagic.api.iblock.IMFBlock;
+import sweetmagic.init.tile.magic.TileMFGeneration;
 
-public class TileMFBlockPKT implements IMessage {
+public class MFGenerationPKT implements IMessage {
 
-	public int tickTime;
-	public int randTime;
-	public int mf;
+	public int lava;
 	public int x;
 	public int y;
 	public int z;
 
-	public TileMFBlockPKT() { }
+	public MFGenerationPKT() { }
 
-	public TileMFBlockPKT(int tickTime, int randTime, int mf, BlockPos pos) {
-		this.tickTime = tickTime;
-		this.randTime = randTime;
-		this.mf = mf;
+	public MFGenerationPKT(int lava, BlockPos pos) {
+		this.lava = lava;
 		this.x = pos.getX();
 		this.y = pos.getY();
 		this.z = pos.getZ();
@@ -32,9 +28,7 @@ public class TileMFBlockPKT implements IMessage {
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.tickTime = buf.readInt();
-		this.randTime = buf.readInt();
-		this.mf = buf.readInt();
+		this.lava = buf.readInt();
 		this.x = buf.readInt();
 		this.y = buf.readInt();
 		this.z = buf.readInt();
@@ -42,18 +36,16 @@ public class TileMFBlockPKT implements IMessage {
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeInt(this.tickTime);
-		buf.writeInt(this.randTime);
-		buf.writeInt(this.mf);
+		buf.writeInt(this.lava);
 		buf.writeInt(this.x);
 		buf.writeInt(this.y);
 		buf.writeInt(this.z);
 	}
 
-	public static class Handler implements IMessageHandler<TileMFBlockPKT, IMessage> {
+	public static class Handler implements IMessageHandler<MFGenerationPKT, IMessage> {
 
 		@Override
-		public IMessage onMessage(final TileMFBlockPKT msg, final MessageContext ctx) {
+		public IMessage onMessage(final MFGenerationPKT msg, final MessageContext ctx) {
 
 			Minecraft.getMinecraft().addScheduledTask(new Runnable() {
 				@Override
@@ -65,11 +57,10 @@ public class TileMFBlockPKT implements IMessage {
 
 					BlockPos pos = new BlockPos(msg.x, msg.y, msg.z);
 					TileEntity tile = player.world.getTileEntity(pos);
-					if (!(tile instanceof IMFBlock)) { return; }
+					if (!(tile instanceof TileMFGeneration)) { return; }
 
-					IMFBlock fisher = (IMFBlock) tile;
-					fisher.setTickTime(msg.tickTime);
-					fisher.setMF(msg.mf);
+					TileMFGeneration fisher = (TileMFGeneration) tile;
+					fisher.lavaValue = msg.lava;
 				}
 			});
 			return null;

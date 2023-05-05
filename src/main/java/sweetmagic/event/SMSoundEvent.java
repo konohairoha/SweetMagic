@@ -39,8 +39,15 @@ public class SMSoundEvent {
 	public static final SoundEvent MAGICCRAFT = createEvent("magic_craft");
 	public static final SoundEvent BABULE = createEvent("babule");
 	public static final SoundEvent STARDUST = createEvent("stardust");
+	public static final SoundEvent AVOID = createEvent("avoid");
+	public static final SoundEvent EC_AMBIENT = createEvent("ec_ambient");
+	public static final SoundEvent EC_DEATH = createEvent("ec_death");
+	public static final SoundEvent EC_HURT = createEvent("ec_hurt");
+	public static final SoundEvent FLASH = createEvent("flash");
+	public static final SoundEvent STORAGE = createEvent("storage");
+	public static final SoundEvent KNOCKBACK = createEvent("knockback");
 
-	private static SoundEvent createEvent(String sound){
+	private static SoundEvent createEvent(String sound) {
 		ResourceLocation name = new ResourceLocation(SweetMagicCore.MODID, sound);
 		return new SoundEvent(name).setRegistryName(name);
 	}
@@ -78,7 +85,11 @@ public class SMSoundEvent {
 		registry.register(MAGICCRAFT);
 		registry.register(BABULE);
 		registry.register(STARDUST);
+		registry.register(AVOID);
+		registry.register(FLASH);
+		registry.register(STORAGE);
+		registry.register(KNOCKBACK);
 	}
 
-	public SMSoundEvent() {}
+	public SMSoundEvent() { }
 }

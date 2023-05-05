@@ -1,5 +1,7 @@
 package sweetmagic.event;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -19,8 +21,18 @@ import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityMagicItem;
 import sweetmagic.init.item.sm.sweetmagic.SMBookCosmic;
+import sweetmagic.init.tile.inventory.InventoryHarvestBag;
+import sweetmagic.init.tile.slot.SlotPredicates;
 
 public class EntityItemTossEvent {
+
+	public static final List<Item> cosmicList = Arrays.<Item> asList(
+		ItemInit.aether_crystal_shard, ItemInit.aether_crystal
+	);
+
+	public static final List<Item> scarletList = Arrays.<Item> asList(
+		ItemInit.aether_crystal_shard, ItemInit.aether_crystal, ItemInit.divine_crystal, ItemInit.pure_crystal
+	);
 
 	@SubscribeEvent
 	public void onEvent(ItemTossEvent event) {
@@ -36,7 +48,6 @@ public class EntityItemTossEvent {
 		// エンティティの置き換え
 		World world = entity.world;
 		EntityMagicItem item = this.getEntity(world, event.getPlayer(), stack);
-		item.setNoDespawn();
 		entity.setDead();
 		event.setCanceled(true);
 
@@ -46,12 +57,13 @@ public class EntityItemTossEvent {
 	}
 
 	// エンティティの取得
-	public EntityMagicItem getEntity (World world, EntityPlayer player, ItemStack stack) {
+	public static EntityMagicItem getEntity (World world, EntityPlayer player, ItemStack stack) {
 
 		double d0 = player.posY - 0.30000001192092896D + (double) player.getEyeHeight();
 		EntityMagicItem entity = new EntityMagicItem(world, player.posX, d0, player.posZ, stack);
 		entity.setPickupDelay(40);
 		entity.setThrower(player.getName());
+//		entity.not
 
         float f2 = 0.3F;
         Random rand = world.rand;
@@ -63,6 +75,7 @@ public class EntityItemTossEvent {
 		entity.motionX += Math.cos((double) f3) * (double) f2;
 		entity.motionY += (double) ((rand.nextFloat() - rand.nextFloat()) * 0.1F);
 		entity.motionZ += Math.sin((double) f3) * (double) f2;
+		entity.setNoDespawn();
 
         return entity;
 	}
@@ -82,7 +95,11 @@ public class EntityItemTossEvent {
 		// エーテルクリスタルかエーテルクリスタルシャード以外なら終了
 		ItemStack stack = entity.getItem();
 		Item item = stack.getItem();
-		if (item != ItemInit.aether_crystal && item != ItemInit.aether_crystal_shard) { return; }
+		if (!scarletList.contains(item) && !SlotPredicates.isSeed(stack) && !SlotPredicates.isSapling(stack)) { return; }
+
+		boolean isCrystal = scarletList.contains(item);
+		boolean isSeed = SlotPredicates.isSeed(stack);
+		boolean isSapling = SlotPredicates.isSapling(stack);
 
 		// プレイヤー取得
 		EntityPlayer player = event.getEntityPlayer();
@@ -92,18 +109,45 @@ public class EntityItemTossEvent {
 		for (int i = 0; i < pInv.size(); i++) {
 
 			// アイテムスタックを取得し空なら終了
-			ItemStack bookStack = pInv.get(i);
-			if (stack.isEmpty() || bookStack.getItem() != ItemInit.magic_book_cosmic) { continue; }
+			ItemStack invStack = pInv.get(i);
+			if (invStack.isEmpty()) { continue; }
 
-			// アイテムを拾う設定をしてないなら次へ
-			SMBookCosmic book = (SMBookCosmic) bookStack.getItem();
-			if (!book.isPickUp(bookStack) || book.isMaxMF(stack)) { continue; }
+			Item invItem = invStack.getItem();
 
-			book.insetMF(bookStack, book.getItemMF(stack));
-			entity.setDead();
-	        event.setCanceled(true);
-			player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.33F, 1.7F);
-	        return;
+			if (isCrystal && invStack.getItem() instanceof SMBookCosmic) {
+
+				// アイテムを拾う設定をしてないなら次へ
+				SMBookCosmic book = (SMBookCosmic) invItem;
+				if (!book.isPickUp(invStack) || book.isMaxMF(invStack) || !book.checkCrystal(item)) { continue; }
+
+				book.insetMF(invStack, book.getItemMF(stack));
+				entity.setDead();
+		        event.setCanceled(true);
+				player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.33F, 1.7F);
+		        return;
+			}
+
+			else if ( (isSeed && invItem == ItemInit.seed_harvest_bag) ||
+						(isSapling && invItem == ItemInit.sapling_harvest_bag)) {
+
+				// インベントリを取得
+				InventoryHarvestBag bag = new InventoryHarvestBag(player, invStack);
+
+				for (int k = 0; k < bag.getSlots(); k++) {
+
+					// クラネオインベントリ内のアイテムを取得
+					ItemStack st = bag.insertItem(k, stack.copy(), true);
+					if (!st.isEmpty()) { continue; }
+
+					bag.insertItem(k, stack.copy(), false);
+					bag.writeBack();
+					entity.setDead();
+			        event.setCanceled(true);
+					player.world.playSound(null, player.getPosition(), SoundEvents.ENTITY_ITEM_PICKUP, SoundCategory.NEUTRAL, 0.33F, 1.7F);
+
+					return;
+				}
+			}
 		}
 	}
 }

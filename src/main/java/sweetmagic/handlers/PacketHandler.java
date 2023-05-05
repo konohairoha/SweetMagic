@@ -8,9 +8,20 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.packet.EntityRemovePKT;
+import sweetmagic.packet.FigurineStandPKT;
+import sweetmagic.packet.GravityChestClientPKT;
+import sweetmagic.packet.GravityChestSeverPKT;
 import sweetmagic.packet.KeyPressPKT;
 import sweetmagic.packet.LeftClickPKT;
+import sweetmagic.packet.MFGenerationPKT;
+import sweetmagic.packet.MFHarvesterClientPKT;
+import sweetmagic.packet.MFHarvesterSeverPKT;
 import sweetmagic.packet.MouseSclorPKT;
+import sweetmagic.packet.PacketNotePCButtonClient;
+import sweetmagic.packet.PacketNotePCtoClient;
+import sweetmagic.packet.PacketNotePCtoSever;
+import sweetmagic.packet.PacketUpdateSlot;
+import sweetmagic.packet.PedalCreatePKT;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.packet.RemovePotion;
 import sweetmagic.packet.SMBucketPKT;
@@ -33,10 +44,21 @@ public class PacketHandler {
 		HANDLER.registerMessage(ScrollPagePKT.Handler.class, ScrollPagePKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(LeftClickPKT.Handler.class, LeftClickPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(WandLeftClickPKT.Handler.class, WandLeftClickPKT.class, disc++, Side.SERVER);
-		HANDLER.registerMessage(TileMFBlockPKT.Handler.class, TileMFBlockPKT.class, disc++, Side.SERVER);
+//		HANDLER.registerMessage(TileMFBlockPKT.Handler.class, TileMFBlockPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(EntityRemovePKT.Handler.class, EntityRemovePKT.class, disc++, Side.CLIENT);
 		HANDLER.registerMessage(StarLightPKT.Handler.class, StarLightPKT.class, disc++, Side.SERVER);
 		HANDLER.registerMessage(SMBucketPKT.Handler.class, SMBucketPKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(FigurineStandPKT.Handler.class, FigurineStandPKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(PedalCreatePKT.Handler.class, PedalCreatePKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(MFGenerationPKT.Handler.class, MFGenerationPKT.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(PacketNotePCtoClient.Handler.class, PacketNotePCtoClient.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(PacketNotePCtoSever.Handler.class, PacketNotePCtoSever.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(PacketNotePCButtonClient.Handler.class, PacketNotePCButtonClient.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(GravityChestClientPKT.Handler.class, GravityChestClientPKT.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(GravityChestSeverPKT.Handler.class, GravityChestSeverPKT.class, disc++, Side.SERVER);
+		HANDLER.registerMessage(PacketUpdateSlot.Handler.class, PacketUpdateSlot.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(MFHarvesterClientPKT.Handler.class, MFHarvesterClientPKT.class, disc++, Side.CLIENT);
+		HANDLER.registerMessage(MFHarvesterSeverPKT.Handler.class, MFHarvesterSeverPKT.class, disc++, Side.SERVER);
 	}
 
 	public static void sendToServer(IMessage msg) {

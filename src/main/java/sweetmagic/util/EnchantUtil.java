@@ -26,21 +26,21 @@ public class EnchantUtil {
 
     public static class EnchantCostEvent extends Event {
 
-        private final Enchantment enchantment;
+        private final Enchantment enchant;
         private final int level;
         private final int originalCost;
         private int cost;
 
-        public EnchantCostEvent (int cost, Enchantment enchantment, int level) {
+        public EnchantCostEvent (int cost, Enchantment enchant, int level) {
             super();
             this.cost = cost;
             this.originalCost = cost;
-            this.enchantment = enchantment;
+            this.enchant = enchant;
             this.level = level;
         }
 
         public Enchantment getEnchantment () {
-            return this.enchantment;
+            return this.enchant;
         }
 
         public int getLevel () {

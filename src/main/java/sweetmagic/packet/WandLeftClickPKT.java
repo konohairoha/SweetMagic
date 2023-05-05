@@ -13,26 +13,21 @@ import sweetmagic.util.SoundHelper;
 
 public class WandLeftClickPKT implements IMessage {
 
-	public boolean flag;
 	public int slot;
 
-	public WandLeftClickPKT() {
-	}
+	public WandLeftClickPKT() { }
 
-	public WandLeftClickPKT(boolean flag, int slot) {
-		this.flag = flag;
+	public WandLeftClickPKT(int slot) {
 		this.slot = slot;
 	}
 
 	@Override
 	public void fromBytes(ByteBuf buf) {
-		this.flag = buf.readBoolean();
 		this.slot = buf.readInt();
 	}
 
 	@Override
 	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(this.flag);
 		buf.writeInt(this.slot);
 	}
 
@@ -47,10 +42,7 @@ public class WandLeftClickPKT implements IMessage {
 
 					EntityPlayerMP player = ctx.getServerHandler().player;
 					NBTTagCompound tags = ItemHelper.getNBT(player.getHeldItemMainhand());
-
-					tags.setBoolean(IWand.FAVFLAG, msg.flag);
-					tags.setInteger(IWand.SLOT , msg.slot);
-
+					tags.setInteger(IWand.SLOT, msg.slot);
 					PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_NEXT, 1F, 0.33F), player);
 				}
 			});

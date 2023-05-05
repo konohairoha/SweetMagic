@@ -12,13 +12,11 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BlockRendererDispatcher;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -43,7 +41,6 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.template.PlacementSettings;
 import net.minecraft.world.gen.structure.template.Template;
-import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -77,7 +74,9 @@ public class MagicianBeginnerEvent {
 	private final static String SMSTARTER = "smStarter";
 
 	private static final List<Block> itemList = Arrays.<Block> asList(
-		Blocks.AIR, BlockInit.goldcrest, BlockInit.table_modernlamp_on, BlockInit.modenlanp
+			Blocks.AIR, Blocks.OAK_FENCE, BlockInit.goldcrest, BlockInit.table_modernlamp_on, BlockInit.modenlanp, BlockInit.white_ironfence,
+			BlockInit.shopboard, BlockInit.darkbrown4panel_glass, BlockInit.prismglass_pane, BlockInit.chestnut_leaves, BlockInit.antique_window_brown2,
+			BlockInit.darkbrown4panel_glass_pane
 	);
 
 	@SubscribeEvent
@@ -163,7 +162,8 @@ public class MagicianBeginnerEvent {
 
 	public static void renderGen (World world, EntityPlayer player, ItemStack stack, double x, double y, double z, float parTick) {
 
-		RayTraceResult mop = ((MagicianBeginnerBook) stack.getItem()).getHitBlock(player);
+		MagicianBeginnerBook book = ((MagicianBeginnerBook) stack.getItem());
+		RayTraceResult mop = book.getHitBlock(player);
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
 		BlockPos pos = null;
 
@@ -187,12 +187,12 @@ public class MagicianBeginnerEvent {
 		}
 
 		// レンダーを軽減するなら
-		if (!SMConfig.isRender) {
+		if (SMConfig.isRender) {
 
 			// 座標がnull以外なら生成範囲をレンダー
 			if (pos != null) {
 				addHeldToRenderList(world, stack, pos, stack.getItem());
-				RenderUtils.drawCube(renderList);
+				RenderUtils.drawCube(renderList, false);
 			}
 
 			renderList.clear();
@@ -203,8 +203,9 @@ public class MagicianBeginnerEvent {
 
 			if (pos == null) { return; }
 
-			Template template = getTemplateToJar(new ResourceLocation(SweetMagicCore.MODID, "house"));
-			List<Template.BlockInfo> list = (List<Template.BlockInfo>) SMUtil.callPrivateField(Template.class, template, "field_186270_a", "field_186270_a");
+			Template template = getTemplateToJar(new ResourceLocation(SweetMagicCore.MODID, book.getStructure()));
+			List<Template.BlockInfo> list = (List<Template.BlockInfo>) SMUtil.callPrivateField(Template.class, template, "blocks", "field_186270_a");
+//			List<Template.BlockInfo> list = (List<Template.BlockInfo>) SMUtil.callPrivateField(Template.class, template, "blocks", "blocks");
 			if (list == null || list.isEmpty()) { return; }
 
 			PlacementSettings place = new PlacementSettings();
@@ -215,6 +216,7 @@ public class MagicianBeginnerEvent {
 			EnumFacing face = EnumFacing.SOUTH;
 			int pX = 0;
 			int pZ = 0;
+			pos = book.getPos(pos);
 
 			switch (tags.getInteger(FACING)) {
 			case 0:
@@ -238,6 +240,15 @@ public class MagicianBeginnerEvent {
 				break;
 			}
 
+			GlStateManager.pushMatrix();
+			GlStateManager.translate( -mane.viewerPosX, -mane.viewerPosY + 0.1F, -mane.viewerPosZ );
+			GlStateManager.depthMask(false);
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			tex.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
+			Tessellator tes = Tessellator.getInstance();
+			BufferBuilder buf = tes.getBuffer();
+			buf.begin(7, DefaultVertexFormats.BLOCK);
+
 			for (Template.BlockInfo info : list) {
 
 				IBlockState state = info.blockState;
@@ -254,41 +265,20 @@ public class MagicianBeginnerEvent {
 						state = state.withProperty(BlockStairs.FACING, place.getRotation().rotate(state.getValue(BlockStairs.FACING)));
 					}
 
-					else if (block instanceof BlockTrapDoor) {
-						state = state.withProperty(BlockTrapDoor.FACING, place.getRotation().rotate(state.getValue(BlockTrapDoor.FACING)));
-					}
-
 					else if (block instanceof BaseFaceBlock) {
 						state = state.withProperty(BaseFaceBlock.FACING, place.getRotation().rotate(state.getValue(BaseFaceBlock.FACING)));
 					}
 
-					GlStateManager.pushMatrix();
-
-					GlStateManager.translate( -mane.viewerPosX, -mane.viewerPosY + 0.1F, -mane.viewerPosZ );
-					GlStateManager.color(1F, 1F, 1F, 1F);
-					GlStateManager.depthMask(false);
-					RenderHelper.disableStandardItemLighting();
-					GlStateManager.enableLighting();
-					GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-					tex.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-					GlStateManager.shadeModel(Minecraft.isAmbientOcclusionEnabled() ? GL11.GL_SMOOTH : GL11.GL_FLAT);
-
-					Tessellator tes = Tessellator.getInstance();
-					BufferBuilder buf = tes.getBuffer();
-					buf.begin(7, DefaultVertexFormats.BLOCK);
 					BlockPos p = Template.transformedBlockPos(place, info.pos);
+					if (!world.isAirBlock(p) && !world.isAirBlock(p.up())) { continue; }
+
 					render.renderBlock(state, pos.add(p.getX(), p.getY() - 1D, p.getZ()), world, buf);
-
-					GlStateManager.disableLighting();
-					RenderHelper.enableStandardItemLighting();
-					GlStateManager.depthMask(true);
-
-					tes.draw();
-					GlStateManager.popMatrix();
 				}
-
-				ForgeHooksClient.setRenderLayer(null);
 			}
+
+			GlStateManager.depthMask(true);
+			tes.draw();
+			GlStateManager.popMatrix();
 		}
 	}
 

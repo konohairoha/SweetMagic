@@ -1,6 +1,7 @@
 package sweetmagic.util;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -19,6 +20,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
@@ -54,10 +56,10 @@ public class SMUtil {
 
 	// オーブンとかの複数個可変にするとき用、一番少ないItemStackの整数を返す
 	public static int minObj(List<Object[]> inputs) {
-		ItemStack item = (ItemStack)(inputs.get(0)[1]);
+		ItemStack item = (ItemStack) (inputs.get(0)[1]);
 		int min = item.getCount();
-		for(Object[] input : inputs) {
-			ItemStack check = (ItemStack)(input[1]);
+		for (Object[] input : inputs) {
+			ItemStack check = (ItemStack) (input[1]);
 			if(min > check.getCount())	min = check.getCount();
 		}
 		return min;
@@ -71,8 +73,8 @@ public class SMUtil {
 
 	// オーブンでプレイヤーのInventoryの可変個数を一気にへらすラクラクメソッド(リスト版)
 	public static void decrPInvMinList(EntityPlayer player, int st, List<Object[]> inputs) {
-		for(Object[] input : inputs) {
-			player.inventory.decrStackSize((Integer) input[0], (int)input[2] * st);
+		for (Object[] input : inputs) {
+			player.inventory.decrStackSize((Integer) input[0], (int) input[2] * st);
 		}
 	}
 
@@ -111,6 +113,7 @@ public class SMUtil {
 
             // ItemStackが最低個数かどう
             if (!stack.isEmpty() && (stack.getCount() >= minAmount || minAmount == 0)) {
+
                 // ItemStackが鉱石辞書登録してるなら鉱石辞書名で判断
                 if (ItemHelper.checkOreName(stack, itemstack) || stack.isItemEqual(itemstack)) {
                     obj[0] = i;
@@ -132,6 +135,7 @@ public class SMUtil {
 
             // ItemStackが最低個数かどう
             if (!stack.isEmpty() && (stack.getCount() >= minAmount || minAmount == 0)) {
+
                 // ItemStackが鉱石辞書登録してるなら鉱石辞書名で判断
                 if (ItemHelper.checkOreName(stack, itemstack) || stack.isItemEqual(itemstack)) {
                     obj[0] = i;
@@ -178,9 +182,12 @@ public class SMUtil {
 	 * @return	Object[]	Inventoryのポインタ[0]、アイテム情報(ItemStack)[1]、スタック数(int)[2]
 	 */
 	public static Object[] getStackFromPInv(NonNullList<ItemStack> inv, Item item, byte minAmount) {
+
 		Object[] obj = new Object[3];
 		for (int i = 0; i < inv.size(); i++) {
+
 			ItemStack stack = inv.get(i);
+
 			if (!stack.isEmpty() && (stack.getCount() >= minAmount || minAmount == 0) && stack.getItem() == item) {
 				obj[0] = i;
 				obj[1] = stack;
@@ -200,11 +207,13 @@ public class SMUtil {
 	 * @return		Object[]	Inventoryのポインタ[0]、アイテム情報(ItemStack)[1]、スタック数(int)[2]
 	 */
 	public static Object[] getStackFromInventory(NonNullList<ItemStack> inv, Item item, int meta, byte minAmount) {
+
 		Object[] obj = new Object[3];
 		for (int i = 0; i < inv.size(); i++) {
+
 			ItemStack stack = inv.get(i);
-			if (!stack.isEmpty() && stack.getCount() >= minAmount && stack.getItem() == item
-					&& stack.getItemDamage() == meta) {
+
+			if (!stack.isEmpty() && stack.getCount() >= minAmount && stack.getItem() == item && stack.getItemDamage() == meta) {
 				obj[0] = i;
 				obj[1] = stack;
 				obj[2] = stack.getCount();
@@ -214,47 +223,63 @@ public class SMUtil {
 		return null;
 	}
 
-	public static boolean isIntegratedItem(ItemStack i1, ItemStack i2, boolean nullable) {
-		if (isEmpty(i1) || isEmpty(i2)) { return nullable; }
+	public static boolean isIntegratedItem(ItemStack stack1, ItemStack stack2, boolean nullable) {
 
-		if (i1.getItem() == i2.getItem()) {
-			if (i1.getItemDamage() == i2.getItemDamage() || i2.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
-				NBTTagCompound t1 = i1.getTagCompound();
-				NBTTagCompound t2 = i2.getTagCompound();
-				if (t1 == null && t2 == null) {
-					return true;
-				} else if (t1 == null || t2 == null) {
-					return false;
-				} else {
-					return t1.equals(t2);
-				}
+		if (isEmpty(stack1) || isEmpty(stack2)) { return nullable; }
+		if (stack1.getItem() != stack2.getItem()) { return false; }
+
+		if (stack1.getItemDamage() == stack2.getItemDamage() || stack2.getItemDamage() == OreDictionary.WILDCARD_VALUE) {
+
+			NBTTagCompound tag1 = stack1.getTagCompound();
+			NBTTagCompound tag2 = stack2.getTagCompound();
+
+			if (tag1 == null && tag2 == null) {
+				return true;
+			}
+
+			else if (tag1 == null || tag2 == null) {
+				return false;
+			}
+
+			else {
+				return tag1.equals(tag2);
 			}
 		}
+
 		return false;
 	}
 
-	public static boolean canInsert(ItemStack i1, ItemStack i2) {
-		if (!isEmpty(i1) && isEmpty(i2)) {
+	public static boolean canInsert(ItemStack stack1, ItemStack stack2) {
+
+		if (!isEmpty(stack1) && isEmpty(stack2)) {
 			return true;
-		} else if (isSameItem(i1, i2, false)) {
-			return i1.getCount() <= (i2.getMaxStackSize() - i2.getCount());
+		}
+
+		else if (isSameItem(stack1, stack2, false)) {
+			return stack1.getCount() <= (stack2.getMaxStackSize() - stack2.getCount());
 		}
 		return false;
 	}
 
-	public static boolean isSameItem(ItemStack i1, ItemStack i2, boolean nullable) {
+	public static boolean isSameItem(ItemStack stack1, ItemStack stack2, boolean nullable) {
 
-		if (isEmpty(i1) || isEmpty(i2)) { return nullable; }
+		if (isEmpty(stack1) || isEmpty(stack2)) { return nullable; }
 
-		if (i1.getItem() == i2.getItem() && i1.getItemDamage() == i2.getItemDamage()) {
-			NBTTagCompound t1 = i1.getTagCompound();
-			NBTTagCompound t2 = i2.getTagCompound();
-			if (t1 == null && t2 == null) {
+		if (stack1.getItem() == stack2.getItem() && stack1.getItemDamage() == stack2.getItemDamage()) {
+
+			NBTTagCompound tag1 = stack1.getTagCompound();
+			NBTTagCompound tag2 = stack2.getTagCompound();
+
+			if (tag1 == null && tag2 == null) {
 				return true;
-			} else if (t1 == null || t2 == null) {
+			}
+
+			else if (tag1 == null || tag2 == null) {
 				return false;
-			} else {
-				return t1.equals(t2);
+			}
+
+			else {
+				return tag1.equals(tag2);
 			}
 		}
 		return false;
@@ -263,17 +288,17 @@ public class SMUtil {
 	// Obj型から鉱石辞書を元にアイテムに変換
 	public static ArrayList<ItemStack> getOreList(Object obj) {
 
-		ArrayList<ItemStack> ret = Lists.newArrayList();
-		if (obj == null) { return ret; }
+		ArrayList<ItemStack> stackList = Lists.newArrayList();
+		if (obj == null) { return stackList; }
 
 		// String型なら
 		if (obj instanceof String) {
-			ret.addAll(OreDictionary.getOres((String) obj));
+			stackList.addAll(OreDictionary.getOres((String) obj));
 		}
 
 		// List型なら
 		else if (obj instanceof List && !((List) obj).isEmpty()) {
-			ret.addAll((List<ItemStack>) obj);
+			stackList.addAll((List<ItemStack>) obj);
 		}
 
 		// ItemStack型なら
@@ -281,18 +306,18 @@ public class SMUtil {
 
 			ItemStack stack = (ItemStack) obj;
 			if (!SMUtil.isEmpty(stack)) {
-				ret.add(stack.copy());
+				stackList.add(stack.copy());
 			}
 		}
 
 		// Item型なら
 		else if (obj instanceof Item) {
-			ret.add(new ItemStack((Item) obj, 1, 0));
+			stackList.add(new ItemStack((Item) obj, 1, 0));
 		}
 
 		// Block型なら
 		else if (obj instanceof Block) {
-			ret.add(new ItemStack((Block) obj, 1, 0));
+			stackList.add(new ItemStack((Block) obj, 1, 0));
 		}
 
 		// OreObj型なら
@@ -307,7 +332,7 @@ public class SMUtil {
 				// アイテム個数の設定
 				ItemStack stack = ore.getStack();
 				stack.setCount(amount);
-				ret.add(stack.copy());
+				stackList.add(stack.copy());
 			}
 
 			// Stringなら
@@ -321,7 +346,7 @@ public class SMUtil {
 				for (ItemStack oreStack : oreList) {
 					ItemStack stack = oreStack.copy();
 					stack.setCount(amount);
-					ret.add(stack.copy());
+					stackList.add(stack.copy());
 				}
 			}
 		}
@@ -329,7 +354,7 @@ public class SMUtil {
 		else {
 			throw new IllegalArgumentException("Unknown Object passed to recipe!");
 		}
-		return ret;
+		return stackList;
 	}
 
 	// 配列型で鉱石辞書を返す
@@ -375,18 +400,19 @@ public class SMUtil {
 		float f = 1.0F;
 		BlockPos p0 = pos.down();
 
-		for (int i = -1; i <= 1; ++i) {
-			for (int j = -1; j <= 1; ++j) {
-				float f1 = 0.0F;
-				IBlockState state = world.getBlockState(p0.add(i, 0, j));
+		for (int x = -1; x <= 1; ++x) {
+			for (int y = -1; y <= 1; ++y) {
 
-				if (state.getBlock().canSustainPlant(state, world, p0.add(i, 0, j), EnumFacing.UP, (IPlantable) block)) {
-					f1 = 1.0F;
+				float f1 = 0F;
+				IBlockState state = world.getBlockState(p0.add(x, 0, y));
 
-					if (state.getBlock().isFertile(world, p0.add(i, 0, j))) { f1 = 3.0F; }
+				if (state.getBlock().canSustainPlant(state, world, p0.add(x, 0, y), EnumFacing.UP, (IPlantable) block)) {
+					f1 = 1F;
+
+					if (state.getBlock().isFertile(world, p0.add(x, 0, y))) { f1 = 3F; }
 				}
 
-				if (i != 0 || j != 0) { f1 /= 4.0F; }
+				if (x != 0 || y != 0) { f1 /= 4F; }
 				f += f1;
 			}
 		}
@@ -395,18 +421,18 @@ public class SMUtil {
 		BlockPos p2 = pos.south();
 		BlockPos p3 = pos.west();
 		BlockPos p4 = pos.east();
-		boolean flag = block == world.getBlockState(p3).getBlock() || block == world.getBlockState(p4).getBlock();
-		boolean flag1 = block == world.getBlockState(p1).getBlock() || block == world.getBlockState(p2).getBlock();
+		boolean flag = block == getBlock(world, p3) || block == getBlock(world, p4);
+		boolean flag1 = block == getBlock(world, p1) || block == getBlock(world, p2);
 
 		if (flag && flag1) {
 			f /= chance;
-		} else {
-			boolean flag2 = block == world.getBlockState(p3.north()).getBlock()
-					|| block == world.getBlockState(p4.north()).getBlock()
-					|| block == world.getBlockState(p4.south()).getBlock()
-					|| block == world.getBlockState(p3.south()).getBlock();
+		}
 
-			if (flag2) { f /= 2.0F; }
+		else {
+			boolean flag2 = block == getBlock(world, p3.north()) || block == getBlock(world, p4.north())
+					|| block == getBlock(world, p3.south()) || block == getBlock(world, p4.south());
+
+			if (flag2) { f /= 2F; }
 		}
 
 		return f;
@@ -426,18 +452,49 @@ public class SMUtil {
         return null;
     }
 
+	// 取得不可な変数の呼び出し
 	public static Object callPrivateField(Class<?> theClass, Object obj, String name, String field) {
-
 		try {
 			Field f = ReflectionHelper.findField(theClass, name, field);
 			if (f != null) {
 				return f.get(obj);
 			}
 
-		} catch (Exception e) {
+		}
+
+		catch (Exception e) {
 			return null;
 		}
 
 		return null;
+	}
+
+	// 取得不可なメソッドの呼び出し
+	public static Object callPrivateMethod(Class<?> theClass, String name, String field, Class<?> arClass) {
+		try {
+			Method f = ReflectionHelper.findMethod(theClass, name, field, arClass);
+			if (f != null) {
+				return f;
+			}
+
+		}
+
+		catch (Exception e) {
+			return null;
+		}
+
+		return null;
+	}
+
+	public static Block getBlock (World world, BlockPos pos) {
+		return world.getBlockState(pos).getBlock();
+	}
+
+	public static int potionLevel (EntityLivingBase entity, Potion potion) {
+		return entity.getActivePotionEffect(potion).getAmplifier();
+	}
+
+	public static int potionTime (EntityLivingBase entity, Potion potion) {
+		return entity.getActivePotionEffect(potion).getDuration();
 	}
 }

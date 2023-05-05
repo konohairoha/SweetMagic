@@ -10,18 +10,18 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
 public class DrawHeleper {
 
-	public static void drawTexturedRect(int x, int y, int width, int height) {
-		drawTexturedRect(x, y, 0, 0, width, height, width, height);
+	public static void drawTextured(int x, int y, int width, int height) {
+		drawTextured(x, y, 0, 0, width, height, width, height);
 	}
 
-	public static void drawTexturedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight) {
-		DrawHeleper.drawTexturedFlippedRect(x, y, u, v, width, height, texWidth, texHeight, false, false);
+	public static void drawTextured(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight) {
+		DrawHeleper.drawTextured(x, y, u, v, width, height, texWidth, texHeight, false, false);
 	}
 
-	public static void drawTexturedFlippedRect(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight, boolean flipX, boolean flipY) {
+	public static void drawTextured(int x, int y, int u, int v, int width, int height, int texWidth, int texHeight, boolean flipX, boolean flipY) {
 
-		float f = 1F / (float)texWidth;
-		float f1 = 1F / (float)texHeight;
+		float f = 1F / (float) texWidth;
+		float f1 = 1F / (float) texHeight;
 
 		int u1 = flipX ? u + width : u;
 		int u2 = flipX ? u : u + width;
@@ -41,15 +41,16 @@ public class DrawHeleper {
 		tessellator.draw();
 	}
 
-	public static void drawScaledStringToWidth(FontRenderer font, String text, float x, float y, float scale,
-			int colour, float width, boolean centre, boolean alignR) {
+	public static void drawString(FontRenderer font, String text, float x, float y, float scale, int colour, float width, boolean centre, boolean alignR) {
 
 		float textWidth = font.getStringWidth(text) * scale;
 		float textHeight = font.FONT_HEIGHT * scale;
 
 		if (textWidth > width) {
 			scale *= width / textWidth;
-		} else if (alignR) {
+		}
+
+		else if (alignR) {
 			x += width - textWidth;
 		}
 
@@ -57,10 +58,10 @@ public class DrawHeleper {
 			y += (font.FONT_HEIGHT - textHeight) / 2;
 		}
 
-		DrawHeleper.drawScaledTranslucentString(font, text, x, y, scale, colour);
+		DrawHeleper.drawString(font, text, x, y, scale, colour);
 	}
 
-	public static void drawScaledTranslucentString(FontRenderer font, String text, float x, float y, float scale, int colour) {
+	public static void drawString(FontRenderer font, String text, float x, float y, float scale, int colour) {
 
 		GlStateManager.pushMatrix();
 		GlStateManager.enableBlend();

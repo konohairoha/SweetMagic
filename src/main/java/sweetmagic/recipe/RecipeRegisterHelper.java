@@ -1,28 +1,36 @@
 package sweetmagic.recipe;
 
 import net.minecraft.block.Block;
+import net.minecraft.item.crafting.Ingredient;
 
 public class RecipeRegisterHelper {
 
-	public Block log = null;
-	public Block plate = null;
+	private Block log = null;
+	private Block plate = null;
 
-	public Block planks = null;
-	public Block stairs = null;
-	public Block slab = null;
+	private Block planks = null;
+	private Block stairs = null;
+	private Block slab = null;
 
-	public Block stone = null;
-	public String ore = null;
+	private Block stone = null;
+	private String ore = null;
 
-	public Block glass = null;
-	public Block pane = null;
+	private Block glass = null;
+	private Block pane = null;
 
-	public String dye = null;
+	private String dye = null;
 
-	public String brick = null;
-	public Block brick_0 = null;
-	public Block brick_1 = null;
-	public Block brick_2 = null;
+	private String brick = null;
+	private Block brick_0 = null;
+	private Block brick_1 = null;
+	private Block brick_2 = null;
+
+	private Block brick_3 = null;
+	private Block brick_4 = null;
+	private Block brick_5 = null;
+	private Block brick_6 = null;
+
+	private Ingredient ing = null;
 
 	public RecipeRegisterHelper (Block planks, Block stairs, Block slab) {
 		this.planks = planks;
@@ -58,6 +66,26 @@ public class RecipeRegisterHelper {
 		this.brick_2 = brick_2;
 		this.stairs = stairs;
 		this.slab = slab;
+	}
+
+	public RecipeRegisterHelper (Block log, Block planks, Block brick_0, Block brick_1, Block brick_2, Block brick_3) {
+		this.log = log;
+		this.planks = planks;
+		this.brick_0 = brick_0;
+		this.brick_1 = brick_1;
+		this.brick_2 = brick_2;
+		this.brick_3 = brick_3;
+	}
+
+	public RecipeRegisterHelper (Ingredient ing, Block brick_0, Block brick_1, Block brick_2, Block brick_3, Block brick_4, Block brick_5, Block brick_6) {
+		this.ing = ing;
+		this.brick_0 = brick_0;
+		this.brick_1 = brick_1;
+		this.brick_2 = brick_2;
+		this.brick_3 = brick_3;
+		this.brick_4 = brick_4;
+		this.brick_5 = brick_5;
+		this.brick_6 = brick_6;
 	}
 
 	public Block getPlanks () {
@@ -114,5 +142,25 @@ public class RecipeRegisterHelper {
 
 	public Block getBrick2 () {
 		return this.brick_2;
+	}
+
+	public Block getBrick3 () {
+		return this.brick_3;
+	}
+
+	public Block getBrick4 () {
+		return this.brick_4;
+	}
+
+	public Block getBrick5 () {
+		return this.brick_5;
+	}
+
+	public Block getBrick6 () {
+		return this.brick_6;
+	}
+
+	public Ingredient getIng () {
+		return this.ing;
 	}
 }

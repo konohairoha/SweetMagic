@@ -28,10 +28,8 @@ public class SpwanBlockRegistry implements INBTSerializable<NBTTagList> {
 
 	public boolean isPosInRange(World world, double posX, double posY, double posZ) {
 
-		int range = this.getRange();
-
 		for (BlockPos pos : this.posList) {
-			if (this.checkDistance(posX, posZ, pos, range) && this.checkHasMF(world, pos)) { return true; }
+			if (this.checkDistance(world, posX, posZ, pos) && this.checkHasMF(world, pos)) { return true; }
 		}
 
 		return false;
@@ -43,10 +41,15 @@ public class SpwanBlockRegistry implements INBTSerializable<NBTTagList> {
 		if (tile == null || !(tile instanceof TileMagiaLight)) { return false; }
 
 		TileMagiaLight mf = (TileMagiaLight) tile;
-		return mf.getMF() >= mf.getShrinkMF() && mf.isActive(world, pos);
+		return mf.getMF() >= mf.getShrinkMF() && mf.isActive(pos);
 	}
 
-	public boolean checkDistance (double posX, double posZ, BlockPos pos, int range) {
+	public boolean checkDistance (World world, double posX, double posZ, BlockPos pos) {
+
+		TileEntity tile = world.getTileEntity(pos);
+		if (tile == null || !(tile instanceof TileMagiaLight)) { return false; }
+
+		int range = ((TileMagiaLight) tile).getRange();
 		return Math.abs(posX - pos.getX()) <= range && Math.abs(posZ - pos.getZ()) <= range;
 	}
 

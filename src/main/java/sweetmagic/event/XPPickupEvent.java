@@ -1,5 +1,7 @@
 package sweetmagic.event;
 
+import java.util.List;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.item.EntityXPOrb;
@@ -9,7 +11,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
@@ -71,18 +72,16 @@ public class XPPickupEvent {
 		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		if (!(leg.getItem() instanceof IPouch)) { return; }
 
-		// インベントリを取得
-		InventoryPouch neo = new InventoryPouch(player);
-		IItemHandlerModifiable inv = neo.inventory;
 		float addXP = 0;
 
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(player);
+		List<ItemStack> stackList = neo.getStackList();
+
 		// インベントリの分だけ回す
-		for (int i = 0; i < inv.getSlots(); i++) {
+		for (ItemStack st : stackList) {
 
-			// アイテムを取得し空かアクセサリー以外なら次へ
-			ItemStack st = inv.getStackInSlot(i);
-			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
-
+			// アクセサリーの取得
 			Item item = st.getItem();
 			IAcce acce = (IAcce) item;
 
@@ -117,10 +116,8 @@ public class XPPickupEvent {
 
 	public void repairTool (EntityPlayer player, ItemStack stack, int value) {
 
-		// エンチャレベルの取得
+		// エンチャレベルの取得してエンチャレベル分増やす
 		int level = this.getEnchantLevel(EnchantInit.mfRecover, stack);
-
-		// エンチャレベル分増やす
 		value = ( value >= 4 ? value / 3 : value ) * level;
 		stack.setItemDamage(stack.getItemDamage() - value);
 

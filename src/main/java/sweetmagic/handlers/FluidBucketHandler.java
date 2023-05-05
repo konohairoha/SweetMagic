@@ -51,7 +51,7 @@ public class FluidBucketHandler implements IFluidHandlerItem, ICapabilityProvide
 
 		if (resource == null || resource.amount < Fluid.BUCKET_VOLUME || this.bucket != ItemInit.alt_bucket_water) { return 0; }
 
-		NBTTagCompound tags = ItemHelper.getTag(this.stack);
+		NBTTagCompound tags = ItemHelper.getNBT(this.stack);
 		int fillAmount = this.bucket.isAmountEmpty(tags) ? Fluid.BUCKET_VOLUME : -Fluid.BUCKET_VOLUME;
 
 		if (doFill) {
@@ -71,7 +71,7 @@ public class FluidBucketHandler implements IFluidHandlerItem, ICapabilityProvide
 		if (fluidStack != null && fluidStack.isFluidEqual(resource)) {
 
 			if (doDrain) {
-				this.setFluid((FluidStack) null, this.bucket.getAmount(ItemHelper.getTag(this.stack)) - 1);
+				this.setFluid((FluidStack) null, this.bucket.getAmount(ItemHelper.getNBT(this.stack)) - 1);
 			}
 			return fluidStack;
 		}
@@ -85,7 +85,7 @@ public class FluidBucketHandler implements IFluidHandlerItem, ICapabilityProvide
 		if (this.fluid == null || maxDrain < Fluid.BUCKET_VOLUME || this.bucket != ItemInit.alt_bucket_water) { return null; }
 
 		if (doDrain) {
-			this.setFluid((FluidStack) null, this.bucket.getAmount(ItemHelper.getTag(this.stack)) - 1);
+			this.setFluid((FluidStack) null, this.bucket.getAmount(ItemHelper.getNBT(this.stack)) - 1);
 		}
 
 		return new FluidStack(FluidRegistry.WATER, Fluid.BUCKET_VOLUME);

@@ -26,6 +26,7 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.recipe.JeiRecipeMFTank;
 import sweetmagic.recipe.RecipeNBTExtend;
 import sweetmagic.recipe.RecipeRegisterHelper;
+import sweetmagic.recipe.RecipeShaplessNBTCraft;
 import sweetmagic.util.SMUtil;
 
 public class RecipeHandler {
@@ -36,7 +37,6 @@ public class RecipeHandler {
     //レシピ定数List格納
 	public static void registerCrafting() {
 
-		String MODID = SweetMagicCore.MODID;
 		Ingredient recipeBook = getIngred("recipeBook");
 		Ingredient alt_ingot = getIngred(ItemInit.alternative_ingot);
 		Ingredient cobble = getIngred("cobblestone");
@@ -57,11 +57,16 @@ public class RecipeHandler {
 		Ingredient dyeRed = getIngred("dyeRed");
 		Ingredient dyeBlue = getIngred("dyeBlue");
 		Ingredient dyeYellow = getIngred("dyeYellow");
+		Ingredient dyeOrange = getIngred("dyeOrange");
 		Ingredient dyeWhite = getIngred("dyeWhite");
 		Ingredient dyeLime = getIngred("dyeLime");
 		Ingredient dyeBlack = getIngred("dyeBlack");
 		Ingredient dyeGreen = getIngred("dyeGreen");
 		Ingredient dyeLightGray = getIngred("dyeLightGray");
+		Ingredient dyeLightBlue = getIngred("dyeLightBlue");
+		Ingredient dyePurple = getIngred("dyePurple");
+		Ingredient dyeBrown = getIngred("dyeBrown");
+		Ingredient dyePink = getIngred("dyePink");
 		Ingredient prismglass = getIngred(BlockInit.prismglass);
 		Ingredient sugarglass = getIngred(BlockInit.sugarglass);
 		Ingredient prism_planks = getIngred(BlockInit.prism_planks);
@@ -80,7 +85,6 @@ public class RecipeHandler {
 		Ingredient ice = getIngred("ice");
 		Ingredient seed = getIngred("listAllseed");
 		Ingredient door = getIngred("doorWood");
-		Ingredient orange_planks_w = getIngred("orange_planks_w");
 		Ingredient smtable = getIngred(BlockInit.smtable);
 //		Ingredient ingotIron = getIngred("ingotIron");
 		Ingredient dustGlowstone = getIngred("dustGlowstone");
@@ -91,8 +95,39 @@ public class RecipeHandler {
 		Ingredient stone = getIngred("stone");
 		Ingredient book = getIngred(Items.BOOK);
 		Ingredient ingotIron = getIngred("ingotIron", "ingotCopper");
+		Ingredient orange_planks = getIngred(BlockInit.orange_planks);
+		Ingredient orange_planks_w = getIngred(BlockInit.orange_planks_w);
+		Ingredient orange_slab = getIngred(BlockInit.orange_slab, BlockInit.orange_huti_slab);
+		Ingredient orange_wslab = getIngred(BlockInit.orange_wslab, BlockInit.orange_whuti_slab);
+		Ingredient orange_stairs = getIngred(BlockInit.orange_stairs, BlockInit.orange_huti_stairs);
+		Ingredient orange_wstairs = getIngred(BlockInit.orange_wstairs, BlockInit.orange_whuti_stairs);
+		Ingredient furnace = getIngred(Blocks.FURNACE);
+		Ingredient pot = getIngred(BlockInit.pot_off);
+		Ingredient pot_color = getIngred("pot");
+		Ingredient frypan = getIngred(BlockInit.frypan_off);
+		Ingredient frypan_color = getIngred("frypan");
+		Ingredient listAllmushroom = getIngred("listAllmushroom");
+		Ingredient oven = getIngred(BlockInit.oven);
+		Ingredient modenShelf = getIngred(BlockInit.moden_shelf_y);
+		Ingredient smcushion = getIngred(ItemInit.smcushion_o);
+		Ingredient toaster = getIngred(BlockInit.toaster_s);
+		Ingredient coffee = getIngred(BlockInit.coffee_maker_s);
+		Ingredient mixer = getIngred(BlockInit.mixer_s);
+		Ingredient register = getIngred(BlockInit.register_w);
+		Ingredient woodBench = getIngred(BlockInit.woodbench);
+		Ingredient sofa = getIngred(BlockInit.sofa_r);
+		Ingredient sm_phone = getIngred(ItemInit.sm_phone);
+		Ingredient smPhone = getIngred("smPhone");
+		Ingredient note_pc = getIngred(BlockInit.note_pc);
+		Ingredient shoe_box = getIngred(BlockInit.shoe_box);
+		Ingredient shoe_box_piling = getIngred(BlockInit.shoe_box_piling);
+		Ingredient paneGlass = getIngred("paneGlass");
+		Ingredient ironFence = getIngred("ironFence");
+		Ingredient walllamp = getIngred(BlockInit.walllamp);
+		Ingredient antique_brick = getIngred("antique_brick");
+		Ingredient antique_brick_brown = getIngred("antique_brick_brown");
 
-		/*草ブロックから粘土*/
+		// 草ブロックから粘土
 		if (SMConfig.help_recipe) {
 			addShapedRecipe("help_magicmeal", new ItemStack(ItemInit.magicmeal, 4),
 				" X ",
@@ -103,6 +138,73 @@ public class RecipeHandler {
 			);
 		}
 
+		// バニラ追加レシピ
+		if (SMConfig.addVanilaRecipe) {
+
+			// ボトル
+			addShapedRecipe("bottle", new ItemStack(Items.GLASS_BOTTLE, 16),
+				"G G",
+				" G ",
+				'G', blockGlass
+			);
+
+			// キノコシチュー
+			addShapelessRecipe( "mushroom_stew", new ItemStack(Items.MUSHROOM_STEW),
+				listAllmushroom, listAllmushroom, getIngred(Items.BOWL)
+			);
+
+			// エンダーパール
+			addShapelessRecipe( "ender_pearl,", new ItemStack(Items.ENDER_PEARL),
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard,
+				ender_shard
+			);
+
+			// 木の棒
+			addShapelessRecipe( "smlog_stick", new ItemStack(Items.STICK, 16),
+				smLog, smLog
+			);
+
+			// 松明
+			addShapelessRecipe( "torch", new ItemStack(Blocks.TORCH, 2),
+					stickWood, getIngred(ItemInit.fire_powder)
+			);
+
+			// 緑の染料
+			addShapelessRecipe( "dyeGreen", new ItemStack(Items.DYE, 2, 4),
+				dyeBlue, dyeYellow
+			);
+
+			singleCraft(new ItemStack(Items.SKULL, 1, 0), new ItemStack(Blocks.BONE_BLOCK, 9));
+
+			// 鉄格子
+			addShapelessRecipe( "iron_bars_1", new ItemStack(Blocks.IRON_BARS, 16),
+				iron_chain, iron_chain, iron_chain, iron_chain
+			);
+
+			// チェスト
+			addShapedRecipe("chest", new ItemStack(Blocks.CHEST, 4),
+				"LLL",
+				"L L",
+				"LLL",
+				'L', smLog
+			);
+
+			// 鉄柵
+			addShapedRecipe("iron_bars", new ItemStack(Blocks.IRON_BARS, 64),
+				"III",
+				"III",
+				'I', ItemInit.alternative_ingot
+			);
+		}
+
+
 		// アルストロメリア
 		addShapedRecipe("alstroemeria", new ItemStack(BlockInit.twilight_alstroemeria),
 			"SSS",
@@ -111,6 +213,13 @@ public class RecipeHandler {
 			'S', ItemInit.sannyflower_petal,
 			'M', ItemInit.moonblossom_petal,
 			'C', Items.CLOCK
+		);
+
+		// オルタナティブブロック
+		addShapedRecipe("alt_block", new ItemStack(BlockInit.alt_block),
+			"AA",
+			"AA",
+			'A', ItemInit.alternative_ingot
 		);
 
 		// オルタナティブアックス
@@ -195,7 +304,16 @@ public class RecipeHandler {
 			"SF ",
 			'I', ingotIron,
 			'S', stickWood,
-			'F', Items.FEATHER
+			'F', feather
+		);
+
+		// マジシャンズワンド
+		addShapedRecipe("magician_wand", new ItemStack(ItemInit.magician_wand),
+			"  A",
+			" S ",
+			"S  ",
+			'A', ItemInit.aether_crystal,
+			'S', stickWood
 		);
 
 		// ガイドブック
@@ -205,7 +323,12 @@ public class RecipeHandler {
 
 		// マジックブック
 		addShapelessRecipe( "magicbook", new ItemStack(BlockInit.magicbook),
-				book, book, book, recipeBook
+			book, book, book, recipeBook
+		);
+
+		// マジックブック(青)
+		addShapelessRecipe( "magicbook_b", new ItemStack(BlockInit.magicbook_b),
+			book, book, book, dyeBlue, recipeBook
 		);
 
 		// 魔術書
@@ -240,20 +363,13 @@ public class RecipeHandler {
 			'B', magicBook
 		);
 
-		// ボトル
-		addShapedRecipe("bottle", new ItemStack(Items.GLASS_BOTTLE, 16),
-			"G G",
-			" G ",
-			'G', blockGlass
-		);
-
 		// カフェテーブル
 		addShapedRecipe("cafe_table", new ItemStack(BlockInit.cafe_table, 6),
 			"WWW",
 			" I ",
 			"III",
 			'W', smPlanks,
-			'I', Items.IRON_INGOT
+			'I', ironNugget
 		);
 
 		// カフェチェア
@@ -262,7 +378,7 @@ public class RecipeHandler {
 			"WWW",
 			"I I",
 			'W', smPlanks,
-			'I', Items.IRON_INGOT
+			'I', ironNugget
 		);
 
 		// バルコニーテーブル
@@ -281,6 +397,38 @@ public class RecipeHandler {
 			"I I",
 			'W', smPlanks,
 			'I', iron_bars
+		);
+
+		// モダン背もたれチェア
+		addShapedRecipe("moden_chair", new ItemStack(BlockInit.moden_chair, 6),
+			"P  ",
+			"PWW",
+			"I I",
+			'P', smPlanks,
+			'W', wool,
+			'I', ironNugget
+		);
+
+		// モダン黒背もたれチェア
+		addShapedRecipe("moden_chair_b", new ItemStack(BlockInit.moden_chair_b, 6),
+			"P  ",
+			"PWW",
+			"IDI",
+			'P', smPlanks,
+			'W', wool,
+			'I', ironNugget,
+			'D', dyeBlack
+		);
+
+		// モダン茶背もたれチェア
+		addShapedRecipe("moden_chair_l", new ItemStack(BlockInit.moden_chair_l, 6),
+			"P  ",
+			"PWW",
+			"IDI",
+			'P', smPlanks,
+			'W', wool,
+			'I', ironNugget,
+			'D', dyeWhite
 		);
 
 		// モダンドア
@@ -305,7 +453,7 @@ public class RecipeHandler {
 		);
 
 		// フライパン
-		addShapedRecipe("frypan_off", new ItemStack(BlockInit.frypan_off),
+		addShapedRecipe("frypan_off", new ItemStack(BlockInit.frypan_off, 2),
 			"PII",
 			" II",
 			'I', ingotIron,
@@ -313,7 +461,7 @@ public class RecipeHandler {
 		);
 
 		// 鍋
-		addShapedRecipe("pot_off", new ItemStack(BlockInit.pot_off),
+		addShapedRecipe("pot_off", new ItemStack(BlockInit.pot_off, 2),
 			"BPB",
 			"I I",
 			"IPI",
@@ -393,6 +541,11 @@ public class RecipeHandler {
 			getIngred(Blocks.QUARTZ_BLOCK, 1, 32767), recipeBook
 		);
 
+        // 柱
+		addShapelessRecipe( "magic_square", new ItemStack(BlockInit.magic_square, 4),
+			getIngred(Blocks.QUARTZ_BLOCK, 1, 32767), getIngred(Items.GOLD_NUGGET), recipeBook
+		);
+
 		// 料理皿
 		addShapelessRecipe( "plate", new ItemStack(BlockInit.plate, 4),
 			iron_bars, iron_bars, recipeBook
@@ -403,9 +556,34 @@ public class RecipeHandler {
 			slabWood, slabWood, recipeBook
 		);
 
-		// 木皿
+		// 鉄皿
 		addShapelessRecipe( "iron_plate", new ItemStack(BlockInit.iron_plate, 4),
 			ironNugget, ironNugget, recipeBook
+		);
+
+		// トレー
+		addShapelessRecipe( "tray", new ItemStack(BlockInit.tray, 3),
+			iron_bars, iron_bars, iron_bars, recipeBook
+		);
+
+		// 木製トレー
+		addShapelessRecipe( "tray_wood", new ItemStack(BlockInit.tray_wood, 3),
+			slabWood, slabWood, slabWood, recipeBook
+		);
+
+		// 皿立て
+		addShapelessRecipe( "plate_shaped", new ItemStack(BlockInit.plate_shaped, 2),
+			ironNugget, ironNugget, iron_bars, iron_bars, recipeBook
+		);
+
+		// 天井照明
+		addShapelessRecipe( "ceiling_light", new ItemStack(BlockInit.ceiling_light, 8),
+			getIngred(Items.GLOWSTONE_DUST), paneGlass, recipeBook
+		);
+
+		// 蛍光灯
+		addShapelessRecipe( "fluorescent_light", new ItemStack(BlockInit.fluorescent_light, 12),
+			getIngred(Items.GLOWSTONE_DUST), paneGlass, paneGlass, recipeBook
 		);
 
 		// メニュー表
@@ -423,19 +601,9 @@ public class RecipeHandler {
 			ironNugget, ironNugget, ironNugget, recipeBook
 		);
 
-		// 鉄格子
-		addShapelessRecipe( "iron_bars_1", new ItemStack(Blocks.IRON_BARS, 16),
-			iron_chain, iron_chain, iron_chain, iron_chain
-		);
-
 		// ガラスコップ
 		addShapelessRecipe( "glass_cup", new ItemStack(BlockInit.glass_cup, 4),
 			blockGlass, recipeBook
-		);
-
-		// フライパン(赤)
-		addShapelessRecipe( "frypan_red_off", new ItemStack(BlockInit.frypan_red_off),
-			getIngred(BlockInit.frypan_off), dyeRed
 		);
 
 		// カウンターチェア
@@ -443,7 +611,7 @@ public class RecipeHandler {
 			"WWW",
 			"I I",
 			'W', smPlanks,
-			'I', iron_bars
+			'I', ironNugget
 		);
 
 		// ブレッドウッドトレイ
@@ -527,6 +695,22 @@ public class RecipeHandler {
 			'G', dustGlowstone
 		);
 
+		// ウォールランプ
+		addShapedRecipe("walllamp", new ItemStack(BlockInit.walllamp, 2),
+			" I ",
+			" G ",
+			'I', iron_bars,
+			'G', BlockInit.modenlanp
+		);
+
+		// ウォールランプ
+		addShapedRecipe("ceiling_spotlight", new ItemStack(BlockInit.ceiling_spotlight, 8),
+			"WWW",
+			"LLL",
+			'W', slabWood,
+			'L', walllamp
+		);
+
 		// パラソルポール
 		addShapedRecipe("parasol_pole", new ItemStack(BlockInit.parasol_pole, 16),
 			" I ",
@@ -560,12 +744,20 @@ public class RecipeHandler {
 			'W', new ItemStack(Blocks.WOOL, 1, 0)
 		);
 
+		// ゴールドクレスト
+		addShapelessRecipe( "goldcrest", new ItemStack(BlockInit.goldcrest, 2),
+			recipeBook, getIngred(Blocks.TALLGRASS, 1, 32767)
+		);
+
 		// ローブ
 		Map<Item, String> mapRecipe = new HashMap<>();
 		mapRecipe.put(ItemInit.wizard_robe, "dyeBlack");
 		mapRecipe.put(ItemInit.feary_robe, "dyeGreen");
+		mapRecipe.put(ItemInit.kitt_robe, "dyeOrange");
+		mapRecipe.put(ItemInit.curious_robe, "dyeLime");
 		mapRecipe.put(ItemInit.windine_robe, "dyeBlue");
 		mapRecipe.put(ItemInit.ifrite_robe, "dyeRed");
+		mapRecipe.put(ItemInit.witchmadame_robe, "dyeWhite");
 		mapRecipe.put(ItemInit.sandryon_robe, "dyeYellow");
 
 		for (Entry<Item, String> map : mapRecipe.entrySet()) {
@@ -678,30 +870,9 @@ public class RecipeHandler {
 			milk_bucket
 		);
 
-		// エンダーパール
-		addShapelessRecipe( "ender_pearl,", new ItemStack(Items.ENDER_PEARL),
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard,
-			ender_shard
-		);
-
-		// 木の棒
-		addShapelessRecipe( "smlog_stick", new ItemStack(Items.STICK, 16),
-			smLog, smLog
-		);
-
-		// チェスト
-		addShapedRecipe("chest", new ItemStack(Blocks.CHEST, 4),
-			"LLL",
-			"L L",
-			"LLL",
-			'L', smLog
+		// まな板
+		addShapelessRecipe( "chopping_board", new ItemStack(BlockInit.chopping_board),
+			magicBook, getIngred(Blocks.CRAFTING_TABLE)
 		);
 
 		// 木の箱
@@ -746,11 +917,6 @@ public class RecipeHandler {
 			" PP",
 			'P', plankWood,
 			'S', stickWood
-		);
-
-		// 緑の染料
-		addShapelessRecipe( "dyeGreen", new ItemStack(Items.DYE, 2, 4),
-			dyeBlue, dyeYellow
 		);
 
 		// イチゴ
@@ -817,6 +983,246 @@ public class RecipeHandler {
 			'W', smPlanks
 		);
 
+		// レモンのトラップドア
+		addShapedRecipe("lemon_trapdoor", new ItemStack(BlockInit.lemon_trapdoor, 6),
+			" R ",
+			"PPP",
+			'R', recipeBook,
+			'P', BlockInit.lemon_planks
+		);
+
+		// モダンラック（茶）
+		addShapedRecipe("moden_rack_brown", new ItemStack(BlockInit.moden_rack_brown),
+			"SPS",
+			"S S",
+			"PPP",
+			'S', stickWood,
+			'P', slabWood
+		);
+
+		// モダンラック
+		addShapedRecipe("moden_rack", new ItemStack(BlockInit.moden_rack),
+			"PPP",
+			"S S",
+			"SPS",
+			'S', stickWood,
+			'P', slabWood
+		);
+
+		// ツール入れ木箱
+		addShapedRecipe("wooden_tool_box", new ItemStack(BlockInit.wooden_tool_box, 4),
+			"P P",
+			"P P",
+			"WWW",
+			'P', smPlanks,
+			'W', slabWood
+		);
+
+		// 天井棚
+		addShapedRecipe("ceiling_shelfrrrrr", new ItemStack(BlockInit.ceiling_shelf, 2),
+			"I I",
+			"IPI",
+			"IPI",
+			'I', ironNugget,
+			'P', slabWood
+		);
+
+		// レンジフードラック
+		addShapedRecipe("range_hood_rack", new ItemStack(BlockInit.range_hood_rack, 2),
+			"I I",
+			"III",
+			'I', ironNugget
+		);
+
+		// モダン階段
+		addShapedRecipe("moden_stair", new ItemStack(BlockInit.moden_stair, 4),
+			"  P",
+			" PS",
+			"PS ",
+			'S', stickWood,
+			'P', slabWood
+		);
+
+		// モダン階段（黒）
+		addShapedRecipe("moden_stair_b", new ItemStack(BlockInit.moden_stair_b, 4),
+			"  P",
+			" PS",
+			"PSD",
+			'S', stickWood,
+			'P', slabWood,
+			'D', dyeBlack
+		);
+
+		// モダン階段（茶）
+		addShapedRecipe("moden_stair_l", new ItemStack(BlockInit.moden_stair_l, 4),
+			"  P",
+			" PS",
+			"PSD",
+			'S', stickWood,
+			'P', slabWood,
+			'D', dyeWhite
+		);
+
+		// オレンジ木材ハーフ
+		addShapedRecipe("orange_slab", new ItemStack(BlockInit.orange_slab, 6),
+			"PPP",
+			'P', BlockInit.orange_planks
+		);
+
+		// オレンジ白木材ハーフ
+		addShapedRecipe("orange_wslab", new ItemStack(BlockInit.orange_wslab, 6),
+			"PPP",
+			'P', BlockInit.orange_planks_w
+		);
+
+		// オレンジ縁ハーフ
+		addShapedRecipe("orange_huti_slab", new ItemStack(BlockInit.orange_huti_slab, 6),
+			"PPP",
+			'P', BlockInit.orange_planks_huti3
+		);
+
+		// オレンジ白縁ハーフ
+		addShapedRecipe("orange_whuti_slab", new ItemStack(BlockInit.orange_whuti_slab, 6),
+			"PPP",
+			'P', BlockInit.orange_planks_w_huti3
+		);
+
+		// オレンジ白縁ハーフ
+		addShapedRecipe("orange_planks_w_huti3", new ItemStack(BlockInit.orange_planks_w_huti3, 6),
+			"PPP",
+			'P', BlockInit.orange_whuti_slab
+		);
+
+		// オレンジ木材
+		addShapelessRecipe( "orange_planks", new ItemStack(BlockInit.orange_planks),
+			orange_planks
+		);
+
+		// オレンジ白木材
+		addShapelessRecipe( "orange_planks_w", new ItemStack(BlockInit.orange_planks_w),
+			orange_planks_w
+		);
+
+		// オレンジ縁階段
+		addShapedRecipe("orange_huti_stairs", new ItemStack(BlockInit.orange_huti_stairs, 8),
+			"  S",
+			" SS",
+			"SSS",
+			'S', BlockInit.orange_planks_huti3
+		);
+
+		// オレンジ白縁階段
+		addShapedRecipe("orange_whuti_stairs", new ItemStack(BlockInit.orange_whuti_stairs, 8),
+			"  S",
+			" SS",
+			"SSS",
+			'S', BlockInit.orange_planks_w_huti3
+		);
+
+		// オレンジ白階段
+		addShapedRecipe("orange_wstairs", new ItemStack(BlockInit.orange_wstairs, 8),
+			"  S",
+			" SS",
+			"SSS",
+			'S', BlockInit.orange_planks_w
+		);
+
+		// オレンジ階段
+		addShapedRecipe("orange_stairs", new ItemStack(BlockInit.orange_stairs, 8),
+			"  S",
+			" SS",
+			"SSS",
+			'S', orange_planks
+		);
+
+		// オレンジ縁木材
+		addShapedRecipe("orange_planks_huti1", new ItemStack(BlockInit.orange_planks_huti1, 2),
+			" P ",
+			" P ",
+			" R ",
+			'P', orange_planks,
+			'R', recipeBook
+		);
+
+		// オレンジ縁木材3
+		addShapedRecipe("orange_planks_huti3", new ItemStack(BlockInit.orange_planks_huti3, 2),
+			" P ",
+			" R ",
+			" P ",
+			'P', orange_planks,
+			'R', recipeBook
+		);
+
+		// オレンジ縁木材
+		addShapedRecipe("orange_planks_w_huti1", new ItemStack(BlockInit.orange_planks_w_huti1, 2),
+			" P ",
+			" P ",
+			" R ",
+			'P', orange_planks_w,
+			'R', recipeBook
+		);
+
+		// オレンジ縁木材3
+		addShapedRecipe("orange_planks_w_huti3", new ItemStack(BlockInit.orange_planks_w_huti3, 2),
+			" P ",
+			" R ",
+			" P ",
+			'P', orange_planks_w,
+			'R', recipeBook
+		);
+
+		// オレンジ感圧版
+		addShapedRecipe("orange_plate", new ItemStack(BlockInit.orange_plate, 2),
+			"PP",
+			'P', orange_planks
+		);
+
+		// オレンジ感圧版
+		addShapedRecipe("orange_wplate", new ItemStack(BlockInit.orange_wplate, 2),
+			"PP",
+			'P', orange_planks_w
+		);
+
+		// オレンジコケ付き木材
+		addShapelessRecipe( "orange_planks_mossy", new ItemStack(BlockInit.orange_planks_mossy),
+			getIngred(BlockInit.orange_planks), recipeBook
+		);
+
+		// オレンジコケ付き白木材
+		addShapelessRecipe( "orange_planks_wmossy", new ItemStack(BlockInit.orange_planks_wmossy),
+			getIngred(BlockInit.orange_planks_w), recipeBook
+		);
+
+		// オレンジ白木材
+		addShapelessRecipe( "orange_planks_w", new ItemStack(BlockInit.orange_planks_w, 4),
+			orange_planks, orange_planks, orange_planks, orange_planks, recipeBook
+		);
+
+		// オレンジ白木材
+		addShapelessRecipe( "orange_planks_wdamage", new ItemStack(BlockInit.orange_planks_wdamage, 4),
+			orange_planks_w, orange_planks_w, orange_planks_w, orange_planks_w, recipeBook
+		);
+
+		// オレンジ木材
+		addShapelessRecipe( "orange_slabplanks", new ItemStack(BlockInit.orange_planks),
+			orange_slab, orange_slab
+		);
+
+		// オレンジ白木材
+		addShapelessRecipe( "orange_slabplanks_w", new ItemStack(BlockInit.orange_planks_w),
+			orange_wslab, orange_wslab
+		);
+
+		// オレンジ木材
+		addShapelessRecipe( "orange_stairsplanks", new ItemStack(BlockInit.orange_planks, 3),
+			orange_stairs, orange_stairs, orange_stairs, orange_stairs
+		);
+
+		// オレンジ白木材
+		addShapelessRecipe( "orange_stairsplanks_w", new ItemStack(BlockInit.orange_planks_w, 3),
+			orange_wstairs, orange_wstairs, orange_wstairs, orange_wstairs
+		);
+
 		// 3段ドア
 		addShapelessRecipe( "woodgold_3", new ItemStack(ItemInit.woodgold_3, 4),
 			door, door, getIngred(Items.GOLD_NUGGET)
@@ -825,6 +1231,23 @@ public class RecipeHandler {
 		// 3段白ドア
 		addShapelessRecipe( "whitewoodgold_3", new ItemStack(ItemInit.whitewoodgold_3, 4),
 			door, door, getIngred(Items.IRON_NUGGET)
+		);
+
+		// アイアンウォールラック
+		addShapedRecipe("iron_wallrack", new ItemStack(BlockInit.iron_wallrack, 4),
+			"III",
+			"B B",
+			'I', ironFence,
+			'B', iron_bars
+		);
+
+		// アイアンシェルフ
+		addShapedRecipe("iron_shelf", new ItemStack(BlockInit.iron_shelf, 4),
+			"BIB",
+			"BIB",
+			"B B",
+			'I', ironFence,
+			'B', iron_bars
 		);
 
 		// イス
@@ -856,6 +1279,63 @@ public class RecipeHandler {
 			'S', stickWood
 		);
 
+		// ステンレステーブル
+		addShapedRecipe("stainless_steel_table", new ItemStack(BlockInit.stainless_steel_table, 4),
+			"NNN",
+			"B B",
+			"B B",
+			'N', ironNugget,
+			'B', iron_bars
+		);
+
+		// モダンテーブル
+		addShapedRecipe("moden_table", new ItemStack(BlockInit.moden_table, 4),
+			"PPP",
+			"I I",
+			"I I",
+			'I', ironNugget,
+			'P', plankWood
+		);
+
+		// モダンテーブル黒
+		addShapedRecipe("moden_table_b", new ItemStack(BlockInit.moden_table_b, 4),
+			"PPP",
+			"IBI",
+			"I I",
+			'I', ironNugget,
+			'P', plankWood,
+			'B', dyeBlack
+		);
+
+		// モダンテーブル茶
+		addShapedRecipe("moden_table_l", new ItemStack(BlockInit.moden_table_l, 4),
+			"PPP",
+			"IWI",
+			"I I",
+			'I', ironNugget,
+			'P', plankWood,
+			'W', dyeWhite
+		);
+
+		// ボトルラック
+		addShapedRecipe("bottle_rack", new ItemStack(BlockInit.bottle_rack, 4),
+			"P  ",
+			"PI ",
+			"PI ",
+			'I', iron_bars,
+			'P', plankWood
+		);
+
+		// ボトルラック
+		addShapedRecipe("bottle_rack_b", new ItemStack(BlockInit.bottle_rack_b, 4),
+			"PD ",
+			"PI ",
+			"PI ",
+			'I', iron_bars,
+			'P', plankWood,
+			'D', dyeBlack
+		);
+
 		// ドットテーブル
 		addShapelessRecipe( "smtable_dot", new ItemStack(BlockInit.smtable_dot, 4),
 			smtable, smtable, wool, dyeRed
@@ -864,13 +1344,6 @@ public class RecipeHandler {
 		// レーステーブル
 		addShapelessRecipe( "smtable_lace", new ItemStack(BlockInit.smtable_lace, 4),
 			smtable, smtable, wool, wool
-		);
-
-		// 鉄柵
-		addShapedRecipe("iron_bars", new ItemStack(Blocks.IRON_BARS, 64),
-			"III",
-			"III",
-			'I', ItemInit.alternative_ingot
 		);
 
 		// 街灯
@@ -909,9 +1382,104 @@ public class RecipeHandler {
 			'G', Blocks.GLOWSTONE
 		);
 
+		// テーブルモダンランプ
+		addShapedRecipe("table_lantern", new ItemStack(BlockInit.table_lantern, 4),
+			"G",
+			"F",
+			'G', ItemInit.fire_nasturtium_petal,
+			'F', blockGlass
+		);
+
+		// テーブルランプ
+		addShapedRecipe("table_modernlamp_off", new ItemStack(BlockInit.table_modernlamp_off, 4),
+			"F",
+			"S",
+			'F', ItemInit.fire_nasturtium_petal,
+			'S', stickWood
+		);
+
+		// テーブルランタン
+		addShapedRecipe("table_lamp", new ItemStack(BlockInit.table_lamp, 4),
+			" I ",
+			" G ",
+			" F ",
+			'I', ironNugget,
+			'G', ItemInit.fire_nasturtium_petal,
+			'F', blockGlass
+		);
+
 		// ランタン
 		addShapelessRecipe( "lantern_side1", new ItemStack(BlockInit.lantern_side1, 4),
 			dustGlowstone, ingotIron
+		);
+
+		// カードヒール
+		addShapedRecipe("card_heal", new ItemStack(ItemInit.card_heal),
+			" V ",
+			"APA",
+			" Y ",
+			'A', ItemInit.moonblossom_petal,
+			'V', dyeWhite,
+			'Y', feather,
+			'P', ItemInit.blank_page
+		);
+
+		// カードノーマル
+		addShapedRecipe("card_normal", new ItemStack(ItemInit.card_normal),
+			" V ",
+			"APA",
+			" Y ",
+			'A', ItemInit.sannyflower_petal,
+			'V', dyeWhite,
+			'Y', feather,
+			'P', ItemInit.blank_page
+		);
+
+		// 農家のエプロン
+		RecipeHandler.addRecipe("farm_apron",
+			new RecipeShaplessNBTCraft(new ResourceLocation(MODID, "farm_apron"), new ItemStack(ItemInit.farm_apron),
+				dyeYellow, getIngred(ItemInit.shop_uniform)
+			)
+		);
+
+		// 火炎の粉
+		addShapedRecipe("fire_powder", new ItemStack(ItemInit.fire_powder, 16),
+			"SPS",
+			"PBP",
+			"SPS",
+			'B', ItemInit.magicmeal,
+			'P', Items.REDSTONE,
+			'S', Items.BLAZE_POWDER
+		);
+
+		// 看板
+		addShapedRecipe("kanban_bot", new ItemStack(BlockInit.kanban_bot, 2),
+			"SWS",
+			"SRS",
+			"SWS",
+			'S', stickWood,
+			'R', recipeBook,
+			'W', new ItemStack(Blocks.WOOL, 1, 13)
+		);
+
+		// ステンドガラス緑
+		addShapedRecipe("stendglass_lamp_g_off", new ItemStack(BlockInit.stendglass_lamp_g_off, 8),
+			"RGR",
+			"GBG",
+			"RGR",
+			'G', glowStoneDust,
+			'R', Items.REDSTONE,
+			'B', recipeBook
+		);
+
+		// ステンドガラス
+		addShapedRecipe("stendglass_lamp_off", new ItemStack(BlockInit.stendglass_lamp_off, 8),
+			"GRG",
+			"RBR",
+			"GRG",
+			'G', glowStoneDust,
+			'R', Items.REDSTONE,
+			'B', recipeBook
 		);
 
 		// ブロック、ハーフ、階段をリストに突っ込む
@@ -922,6 +1490,7 @@ public class RecipeHandler {
 		recipeList.add(new RecipeRegisterHelper(BlockInit.prism_planks, BlockInit.prism_stairs, BlockInit.prism_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.estor_planks, BlockInit.estor_stairs, BlockInit.estor_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.peach_planks, BlockInit.peach_stairs, BlockInit.peach_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.magiawood_planks, BlockInit.magiawood_stairs, BlockInit.magiawood_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.antique_brick_b, BlockInit.antique_brick_stairs_b, BlockInit.antique_brick_slab_b));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.flagstone, BlockInit.flagstone_stairs, BlockInit.flagstone_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.flagstone_color, BlockInit.flagstone_color_stairs, BlockInit.flagstone_color_slab));
@@ -944,6 +1513,13 @@ public class RecipeHandler {
 		recipeList.add(new RecipeRegisterHelper(BlockInit.whiteline_brick, BlockInit.whiteline_brick_stairs, BlockInit.whiteline_brick_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.whiteline_brick_y, BlockInit.whiteline_brick_y_stairs, BlockInit.whiteline_brick_y_slab));
 		recipeList.add(new RecipeRegisterHelper(BlockInit.whiteline_brick_b, BlockInit.whiteline_brick_b_stairs, BlockInit.whiteline_brick_b_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_b, BlockInit.pasteltile_brick_b_stairs, BlockInit.pasteltile_brick_b_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_r, BlockInit.pasteltile_brick_r_stairs, BlockInit.pasteltile_brick_r_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_y, BlockInit.pasteltile_brick_y_stairs, BlockInit.pasteltile_brick_y_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_lg, BlockInit.pasteltile_brick_lg_stairs, BlockInit.pasteltile_brick_lg_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_br, BlockInit.pasteltile_brick_br_stairs, BlockInit.pasteltile_brick_br_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_bl, BlockInit.pasteltile_brick_bl_stairs, BlockInit.pasteltile_brick_bl_slab));
+		recipeList.add(new RecipeRegisterHelper(BlockInit.pasteltile_brick_gr, BlockInit.pasteltile_brick_gr_stairs, BlockInit.pasteltile_brick_gr_slab));
 
 		// リストの分だけ回す
 		for (RecipeRegisterHelper recipe : recipeList ) {
@@ -961,7 +1537,7 @@ public class RecipeHandler {
 			);
 
 			// 階段→ブロック
-			addShapelessRecipe( planks.getUnlocalizedName() + "_1", new ItemStack(planks),
+			addShapelessRecipe( planks.getUnlocalizedName() + "_1", new ItemStack(planks, 3),
 				stairsItem, stairsItem, stairsItem, stairsItem
 			);
 
@@ -988,6 +1564,7 @@ public class RecipeHandler {
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.prism_log, BlockInit.prism_planks, BlockInit.prism_plate, false));
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.estor_log, BlockInit.estor_planks, BlockInit.estor_plate, false));
 		recipeList2.add(new RecipeRegisterHelper(BlockInit.peach_log, BlockInit.peach_planks, BlockInit.peach_plate, false));
+		recipeList2.add(new RecipeRegisterHelper(BlockInit.magiawood_log, BlockInit.magiawood_planks, BlockInit.magiawood_plate, false));
 
 		for (RecipeRegisterHelper recipe : recipeList2) {
 
@@ -1065,11 +1642,17 @@ public class RecipeHandler {
 		for (Entry<Block, Block> map : recipeList4.entrySet()) {
 
 			Block pane = map.getValue();
+			Block gl = map.getKey();
 
-			addShapedRecipe(pane.getUnlocalizedName(), new ItemStack(pane, 16),
+			addShapedRecipe(pane.getUnlocalizedName(), new ItemStack(pane, 18),
 				"BBB",
 				"BBB",
-				'B', map.getKey()
+				'B', gl
+			);
+
+			addShapedRecipe(gl.getUnlocalizedName(), new ItemStack(gl),
+				"BBB",
+				'B', pane
 			);
 		}
 
@@ -1099,7 +1682,7 @@ public class RecipeHandler {
 			);
 
 			// 階段→ブロック
-			addShapelessRecipe( brick0.getUnlocalizedName() + "_0", new ItemStack(brick0, 3),
+			addShapelessRecipe( brick0.getUnlocalizedName() + "_1", new ItemStack(brick0, 3),
 				stairsItem, stairsItem, stairsItem, stairsItem
 			);
 
@@ -1133,6 +1716,26 @@ public class RecipeHandler {
 			);
 		}
 
+		// 柱
+		Map<Ingredient, Block> pilarRecipe = new HashMap<>();
+		pilarRecipe.put(antique_brick, BlockInit.antique_brick_pillar);
+		pilarRecipe.put(antique_brick_brown, BlockInit.antique_brick_pillar_l);
+		pilarRecipe.put(getIngred(BlockInit.whiteline_brick), BlockInit.whiteline_brick_pillar);
+		pilarRecipe.put(getIngred(BlockInit.whiteline_brick_y), BlockInit.whiteline_brick_pillar_y);
+		pilarRecipe.put(getIngred(BlockInit.pasteltile_brick_y), BlockInit.pasteltile_brick_pillar_y);
+
+		for (Entry<Ingredient, Block> map : pilarRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 12),
+				" P ",
+				" P ",
+				" P ",
+				'P', map.getKey()
+			);
+		}
+
 		// 花バスケット
 		Map<Block, Block> busketRecipe = new HashMap<>();
 		busketRecipe.put(BlockInit.iberis_umbellata, BlockInit.iberis_umbellata_basket);
@@ -1143,6 +1746,7 @@ public class RecipeHandler {
 		busketRecipe.put(BlockInit.surfinia, BlockInit.surfinia_basket);
 		busketRecipe.put(BlockInit.pansy_blue, BlockInit.pansy_blue_basket);
 		busketRecipe.put(BlockInit.pansy_yellowmazenta, BlockInit.pansy_yellowmazenta_basket);
+		busketRecipe.put(BlockInit.marigold, BlockInit.marigold_basket);
 
 		for (Entry<Block, Block> map : busketRecipe.entrySet()) {
 
@@ -1171,6 +1775,421 @@ public class RecipeHandler {
 				'P', slabWood,
 				'S', stickWood,
 				'D', map.getValue()
+			);
+		}
+
+		// モダンシェルフ
+		addShapedRecipe("moden_shelf_y", new ItemStack(BlockInit.moden_shelf_y),
+			"SCS",
+			"CRC",
+			"SCS",
+			'R', recipeBook,
+			'S', ItemInit.sugarbell,
+			'C', chestWood
+		);
+
+		// モダンシェルフ色
+		Map<Block, Ingredient> shelfRecipe = new HashMap<>();
+		shelfRecipe.put(BlockInit.moden_shelf_s, dyeLightBlue);
+		shelfRecipe.put(BlockInit.moden_shelf_o, dyeOrange);
+		shelfRecipe.put(BlockInit.moden_shelf_r, dyeRed);
+		shelfRecipe.put(BlockInit.moden_shelf_p, dyePurple);
+		shelfRecipe.put(BlockInit.moden_shelf_l, dyeLime);
+		shelfRecipe.put(BlockInit.moden_shelf_i, dyePink);
+
+		for (Entry<Block, Ingredient> map : shelfRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, block.getUnlocalizedName()),
+				new ItemStack(block),
+					modenShelf, map.getValue()
+				)
+			);
+		}
+
+		// クッション
+		addShapelessRecipe( "smcushion_o", new ItemStack(ItemInit.smcushion_o, 2),
+			wool, wool, recipeBook, dyeOrange
+		);
+
+		// クッション色
+		Map<Item, Ingredient> cusionRecipe = new HashMap<>();
+		cusionRecipe.put(ItemInit.smcushion_s, dyeLightBlue);
+		cusionRecipe.put(ItemInit.smcushion_y, dyeYellow);
+		cusionRecipe.put(ItemInit.smcushion_b, dyeBlue);
+
+		for (Entry<Item, Ingredient> map : cusionRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			// クッション
+			addShapelessRecipe( item.getUnlocalizedName(), new ItemStack(item),
+				smcushion, map.getValue()
+			);
+		}
+
+		// トースター
+		addShapedRecipe("toaster_s", new ItemStack(BlockInit.toaster_s),
+			"IGI",
+			"IFI",
+			"IPI",
+			'P', Blocks.HEAVY_WEIGHTED_PRESSURE_PLATE,
+			'F', Blocks.FURNACE,
+			'G', BlockInit.sugarglass_pane,
+			'I', iron_bars
+		);
+
+		// トースター色
+		Map<Block, Ingredient> toasterRecipe = new HashMap<>();
+		toasterRecipe.put(BlockInit.toaster_o, dyeOrange);
+		toasterRecipe.put(BlockInit.toaster_y, dyeYellow);
+		toasterRecipe.put(BlockInit.toaster_r, dyeRed);
+		toasterRecipe.put(BlockInit.toaster_l, dyeLime);
+		toasterRecipe.put(BlockInit.toaster_p, dyePink);
+
+		for (Entry<Block, Ingredient> map : toasterRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// トースター
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				toaster, map.getValue()
+			);
+		}
+
+		// コーヒーメーカ
+		addShapedRecipe("coffee_maker_s", new ItemStack(BlockInit.coffee_maker_s),
+			"HDD",
+			"FGG",
+			"BBB",
+			'D', dyeLightBlue,
+			'H', hopper,
+			'F', Blocks.FURNACE,
+			'G', BlockInit.sugarglass_pane,
+			'B', iron_bars
+		);
+
+		// コーヒーメーカ
+		Map<Block, Ingredient> coffeeRecipe = new HashMap<>();
+		coffeeRecipe.put(BlockInit.coffee_maker_o, dyeOrange);
+		coffeeRecipe.put(BlockInit.coffee_maker_r, dyeRed);
+		coffeeRecipe.put(BlockInit.coffee_maker_p, dyePurple);
+		coffeeRecipe.put(BlockInit.coffee_maker_l, dyeLime);
+		coffeeRecipe.put(BlockInit.coffee_maker_i, dyePink);
+
+		for (Entry<Block, Ingredient> map : coffeeRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// コーヒーメーカ
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				coffee, map.getValue()
+			);
+		}
+
+		// ミキサーメーカ
+		addShapedRecipe("mixer_s", new ItemStack(BlockInit.mixer_s),
+			"III",
+			"GDG",
+			"SHS",
+			'D', dyeLightBlue,
+			'H', hopper,
+			'G', BlockInit.sugarglass_pane,
+			'S', stone,
+			'I', Items.IRON_NUGGET
+		);
+
+		// ミキサー
+		Map<Block, Ingredient> mixerRecipe = new HashMap<>();
+		mixerRecipe.put(BlockInit.mixer_o, dyeOrange);
+		mixerRecipe.put(BlockInit.mixer_y, dyeYellow);
+		mixerRecipe.put(BlockInit.mixer_r, dyeRed);
+		mixerRecipe.put(BlockInit.mixer_l, dyeLime);
+		mixerRecipe.put(BlockInit.mixer_p, dyePink);
+
+		for (Entry<Block, Ingredient> map : mixerRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// ミキサー
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				mixer, map.getValue()
+			);
+		}
+
+		// レジ
+		addShapedRecipe("register_w", new ItemStack(BlockInit.register_w),
+			"  I",
+			" WW",
+			"WDD",
+			'D', dyeWhite,
+			'W', smPlanks,
+			'I', Items.IRON_NUGGET
+		);
+
+		// レジ
+		Map<Block, Ingredient> registerRecipe = new HashMap<>();
+		registerRecipe.put(BlockInit.register_o, dyeOrange);
+		registerRecipe.put(BlockInit.register_y, dyeYellow);
+		registerRecipe.put(BlockInit.register_r, dyeRed);
+		registerRecipe.put(BlockInit.register_p, dyePurple);
+		registerRecipe.put(BlockInit.register_s, dyeLightBlue);
+		registerRecipe.put(BlockInit.register_w, dyeWhite);
+		registerRecipe.put(BlockInit.register_l, dyeBrown);
+		registerRecipe.put(BlockInit.register_m, dyeLime);
+		registerRecipe.put(BlockInit.register_i, dyePink);
+
+		for (Entry<Block, Ingredient> map : registerRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// レジ
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				register, map.getValue()
+			);
+		}
+
+		// ウッドベンチ
+		addShapedRecipe("woodbench", new ItemStack(BlockInit.woodbench, 4),
+			"  R",
+			" RR",
+			"S S",
+			'R', smPlanks,
+			'S', iron_bars
+		);
+
+		// ウッドベンチ
+		Map<Block, Ingredient> woodBenchRecipe = new HashMap<>();
+		woodBenchRecipe.put(BlockInit.woodbench_b, dyeBrown);
+
+		for (Entry<Block, Ingredient> map : woodBenchRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// ウッドベンチ
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				woodBench, map.getValue()
+			);
+		}
+
+		// ソファー
+		addShapedRecipe("sofa_r", new ItemStack(BlockInit.sofa_r, 4),
+			"  R",
+			" RR",
+			"S S",
+			'R', wool,
+			'S', stickWood
+		);
+
+		// ソファー
+		Map<Block, Ingredient> sofaRecipe = new HashMap<>();
+		sofaRecipe.put(BlockInit.sofa_b, dyeBlue);
+		sofaRecipe.put(BlockInit.sofa_w, dyeWhite);
+
+		for (Entry<Block, Ingredient> map : sofaRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// ソファー
+			addShapelessRecipe( block.getUnlocalizedName(), new ItemStack(block),
+				sofa, map.getValue()
+			);
+		}
+
+		// ノートPC色
+		Map<Block, Ingredient> notePCRecipe = new HashMap<>();
+		notePCRecipe.put(BlockInit.note_pc_b, dyeBlack);
+		notePCRecipe.put(BlockInit.note_pc_o, dyeOrange);
+		notePCRecipe.put(BlockInit.note_pc_r, dyeRed);
+		notePCRecipe.put(BlockInit.note_pc_p, dyePurple);
+		notePCRecipe.put(BlockInit.note_pc_l, dyeLime);
+		notePCRecipe.put(BlockInit.note_pc_i, dyePink);
+
+		for (Entry<Block, Ingredient> map : notePCRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// ノートPC
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, block.getUnlocalizedName()), new ItemStack(block),
+						note_pc, map.getValue()
+				)
+			);
+		}
+
+		// スマートフォン色
+		Map<Item, Ingredient> phoneRecipe = new HashMap<>();
+		phoneRecipe.put(ItemInit.sm_phone_b, dyeBlack);
+		phoneRecipe.put(ItemInit.sm_phone_o, dyeOrange);
+		phoneRecipe.put(ItemInit.sm_phone_r, dyeRed);
+		phoneRecipe.put(ItemInit.sm_phone_p, dyePurple);
+		phoneRecipe.put(ItemInit.sm_phone_l, dyeLime);
+		phoneRecipe.put(ItemInit.sm_phone_i, dyePink);
+
+		for (Entry<Item, Ingredient> map : phoneRecipe.entrySet()) {
+
+			Item item = map.getKey();
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName() + "_1",
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, (item.getUnlocalizedName()) + "_1"), new ItemStack(item),
+					sm_phone, map.getValue()
+				)
+			);
+
+			RecipeHandler.addRecipe(item.getUnlocalizedName() + "_0",
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, (item.getUnlocalizedName()) + "_0"), new ItemStack(item),
+					smPhone, map.getValue()
+				)
+			);
+		}
+
+		// 垂れ幕
+		Map<Block, Ingredient> blinderRecipe = new HashMap<>();
+		blinderRecipe.put(BlockInit.blinder, dyeRed);
+		blinderRecipe.put(BlockInit.blinder_o, dyeOrange);
+		blinderRecipe.put(BlockInit.blinder_s, dyeLightBlue);
+		blinderRecipe.put(BlockInit.blinder_y, dyeYellow);
+		blinderRecipe.put(BlockInit.blinder_g, dyeLime);
+		blinderRecipe.put(BlockInit.blinder_p, dyePink);
+		blinderRecipe.put(BlockInit.blinder_b, dyeBlack);
+		blinderRecipe.put(BlockInit.blinder_w, dyeWhite);
+
+		for (Entry<Block, Ingredient> map : blinderRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 8),
+				"SSS",
+				"DDD",
+				"WWW",
+				'S', stickWood,
+				'D', map.getValue(),
+				'W', wool
+			);
+		}
+
+		// 垂れ幕
+		Map<Block, Ingredient> bannerRecipe = new HashMap<>();
+		bannerRecipe.put(BlockInit.hanging_banner_b, dyeBlue);
+		bannerRecipe.put(BlockInit.hanging_banner_r, dyeRed);
+		bannerRecipe.put(BlockInit.hanging_banner_o, dyeOrange);
+		bannerRecipe.put(BlockInit.hanging_banner_p, dyePurple);
+		bannerRecipe.put(BlockInit.hanging_banner_s, dyeLightBlue);
+		bannerRecipe.put(BlockInit.hanging_banner_l, dyeLime);
+
+		for (Entry<Block, Ingredient> map : bannerRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 8),
+				" II",
+				" DD",
+				" WW",
+				'I', iron_bars,
+				'D', map.getValue(),
+				'W', wool
+			);
+		}
+
+		// シューズボックス
+		addShapedRecipe("shoe_box", new ItemStack(BlockInit.shoe_box),
+			"PWP",
+			"WBW",
+			"PWP",
+			'P', Items.PAPER,
+			'W', smPlanks,
+			'B', recipeBook
+		);
+
+		// シューズボックス色
+		Map<Block, Ingredient> shoeBoxRecipe = new HashMap<>();
+		shoeBoxRecipe.put(BlockInit.shoe_box_g, dyeGreen);
+		shoeBoxRecipe.put(BlockInit.shoe_box_r, dyeRed);
+
+		for (Entry<Block, Ingredient> map : shoeBoxRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// シューズボックス
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, block.getUnlocalizedName()), new ItemStack(block),
+					shoe_box, map.getValue()
+				)
+			);
+		}
+
+		// 積み上げたシューズボックス
+		addShapedRecipe("shoe_box_piling", new ItemStack(BlockInit.shoe_box_piling),
+			"PWP",
+			"WBW",
+			"PWP",
+			'P', chestWood,
+			'W', smLog,
+			'B', recipeBook
+		);
+
+		// 積み上げたシューズボックス色
+		Map<Block, Ingredient> shoeBoxPilingRecipe = new HashMap<>();
+		shoeBoxPilingRecipe.put(BlockInit.shoe_box_piling_g, dyeGreen);
+		shoeBoxPilingRecipe.put(BlockInit.shoe_box_piling_r, dyeRed);
+
+		for (Entry<Block, Ingredient> map : shoeBoxPilingRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			// 積み上げたシューズボックス
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeShaplessNBTCraft(new ResourceLocation(MODID, block.getUnlocalizedName()), new ItemStack(block),
+					shoe_box_piling, map.getValue()
+				)
+			);
+		}
+
+		// ポスト
+		Map<Block, Ingredient> postRecipe = new HashMap<>();
+		postRecipe.put(BlockInit.post_w, dyeWhite);
+		postRecipe.put(BlockInit.post_r, dyeRed);
+
+		for (Entry<Block, Ingredient> map : postRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(MODID, block.getUnlocalizedName()),
+				new ItemStack(block),
+					" D ",
+					" C ",
+					" F ",
+					'D', map.getValue(),
+					'C', "woodChest",
+					'F', "woodFence"
+				)
+			);
+		}
+
+		// 木材ポスト
+		Map<Block, Ingredient> postWoodRecipe = new HashMap<>();
+		postWoodRecipe.put(BlockInit.post_wood_chestnut, getIngred(BlockInit.chestnut_planks));
+		postWoodRecipe.put(BlockInit.post_wood_orange_w, orange_planks_w);
+		postWoodRecipe.put(BlockInit.post_wood_orange, orange_planks);
+		postWoodRecipe.put(BlockInit.post_wood_smstone, getIngred(BlockInit.estor_planks));
+
+		for (Entry<Block, Ingredient> map : postWoodRecipe.entrySet()) {
+
+			Block block = map.getKey();
+
+			RecipeHandler.addRecipe(block.getUnlocalizedName(),
+				new RecipeNBTExtend(new ResourceLocation(MODID, block.getUnlocalizedName()),
+				new ItemStack(block),
+					" P ",
+					"PCP",
+					" F ",
+					'P', map.getValue(),
+					'C', "woodChest",
+					'F', "woodFence"
+				)
 			);
 		}
 
@@ -1224,6 +2243,12 @@ public class RecipeHandler {
 		potRecipe.put(getIngred(BlockInit.whiteline_brick), BlockInit.whiteline_brick_pot);
 		potRecipe.put(getIngred(BlockInit.whiteline_brick_y), BlockInit.whiteline_brick_pot_y);
 		potRecipe.put(getIngred(BlockInit.whiteline_brick_b), BlockInit.whiteline_brick_pot_b);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_b), BlockInit.pasteltile_brick_pot_b);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_r), BlockInit.pasteltile_brick_pot_r);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_y), BlockInit.pasteltile_brick_pot_y);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_gr), BlockInit.pasteltile_brick_pot_gr);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_bl), BlockInit.pasteltile_brick_pot_bl);
+		potRecipe.put(getIngred(BlockInit.pasteltile_brick_lg), BlockInit.pasteltile_brick_pot_lg);
 
 		for (Entry<Ingredient, Block> map : potRecipe.entrySet()) {
 
@@ -1232,6 +2257,27 @@ public class RecipeHandler {
 			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 4),
 				"BDB",
 				" B ",
+				'B', map.getKey(),
+				'D', compost_drit
+			);
+		}
+
+		// プランター
+		Map<Ingredient, Block> planterRecipe = new HashMap<>();
+		planterRecipe.put(getIngred(BlockInit.chestnut_planks), BlockInit.chestnut_planks_planter);
+		planterRecipe.put(getIngred("orange_planks_w"), BlockInit.orange_planks_planter_w);
+		planterRecipe.put(getIngred("orange_planks"), BlockInit.orange_planks_planter);
+		planterRecipe.put(getIngred("antique_brick"), BlockInit.antique_brick_planter_r);
+		planterRecipe.put(getIngred("antique_brick_brown"), BlockInit.antique_brick_planter_l);
+		planterRecipe.put(getIngred(BlockInit.whiteline_brick_y), BlockInit.whiteline_brick_planter_y);
+		planterRecipe.put(getIngred(BlockInit.whiteline_brick_b), BlockInit.whiteline_brick_planter_b);
+
+		for (Entry<Ingredient, Block> map : planterRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 3),
+				"BDB",
 				'B', map.getKey(),
 				'D', compost_drit
 			);
@@ -1268,6 +2314,14 @@ public class RecipeHandler {
 		trapdoorRecipe.put(getIngred(BlockInit.whiteline_brick_y), BlockInit.whiteline_brick_y_tdoor);
 		trapdoorRecipe.put(getIngred(BlockInit.whiteline_brick_b), BlockInit.whiteline_brick_b_tdoor);
 
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_b), BlockInit.pasteltile_brick_b_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_r), BlockInit.pasteltile_brick_r_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_y), BlockInit.pasteltile_brick_y_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_lg), BlockInit.pasteltile_brick_lg_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_br), BlockInit.pasteltile_brick_br_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_bl), BlockInit.pasteltile_brick_bl_tdoor);
+		trapdoorRecipe.put(getIngred(BlockInit.pasteltile_brick_gr), BlockInit.pasteltile_brick_gr_tdoor);
+
 		trapdoorRecipe.put(getIngred(BlockInit.coconut_planks), BlockInit.coconut_trapdoor);
 
 		for (Entry<Ingredient, Block> map : trapdoorRecipe.entrySet()) {
@@ -1283,10 +2337,10 @@ public class RecipeHandler {
 
 		// トラップドア
 		Map<Ingredient, Block> trapdoorRecipe2 = new HashMap<>();
-		trapdoorRecipe2.put(getIngred("dyeWhite"), BlockInit.antique_window_white);
-		trapdoorRecipe2.put(getIngred("dyeGreen"), BlockInit.antique_window_green);
-		trapdoorRecipe2.put(getIngred("dyeBlack"), BlockInit.antique_window_brown2);
-		trapdoorRecipe2.put(getIngred("dyeBrown"), BlockInit.antique_window_brown);
+		trapdoorRecipe2.put(dyeWhite, BlockInit.antique_window_white);
+		trapdoorRecipe2.put(dyeGreen, BlockInit.antique_window_green);
+		trapdoorRecipe2.put(dyeBlack, BlockInit.antique_window_brown2);
+		trapdoorRecipe2.put(dyeBrown, BlockInit.antique_window_brown);
 
 		for (Entry<Ingredient, Block> map : trapdoorRecipe2.entrySet()) {
 
@@ -1329,6 +2383,70 @@ public class RecipeHandler {
 			addShapedRecipe(block.getUnlocalizedName() + "_1", new ItemStack(block, 24),
 				"BBB",
 				"BBB",
+				'B', map.getKey()
+			);
+		}
+
+		// フェンス
+		Map<Block, Block> fencePoleRecipe = new HashMap<>();
+		fencePoleRecipe.put(BlockInit.estor_log, BlockInit.fence_pole_estor);
+		fencePoleRecipe.put(BlockInit.prism_log, BlockInit.fence_pole_prism);
+		fencePoleRecipe.put(BlockInit.peach_log, BlockInit.fence_pole_pearch);
+
+		for (Entry<Block, Block> map : fencePoleRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName() + "_1", new ItemStack(block, 16),
+				" B ",
+				" B ",
+				" B ",
+				'B', map.getKey()
+			);
+		}
+
+		// フェンス
+		Map<Block, Block> brFenceRecipe = new HashMap<>();
+		brFenceRecipe.put(BlockInit.antique_brick_0, BlockInit.brick_fence_antique);
+		brFenceRecipe.put(BlockInit.antique_brick_0w, BlockInit.brick_fence_antique_w);
+		brFenceRecipe.put(BlockInit.antique_brick_0l, BlockInit.brick_fence_antique_b);
+		brFenceRecipe.put(BlockInit.antique_brick_0g, BlockInit.brick_fence_antique_g);
+		brFenceRecipe.put(BlockInit.whiteline_brick_y, BlockInit.brick_fence_whiteline_y);
+		brFenceRecipe.put(BlockInit.whiteline_brick_b, BlockInit.brick_fence_whiteline_b);
+
+		for (Entry<Block, Block> map : brFenceRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 16),
+				"B B",
+				"BBB",
+				'B', map.getKey()
+			);
+		}
+
+		// フェンス
+		Map<Block, Block> brFenceRecipe2 = new HashMap<>();
+		brFenceRecipe2.put(BlockInit.whiteline_brick, BlockInit.stone_fence_whiteline);
+		brFenceRecipe2.put(BlockInit.whiteline_brick_b, BlockInit.stone_fence_whiteline_b);
+		brFenceRecipe2.put(BlockInit.whiteline_brick_y, BlockInit.stone_fence_whiteline_y);
+		brFenceRecipe2.put(BlockInit.antique_brick_0, BlockInit.stone_fence_antique);
+		brFenceRecipe2.put(BlockInit.antique_brick_0w, BlockInit.stone_fence_antique_w);
+		brFenceRecipe2.put(BlockInit.antique_brick_0l, BlockInit.stone_fence_antique_l);
+		brFenceRecipe2.put(BlockInit.antique_brick_0g, BlockInit.stone_fence_antique_g);
+		brFenceRecipe2.put(BlockInit.pasteltile_brick_y, BlockInit.stone_fence_pastel_y);
+		brFenceRecipe2.put(BlockInit.pasteltile_brick_r, BlockInit.stone_fence_pastel_r);
+		brFenceRecipe2.put(BlockInit.pasteltile_brick_b, BlockInit.stone_fence_pastel_b);
+		brFenceRecipe2.put(BlockInit.pasteltile_brick_lg, BlockInit.stone_fence_pastel_lg);
+		brFenceRecipe2.put(BlockInit.pasteltile_brick_gr, BlockInit.stone_fence_pastel_gr);
+
+		for (Entry<Block, Block> map : brFenceRecipe2.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 16),
+				"BBB",
+				"B B",
 				'B', map.getKey()
 			);
 		}
@@ -1383,33 +2501,63 @@ public class RecipeHandler {
 
 		// カウンターテーブル
 		List<RecipeRegisterHelper> counterList = new ArrayList<>();
-		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick, BlockInit.counter_table_white_brick));
-		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick_y, BlockInit.counter_table_white_brick_y));
-		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick_b, BlockInit.counter_table_white_brick_b));
-		counterList.add(new RecipeRegisterHelper(smLog, BlockInit.orange_planks_w, BlockInit.counter_table_orange_planks));
-		counterList.add(new RecipeRegisterHelper(orange_planks_w, BlockInit.estor_log, BlockInit.counter_table_modan));
+		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick, BlockInit.counter_table_white_brick, BlockInit.counter_table_stove_white_brick, BlockInit.counter_table_sink_white_brick, BlockInit.counter_table_oven_white_brick, BlockInit.counter_table_chest_white_brick, BlockInit.counter_table_half_white_brick));
+		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick_y, BlockInit.counter_table_white_brick_y, BlockInit.counter_table_stove_white_brick_y, BlockInit.counter_table_sink_white_brick_y, BlockInit.counter_table_oven_white_brick_y, BlockInit.counter_table_chest_white_brick_y, BlockInit.counter_table_half_white_brick_y));
+		counterList.add(new RecipeRegisterHelper(smPlanks, BlockInit.whiteline_brick_b, BlockInit.counter_table_white_brick_b, BlockInit.counter_table_stove_white_brick_b, BlockInit.counter_table_sink_white_brick_b, BlockInit.counter_table_oven_white_brick_b, BlockInit.counter_table_chest_white_brick_b, BlockInit.counter_table_half_white_brick_b));
+		counterList.add(new RecipeRegisterHelper(smLog, BlockInit.orange_planks_w, BlockInit.counter_table_orange_planks, BlockInit.counter_table_stove_orange_planks, BlockInit.counter_table_sink_orange_planks, BlockInit.counter_table_oven_orange_planks, BlockInit.counter_table_chest_orange_planks, BlockInit.counter_table_half_orange_planks));
+		counterList.add(new RecipeRegisterHelper(orange_planks_w, BlockInit.estor_log, BlockInit.counter_table_modan, BlockInit.counter_table_stove_modan, BlockInit.counter_table_sink_modan, BlockInit.counter_table_oven_modan, BlockInit.counter_table_chest_modan, BlockInit.counter_table_half_modan));
 
 		for (RecipeRegisterHelper recipe : counterList) {
 
 			Ingredient base = recipe.getIng();
-			Block counter = recipe.getBrick1();
+			Block counter1 = recipe.getBrick1();
+			Block counter2 = recipe.getBrick2();
+			Block counter3 = recipe.getBrick3();
+			Block counter4 = recipe.getBrick4();
+			Block counter5 = recipe.getBrick5();
+			Block counter6 = recipe.getBrick6();
+			Ingredient counter = getIngred(counter1);
 
-			addShapedRecipe(counter.getUnlocalizedName(), new ItemStack(counter, 16),
+			addShapedRecipe(counter1.getUnlocalizedName() + "_1", new ItemStack(counter1, 16),
 				"WWW",
 				"BB ",
 				"WWW",
 				'B', recipe.getBrick0(),
 				'W', base
 			);
+
+			addShapelessRecipe(counter2.getUnlocalizedName(), new ItemStack(counter2, 2),
+				counter, furnace
+			);
+
+			addShapelessRecipe(counter3.getUnlocalizedName(), new ItemStack(counter3, 2),
+				counter, ingotIron
+			);
+
+			addShapelessRecipe(counter4.getUnlocalizedName(), new ItemStack(counter4, 2),
+				counter, oven
+			);
+
+			addShapelessRecipe(counter5.getUnlocalizedName(), new ItemStack(counter5),
+				counter, chestWood, chestWood, chestWood, chestWood
+			);
+
+			addShapelessRecipe(counter6.getUnlocalizedName(), new ItemStack(counter6, 2),
+				counter
+			);
+
+			addShapelessRecipe(counter1.getUnlocalizedName() + "_0", new ItemStack(counter1),
+				getIngred(counter6), getIngred(counter6)
+			);
 		}
 
 		// オーニングテント
 		Map<Ingredient, Block> tentRecipe = new HashMap<>();
-		tentRecipe.put(getIngred("dyeBlue"), BlockInit.awning_tent_b);
-		tentRecipe.put(getIngred("dyeOrange"), BlockInit.awning_tent_o);
-		tentRecipe.put(getIngred("dyePurple"), BlockInit.awning_tent_p);
-		tentRecipe.put(getIngred("dyeRed"), BlockInit.awning_tent_r);
-		tentRecipe.put(getIngred("dyeLightBlue"), BlockInit.awning_tent_s);
+		tentRecipe.put(dyeBlue, BlockInit.awning_tent_b);
+		tentRecipe.put(dyeOrange, BlockInit.awning_tent_o);
+		tentRecipe.put(dyePurple, BlockInit.awning_tent_p);
+		tentRecipe.put(dyeRed, BlockInit.awning_tent_r);
+		tentRecipe.put(dyeLightBlue, BlockInit.awning_tent_s);
 
 		for (Entry<Ingredient, Block> map : tentRecipe.entrySet()) {
 
@@ -1419,6 +2567,27 @@ public class RecipeHandler {
 				"  W",
 				" WI",
 				"WID",
+				'D', map.getKey(),
+				'W', wool,
+				'I', iron_bars
+			);
+		}
+
+		// オーニングテント2
+		Map<Ingredient, Block> tentRecipe2 = new HashMap<>();
+		tentRecipe2.put(dyeGreen, BlockInit.awning_tent_g);
+		tentRecipe2.put(dyeOrange, BlockInit.awning_tent_or);
+		tentRecipe2.put(dyeBlack, BlockInit.awning_tent_bl);
+		tentRecipe2.put(dyeWhite, BlockInit.awning_tent_w);
+
+		for (Entry<Ingredient, Block> map : tentRecipe2.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 16),
+				"  W",
+				" WD",
+				"WDI",
 				'D', map.getKey(),
 				'W', wool,
 				'I', iron_bars
@@ -1437,6 +2606,138 @@ public class RecipeHandler {
 
 			addShapelessRecipe(block.getUnlocalizedName(), new ItemStack(block, 8),
 				ing, ing, ing, recipeBook
+			);
+		}
+
+		// 果物箱
+		Map<Ingredient, Block> fruitRecipe = new HashMap<>();
+		fruitRecipe.put(getIngred(BlockInit.chestnut_planks), BlockInit.fruit_crate);
+		fruitRecipe.put(getIngred(BlockInit.coconut_planks), BlockInit.fruit_crate_coconut);
+		fruitRecipe.put(orange_planks_w, BlockInit.fruit_crate_orange);
+		fruitRecipe.put(getIngred(BlockInit.magiawood_planks), BlockInit.fruit_crate_smwood);
+		fruitRecipe.put(dyeBlack, BlockInit.fruit_crate_wood_black);
+
+		for (Entry<Ingredient, Block> map : fruitRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 4),
+				"  P",
+				" PW",
+				"P W",
+				'P', map.getKey(),
+				'W', slabWood
+			);
+		}
+
+		// 果物箱
+		Map<Ingredient, Block> fruitBoxRecipe = new HashMap<>();
+		fruitBoxRecipe.put(getIngred(BlockInit.chestnut_planks), BlockInit.fruit_crate_box);
+		fruitBoxRecipe.put(getIngred(BlockInit.coconut_planks), BlockInit.fruit_crate_box_coconut);
+		fruitBoxRecipe.put(orange_planks_w, BlockInit.fruit_crate_box_orange);
+		fruitBoxRecipe.put(getIngred(BlockInit.magiawood_planks), BlockInit.fruit_crate_box_smwood);
+		fruitBoxRecipe.put(dyeBlack, BlockInit.fruit_crate_box_wood_black);
+
+		for (Entry<Ingredient, Block> map : fruitBoxRecipe.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block, 4),
+				"WBW",
+				"PWP",
+				'B', recipeBook,
+				'P', map.getKey(),
+				'W', slabWood
+			);
+		}
+
+		// 鍋
+		Map<Ingredient, Block> potMap = new HashMap<>();
+		potMap.put(dyeYellow, BlockInit.pot_yellow_off);
+		potMap.put(dyeRed, BlockInit.pot_red_off);
+		potMap.put(dyeLightBlue, BlockInit.pot_skyblue_off);
+		potMap.put(dyeLime, BlockInit.pot_lime_off);
+		potMap.put(dyePink, BlockInit.pot_pink_off);
+
+		for (Entry<Ingredient, Block> map : potMap.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_1", new ItemStack(block),
+				pot, map.getKey()
+			);
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_0", new ItemStack(block),
+				pot_color, map.getKey()
+			);
+		}
+
+		// 鍋
+		Map<Ingredient, Block> singleMap = new HashMap<>();
+		singleMap.put(dyeBlue, BlockInit.single_pot_b);
+		singleMap.put(dyeOrange, BlockInit.single_pot_o);
+		singleMap.put(dyePurple, BlockInit.single_pot_p);
+		singleMap.put(dyeRed, BlockInit.single_pot_r);
+		singleMap.put(dyeLightBlue, BlockInit.single_pot_s);
+		singleMap.put(dyeYellow, BlockInit.single_pot_y);
+		singleMap.put(dyeLime, BlockInit.single_pot_l);
+		singleMap.put(dyePink, BlockInit.single_pot_i);
+
+		for (Entry<Ingredient, Block> map : singleMap.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_1", new ItemStack(block, 2),
+				pot, ironNugget, map.getKey()
+			);
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_0", new ItemStack(block, 2),
+				pot_color, ironNugget, map.getKey()
+			);
+		}
+
+		// フライパン
+		Map<Ingredient, Block> frypanMap = new HashMap<>();
+		frypanMap.put(dyeRed, BlockInit.frypan_red_off);
+		frypanMap.put(dyePurple, BlockInit.frypan_purple_off);
+		frypanMap.put(dyeLightBlue, BlockInit.frypan_skyblue_off);
+		frypanMap.put(dyeYellow, BlockInit.frypan_yellow_off);
+		frypanMap.put(dyeLime, BlockInit.frypan_lime_off);
+		frypanMap.put(dyePink, BlockInit.frypan_pink_off);
+
+		for (Entry<Ingredient, Block> map : frypanMap.entrySet()) {
+
+			Block block = map.getValue();
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_1", new ItemStack(block),
+				frypan, map.getKey()
+			);
+
+			addShapelessRecipe(block.getUnlocalizedName() + "_0", new ItemStack(block),
+				frypan_color, map.getKey()
+			);
+		}
+
+		// クリスタル
+		Map<Item, Block> crystalMap = new HashMap<>();
+		crystalMap.put(ItemInit.aether_crystal, BlockInit.aethercrystal_block);
+		crystalMap.put(ItemInit.divine_crystal, BlockInit.divinecrystal_block);
+		crystalMap.put(ItemInit.pure_crystal, BlockInit.purecrystal_block);
+
+		for (Entry<Item, Block> map : crystalMap.entrySet()) {
+
+			Block block = map.getValue();
+			Item item = map.getKey();
+
+			addShapedRecipe(block.getUnlocalizedName(), new ItemStack(block),
+				"CCC",
+				"CCC",
+				"CCC",
+				'C', item
+			);
+
+			addShapelessRecipe(item.getUnlocalizedName(), new ItemStack(item, 9),
+				getIngred(block)
 			);
 		}
 
@@ -1481,6 +2782,15 @@ public class RecipeHandler {
 		singleCraft(new ItemStack(BlockInit.hard_bread_basket), new ItemStack(BlockInit.bread_baskets));
 		singleCraft(new ItemStack(ItemInit.alt_bucket_lava), new ItemStack(ItemInit.alt_bucket));
 		singleCraft(new ItemStack(ItemInit.milk_pack), new ItemStack(ItemInit.whipping_cream, 4));
+		singleCraft(new ItemStack(BlockInit.chopping_board), new ItemStack(BlockInit.chopping_board_b));
+		singleCraft(new ItemStack(BlockInit.chopping_board_b), new ItemStack(BlockInit.chopping_board_w));
+		singleCraft(new ItemStack(BlockInit.chopping_board_w), new ItemStack(BlockInit.chopping_board));
+
+
+		List<ItemStack> smPhoneList = SMUtil.getOreList("smPhone");
+		for (ItemStack stack : smPhoneList) {
+			singleCraft(stack, stack, stack.getDisplayName() + "_1");
+		}
 	}
 
     public static Multimap<String,IRecipe> recipeMultimap = HashMultimap.create();
@@ -1520,47 +2830,58 @@ public class RecipeHandler {
 		);
     }
 
-    public static Ingredient getIngred (Item item) {
-    	return Ingredient.fromStacks(new ItemStack(item));
-    }
+	public static Ingredient getIngred(Item item) {
+		return Ingredient.fromStacks(new ItemStack(item));
+	}
 
-    public static Ingredient getIngred (Item item, int amount, int data) {
-    	return Ingredient.fromStacks(new ItemStack(item, amount, data));
-    }
+	public static Ingredient getIngred(Item item, int amount, int data) {
+		return Ingredient.fromStacks(new ItemStack(item, amount, data));
+	}
 
-    public static Ingredient getIngred (Block block) {
-    	return Ingredient.fromStacks(new ItemStack(block));
-    }
+	public static Ingredient getIngred(Block block) {
+		return Ingredient.fromStacks(new ItemStack(block));
+	}
 
-    public static Ingredient getIngred (Block block, int amount, int data) {
-    	return Ingredient.fromStacks(new ItemStack(block, amount, data));
-    }
+	public static Ingredient getIngred(Block block, int amount, int data) {
+		return Ingredient.fromStacks(new ItemStack(block, amount, data));
+	}
 
-    public static Ingredient getIngred (String... oreNameArray) {
+	public static Ingredient getIngred(Block... blocks) {
 
-    	// 配列のリストの初期化
-    	int arraySize = 0;
-    	List<ItemStack[]> arrayList = new ArrayList<>();
+		ItemStack[] stackArray = new ItemStack[blocks.length];
 
-    	// 配列を取得してリストに突っ込む
-    	for (String oreName : oreNameArray) {
-    		ItemStack[] oreArray = SMUtil.getOreArray(oreName);
-    		arrayList.add(oreArray);
-    		arraySize += oreArray.length;
-    	}
+		for (int i = 0; i < blocks.length; ++i) {
+			stackArray[i] = new ItemStack(blocks[i]);
+		}
 
-    	// 配列の初期化
-    	int putLength = 0;
-    	ItemStack[] stackArray = new ItemStack[arraySize];
+		return Ingredient.fromStacks(stackArray);
+	}
 
-    	// リスト分回して配列にまとめる
-    	for (ItemStack[] stack : arrayList) {
-    		System.arraycopy(stack, 0, stackArray, putLength, stack.length);
-    		putLength = stack.length;
-    	}
+	public static Ingredient getIngred(String... oreNameArray) {
 
-    	return Ingredient.fromStacks(stackArray);
-    }
+		// 配列のリストの初期化
+		int arraySize = 0;
+		List<ItemStack[]> arrayList = new ArrayList<>();
+
+		// 配列を取得してリストに突っ込む
+		for (String oreName : oreNameArray) {
+			ItemStack[] oreArray = SMUtil.getOreArray(oreName);
+			arrayList.add(oreArray);
+			arraySize += oreArray.length;
+		}
+
+		// 配列の初期化
+		int putLength = 0;
+		ItemStack[] stackArray = new ItemStack[arraySize];
+
+		// リスト分回して配列にまとめる
+		for (ItemStack[] stack : arrayList) {
+			System.arraycopy(stack, 0, stackArray, putLength, stack.length);
+			putLength = stack.length;
+		}
+
+		return Ingredient.fromStacks(stackArray);
+	}
 
 	public static void registerSmelting() {
 		//たまごっちメモ：(精錬前のアイテムまたはブロック)、（精錬後のアイテムまたはブロック）、精錬時に出る経験値

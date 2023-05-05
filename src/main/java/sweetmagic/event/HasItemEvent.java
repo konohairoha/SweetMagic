@@ -16,8 +16,10 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.client.particle.ParticleMagicLight;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.util.ParticleHelper;
 
 public class HasItemEvent {
 
@@ -33,7 +35,9 @@ public class HasItemEvent {
 	public void renderfov(FOVUpdateEvent event) {
 
 		this.tickTime++;
-		if(this.tickTime % 65 != 0) { return; }
+		int renderTick = SMConfig.isRender ? 30 : 65;
+
+		if(this.tickTime % renderTick != 0) { return; }
 
 		this.tickTime = 0;
 		EntityPlayer player = FMLClientHandler.instance().getClient().player;
@@ -47,12 +51,9 @@ public class HasItemEvent {
 
 		Item item = stack.getItem();
 
+		// 杖の呼び出して選択中のアイテムを取得
 		if (item instanceof IWand) {
-
-			// 杖の呼び出し
 			IWand wand = (IWand) item;
-
-			// 選択中のアイテムを取得
 			item = wand.getSlotItem(player, stack, wand.getNBT(stack)).getItem();
 		}
 
@@ -77,7 +78,7 @@ public class HasItemEvent {
 			double d0 = (int) pos.getX() + 0.5D;
 			double d1 = (int) pos.getY() + 0.6D;
 			double d2 = (int) pos.getZ() + 0.5D;
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleMagicLight.Factory().createParticle(0, world, d0, d1, d2, 0D, 0D, 0D));
+			ParticleHelper.spawnParticl().addEffect(ParticleMagicLight.create(world, d0, d1, d2, 0D, 0D, 0D));
 		}
 	}
 }

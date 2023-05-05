@@ -121,42 +121,32 @@ public class WorldHelper {
 
 		// 杖と魔法アイテムの取得
 		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+
+		float maxHealth = player.getMaxHealth();
+		float healValue = isFullHeal ? maxHealth : maxHealth * (0.5F + 0.02F * (level - 1));
 
 		// 追加経験値
 		int addExp = 0;
 		List<EntityLivingBase> list = getEntityList(world, aabb);
 
-		for (EntityLivingBase ent : list) {
+		for (EntityLivingBase entity : list) {
 
-			if (ent instanceof IMob || ent.getHealth() >= ent.getMaxHealth()) { continue; }
+			if (entity instanceof IMob || entity.getHealth() >= entity.getMaxHealth()) { continue; }
 
-			if (!isFullHeal) {
-
-				// switch文で回復量を変える予定
-				ent.setHealth(ent.getHealth() + (wand.getLevel(stack) * 2) + 4);
-
-				// デバフ解除
-				ent.removePotionEffect(MobEffects.HUNGER);
-				ent.removePotionEffect(MobEffects.WEAKNESS);
-				addExp++;
-			}
-
-			// 全回復
-			else {
-				ent.setHealth(ent.getMaxHealth());
-			}
+			// switch文で回復量を変える予定
+			entity.setHealth(entity.getHealth() + healValue);
+			entity.removePotionEffect(MobEffects.HUNGER);
+			entity.removePotionEffect(MobEffects.WEAKNESS);
+			addExp++;
 
 			// パーティクルスポーン
-			ParticleHelper.spawnHeal(ent, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
+			ParticleHelper.spawnHeal(entity, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
 		}
 
-
-		if (addExp > 0 && !wand.isCreativeWand() && isFullHeal) {
-
-			addExp *= 2;
-
-			// 経験値の追加
-			wand.levelUpCheck(world, player, stack, addExp);
+		// 経験値の追加
+		if (addExp > 0 && !wand.isCreativeWand()) {
+			wand.levelUpCheck(world, player, stack, addExp * 2);
 		}
 	}
 
@@ -233,8 +223,8 @@ public class WorldHelper {
 		return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
 	}
 
-	public static List<ItemStack> getBlockDrops(World world, EntityPlayer player, IBlockState state, Block block, BlockPos pos, boolean canSilk, int fortune){
-		if (canSilk && block.canSilkHarvest(world, pos, state, player)){
+	public static List<ItemStack> getBlockDrops(World world, EntityPlayer player, IBlockState state, Block block, BlockPos pos, boolean canSilk, int fortune) {
+		if (canSilk && block.canSilkHarvest(world, pos, state, player)) {
 			return Lists.newArrayList(new ItemStack(block, 1, block.getMetaFromState(state)));
 		}
 		return block.getDrops(world, pos, state, fortune);
@@ -242,7 +232,7 @@ public class WorldHelper {
 
 	public static void createLootDrop(List<ItemStack> drops, World world, double x, double y, double z) {
 
-		ItemHelper.compactItemListNoStacksize(drops);
+		ItemHelper.compactStackList(drops);
 		if (drops.isEmpty()) { return; }
 
 		for (ItemStack drop : drops) {
@@ -270,7 +260,7 @@ public class WorldHelper {
 		}
 
 		world.playSound(null, living.getPosition(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 3F, 1F / (world.rand.nextFloat() * 0.2F + 0.9F));
-		ParticleHelper.spawnBoneMeal(world, new BlockPos(living.posX, living.posY + 0.5, living.posZ), EnumParticleTypes.EXPLOSION_HUGE);
+		ParticleHelper.spawnParticle(world, new BlockPos(living.posX, living.posY + 0.5, living.posZ), EnumParticleTypes.EXPLOSION_HUGE);
 	}
 
 	// ピースフルか

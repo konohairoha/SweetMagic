@@ -35,10 +35,12 @@ public class SoundHelper {
 	public static final int S_TELEPORT = 10;
 	// リジェネ解除音
 	public static final int S_REMOVE = 11;
+	// 回避音
+	public static final int S_AVOID = 12;
 
 	// クライアント対象プレイヤーに音声を再生させる処理
 	public static void PlaySoundToPlayer(int sound, float pitch, float volume) {
-		
+
 		SoundEvent play_Sound = null;
 
 		switch (sound) {
@@ -74,6 +76,9 @@ public class SoundHelper {
 			break;
 		case S_REMOVE:
 			play_Sound = SoundEvents.ENTITY_ITEM_BREAK;
+			break;
+		case S_AVOID:
+			play_Sound = SMSoundEvent.AVOID;
 			break;
 		default:
 			// ログ流して処理強制終了

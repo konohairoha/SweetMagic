@@ -50,7 +50,7 @@ public class MFStuffRenderEvent {
 		renderGen(world, player, stack, x, y, z, parTick);
 	}
 
-	// マジシャンズビギナーかどうか
+	// 魔法流の杖かどうか
 	public static boolean isStuff (ItemStack stack) {
 		return stack.getItem() instanceof MFStuff;
 	}
@@ -65,7 +65,7 @@ public class MFStuffRenderEvent {
 		// 座標がnull以外なら生成範囲をレンダー
 		if (pos != null) {
 			addHeldToRenderList(world, stack, pos, stack.getItem());
-			RenderUtils.drawCube(renderList);
+			RenderUtils.drawCube(renderList, false);
 		}
 
 		// AABBリストの初期化
@@ -74,7 +74,7 @@ public class MFStuffRenderEvent {
 
 	// レンダー範囲を向き合わせて取得
 	public static void addHeldToRenderList(World world, ItemStack stack, BlockPos pos, Item item) {
-		AxisAlignedBB box = new AxisAlignedBB(pos, pos.add(1, -1, 1)).offset(-x, -y + 0.025, -z);
+		AxisAlignedBB box = new AxisAlignedBB(pos, pos.add(1, -1, 1)).offset(-x, -y, -z).grow(0.005D);
 		renderList.add(box);
 	}
 }

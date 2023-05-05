@@ -18,7 +18,9 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iitem.IRangePosTool;
 import sweetmagic.handlers.PacketHandler;
+import sweetmagic.init.item.sm.magic.AetherHammer;
 import sweetmagic.init.item.sm.magic.StarLightWand;
 import sweetmagic.packet.StarLightPKT;
 import sweetmagic.util.ItemHelper;
@@ -42,18 +44,19 @@ public class StarLightWandEvent {
 
         EntityPlayer player = event.getEntityPlayer();
         ItemStack stack = player.getHeldItemMainhand();
-        if (!(stack.getItem() instanceof StarLightWand)) { return; }
+        if (!(stack.getItem() instanceof StarLightWand) && !(stack.getItem() instanceof AetherHammer)) { return; }
 
+        boolean isHammer = stack.getItem() instanceof AetherHammer;
 		BlockPos pos = event.getPos();
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
 
 		// 設置モードなら触れた面の座標
-		if (!tags.getBoolean(REPLACE)) {
+		if (!tags.getBoolean(REPLACE) && !isHammer) {
 			pos = pos.offset(event.getFace());
 		}
 
 		// スニークしてるなら終点を登録
-		if (player.isSneaking()){
+		if (player.isSneaking()) {
 			tags.setInteger(ENDX, pos.getX());
 			tags.setInteger(ENDY, pos.getY());
 			tags.setInteger(ENDZ, pos.getZ());
@@ -93,7 +96,7 @@ public class StarLightWandEvent {
 		z = player.lastTickPosZ + (player.posZ - player.lastTickPosZ) * parTick;
 
 		if (addHeldToRenderList(world, stack, stack.getItem())) {
-			RenderUtils.drawCube(renderList);
+			RenderUtils.drawCube(renderList, false);
 		}
 
 		renderList.clear();
@@ -101,14 +104,14 @@ public class StarLightWandEvent {
 
 	// スターライトワンドかどうか
 	public static boolean isSLWand (ItemStack stack) {
-		return stack.getItem() instanceof StarLightWand;
+		return stack.getItem() instanceof StarLightWand || stack.getItem() instanceof AetherHammer;
 	}
 
 	// レンダー範囲を向き合わせて取得
 	public static boolean addHeldToRenderList(World world, ItemStack stack, Item item) {
 
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
-		StarLightWand wand = (StarLightWand) item;
+		IRangePosTool wand = (IRangePosTool) item;
 		BlockPos startPos = null;
 		BlockPos endPos = null;
 

@@ -2,6 +2,7 @@ package sweetmagic.event;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.AttachCapabilitiesEvent;
@@ -27,7 +28,7 @@ public class EntitiySpawnEvent {
 		if (event.getResult() == Event.Result.ALLOW || event.isSpawner()) { return; }
 
 		EntityLivingBase entity = event.getEntityLiving();
-		if (!(entity instanceof IMob) || !entity.isNonBoss()) { return; }
+		if ( ( !(entity instanceof IMob) && !(entity instanceof EntityBat) ) || !entity.isNonBoss()) { return; }
 
 		SpawnBlockRegsterContainer container = event.getWorld().getCapability(CapabilityHandler.CONTAINER_REGISTRY, null);
 

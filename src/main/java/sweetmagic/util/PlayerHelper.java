@@ -1,13 +1,14 @@
 package sweetmagic.util;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraftforge.items.IItemHandlerModifiable;
-import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IPouch;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.tile.inventory.InventoryPouch;
@@ -54,51 +55,48 @@ public class PlayerHelper {
 		ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
 		if (stack.isEmpty() || !(stack.getItem() instanceof IPouch) ) { return time; }
 
-		// インベントリを取得
-		InventoryPouch neo = new InventoryPouch(entity);
-		IItemHandlerModifiable inv = neo.inventory;
 		float addTime = 1F;
 
-		// インベントリの分だけ回す
-		for (int i = 0; i < inv.getSlots(); i++) {
+		// インベントリを取得
+		InventoryPouch neo = new InventoryPouch(entity);
+		List<ItemStack> stackList = neo.getStackList();
 
-			// アイテムを取得し空かアクセサリー以外なら次へ
-			ItemStack st = inv.getStackInSlot(i);
-			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+		// インベントリの分だけ回す
+		for (ItemStack st : stackList) {
 
 			// ペンデュラムネックレスなら
 			if (st.getItem() == ItemInit.pendulum_necklace) {
-				addTime += 0.1F;
+				addTime += 0.175F;
 			}
 		}
 
 		return (int) (time * addTime);
 	}
 
-    public static void addExperience (EntityPlayer player, int amount) {
-        final int experience = getExperience(player) + amount;
-        player.experienceTotal = experience;
-        player.experienceLevel = getLevelForExperience(experience);
-        final int expForLevel = getExperienceForLevels(player.experienceLevel);
-        player.experience = (float) (experience - expForLevel) / (float) player.xpBarCap();
+    public static void addExp (EntityPlayer player, int amount) {
+        final int exp = getExpValue(player) + amount;
+        player.experienceTotal = exp;
+        player.experienceLevel = getLevelForExp(exp);
+        final int expForLevel = getExpForLevel(player.experienceLevel);
+        player.experience = (float) (exp - expForLevel) / (float) player.xpBarCap();
     }
 
-    public static int getExperience (EntityPlayer player) {
-        return (int) (getExperienceForLevels(player.experienceLevel) + player.experience * player.xpBarCap());
+    public static int getExpValue (EntityPlayer player) {
+        return (int) (getExpForLevel(player.experienceLevel) + player.experience * player.xpBarCap());
     }
 
-    public static int getLevelForExperience (int experience) {
+    public static int getLevelForExp (int exp) {
 
         int level = 0;
 
-        while (getExperienceForLevels(level) <= experience) {
+        while (getExpForLevel(level) <= exp) {
             level++;
         }
 
         return level - 1;
     }
 
-    public static int getExperienceForLevels (int level) {
+    public static int getExpForLevel (int level) {
 
         if (level == 0) { return 0; }
 
@@ -111,5 +109,13 @@ public class PlayerHelper {
         }
 
         return (int) (4.5 * level * level - 162.5 * level + 2220);
+    }
+
+    public static ItemStack getLeg (EntityPlayer player) {
+    	return player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+    }
+
+    public static Item getLegItem (EntityPlayer player) {
+    	return getLeg(player).getItem();
     }
 }

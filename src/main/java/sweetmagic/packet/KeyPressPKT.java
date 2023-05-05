@@ -1,5 +1,7 @@
 package sweetmagic.packet;
 
+import java.util.List;
+
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
@@ -11,14 +13,20 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IPouch;
+import sweetmagic.api.iitem.IRangePosTool;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.IWand;
-import sweetmagic.init.ItemInit;
+import sweetmagic.handlers.PacketHandler;
+import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.item.sm.magic.StarLightWand;
+import sweetmagic.init.item.sm.sweetmagic.SMBook;
 import sweetmagic.init.item.sm.sweetmagic.SMBookCosmic;
+import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.key.SMKeybind;
 import sweetmagic.util.ItemHelper;
+import sweetmagic.util.SoundHelper;
 
 public class KeyPressPKT implements IMessage {
 
@@ -51,6 +59,8 @@ public class KeyPressPKT implements IMessage {
 				public void run() {
 
 					EntityPlayerMP player = ctx.getServerHandler().player;
+					if (player.isSpectator()) { return; }
+
 					ItemStack stack = player.getHeldItemMainhand();
 					Item item = stack.getItem();
 
@@ -86,8 +96,8 @@ public class KeyPressPKT implements IMessage {
 							wand.nextSlot(player.world, player, stack);
 						}
 
-						else if (item instanceof StarLightWand) {
-							((StarLightWand) item).resetPos(stack);
+						else if (item instanceof IRangePosTool) {
+							((IRangePosTool) item).resetPos(stack);
 						}
 
 						return;
@@ -104,10 +114,32 @@ public class KeyPressPKT implements IMessage {
 							player.world.playSound(null, player.getPosition(), SoundEvents.UI_BUTTON_CLICK, SoundCategory.NEUTRAL, 0.5F, 1F);
 						}
 
-						// 宇宙と魔術書を持っているなら
-						else if (item == ItemInit.magic_book_cosmic) {
+						// 上位魔術書を持っているなら
+						else if (item instanceof SMBookCosmic) {
 							SMBookCosmic book = (SMBookCosmic) item;
 							book.setPickUp(stack);
+						}
+
+						else {
+							ItemStack legs = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+
+							// ポーチ
+							if (!legs.isEmpty() && legs.getItem() instanceof IPouch) {
+
+								InventoryPouch neo = new InventoryPouch(player);
+								List<ItemStack> stackList = neo.getStackList();
+
+								// インベントリの分だけ回す
+								for (ItemStack acce : stackList) {
+
+									// 本以外なら次へ
+									if (!(acce.getItem() instanceof SMBook)) { continue; }
+
+									player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.SMBOOK_GUI, player.world, 0, -1, -1);
+									PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_PAGE, 1F, 0.33F), (EntityPlayerMP) player);
+									return;
+								}
+							}
 						}
 
 						return;

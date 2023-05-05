@@ -34,7 +34,7 @@ public class SMLoottableEvent {
 
 		// ボーナスチェスト
 		if (src.equals(LootTableList.CHESTS_SPAWN_BONUS_CHEST)) {
-			Item item = SMConfig.isHard ? Item.getItemFromBlock(BlockInit.sturdust_crystal_bot) : ItemInit.magicianbeginner_book;
+			Item item = SMConfig.isHard == 2 ? Item.getItemFromBlock(BlockInit.sturdust_crystal_bot) : ItemInit.magicianbeginner_book;
 			pool.addEntry(new LootEntryItem(item, 100, 0, FUN, CON, MODID + ":magicianbeginner_book"));
 		}
 

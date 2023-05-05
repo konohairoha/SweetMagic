@@ -26,6 +26,7 @@ import sweetmagic.handlers.RecipeHandler;
 import sweetmagic.handlers.RegistryHandler;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.AdvancedInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.proxy.CommonProxy;
 import sweetmagic.recipe.RecipeManager;
 import sweetmagic.util.SMChunkLoader;
@@ -39,7 +40,7 @@ public class SweetMagicCore {
 
     public static final String MODID = "sweetmagic";
     public static final String NAME = "SweetMagic";
-    public static final String VERSION = "1.1.5";
+    public static final String VERSION = "1.4.0";
     public static final String CLIENTPROXY = "sweetmagic.proxy.ClientProxy";
     public static final String COMMONPROXY = "sweetmagic.proxy.CommonProxy";
 
@@ -55,10 +56,10 @@ public class SweetMagicCore {
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
 
-    	this.proxy.preInit(event);
-
     	// すぐconfigの読み込みをする
     	SMConfig.INSTANCE.load(event.getModConfigurationDirectory());
+
+    	this.proxy.preInit(event);
 
     	this.logger = event.getModLog();
 
@@ -87,6 +88,9 @@ public class SweetMagicCore {
 		// 能力の読み込み
 		CapabilityHandler.registerModCaps();
 
+    	// 鉱石辞書登録
+    	OreDictionaryHandler.registerOreDictionary();
+
     }
 
     @EventHandler
@@ -100,9 +104,6 @@ public class SweetMagicCore {
 
     	// イベント登録
     	RegistryHandler.eventHandler(event);
-
-    	// 鉱石辞書登録
-    	OreDictionaryHandler.registerOreDictionary();
 
     	// 種の追加
     	RegistryHandler.addSeed();
@@ -121,6 +122,8 @@ public class SweetMagicCore {
 
         // 追加モブのスポーンするバイオームを設定
         RegistryHandler.setSpawnBiome();
+
+        LootTableInit.regsterLoottable();
     }
 
 	@EventHandler
@@ -135,6 +138,9 @@ public class SweetMagicCore {
 
         // 追加レシピ
         RecipeHandler.registerCrafting();
+
+        // 連携周りの登録
+        RegistryHandler.registerPlugin();
 
 	}
 

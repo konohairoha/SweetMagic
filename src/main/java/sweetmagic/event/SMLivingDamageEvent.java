@@ -1,10 +1,14 @@
 package sweetmagic.event;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -15,7 +19,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.api.iitem.IAcce;
 import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.IPouch;
@@ -25,6 +28,7 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.monster.ISMMob;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
+import sweetmagic.init.item.sm.armor.MagiciansPouch;
 import sweetmagic.init.tile.inventory.InventoryPouch;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.EventUtil;
@@ -48,33 +52,40 @@ public class SMLivingDamageEvent {
 		DamageSource src = event.getSource();
 
 		// えんちちーによる攻撃なら
-		if (src.getTrueSource() instanceof EntityLivingBase) {
-			newDam = this.fromEntityDamage(event, (EntityLivingBase) src.getTrueSource(), target, src, newDam);
+		if ( src.getTrueSource() instanceof EntityLivingBase || ( src.getTrueSource() == null && src == DamageSource.MAGIC )) {
+
+			EntityLivingBase entity = src.getTrueSource() != null ? (EntityLivingBase) src.getTrueSource() : null;
+
+			newDam = this.fromEntityDamage(event, entity, target, src, newDam);
 			if (event.isCanceled()) { return; }
 		}
 
-		// エーテルバリアーを張っていれば
-		if (target.isPotionActive(PotionInit.aether_barrier)) {
-			newDam = this.barrierCut(target, newDam);
-		}
+		// ダメージが0を超えていたら
+		if (newDam > 0) {
 
-		ItemStack chest = target.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-		Item chestItem = chest.getItem();
+			// エーテルバリアーを張っていれば
+			if (target.isPotionActive(PotionInit.aether_barrier)) {
+				newDam = this.barrierCut(target, newDam);
+			}
 
-		// ローブを着ていたら
-		if (chestItem instanceof IRobe) {
-			newDam = this.robeDamageCut(src, target, newDam, chest, chestItem);
-		}
+			ItemStack chest = this.getArmor(target, EntityEquipmentSlot.CHEST);
+			Item chestItem = chest.getItem();
 
-		// 血吸によるHP回復
-		if (target.getHealth() <= newDam && src.getTrueSource() instanceof EntityLivingBase && src.getImmediateSource() instanceof EntityBaseMagicShot) {
+			// ローブを着ていたら
+			if (chestItem instanceof IRobe) {
+				newDam = this.robeDamageCut(src, target, newDam, chest, chestItem);
+			}
 
-			EntityLivingBase attacker = (EntityLivingBase) src.getTrueSource();
-			ItemStack porch = attacker.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-			Item porchItem = porch.getItem();
+			// 血吸によるHP回復
+			if (target.getHealth() <= newDam && src.getTrueSource() instanceof EntityLivingBase && src.getImmediateSource() instanceof EntityBaseMagicShot) {
 
-			if (porchItem instanceof IPouch) {
-				this.blood_suckingEffect(attacker, porch, porchItem);
+				EntityLivingBase attacker = (EntityLivingBase) src.getTrueSource();
+				ItemStack porch = this.getArmor(attacker, EntityEquipmentSlot.LEGS);
+				Item porchItem = porch.getItem();
+
+				if (porchItem instanceof IPouch) {
+					this.targetKillEffect(attacker, porch, porchItem);
+				}
 			}
 		}
 
@@ -83,11 +94,6 @@ public class SMLivingDamageEvent {
 
 	// えんちちーの攻撃
 	public float fromEntityDamage (LivingHurtEvent event, EntityLivingBase attacker, EntityLivingBase target, DamageSource src, float newDam) {
-
-		// エメラルドピアスの効果
-		if (target instanceof EntityPlayer) {
-			newDam = this.emelaldPiasEffect((EntityPlayer) target, newDam);
-		}
 
 		// 無敵魔法
 		if (target.isPotionActive(PotionInit.aether_shield)) {
@@ -103,8 +109,8 @@ public class SMLivingDamageEvent {
 			return newDam;
 		}
 
-		// 未来視レベル2以上なら
-		if (target.isPotionActive(PotionInit.timestop) && this.getPotionLevel(target, PotionInit.timestop) >= 1) {
+		// 未来視なら
+		if (target.isPotionActive(PotionInit.timestop) && attacker != null) {
 
 			// 攻撃を無効化したら終了
 			if (this.futureVision(src, target, attacker, newDam)) {
@@ -114,29 +120,29 @@ public class SMLivingDamageEvent {
 			}
 		}
 
+		// エメラルドピアスの効果
+		if (target instanceof EntityPlayer) {
+			newDam = this.emelaldPiasEffect((EntityPlayer) target, newDam);
+		}
+
 		// 攻撃者が燃焼状態なら攻撃力ダウン
-		if (attacker.isPotionActive(PotionInit.flame)) {
+		if (attacker != null && attacker.isPotionActive(PotionInit.flame)) {
 			newDam *= 0.75;
 		}
 
 		// 火力上昇ならダメージアップ
-		if (attacker.isPotionActive(PotionInit.shadow)) {
+		if (attacker != null && attacker.isPotionActive(PotionInit.shadow)) {
 			newDam = this.lunaticAdd(target, attacker, newDam);
 		}
 
 		// 攻撃されたのがえんちちーかつエレキアーマーかつボスでないなら
-		if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker.isNonBoss()) {
+		if (target instanceof EntityLivingBase && target.isPotionActive(PotionInit.electric_armor) && attacker != null && attacker.isNonBoss()) {
 			newDam = this.getElecArmor(target, attacker, newDam);
 		}
 
 		// 毒の付与
-		if (attacker.isPotionActive(PotionInit.grant_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
+		if (attacker != null && attacker.isPotionActive(PotionInit.grant_poison) && !target.isPotionActive(PotionInit.grant_poison)) {
 			this.addGrantPoison(attacker, target);
-		}
-
-		// 未来視が付いてたらスタン
-		if (attacker.isPotionActive(PotionInit.timestop) && target instanceof EntityLiving && src instanceof SMDamage) {
-			this.activeFutureVision(attacker, (EntityLiving) target);
 		}
 
 		// 猛毒が付いてたらダメージ増加
@@ -144,46 +150,40 @@ public class SMLivingDamageEvent {
 			newDam = this.addPoisonDamage(target, newDam);
 		}
 
-		// 回避魔法
-		if (target.isPotionActive(PotionInit.cyclone)) {
-
-			// 攻撃向こうかなら終了
-			if(this.avoidAtttack(target, this.getPotionLevel(target, PotionInit.cyclone))) {
-				event.setAmount(0);
-				return 0F;
-			}
+		// 防御力ダウンが付与されているとダメージ増加
+		if (target.isPotionActive(PotionInit.armor_break)) {
+			newDam *= 1.F + this.getPotionLevel(target, PotionInit.armor_break) * 0.1F;
 		}
 
-		// 風のレリーフ
-		if (target.isPotionActive(PotionInit.wind_relief)) {
-			event.setAmount(0);
-			return 0F;
+		// 回避処理
+		newDam = this.avoidDamage(target, newDam);
+
+		// 回避出来たら音を鳴らす
+		if (newDam <= 0F && target instanceof EntityPlayer) {
+
+			if (this.avoidEffct((EntityPlayer) target) && target instanceof EntityPlayerMP) {
+				PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_AVOID, 0.125F, 1.25F), (EntityPlayerMP) target);
+			}
 		}
 
 		return newDam;
 	}
 
-	// 回避魔法
-	public boolean avoidAtttack (EntityLivingBase entity, int level) {
-		return ( 0.01F + level * 0.02F ) >= entity.world.rand.nextFloat();
-	}
-
 	// エレキアーマー
-	public float getElecArmor (EntityLivingBase entity, EntityLivingBase liv, float dame) {
+	public float getElecArmor (EntityLivingBase target, EntityLivingBase attacker, float dame) {
 
 		// ポーション取得
-		PotionEffect effect = entity.getActivePotionEffect(PotionInit.electric_armor);
-		int level = effect.getAmplifier() + 1;
-		int time = effect.getDuration();
+		PotionEffect effect = target.getActivePotionEffect(PotionInit.electric_armor);
+		int level = effect.getAmplifier();
 
 		// 反撃ダメージ
 		float counter = dame * (level * 0.2F);
-		float health = liv.getHealth();
+		float health = attacker.getHealth();
 
 		// バフ時間の減少
-		this.setPotionTime(entity.world, entity, effect.getPotion(), level, time, (int) (dame * 20));
+		this.setPotionTime(target.world, target, effect.getPotion(), level, effect.getDuration(), (int) (dame * 20));
 
-		liv.setHealth( Math.max(1, health - counter) );
+		attacker.setHealth( Math.max(1, health - counter) );
 		dame -= 2;
 
 		return dame;
@@ -199,21 +199,16 @@ public class SMLivingDamageEvent {
 	// エメラルドピアス
 	public float emelaldPiasEffect (EntityPlayer player, float dame) {
 
-		ItemStack leg = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-		if (!(leg.getItem() instanceof IPouch)) { return dame; }
+		if (!(PlayerHelper.getLegItem(player) instanceof IPouch)) { return dame; }
 
 		// インベントリを取得
-		InventoryPouch neo = new InventoryPouch(player);
-		IItemHandlerModifiable inv = neo.inventory;
+		List<ItemStack> stackList = new InventoryPouch(player).getStackList();
 
 		// インベントリの分だけ回す
-		for (int i = 0; i < inv.getSlots(); i++) {
+		for (ItemStack stack : stackList) {
 
-			// アイテムを取得し空かアクセサリー以外なら次へ
-			ItemStack st = inv.getStackInSlot(i);
-			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
-
-			Item item = st.getItem();
+			// アクセサリーの取得
+			Item item = stack.getItem();
 			IAcce acce = (IAcce) item;
 
 			// エメラルドピアスを持ってるならダメージ増加
@@ -238,16 +233,22 @@ public class SMLivingDamageEvent {
 
 			// 未来視を5分減らす
 			PotionEffect effect = target.getActivePotionEffect(PotionInit.timestop);
-			int level = effect.getAmplifier() + 1;
-			int time = effect.getDuration();
+			int level = effect.getAmplifier();
+			boolean isFV = level == 0;
 
 			// バフ時間の減少
-			this.setPotionTime(target.world, target, effect.getPotion(), level, time, 6000);
+			this.setPotionTime(target.world, target, effect.getPotion(), level, effect.getDuration(), 6000);
 
 			// 8秒間敵を動かなくさせる
-			EventUtil.tameAIDonmov(living, 8);
+			EventUtil.tameAIDonmov(living, isFV ? 8 : 10);
 			DamageSource damage = SMDamage.MagicDamage(living, target);
 			attacker.attackEntityFrom(damage, newDam);
+
+			// ボスが攻撃してきたら因果律予測を付与
+			if (!isFV && !living.isNonBoss()) {
+				PlayerHelper.addPotion(target, PotionInit.causality_prediction, 600, 0, false);
+			}
+
 			return true;
 		}
 
@@ -255,16 +256,15 @@ public class SMLivingDamageEvent {
 	}
 
 	// エーテルバリア
-	public float barrierCut(EntityLivingBase liv, float dame) {
+	public float barrierCut(EntityLivingBase target, float dame) {
 
-		PotionEffect effect = liv.getActivePotionEffect(PotionInit.aether_barrier);
-		int level = effect.getAmplifier() + 1;
-		int time = effect.getDuration();
+		PotionEffect effect = target.getActivePotionEffect(PotionInit.aether_barrier);
+		int level = effect.getAmplifier();
 
 		// バフ時間の減少
-		this.setPotionTime(liv.world, liv, effect.getPotion(), level, time, (int) (dame * 20));
+		this.setPotionTime(target.world, target, effect.getPotion(), level, effect.getDuration(), (int) (dame * 20));
 
-		return dame / level;
+		return dame / (level + 1);
 	}
 
 	// 猛毒追加ダメージ
@@ -314,37 +314,30 @@ public class SMLivingDamageEvent {
 		}
 	}
 
-	// 未来視レベル0なら敵を動かなくさせる
-	public void activeFutureVision (EntityLivingBase attacker, EntityLiving target) {
-		if (this.getPotionLevel(attacker, PotionInit.timestop) == 0) {
-			EventUtil.tameAIDonmov(target, 1);
-		}
-	}
-
-	// 血吸によるHP回復
-	public void blood_suckingEffect (EntityLivingBase entity, ItemStack porch, Item porchItem) {
+	// 敵を倒したら
+	public void targetKillEffect (EntityLivingBase entity, ItemStack porch, Item porchItem) {
 
 		if (entity.getHealth() >= 0.25D && entity instanceof EntityPlayer) {
 
 			// インベントリを取得
 			float healHealth = 0F;
 			EntityPlayer player = (EntityPlayer) entity;
-			InventoryPouch neo = new InventoryPouch(player);
-			IItemHandlerModifiable inv = neo.inventory;
+			List<ItemStack> stackList = new InventoryPouch(player).getStackList();
 
 			// インベントリの分だけ回す
-			for (int i = 0; i < inv.getSlots(); i++) {
-
-				// アイテムを取得し空かアクセサリー以外なら次へ
-				ItemStack st = inv.getStackInSlot(i);
-				if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
+			for (ItemStack stack : stackList) {
 
 				// アクセサリーの取得
-				Item item = st.getItem();
+				Item item = stack.getItem();
 
-				// 魔法使いの羽ペンなら減少時間を半分に
+				// 血吸の指輪なら体力回復
 				if (item == ItemInit.blood_sucking_ring) {
 					healHealth += 0.25F;
+				}
+
+				// 勇者の腕輪なら
+				else if (item == ItemInit.warrior_bracelet) {
+					((IAcce) item).acceeffect(player.world, player, stack);
 				}
 			}
 
@@ -352,37 +345,86 @@ public class SMLivingDamageEvent {
 		}
 	}
 
+	public float avoidDamage (EntityLivingBase entity, float damage) {
+
+		// 風のレリーフなら回避
+		if (entity.isPotionActive(PotionInit.wind_relief)) {
+			entity.removeActivePotionEffect(PotionInit.wind_relief);
+			return 0F;
+		}
+
+		float chance = 0F;
+
+		// アヴォイドなら確立回避
+		if (entity.isPotionActive(PotionInit.cyclone)) {
+			chance += ( 0.05F + this.getPotionLevel(entity, PotionInit.cyclone) * 0.05F );
+		}
+
+		// 幸運なら確立回避
+		if (entity.isPotionActive(MobEffects.LUCK)) {
+			chance += ( 0.01F + this.getPotionLevel(entity, MobEffects.LUCK) * 0.01F );
+		}
+
+		// 因果律予測なら確立上昇
+		if (entity.isPotionActive(PotionInit.causality_prediction)) {
+			chance += 0.1F;
+		}
+
+		// レギンスの取得
+		ItemStack legs = this.getArmor(entity, EntityEquipmentSlot.LEGS);
+
+		if (legs.getItem() instanceof IPouch && entity instanceof EntityPlayer) {
+
+			List<Item> blackList = new ArrayList<>();
+
+			// インベントリを取得
+			List<ItemStack> stackList = new InventoryPouch((EntityPlayer) entity).getStackList();
+
+			// インベントリの分だけ回す
+			for (ItemStack stack : stackList) {
+
+				Item item = stack.getItem();
+				if (blackList.contains(item)) { continue; }
+
+				blackList.add(item);
+
+				// 毒の牙なら確立回避
+				if (item == ItemInit.poison_fang) {
+					chance += ( 0.05F + 0.1F * ( 1F - Math.max(0.5F, entity.getHealth() / entity.getHealth()) ) );
+					break;
+				}
+
+				// エンジェルフリューゲルの確立追加
+				else if (item == ItemInit.angel_flugel) {
+					chance += 0.03F;
+					break;
+				}
+			}
+		}
+
+		return chance >= entity.world.rand.nextFloat() ? 0 : damage;
+	}
+
+	public boolean avoidEffct (EntityPlayer entity) {
+
+		if (MagiciansPouch.hasAcce(entity, ItemInit.angel_flugel)) {
+			PlayerHelper.addPotion(entity, MobEffects.REGENERATION, 60, 0, false);
+			PlayerHelper.addPotion(entity, MobEffects.STRENGTH, 400, 3, false);
+			PlayerHelper.addPotion(entity, PotionInit.mf_down, 400, 1, false);
+			return true;
+		}
+
+		return false;
+	}
+
 	// バフ時間の設定
 	public void setPotionTime (World world, EntityLivingBase entity, Potion potion, int level, int time, int decre) {
 
 		entity.removePotionEffect(potion);
 
-		// レギンスの取得
-		ItemStack legs = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-
-		if (legs.getItem() instanceof IPouch && entity instanceof EntityPlayer) {
-
-			// インベントリを取得
-			EntityPlayer player = (EntityPlayer) entity;
-			InventoryPouch neo = new InventoryPouch(player);
-			IItemHandlerModifiable inv = neo.inventory;
-
-			// インベントリの分だけ回す
-			for (int i = 0; i < inv.getSlots(); i++) {
-
-				// アイテムを取得し空かアクセサリー以外なら次へ
-				ItemStack st = inv.getStackInSlot(i);
-				if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
-
-				// アクセサリーの取得
-				Item item = st.getItem();
-
-				// 魔法使いの羽ペンなら減少時間を半分に
-				if (item == ItemInit.magician_quillpen) {
-					decre *= 0.25;
-					break;
-				}
-			}
+		if (entity instanceof EntityPlayer) {
+			boolean hasAcce = MagiciansPouch.hasAcce((EntityPlayer) entity, ItemInit.magician_quillpen);
+			decre *= hasAcce ? 0.25F : 1F;;
 		}
 
 		time -= decre;
@@ -405,5 +447,9 @@ public class SMLivingDamageEvent {
 	// ポーションレベル取得
 	public int getPotionLevel (EntityLivingBase entity, Potion potion) {
 		return entity.getActivePotionEffect(potion).getAmplifier();
+	}
+
+	public ItemStack getArmor (EntityLivingBase entity, EntityEquipmentSlot slot) {
+		return entity.getItemStackFromSlot(slot);
 	}
 }

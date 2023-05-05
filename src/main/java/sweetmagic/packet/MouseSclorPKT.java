@@ -49,9 +49,8 @@ public class MouseSclorPKT implements IMessage {
 					if (stack.isEmpty() || !(stack.getItem() instanceof IWand)) { return; }
 
 					IWand wand = (IWand) stack.getItem();
-					boolean isNext = msg.isNext;
 
-					if (isNext) {
+					if (msg.isNext) {
 						wand.nextSlot(player.world, player, stack);
 						return;
 					}

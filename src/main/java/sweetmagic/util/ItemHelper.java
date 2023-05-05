@@ -41,14 +41,7 @@ public class ItemHelper {
 		return new ItemStack(state.getBlock(), stackSize, state.getBlock().getMetaFromState(state));
 	}
 
-	public static NBTTagCompound getTag(ItemStack stack) {
-		if (!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
-		}
-		return stack.getTagCompound();
-	}
-
-	public static void compactItemListNoStacksize(List<ItemStack> list) {
+	public static void compactStackList(List<ItemStack> list) {
 
 		for (int x = 0; x < list.size(); x++) {
 
@@ -132,10 +125,8 @@ public class ItemHelper {
 		// ItemStackが空じゃないことをチェック
 		if (recipeStack.isEmpty()) { return false; }
 
-		// 鉱石辞書のID取得
+		// 鉱石辞書のID取得し鉱石辞書に登録してるかどうかのチェック
 		int[] recipeId = OreDictionary.getOreIDs(recipeStack);
-
-		// 鉱石辞書に登録してるかどうかのチェック
 		if (recipeId.length == 0) { return false; }
 
 		// recipeStackの鉱石辞書登録数分回す
@@ -157,7 +148,9 @@ public class ItemHelper {
 		else {
 			if (o1.getItem() != o2.getItem()) {
 				return Item.getIdFromItem(o1.getItem()) - Item.getIdFromItem(o2.getItem());
-			} else {
+			}
+
+			else {
 				return o1.getItemDamage() - o2.getItemDamage();
 			}
 		}

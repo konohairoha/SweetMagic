@@ -5,17 +5,17 @@ import net.minecraft.util.math.AxisAlignedBB;
 
 public class CollisionHelper {
 
-	public static AxisAlignedBB getBlockBounds(EnumFacing face, Bounds bounds) {
-		double[] fixeAABB = fixRotation(face, bounds.x1, bounds.z1, bounds.x2, bounds.z2);
-		return new AxisAlignedBB(fixeAABB[0], bounds.y1, fixeAABB[1], fixeAABB[2], bounds.y2, fixeAABB[3]);
+	public static AxisAlignedBB getBlockAABB(EnumFacing face, FaceAABB aabb) {
+		double[] fixeAABB = fixRot(face, aabb.x1, aabb.z1, aabb.x2, aabb.z2);
+		return new AxisAlignedBB(fixeAABB[0], aabb.y1, fixeAABB[1], fixeAABB[2], aabb.y2, fixeAABB[3]);
 	}
 
-	public static AxisAlignedBB getBlockBounds(EnumFacing facing, double x1, double y1, double z1, double x2, double y2, double z2) {
-		double[] bounds = fixRotation(facing, x1, z1, x2, z2);
+	public static AxisAlignedBB getBlockAABB(EnumFacing face, double x1, double y1, double z1, double x2, double y2, double z2) {
+		double[] bounds = fixRot(face, x1, z1, x2, z2);
 		return new AxisAlignedBB(bounds[0], y1, bounds[1], bounds[2], y2, bounds[3]);
 	}
 
-	private static double[] fixRotation(EnumFacing face, double var1, double var2, double var3, double var4) {
+	private static double[] fixRot(EnumFacing face, double var1, double var2, double var3, double var4) {
 		switch (face) {
 		case WEST:
 			double temp1 = var1;

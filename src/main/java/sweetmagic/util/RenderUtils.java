@@ -59,8 +59,15 @@ public class RenderUtils {
         GlStateManager.popMatrix();
     }
 
+    public static void renderItem(RenderItem renderer, ItemStack stack, float x, float y, float z, float angle, float xr, float yr, float zr, boolean flag) {
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, z);
+        renderer.renderItem(stack, ItemCameraTransforms.TransformType.FIXED);
+        GlStateManager.popMatrix();
+    }
+
 	// レンダー
-	public static void drawCube(List<AxisAlignedBB> renderList) {
+	public static void drawCube(List<AxisAlignedBB> renderList, boolean isRed) {
 
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -68,10 +75,18 @@ public class RenderUtils {
 		GlStateManager.disableCull();
 		GlStateManager.disableLighting();
 		GlStateManager.depthMask(false);
-		GlStateManager.color(1F, 1F, 0F, 1F);
+
+		if (isRed) {
+			GlStateManager.color(0F, 0.082F, 0.62F, 1F);
+		}
+
+		else {
+			GlStateManager.color(1F, 1F, 0F, 1F);
+		}
+
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder wr = tess.getBuffer();
-        GL11.glLineWidth(5.0F);
+        GL11.glLineWidth(isRed ? 10F : 5F);
 		wr.begin(2, DefaultVertexFormats.POSITION);
 
 		for (AxisAlignedBB b : renderList) {
@@ -92,10 +107,77 @@ public class RenderUtils {
 	        wr.pos(b.minX, b.maxY, b.minZ).endVertex();
 	        wr.pos(b.maxX, b.minY, b.minZ).endVertex();
 	        wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+
 	        wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
 	        wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
 	        wr.pos(b.minX, b.minY, b.maxZ).endVertex();
 	        wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+		}
+
+		tess.draw();
+		GlStateManager.depthMask(true);
+		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
+		GlStateManager.enableTexture2D();
+		GlStateManager.enableDepth();
+		GlStateManager.disableBlend();
+	}
+
+	// レンダー
+	public static void drawCube(List<AxisAlignedBB> renderList, int type) {
+
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableCull();
+		GlStateManager.disableLighting();
+		GlStateManager.depthMask(false);
+
+		if (type == 2) {
+	        GL11.glLineWidth(6F);
+			GlStateManager.color(1F, 0.4667F, 0.2196F, 0.5F);
+		}
+
+		else {
+	        GL11.glLineWidth(5F);
+			GlStateManager.color(1F, 0.69F, 0.549F, 0.325F);
+		}
+
+		Tessellator tess = Tessellator.getInstance();
+		BufferBuilder wr = tess.getBuffer();
+		wr.begin(type, DefaultVertexFormats.POSITION);
+
+		for (AxisAlignedBB b : renderList) {
+
+			wr.pos(b.minX, b.minY, b.minZ).endVertex();
+			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
+
+			wr.pos(b.minX, b.minY, b.minZ).endVertex();
+			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
+
+			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+			wr.pos(b.maxX, b.minY, b.minZ).endVertex();
+
+			wr.pos(b.maxX, b.minY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
+
+			wr.pos(b.minX, b.minY, b.minZ).endVertex();
+			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
+			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.minX, b.minY, b.maxZ).endVertex();
+
+			wr.pos(b.minX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.maxZ).endVertex();
+			wr.pos(b.maxX, b.maxY, b.minZ).endVertex();
+			wr.pos(b.minX, b.maxY, b.minZ).endVertex();
 		}
 
 		tess.draw();

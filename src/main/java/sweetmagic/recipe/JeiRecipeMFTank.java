@@ -21,7 +21,6 @@ public class JeiRecipeMFTank {
 		JeiRecipeMFTank.register(new ItemStack(Items.GLASS_BOTTLE, 1), new ItemStack(ItemInit.mf_sbottle, 1));
 		JeiRecipeMFTank.register(new ItemStack(ItemInit.b_mf_bottle, 1), new ItemStack(ItemInit.mf_bottle, 1));
 		JeiRecipeMFTank.register(new ItemStack(ItemInit.b_mf_magiabottle, 1), new ItemStack(ItemInit.mf_magiabottle, 1));
-
 	}
 
 	// 外向け用レシピ登録メソッド

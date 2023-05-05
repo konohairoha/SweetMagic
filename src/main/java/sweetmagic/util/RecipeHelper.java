@@ -22,6 +22,7 @@ import sweetmagic.api.recipe.pan.PanRecipeInfo;
 import sweetmagic.api.recipe.pedal.PedalRecipeInfo;
 import sweetmagic.api.recipe.pot.PotRecipeInfo;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.sm.sweetmagic.SMBookCosmic;
 import sweetmagic.init.item.sm.sweetmagic.SMBucket;
 
 public class RecipeHelper {
@@ -133,7 +134,7 @@ public class RecipeHelper {
 					if (itemInfos.size() != recipe.getInputList().size()) { break; }
 
 					// 数が揃ったら中分類から抜け出す
-					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack(), recipe.keepTag);
+					recipeInfo.setRecipeInfo(recipe.getHandList(), itemInfos, recipe.getOutputItemStack(), recipe.keepTag, recipe.needMF);
 					recipeInfo.canComplete = true;
 					return;
 
@@ -693,8 +694,8 @@ public class RecipeHelper {
 		}
 
 		// 上位魔術書
-		else if (handStack == ItemInit.magic_book_cosmic){
-			ItemStack book = new ItemStack(ItemInit.magic_book_cosmic);
+		else if (handStack instanceof SMBookCosmic){
+			ItemStack book = new ItemStack(handStack);
 			book.setTagCompound(ItemHelper.getNBT(handitem));
 			results.add(book);
 		}
@@ -722,8 +723,8 @@ public class RecipeHelper {
 			}
 
 			// 上位魔術書
-			else if (sendItem == ItemInit.magic_book_cosmic){
-				ItemStack book = new ItemStack(ItemInit.magic_book_cosmic);
+			else if (sendItem instanceof SMBookCosmic){
+				ItemStack book = new ItemStack(sendItem);
 				book.setTagCompound(ItemHelper.getNBT(send));
 				results.add(book);
 			}

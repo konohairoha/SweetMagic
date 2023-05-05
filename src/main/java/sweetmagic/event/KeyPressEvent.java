@@ -33,8 +33,11 @@ public class KeyPressEvent {
 	@SubscribeEvent
 	public static void onMouseEvent(MouseEvent event) {
 
-		// 杖を持っていないなら終了
+		// スペクターモードなら終了
 		EntityPlayer player = Minecraft.getMinecraft().player;
+		if (player.isSpectator()) { return; }
+
+		// 杖を持っていないなら終了
 		ItemStack stack = player.getHeldItemMainhand();
 		if (stack == ItemStack.EMPTY || !(stack.getItem() instanceof IWand)) { return; }
 

@@ -35,7 +35,6 @@ public class ScrollPagePKT implements IMessage {
 			EntityPlayer player = ctx.getServerHandler().player;
 			ContainerParallelInterfere container = (ContainerParallelInterfere) player.openContainer;
 			container.onScrollChanged(pkt.page);
-
 			return null;
 		}
 	}

@@ -1,6 +1,7 @@
 package sweetmagic.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.lwjgl.input.Keyboard;
@@ -76,11 +77,22 @@ public class ToolTipEvent {
 				if (toolTip.isEmpty()) { return; }
 
 				String effect = getTip("tip.effect.name");
+				List<String> toolTipBr = Arrays.<String>asList(new TextComponentTranslation(toolTip.get(0)).getFormattedText().split("<br>"));
 
-				// リストの分だけ回す
-				for (String name : toolTip) {
-					String listTip = new TextComponentTranslation(name, new Object[0]).getFormattedText();
-					tooltip.add(I18n.format(TextFormatting.GREEN + effect + TextFormatting.GOLD + listTip));
+				if (toolTipBr.size() == 1) {
+					tooltip.add(I18n.format(TextFormatting.GREEN + effect + "  : " + TextFormatting.GOLD + toolTipBr.get(0)));
+				}
+
+				else {
+
+					int i = 0;
+
+					// リストの分だけ回す
+					for (String name : toolTipBr) {
+						i++;
+						String listTip = new TextComponentTranslation(name).getFormattedText();
+						tooltip.add(I18n.format(TextFormatting.GREEN + effect + TextFormatting.GREEN + i + " : " + TextFormatting.GOLD + listTip));
+					}
 				}
 
 				item.magicToolTip(list);
@@ -98,14 +110,18 @@ public class ToolTipEvent {
 		else if (itemStack instanceof IWand) {
 
 			IWand wand = (IWand) itemStack;
+			int level = wand.getLevel(stack);
 
 			// キー操作
 			String open = getTip("tip.open.name");
 			String next = getTip("tip.next.name");
 			String back = getTip("tip.back.name");
-			tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.OPEN) + open));
-			tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.NEXT) + next));
-			tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.BACK) + back));
+
+			if (level <= 5) {
+				tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.OPEN) + open));
+				tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.NEXT) + next));
+				tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.BACK) + back));
+			}
 
 			// tier
 			tooltip.add(I18n.format(TextFormatting.GREEN + getTip("tip.tier.name") + " : " + wand.getTier() ));
@@ -124,14 +140,14 @@ public class ToolTipEvent {
 			// レベルアップに必要な経験値
 			int needExp = wand.needExp(wand.getMaxLevel(), nextLevel, stack);
 
-			tooltip.add(I18n.format(TextFormatting.GREEN + tipExp + " : " + wand.getLevel(stack)));
+			tooltip.add(I18n.format(TextFormatting.GREEN + tipExp + " : " + level));
 			tooltip.add(I18n.format(TextFormatting.GREEN + tipMF + " : " + String.format("%,d", wand.getMF(stack))));
 			tooltip.add(I18n.format(TextFormatting.GREEN + tipLv + " : " + String.format("%,d", needExp)));
 
 			// 属性杖なら属性表示
 			if (wand.isNotElement()) {
-				String tipEle = new TextComponentTranslation(enumString(wand.getWandElement().toString()), new Object[0]).getFormattedText();
-				String texEle = new TextComponentTranslation(getTipName("smelement"), new Object[0]).getFormattedText() + " ： " + tipEle;
+				String tipEle = new TextComponentTranslation(enumString(wand.getWandElement().toString())).getFormattedText();
+				String texEle = new TextComponentTranslation(getTipName("smelement")).getFormattedText() + " ： " + tipEle;
 				tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
 			}
 
@@ -139,6 +155,12 @@ public class ToolTipEvent {
 			if (Keyboard.isKeyDown(42)) {
 				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.mousescroll.name")));
 				tooltip.add(I18n.format(TextFormatting.GOLD + getTip("tip.shiftleft.name")));
+
+				if (level > 5) {
+					tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.OPEN) + open));
+					tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.NEXT) + next));
+					tooltip.add(I18n.format(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.BACK) + back));
+				}
 			}
 
 			else {
@@ -212,13 +234,13 @@ public class ToolTipEvent {
 		}
 
 		// 装備品
-		else if (itemStack instanceof IAcce) {
+		if (itemStack instanceof IAcce) {
 
 			IAcce acce = (IAcce) itemStack;
 
-			// Stringのリストを作成
-			List<String> list = new ArrayList<>();
-			tooltip.add(I18n.format(TextFormatting.RED + new TextComponentTranslation("tip.smacc.name", new Object[0]).getFormattedText()));
+			tooltip.add("");
+			tooltip.add(I18n.format(TextFormatting.RED + getTip(getTipName("smacc"))));
+			tooltip.add(I18n.format(TextFormatting.BLUE + "========================================"));
 
 			String tipEle = getTip(enumString(acce.getAcceType().name()));
 			String texEle = getTip(getTipName("smacce")) + " ： " + tipEle;
@@ -226,17 +248,45 @@ public class ToolTipEvent {
 			tooltip.add(I18n.format(TextFormatting.GREEN + texEle));
 			tooltip.add(I18n.format(TextFormatting.GREEN + getTip(getTipName("isduplication")) + " ： " + acce.isDuplication()));
 
+			if (!acce.canCraft().isEmpty()) {
+				tooltip.add(I18n.format(TextFormatting.GREEN + getTip(getTipName("smacc_howget")) + " ： " + getTip(getTipName(acce.canCraft())) ));
+			}
+
 			// tier
 			tooltip.add(I18n.format(TextFormatting.GREEN + getTip("tip.tier.name") + " : " + acce.getTier() ));
+			tooltip.add(I18n.format(TextFormatting.BLUE + "========================================"));
 
-			List<String> toolTip = acce.magicToolTip(list);
-			if (toolTip.isEmpty()) { return; }
+			List<String> debufList = new ArrayList<>();
+			acce.debuffRemovalTip(debufList);
+
+			if (!debufList.isEmpty()) {
+
+				String debuf = getTip("tip.debufeffect.name");
+				String tip = "";
+
+				for (int i = 0; i < debufList.size() ; i++) {
+
+					if (i != 0) { tip += TextFormatting.GOLD + ", "; }
+					tip += (TextFormatting.GOLD + getTip(debufList.get(i)));
+				}
+
+				tooltip.add(I18n.format(TextFormatting.GREEN + debuf + TextFormatting.WHITE + " : " + tip));
+			}
+
+			// Stringのリストを作成
+			List<String> list = new ArrayList<>();
+			List<String> textList = acce.magicToolTip(list);
+			if (textList.isEmpty()) { return; }
+
+			List<String> toolTip = Arrays.<String>asList(getTip(textList.get(0)).split("<br>"));
 
 			String effect = getTip("tip.effect.name");
+			int i = 0;
 
 			// リストの分だけ回す
 			for (String name : toolTip) {
-				tooltip.add(I18n.format(TextFormatting.GREEN + effect + " " + TextFormatting.GOLD + getTip(name)));
+				i++;
+				tooltip.add(I18n.format(TextFormatting.GREEN + effect + TextFormatting.GREEN + i + " : " + TextFormatting.GOLD + name));
 			}
 
 		}
@@ -253,7 +303,7 @@ public class ToolTipEvent {
 
 	// 翻訳に変換
 	public static String getTip (String tip) {
-		return new TextComponentTranslation(tip, new Object[0]).getFormattedText();
+		return new TextComponentTranslation(tip).getFormattedText();
 	}
 
 	// シフト押したときのツールチップ

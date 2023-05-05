@@ -3,6 +3,10 @@ package sweetmagic.handlers;
 import java.util.Arrays;
 import java.util.List;
 
+import defeatedcrow.hac.api.climate.ClimateAPI;
+import defeatedcrow.hac.api.climate.DCHeatTier;
+import defeatedcrow.hac.core.climate.ArmorResistantRegister;
+import defeatedcrow.hac.core.climate.MobResistantRegister;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Biomes;
 import net.minecraft.item.ItemStack;
@@ -11,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -19,6 +24,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.config.SMConfig;
+import sweetmagic.event.AlstroemeriaClickEvent;
 import sweetmagic.event.EntitiySpawnEvent;
 import sweetmagic.event.EntityItemTossEvent;
 import sweetmagic.event.HasItemEvent;
@@ -35,72 +41,110 @@ import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.layer.LayerBarrier;
 import sweetmagic.init.entity.layer.LayerEffectBase;
+import sweetmagic.init.entity.layer.LayerGlider;
 import sweetmagic.init.entity.layer.LayerMagicArray;
 import sweetmagic.init.entity.layer.LayerRefresh;
 import sweetmagic.init.entity.layer.LayerRegen;
-import sweetmagic.init.entity.layer.LayerRenderWand;
 import sweetmagic.init.entity.layer.LayerWandSandryon;
+import sweetmagic.init.entity.monster.EntityAncientFairy;
 import sweetmagic.init.entity.monster.EntityArchSpider;
+import sweetmagic.init.entity.monster.EntityBlackCat;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
+import sweetmagic.init.entity.monster.EntityBraveSkeleton;
 import sweetmagic.init.entity.monster.EntityCreeperCal;
 import sweetmagic.init.entity.monster.EntityElectricCube;
+import sweetmagic.init.entity.monster.EntityElshariaCurious;
 import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.monster.EntityIfritVerre;
+import sweetmagic.init.entity.monster.EntityPhantomZombie;
+import sweetmagic.init.entity.monster.EntityPixieVex;
+import sweetmagic.init.entity.monster.EntityRepairKitt;
+import sweetmagic.init.entity.monster.EntitySandryon;
+import sweetmagic.init.entity.monster.EntityShadowGolem;
+import sweetmagic.init.entity.monster.EntityShadowHorse;
+import sweetmagic.init.entity.monster.EntityShadowWolf;
+import sweetmagic.init.entity.monster.EntitySilderGhast;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
 import sweetmagic.init.entity.monster.EntityWindineVerre;
 import sweetmagic.init.entity.monster.EntityWitchMadameVerre;
+import sweetmagic.init.entity.monster.EntityZombieHora;
+import sweetmagic.init.entity.monster.EntityZombieKronos;
+import sweetmagic.init.tile.chest.TileDisplay;
+import sweetmagic.init.tile.chest.TileFruitCrate;
 import sweetmagic.init.tile.chest.TileGlassCup;
-import sweetmagic.init.tile.chest.TileGravityChest;
+import sweetmagic.init.tile.chest.TileIronShelf;
+import sweetmagic.init.tile.chest.TileMagiaStorage;
 import sweetmagic.init.tile.chest.TileModenRack;
 import sweetmagic.init.tile.chest.TileModenWallRack;
+import sweetmagic.init.tile.chest.TileNotePC;
+import sweetmagic.init.tile.chest.TilePlateShaped;
 import sweetmagic.init.tile.chest.TileRattanBasket;
+import sweetmagic.init.tile.chest.TileShocase;
+import sweetmagic.init.tile.chest.TileShoeBox;
 import sweetmagic.init.tile.chest.TileWandPedal;
 import sweetmagic.init.tile.chest.TileWoodChest;
+import sweetmagic.init.tile.chest.TileWoodenBox;
 import sweetmagic.init.tile.cook.TileFermenter;
 import sweetmagic.init.tile.cook.TileFlourMill;
 import sweetmagic.init.tile.cook.TileFreezer;
 import sweetmagic.init.tile.cook.TileJuiceMaker;
 import sweetmagic.init.tile.cook.TilePlate;
 import sweetmagic.init.tile.cook.TilePot;
-import sweetmagic.init.tile.cook.TileShocase;
 import sweetmagic.init.tile.cook.TileStove;
+import sweetmagic.init.tile.cook.TileTray;
+import sweetmagic.init.tile.magic.TileAetherCover;
+import sweetmagic.init.tile.magic.TileAetherEnchantTable;
 import sweetmagic.init.tile.magic.TileAetherFurnace;
 import sweetmagic.init.tile.magic.TileAetherHopper;
-import sweetmagic.init.tile.magic.TileFlyishForer;
+import sweetmagic.init.tile.magic.TileAltarCreat;
+import sweetmagic.init.tile.magic.TileAltarCreationStar;
+import sweetmagic.init.tile.magic.TileCleroLanp;
+import sweetmagic.init.tile.magic.TileCrystalCore;
+import sweetmagic.init.tile.magic.TileFigurineStand;
+import sweetmagic.init.tile.magic.TileGravityChest;
 import sweetmagic.init.tile.magic.TileMFAccelerator;
 import sweetmagic.init.tile.magic.TileMFAetherLanp;
 import sweetmagic.init.tile.magic.TileMFArcaneTable;
 import sweetmagic.init.tile.magic.TileMFChanger;
 import sweetmagic.init.tile.magic.TileMFChangerAdvanced;
 import sweetmagic.init.tile.magic.TileMFFisher;
+import sweetmagic.init.tile.magic.TileMFForer;
 import sweetmagic.init.tile.magic.TileMFFurnace;
 import sweetmagic.init.tile.magic.TileMFFurnaceAdvanced;
+import sweetmagic.init.tile.magic.TileMFGeneration;
+import sweetmagic.init.tile.magic.TileMFHarvester;
 import sweetmagic.init.tile.magic.TileMFMMTable;
 import sweetmagic.init.tile.magic.TileMFMMTank;
 import sweetmagic.init.tile.magic.TileMFPot;
+import sweetmagic.init.tile.magic.TileMFSqueezer;
 import sweetmagic.init.tile.magic.TileMFSuccessor;
 import sweetmagic.init.tile.magic.TileMFTable;
 import sweetmagic.init.tile.magic.TileMFTableAdvanced;
 import sweetmagic.init.tile.magic.TileMFTank;
 import sweetmagic.init.tile.magic.TileMFTankAdvanced;
+import sweetmagic.init.tile.magic.TileMFTankCreative;
+import sweetmagic.init.tile.magic.TileMagiaFluxCore;
+import sweetmagic.init.tile.magic.TileMagiaLantern;
 import sweetmagic.init.tile.magic.TileMagiaLight;
+import sweetmagic.init.tile.magic.TileMagiaReIncarnation;
 import sweetmagic.init.tile.magic.TileMagiaWrite;
 import sweetmagic.init.tile.magic.TileMagicBarrier;
 import sweetmagic.init.tile.magic.TileParallelInterfere;
 import sweetmagic.init.tile.magic.TilePedalCreate;
+import sweetmagic.init.tile.magic.TileRegister;
 import sweetmagic.init.tile.magic.TileSMSpaner;
 import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.init.tile.magic.TileStardustCrystal;
 import sweetmagic.init.tile.magic.TileStardustWish;
 import sweetmagic.init.tile.magic.TileToolRepair;
 import sweetmagic.init.tile.magic.TileWarpBlock;
+import sweetmagic.init.tile.magic.TileWorkbenchStorage;
 import sweetmagic.init.tile.plant.TileAlstroemeria;
-import sweetmagic.init.tile.plant.TileCleroLanp;
 import sweetmagic.init.tile.plant.TileSannyFlower;
+import sweetmagic.worldgen.dungen.map.MapFlugelHouse;
 import sweetmagic.worldgen.dungen.map.MapGenCastle;
 import sweetmagic.worldgen.dungen.map.MapGenDekaijyu;
 import sweetmagic.worldgen.dungen.map.MapGenIdo;
-import sweetmagic.worldgen.dungen.map.MapGenKutiMura;
 import sweetmagic.worldgen.dungen.map.MapGenMekyu;
 import sweetmagic.worldgen.dungen.map.MapGenPyramid;
 import sweetmagic.worldgen.dungen.map.MapGenTogijyo;
@@ -108,8 +152,8 @@ import sweetmagic.worldgen.dungen.map.MapGenVillager;
 import sweetmagic.worldgen.dungen.map.MapWitchHouse;
 import sweetmagic.worldgen.dungen.piece.CastlePiece;
 import sweetmagic.worldgen.dungen.piece.DekaijyuPiece;
+import sweetmagic.worldgen.dungen.piece.FlugelHousePiece;
 import sweetmagic.worldgen.dungen.piece.IdoPiece;
-import sweetmagic.worldgen.dungen.piece.KutiMuraPiece;
 import sweetmagic.worldgen.dungen.piece.MekyuPiece;
 import sweetmagic.worldgen.dungen.piece.PyramidPiece;
 import sweetmagic.worldgen.dungen.piece.TogijyoPiece;
@@ -121,7 +165,6 @@ import sweetmagic.worldgen.gen.CemeteryGen;
 import sweetmagic.worldgen.gen.CledonGen;
 import sweetmagic.worldgen.gen.FlowerGardenGen;
 import sweetmagic.worldgen.gen.FluitForestFlowerGen;
-import sweetmagic.worldgen.gen.GeddanGen;
 import sweetmagic.worldgen.gen.MoonGen;
 import sweetmagic.worldgen.gen.NetGen;
 import sweetmagic.worldgen.gen.SMOreGen;
@@ -175,9 +218,6 @@ public class RegistryHandler {
 		GameRegistry.registerWorldGenerator(new WellGen(), 0);	// 井戸生成
 		WellGen.initLootTable();									// ルートテーブルInit
 
-		GameRegistry.registerWorldGenerator(new GeddanGen(), 1);	// ゲッダン生成
-		GeddanGen.setLootChestA();									// ルートテーブルInit
-
 		GameRegistry.registerWorldGenerator(new BonusGen(), 1);	// ゲッダン生成
 
 		// 鉱石生成
@@ -192,9 +232,6 @@ public class RegistryHandler {
 
 		MapGenStructureIO.registerStructure(MapGenTogijyo.Start.class, "burassamu");
 		TogijyoPiece.registerIdoPiece();
-
-		MapGenStructureIO.registerStructure(MapGenKutiMura.Start.class, "kuchihatetamura");
-		KutiMuraPiece.registerIdoPiece();
 
 		MapGenStructureIO.registerStructure(MapGenMekyu.Start.class, "mekyu");
 		MekyuPiece.registerIdoPiece();
@@ -211,6 +248,35 @@ public class RegistryHandler {
 		MapGenStructureIO.registerStructure(MapGenVillager.Start.class, "villager");
 		VillagerPiece.registerIdoPiece();
 
+		MapGenStructureIO.registerStructure(MapFlugelHouse.Start.class, "flugel_house");
+		FlugelHousePiece.registerIdoPiece();
+
+		if (Loader.isModLoaded("dcs_lib")) {
+			ArmorResistantRegister arr = ArmorResistantRegister.INSTANCE;
+
+			arr.registerMaterial(new ItemStack(ItemInit.aether_choker), 2F, 0.25F);
+			arr.registerMaterial(new ItemStack(ItemInit.pure_choker), 3F, 0.375F);
+			arr.registerMaterial(new ItemStack(ItemInit.deus_choker), 5F, 0.5F);
+
+			arr.registerMaterial(new ItemStack(ItemInit.magicians_robe), 5F, 5F);
+			arr.registerMaterial(new ItemStack(ItemInit.curious_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.feary_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.ifrite_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.kitt_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.sandryon_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.windine_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.witchmadame_robe), 7.5F, 7.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.wizard_robe), 7.5F, 7.5F);
+
+			arr.registerMaterial(new ItemStack(ItemInit.magicians_pouch), 2.5F, 2.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.master_magia_pouch), 3.5F, 3.5F);
+
+			arr.registerMaterial(new ItemStack(ItemInit.aether_boot), 0.25F, 2.5F);
+			arr.registerMaterial(new ItemStack(ItemInit.angel_harness), 0.35F, 5F);
+
+			arr.registerMaterial(new ItemStack(ItemInit.farm_apron), 0.35F, 0.35F);
+			arr.registerMaterial(new ItemStack(ItemInit.shop_uniform), 0.35F, 0.35F);
+		}
 	}
 
 	// tileの登録
@@ -241,7 +307,7 @@ public class RegistryHandler {
 		registerTile(TileWandPedal.class, "WandPedal");
 		registerTile(TileModenWallRack.class, "ModenWallRack");
 		registerTile(TilePlate.class, "PlateRack");
-		registerTile(TileFlyishForer.class, "FlyishForer");
+		registerTile(TileMFForer.class, "FlyishForer");
 		registerTile(TileStardustCrystal.class, "StardustCrystal");
 		registerTile(TileWoodChest.class, "WoodChest");
 		registerTile(TileSMSpaner.class, "SMSpaner");
@@ -264,6 +330,30 @@ public class RegistryHandler {
 		registerTile(TileShocase.class, "Showcase");
 		registerTile(TileGlassCup.class, "GlassCup");
 		registerTile(TileMagiaLight.class, "MagicLight");
+		registerTile(TileMFSqueezer.class, "MFSqueezer");
+		registerTile(TilePlateShaped.class, "PlateShaped");
+		registerTile(TileCrystalCore.class, "CrystalCore");
+		registerTile(TileFigurineStand.class, "FigurineStand");
+		registerTile(TileMFGeneration.class, "MFGeneration");
+		registerTile(TileRegister.class, "SMRegister");
+		registerTile(TileWorkbenchStorage.class, "WorkbenchStorage");
+		registerTile(TileNotePC.class, "NotePC");
+		registerTile(TileShoeBox.class, "ShoeBox");
+		registerTile(TileAetherEnchantTable.class, "AetherEnchantTable");
+		registerTile(TileTray.class, "SMTray");
+		registerTile(TileIronShelf.class, "IronShelf");
+		registerTile(TileMagiaLantern.class, "MagiaLantern");
+		registerTile(TileMFTankCreative.class, "MFTankCreative");
+		registerTile(TileFruitCrate.class, "FruitCrate");
+		registerTile(TileWoodenBox.class, "WoodenBox");
+		registerTile(TileMagiaStorage.class, "MagiaStorage");
+		registerTile(TileAltarCreat.class, "AltarCreat");
+		registerTile(TileAltarCreationStar.class, "AltarCreationStar");
+		registerTile(TileMagiaFluxCore.class, "MagiaFluxCore");
+		registerTile(TileDisplay.class, "Display");
+		registerTile(TileMagiaReIncarnation.class, "MagiaReIncarnation");
+		registerTile(TileAetherCover.class, "AetherCover");
+		registerTile(TileMFHarvester.class, "MFHarvester");
 	}
 
 	// 草から種の追加
@@ -296,17 +386,18 @@ public class RegistryHandler {
 		MinecraftForge.EVENT_BUS.register(new XPPickupEvent());
 		MinecraftForge.EVENT_BUS.register(new EntityItemTossEvent());
 		MinecraftForge.EVENT_BUS.register(new EntitiySpawnEvent());
+		MinecraftForge.EVENT_BUS.register(new AlstroemeriaClickEvent());
 	}
 
 	// レイヤー登録
 	public static void layerHandler () {
-		if (SMConfig.isRender) {
+		if (!SMConfig.isRender) {
 			LayerEffectBase.initialiseLayers(LayerBarrier::new);
 			LayerEffectBase.initialiseLayers(LayerRefresh::new);
-			LayerEffectBase.initialiseLayers(LayerRenderWand::new);
 			LayerEffectBase.initialiseLayers(LayerRegen::new);
 			LayerEffectBase.initialiseLayers(LayerWandSandryon::new);
 			LayerEffectBase.initialiseLayers(LayerMagicArray::new);
+			LayerEffectBase.initialiseLayers(LayerGlider::new);
 		}
 	}
 
@@ -351,5 +442,41 @@ public class RegistryHandler {
 
 	public static void registerTile (Class<? extends TileEntity> tileClass, String name) {
 		GameRegistry.registerTileEntity(tileClass, new ResourceLocation(MODID, name));
+	}
+
+	// 連携周りの登録
+	public static void registerPlugin () {
+
+		if (Loader.isModLoaded("dcs_lib")) {
+
+			if (SMConfig.isHard >= 2) {
+				ClimateAPI.registerBlock.registerHeatBlock(BlockInit.fire_nasturtium_plant, 3, DCHeatTier.KILN);
+			}
+
+			MobResistantRegister mrr = MobResistantRegister.INSTANCE;
+			mrr.registerEntityResistant(EntityAncientFairy.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityArchSpider.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityBlackCat.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityBlazeTempest.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityBraveSkeleton.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityCreeperCal.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityElectricCube.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityElshariaCurious.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityEnderShadow.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityIfritVerre.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityPhantomZombie.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityPixieVex.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityRepairKitt.class, 20F, 20F);
+			mrr.registerEntityResistant(EntitySandryon.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityShadowGolem.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityShadowHorse.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityShadowWolf.class, 20F, 20F);
+			mrr.registerEntityResistant(EntitySilderGhast.class, 20F, 20F);
+			mrr.registerEntityResistant(EntitySkullFrost.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityWindineVerre.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityWitchMadameVerre.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityZombieHora.class, 20F, 20F);
+			mrr.registerEntityResistant(EntityZombieKronos.class, 20F, 20F);
+		}
 	}
 }
