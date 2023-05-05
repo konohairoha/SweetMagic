@@ -46,7 +46,7 @@ public class VillagerPiece {
 
     	String structure = "";
 
-    	switch (world.rand.nextInt(8)) {
+    	switch (world.rand.nextInt(9)) {
     	case 0:
     		structure = "vil_books";
     		break;
@@ -70,6 +70,9 @@ public class VillagerPiece {
     		break;
     	case 7:
     		structure = "vil_smith";
+    		break;
+    	case 8:
+    		structure = "vil_bread";
     		break;
     	}
 
@@ -96,8 +99,26 @@ public class VillagerPiece {
 
         public VillagerTemplate() { }
 
-        public VillagerTemplate(TemplateManager manager, BlockPos pos, Rotation rotation, String templateName) {
-            this(manager, pos, rotation, Mirror.NONE, templateName);
+        public VillagerTemplate(TemplateManager manager, BlockPos pos, Rotation rot, String templateName) {
+            this(manager, getPos(pos, rot, templateName), rot, Mirror.NONE, templateName);
+        }
+
+        public static BlockPos getPos (BlockPos pos, Rotation rot, String templateName) {
+
+        	if (!templateName.equals("vil_bread")) {
+        		return pos;
+        	}
+
+        	switch (rot) {
+        	case NONE:
+            	return pos.north(1);
+        	case CLOCKWISE_90:
+            	return pos.east(2);
+        	case COUNTERCLOCKWISE_90:
+            	return pos.west(2);
+        	}
+
+        	return pos;
         }
 
         public VillagerTemplate(TemplateManager manager, BlockPos pos, Rotation rot, Mirror mirror, String templateName) {

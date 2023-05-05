@@ -238,7 +238,6 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 			// スタックリストの数だけ回してItemStackをレンダーリストに追加
 			currenttip.add(this.getItemStackListName(renderStr, stackList));
 			stackList.clear();
-
 		}
 
 		return currenttip;
@@ -314,6 +313,7 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 					!(block instanceof BlockFryPan) &&
 					!(block instanceof BlockFlourMill) &&
 					!(block instanceof BlockOven) &&
+					!(block instanceof BlockFermenter) &&
 					!(block instanceof BlockLierRose)) {
 
 				registrar.registerBodyProvider(pro, block.getClass());
@@ -325,6 +325,7 @@ public class SMBlockHandler extends HUDHandlerBlocks {
 		registerTile(registrar, pro, TileStove.class);
 		registerTile(registrar, pro, TilePot.class);
 		registerTile(registrar, pro, TileFlourMill.class);
+		registerTile(registrar, pro, TileFermenter.class);
 	}
 
 	// tileの登録

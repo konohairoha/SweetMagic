@@ -37,7 +37,6 @@ public class BiomeFlowerGarden extends Biome {
         super(new BiomeProperties("FlowerGarden").setTemperature(1F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
         this.decorator.treesPerChunk = 0;
         this.decorator.flowersPerChunk = 0;
-//        this.decorator.grassPerChunk = 2;
         this.setRegistryName("FlowerGarden");
         this.addDefaultFlowers();
     }

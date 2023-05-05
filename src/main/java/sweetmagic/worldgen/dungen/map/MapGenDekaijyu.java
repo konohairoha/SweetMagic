@@ -22,13 +22,13 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.DekaijyuPiece;
 
-public class MapGenDekaijyu extends BaseMaoGen {
+public class MapGenDekaijyu extends BaseMapGen {
 
     public MapGenDekaijyu(SMChunkGen provider) {
         super(provider);

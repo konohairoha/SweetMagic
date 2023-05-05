@@ -19,12 +19,13 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
+import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.WitchHousePiece;
 
-public class MapWitchHouse extends BaseMaoGen {
+public class MapWitchHouse extends BaseMapGen {
 
     public MapWitchHouse(SMChunkGen provider) {
         super(provider);
@@ -55,7 +56,6 @@ public class MapWitchHouse extends BaseMaoGen {
 
         public void create(World world, SMChunkGen chunk, Random rand, int chunkX, int chunkZ) {
 
-            Rotation rot = Rotation.NONE;
             ChunkPrimer primer = new ChunkPrimer();
             chunk.setChunkGen(chunkX, chunkZ, primer);
             int i = 5;
@@ -69,7 +69,7 @@ public class MapWitchHouse extends BaseMaoGen {
 
 			BlockPos pos = new BlockPos(chunkX * 16 + 8, posY, chunkZ * 16 + 8);
 			List<WitchHousePiece.WitchHouseTemplate> list = Lists.<WitchHousePiece.WitchHouseTemplate> newLinkedList();
-            WitchHousePiece.generateCore(world.getSaveHandler().getStructureTemplateManager(), pos, rot, list, rand);
+            WitchHousePiece.generateCore(world.getSaveHandler().getStructureTemplateManager(), pos, Rotation.NONE, list, rand);
 
             this.components.addAll(list);
             this.updateBoundingBox();
@@ -82,18 +82,23 @@ public class MapWitchHouse extends BaseMaoGen {
 			for (int x = sbb.minX; x <= sbb.maxX; ++x) {
 				for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 					for (int z = sbb.minZ; z <= sbb.maxZ; ++z) {
-						BlockPos pos = new BlockPos(x, y, z);
 
+						BlockPos pos = new BlockPos(x, y, z);
 	                    if (world.isAirBlock(pos) || !this.boundingBox.isVecInside(pos)) { continue; }
 
-	                    Block block = world.getBlockState(pos).getBlock();
+	                    Block block = this.getBlock(world, pos);
 
 	                    if (block == BlockInit.treasure_chest) {
 							this.setLootTable(world, rand, pos, this.getLoot(rand), 0.375F);
 	                    }
 
 	                    else if (block == BlockInit.smspaner) {
-	                    	this.setSMSpaner(world, rand, pos);
+	                    	this.setSMSpaner(world, rand, pos, true);
+	                    }
+
+	                    else if (block == BlockInit.spawn_stone) {
+							TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
+							tile.isWCSide = true;
 	                    }
 	                }
 				}

@@ -12,6 +12,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.blocks.PlantPot;
 import sweetmagic.init.block.blocks.SMLeaves;
 import sweetmagic.util.SweetState;
 
@@ -166,6 +167,6 @@ public class WorldGenCoconutTree extends WorldGenAbstractTree {
 
 	// 草か土かチェック
 	public boolean checkBlock (Block block) {
-		return block != Blocks.DIRT && block != Blocks.GRASS && block != Blocks.SAND;
+		return block != Blocks.DIRT && block != Blocks.GRASS && block != Blocks.SAND && !(block instanceof PlantPot);
 	}
 }

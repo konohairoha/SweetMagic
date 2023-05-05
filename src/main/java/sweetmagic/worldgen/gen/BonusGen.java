@@ -8,6 +8,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.BiomeDictionary;
 import sweetmagic.config.SMConfig;
+import sweetmagic.init.BiomeInit;
 import sweetmagic.init.LootTableInit;
 import sweetmagic.init.base.BaseWorldGen;
 import sweetmagic.worldgen.structures.WorldGenStructure;
@@ -34,7 +35,8 @@ public class BonusGen extends BaseWorldGen {
 
     // 生成不可能なバイオーム
     public boolean checkBiome (World world, BlockPos pos, Biome biome) {
-    	return !BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY);
+    	return !BiomeDictionary.hasType(biome, BiomeDictionary.Type.PLAINS) && !BiomeDictionary.hasType(biome, BiomeDictionary.Type.SANDY) &&
+    			!BiomeDictionary.hasType(biome, BiomeDictionary.Type.COLD) &&biome != BiomeInit.PRISMFOREST && biome != BiomeInit.FLUITFOREST;
     }
 
     // 生成できる座標であるか

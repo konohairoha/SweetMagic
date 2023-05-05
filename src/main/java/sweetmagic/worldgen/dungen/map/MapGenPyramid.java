@@ -21,16 +21,16 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.PyramidPiece;
 
-public class MapGenPyramid extends BaseMaoGen {
+public class MapGenPyramid extends BaseMapGen {
 
     public MapGenPyramid(SMChunkGen provider) {
         super(provider);
-        this.distance = 30;
+        this.distance = 27;
     }
 
     public String getStructureName() {
@@ -87,15 +87,10 @@ public class MapGenPyramid extends BaseMaoGen {
 
 	                    if (world.isAirBlock(pos) || !this.boundingBox.isVecInside(pos)) { continue; }
 
-	                    Block block = world.getBlockState(pos).getBlock();
+	                    Block block = this.getBlock(world, pos);
 
 	                    if (block == Blocks.DIAMOND_BLOCK) {
 	                    	this.setMobSpawner(world, rand, pos);
-	                    }
-
-	                    else if (block == Blocks.GOLD_BLOCK) {
-	                    	world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.WEST), 2);
-	                    	this.setLootTable(world, rand, pos, LootTableInit.MOBCHEST);
 	                    }
 
 	                    else if (block == Blocks.LAPIS_BLOCK) {
@@ -111,6 +106,25 @@ public class MapGenPyramid extends BaseMaoGen {
 	                    else if (block == BlockInit.alt_block) {
 	                    	world.setBlockState(pos, Blocks.TRAPPED_CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH), 2);
 	                    	this.setLootTable(world, rand, pos, LootTableList.CHESTS_SIMPLE_DUNGEON);
+	                    }
+
+	                    else if (block == BlockInit.treasure_chest) {
+
+		                    Block top = this.getBlock(world, pos.up());
+
+		                    if (top == Blocks.GOLD_BLOCK) {
+		                    	this.setAir(world, pos.up());
+								this.setLootTable(world, rand, pos, LootTableInit.SKYLANDOLD, 0.2F);
+		                    }
+
+		                    else if (top == BlockInit.cosmos_light_block) {
+		                    	this.setAir(world, pos.up());
+								this.setLootTable(world, rand, pos, LootTableInit.CASTLECHEST, 0.2F);
+		                    }
+
+		                    else {
+								this.setLootTable(world, rand, pos, LootTableInit.PYM, 0.325F);
+		                    }
 	                    }
 	                }
 				}

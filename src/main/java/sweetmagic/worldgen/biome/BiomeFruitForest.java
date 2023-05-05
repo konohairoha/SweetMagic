@@ -41,7 +41,7 @@ public class BiomeFruitForest extends Biome {
     }
 
     public BiomeFruitForest() {
-        super(new BiomeProperties("FluitForest").setTemperature(1F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
+        super(new BiomeProperties("FluitForest").setTemperature(0.75F).setBaseHeight(0.2F).setHeightVariation(0.2F).setRainfall(0.8F).setSnowEnabled());
         this.decorator.treesPerChunk = 2;
         this.decorator.grassPerChunk = 2;
         this.setRegistryName("FluitForest");

@@ -18,7 +18,8 @@ public class WitchHousePiece {
 
     public static void generateCore(TemplateManager manager, BlockPos pos, Rotation rot, List<WitchHouseTemplate> list, Random random) {
         list.add(new WitchHousePiece.WitchHouseTemplate(manager, pos, rot, "witchhouse_main"));
-        list.add(new WitchHousePiece.WitchHouseTemplate(manager, pos.add(24, -8, 13), rot, "witchhouse_under"));
+        list.add(new WitchHousePiece.WitchHouseTemplate(manager, pos.add(21, -8, 10), rot, "witchhouse_under"));
+        list.add(new WitchHousePiece.WitchHouseTemplate(manager, pos.add(22, 14, 6), rot, "witchhouse_top"));
     }
 
     public static class WitchHouseTemplate extends BaseStructureTemplate {

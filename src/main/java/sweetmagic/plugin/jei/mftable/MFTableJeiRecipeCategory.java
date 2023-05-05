@@ -22,7 +22,7 @@ public class MFTableJeiRecipeCategory implements IRecipeCategory<MFTableJeiRecip
 	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_mftable.png");
 
 	public MFTableJeiRecipeCategory(IGuiHelper helper) {
-		this.background = helper.createDrawable(TEX, 0, 0, 175, 151);
+		this.background = helper.createDrawable(TEX, 0, 0, 175, 133);
 		this.icon = helper.createDrawableIngredient(new ItemStack(BlockInit.mftable));
 		this.localizedName = I18n.format("sweetmagic.jei.mftable.title");
 	}
@@ -58,7 +58,7 @@ public class MFTableJeiRecipeCategory implements IRecipeCategory<MFTableJeiRecip
 
 		for (int i = 1; i <= 9; i++) {
 			int x = 7 + (i - 2) * 18;
-			stackFroup.init(i, true, x, 127);
+			stackFroup.init(i, true, x, 109);
 		}
 
 		stackFroup.init(10, true, 108, 20);

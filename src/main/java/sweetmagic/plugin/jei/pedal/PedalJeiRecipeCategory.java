@@ -44,12 +44,11 @@ public class PedalJeiRecipeCategory implements IRecipeCategory<PedalJeiRecipeWra
 
 	@Override
 	public IDrawable getBackground() {
-		return background;
+		return this.background;
 	}
 
 	@Override
-	public void setRecipe(IRecipeLayout recipeLayout, PedalJeiRecipeWrapper recipeWrapper,
-			IIngredients ingredients) {
+	public void setRecipe(IRecipeLayout recipeLayout, PedalJeiRecipeWrapper recipeWrapper, IIngredients ingredients) {
 
 		IGuiItemStackGroup stackFroup = recipeLayout.getItemStacks();
 

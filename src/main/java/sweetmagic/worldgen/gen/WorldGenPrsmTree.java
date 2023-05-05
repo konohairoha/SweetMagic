@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.blocks.PlantPot;
 import sweetmagic.init.block.blocks.SMLeaves;
 
 public class WorldGenPrsmTree extends WorldGenAbstractTree {
@@ -78,7 +79,7 @@ public class WorldGenPrsmTree extends WorldGenAbstractTree {
 
 	// 草か土かチェック
 	public boolean checkBlock (Block block) {
-		return block != Blocks.DIRT && block != Blocks.GRASS;
+		return block != Blocks.DIRT && block != Blocks.GRASS && !(block instanceof PlantPot);
 	}
 
 	// 葉っぱのIBlockStateを取得

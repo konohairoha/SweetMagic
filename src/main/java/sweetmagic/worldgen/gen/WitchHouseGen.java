@@ -48,6 +48,11 @@ public class WitchHouseGen extends BaseWorldGen {
     	return SMConfig.isGenStructure;
     }
 
+    // ディメンション確認
+    public boolean checkDimension (int dimId) {
+    	return dimId != 0;
+    }
+
     // 生成不可能なバイオーム
     public boolean checkBiome (World world, BlockPos pos, Biome biome) {
     	return biome != Biomes.PLAINS && biome != BiomeInit.PRISMFOREST;
@@ -143,7 +148,8 @@ public class WitchHouseGen extends BaseWorldGen {
         chestA.add(new ItemStack(ItemInit.sannyflower_petal, rand.nextInt(24) + 16));
         chestA.add(new ItemStack(ItemInit.moonblossom_petal, rand.nextInt(24) + 16));
         chestA.add(new ItemStack(ItemInit.mf_bottle, rand.nextInt(4) + 1));
-        chestA.add(new ItemStack(ItemInit.mf_sbottle, rand.nextInt(16) + 1));
+        chestA.add(new ItemStack(ItemInit.mf_sbottle, rand.nextInt(16) + 4));
+        chestA.add(new ItemStack(ItemInit.magic_aether_force, rand.nextInt(8) + 4));
 	}
 
     //ルートテーブルの内容設定
@@ -156,6 +162,6 @@ public class WitchHouseGen extends BaseWorldGen {
         chestA.add(new ItemStack(ItemInit.moonblossom_petal, rand.nextInt(16) + 4));
         chestA.add(new ItemStack(ItemInit.divine_crystal, rand.nextInt(2) + 1));
         chestA.add(new ItemStack(ItemInit.aether_crystal, rand.nextInt(16) + 1));
-        chestA.add(new ItemStack(ItemInit.aether_crystal_shard, rand.nextInt(42) + 8));
+        chestA.add(new ItemStack(ItemInit.magic_aether_force, rand.nextInt(4) + 1));
 	}
 }

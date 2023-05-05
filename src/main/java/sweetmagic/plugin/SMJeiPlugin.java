@@ -1,6 +1,5 @@
 package sweetmagic.plugin;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mezz.jei.api.IGuiHelper;
@@ -16,6 +15,7 @@ import mezz.jei.api.ingredients.IModIngredientRegistration;
 import mezz.jei.api.recipe.IFocus;
 import mezz.jei.api.recipe.IRecipeCategoryRegistration;
 import net.minecraft.block.Block;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.alstroemeria.AlstroemeriaRecipes;
@@ -30,6 +30,9 @@ import sweetmagic.api.recipe.pan.PanRecipes;
 import sweetmagic.api.recipe.pedal.PedalRecipes;
 import sweetmagic.api.recipe.pot.PotRecipes;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.ItemInit;
+import sweetmagic.init.tile.gui.GuiJuiceMaker;
+import sweetmagic.init.tile.gui.GuiMFTank;
 import sweetmagic.plugin.jei.alstroemeria.AlstroemeriaJeiRecipeCategory;
 import sweetmagic.plugin.jei.alstroemeria.AlstroemeriaJeiRecipeWrapper;
 import sweetmagic.plugin.jei.fermente.FermenteRecipeCategory;
@@ -103,10 +106,6 @@ public class SMJeiPlugin implements IModPlugin {
 		this.pedalCategory = new PedalJeiRecipeCategory(guiHelper);
 		registry.addRecipeCategories(this.pedalCategory);
 
-		// オーブン
-		this.ovenCategory = new OvenJeiRecipeCategory(guiHelper);
-		registry.addRecipeCategories(this.ovenCategory);
-
 		// MFタンク
 		this.mftankCategory = new MFTankJeiRecipeCategory(guiHelper);
 		registry.addRecipeCategories(this.mftankCategory);
@@ -115,13 +114,17 @@ public class SMJeiPlugin implements IModPlugin {
 		this.tableCategory = new MFTableJeiRecipeCategory(guiHelper);
 		registry.addRecipeCategories(this.tableCategory);
 
+		// オブマギア
+		this.obmagiaCategory = new ObMagiaRecipeCategory(guiHelper);
+		registry.addRecipeCategories(this.obmagiaCategory);
+
 		// 製粉機
 		this.millCategory = new MillJeiRecipeCategory(guiHelper);
 		registry.addRecipeCategories(this.millCategory);
 
-		// オブマギア
-		this.obmagiaCategory = new ObMagiaRecipeCategory(guiHelper);
-		registry.addRecipeCategories(this.obmagiaCategory);
+		// オーブン
+		this.ovenCategory = new OvenJeiRecipeCategory(guiHelper);
+		registry.addRecipeCategories(this.ovenCategory);
 
 		// 鍋
 		this.potCategory = new PotJeiRecipeCategory(guiHelper);
@@ -149,95 +152,78 @@ public class SMJeiPlugin implements IModPlugin {
 	public void register(IModRegistry registry) {
 
 		// トワイライトアルストロメリア
-		registry.handleRecipes(AlstroemeriaRecipes.class,
-				AlstroemeriaJeiRecipeWrapper::new,
-				this.alsCategory.getUid());
+		registry.handleRecipes(AlstroemeriaRecipes.class, AlstroemeriaJeiRecipeWrapper::new, this.alsCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.alsRecipe, this.alsCategory.getUid());
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.twilight_alstroemeria), this.alsCategory.getUid());
 
 		// 創造の台座
-		registry.handleRecipes(PedalRecipes.class,
-				PedalJeiRecipeWrapper::new,
-				this.pedalCategory.getUid());
+		registry.handleRecipes(PedalRecipes.class, PedalJeiRecipeWrapper::new, this.pedalCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.pedalRecipe, this.pedalCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.pedestal_creat), this.pedalCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.pedalList, this.pedalCategory.getUid());
 
-		// オーブン
-		registry.handleRecipes(OvenRecipes.class,
-				OvenJeiRecipeWrapper::new,
-				this.ovenCategory.getUid());
-		registry.addRecipes(SweetMagicAPI.ovenRecipe, this.ovenCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.oven), this.ovenCategory.getUid());
-
-		// ジュースメイカー
-		registry.handleRecipes(JuiceMakerRecipes.class,
-				JuiceMakerJeiRecipeWrapper::new,
-				this.juiceMakerCategory.getUid());
-		registry.addRecipes(SweetMagicAPI.juiceRecipe, this.juiceMakerCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.juicemaker_off), this.juiceMakerCategory.getUid());
-
-		// 冷蔵庫
-		registry.handleRecipes(FreezerRecipes.class,
-				FreezerJeiRecipeWrapper::new,
-				this.freezCategory.getUid());
-		registry.addRecipes(SweetMagicAPI.freezRecipe, this.freezCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.freezer_bottom), this.freezCategory.getUid());
+		// 魔法流の机
+		registry.handleRecipes(MFTableRecipes.class, MFTableJeiRecipeWrapper::new, this.tableCategory.getUid());
+		registry.addRecipes(SweetMagicAPI.mfTableRecipe, this.tableCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.mftableList, this.tableCategory.getUid());
 
 		// 魔法流の貯蔵庫
-		registry.handleRecipes(JeiRecipeMFTank.class,
-				MFTankJeiRecipeWrapper::new,
-				this.mftankCategory.getUid());
+		registry.handleRecipes(JeiRecipeMFTank.class, MFTankJeiRecipeWrapper::new, this.mftankCategory.getUid());
 		registry.addRecipes(JeiRecipeMFTank.recipes, this.mftankCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftank), this.mftankCategory.getUid());
-
-		// 製粉機
-		registry.handleRecipes(FlourMillRecipes.class,
-				MillJeiRecipeWrapper::new,
-				this.millCategory.getUid());
-		registry.addRecipes(SweetMagicAPI.millRecipe, this.millCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.flourmill_off), this.millCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.mftankList, this.mftankCategory.getUid());
+		registry.addRecipeClickArea(GuiMFTank.class, 80, 35, 21, 14, new String[] { "sweetmagic_mftank" });
 
 		// オブ・マギア
-		registry.handleRecipes(ObMagiaRecipes.class,
-				ObMagiaRecipeWrapper::new,
-				this.obmagiaCategory.getUid());
+		registry.handleRecipes(ObMagiaRecipes.class, ObMagiaRecipeWrapper::new, this.obmagiaCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.magiaRecipe, this.obmagiaCategory.getUid());
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.obmagia_bottom), this.obmagiaCategory.getUid());
 
-		// 魔法流の机
-		registry.handleRecipes(MFTableRecipes.class,
-				MFTableJeiRecipeWrapper::new,
-				this.tableCategory.getUid());
-		registry.addRecipes(SweetMagicAPI.mfTableRecipe, this.tableCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.mftable), this.tableCategory.getUid());
+		// オーブン
+		registry.handleRecipes(OvenRecipes.class, OvenJeiRecipeWrapper::new, this.ovenCategory.getUid());
+		registry.addRecipes(SweetMagicAPI.ovenRecipe, this.ovenCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.ovenList, this.ovenCategory.getUid());
+
+		// ジュースメイカー
+		registry.handleRecipes(JuiceMakerRecipes.class, JuiceMakerJeiRecipeWrapper::new, this.juiceMakerCategory.getUid());
+		registry.addRecipes(SweetMagicAPI.juiceRecipe, this.juiceMakerCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.juiceList, this.juiceMakerCategory.getUid());
+		registry.addRecipeClickArea(GuiJuiceMaker.class, 95, 36, 21, 13, new String[] { "sweetmagic_juicemaker" });
+
+		// 冷蔵庫
+		registry.handleRecipes(FreezerRecipes.class, FreezerJeiRecipeWrapper::new, this.freezCategory.getUid());
+		registry.addRecipes(SweetMagicAPI.freezRecipe, this.freezCategory.getUid());
+		registry.addRecipeCatalyst(new ItemStack(BlockInit.freezer_bottom), this.freezCategory.getUid());
+
+		// 製粉機
+		registry.handleRecipes(FlourMillRecipes.class, MillJeiRecipeWrapper::new, this.millCategory.getUid());
+		registry.addRecipes(SweetMagicAPI.millRecipe, this.millCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.millList, this.millCategory.getUid());
 
 		// 鍋
-		registry.handleRecipes(PotRecipes.class,
-				PotJeiRecipeWrapper::new,
-				this.potCategory.getUid());
+		registry.handleRecipes(PotRecipes.class, PotJeiRecipeWrapper::new, this.potCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.potRecipe, this.potCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.pot_off), this.potCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.potList, this.potCategory.getUid());
 
 		// フライパン
-		registry.handleRecipes(PanRecipes.class,
-				PanJeiRecipeWrapper::new,
-				this.panCategory.getUid());
+		registry.handleRecipes(PanRecipes.class, PanJeiRecipeWrapper::new, this.panCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.panRecipe, this.panCategory.getUid());
-		registry.addRecipeCatalyst(new ItemStack(BlockInit.frypan_off), this.panCategory.getUid());
+		this.addRecpeCatalyst(registry, BlockInit.frypanList, this.panCategory.getUid());
 
 		// 発酵機
-		registry.handleRecipes(FermenterRecipes.class,
-				FermenteRecipeWrapper::new,
-				this.fermenteCategory.getUid());
+		registry.handleRecipes(FermenterRecipes.class, FermenteRecipeWrapper::new, this.fermenteCategory.getUid());
 		registry.addRecipes(SweetMagicAPI.fermenterRecipe, this.fermenteCategory.getUid());
 		registry.addRecipeCatalyst(new ItemStack(BlockInit.matured_bottle), this.fermenteCategory.getUid());
 
-		// BlackListにブロックなどを登録する　JEIで見せたくないアイテム用
-		List<ItemStack> t = new ArrayList<ItemStack>();
-		IIngredientBlacklist blacklist = registry.getJeiHelpers().getIngredientBlacklist();
-
 		// ItemStackをArrayListに入れてブラックリストに入れていく。
-		this.setBlackListItemStack(blacklist, t);
+		this.setBlackListItemStack(registry.getJeiHelpers().getIngredientBlacklist());
+	}
+
+	public void addRecpeCatalyst (IModRegistry registry, List<Block> blockList, String uuId) {
+
+		if (blockList.isEmpty()) { return; }
+
+		for (Block block : blockList) {
+			registry.addRecipeCatalyst(new ItemStack(block), uuId);
+		}
 	}
 
 	@Override
@@ -246,10 +232,10 @@ public class SMJeiPlugin implements IModPlugin {
 		this.recipeRegistry = runtime.getRecipeRegistry();
 	}
 
-	private void setBlackListItemStack(IIngredientBlacklist blacklist, List<ItemStack> itemList) {
+	private void setBlackListItemStack(IIngredientBlacklist blacklist) {
 
-		for (ItemStack stack : itemList) {
-			blacklist.addIngredientToBlacklist(stack);
+		for (Item item : ItemInit.noTabList) {
+			blacklist.addIngredientToBlacklist(new ItemStack(item));
 		}
 
 		for (Block block : BlockInit.noTabList) {

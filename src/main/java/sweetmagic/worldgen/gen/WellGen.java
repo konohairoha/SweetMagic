@@ -25,7 +25,7 @@ public class WellGen extends BaseWorldGen {
 
 	public static List<ItemStack> chestA = new ArrayList<>();
 	public static List<ItemStack> chestB = new ArrayList<>();
-	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("ido");
+	private static final WorldGenStructure IDO = new WorldGenStructure("ido");
 
     public WellGen() {
 		this.maxChance = SMConfig.dungeon_spawnchance * 3;
@@ -57,7 +57,7 @@ public class WellGen extends BaseWorldGen {
     public void generate(World world, BlockPos pos) {
 
 		BlockPos p = pos.down(21);
-        WorldGenerator gen = this.SM_HOUSE;
+        WorldGenerator gen = this.IDO;
     	gen.generate(world, this.rand, p);
 
     	// スポナーの中身を設定
@@ -102,6 +102,7 @@ public class WellGen extends BaseWorldGen {
         chestA.add(new ItemStack(ItemInit.grav_powder, rand.nextInt(8) + 1));
         chestA.add(new ItemStack(ItemInit.tiny_feather, rand.nextInt(8) + 1));
         chestA.add(new ItemStack(ItemInit.prizmium, rand.nextInt(8) + 1));
+        chestA.add(new ItemStack(ItemInit.magic_aether_force, rand.nextInt(4) + 1));
 	}
 
     //ルートテーブルの内容設定
@@ -113,5 +114,6 @@ public class WellGen extends BaseWorldGen {
         chestB.add(new ItemStack(ItemInit.mf_sbottle, rand.nextInt(10) + 1));
         chestB.add(new ItemStack(ItemInit.mf_sbottle, rand.nextInt(6) + 4));
         chestB.add(new ItemStack(ItemInit.mf_bottle, rand.nextInt(4) + 1));
+        chestB.add(new ItemStack(ItemInit.magic_aether_force, rand.nextInt(5) + 3));
 	}
 }

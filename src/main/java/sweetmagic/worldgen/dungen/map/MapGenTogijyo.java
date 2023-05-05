@@ -21,12 +21,12 @@ import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.TogijyoPiece;
 
-public class MapGenTogijyo extends BaseMaoGen {
+public class MapGenTogijyo extends BaseMapGen {
 
     public MapGenTogijyo(SMChunkGen provider) {
         super(provider);

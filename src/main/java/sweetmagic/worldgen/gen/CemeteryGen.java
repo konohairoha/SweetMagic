@@ -45,6 +45,11 @@ public class CemeteryGen extends BaseWorldGen {
     	return SMConfig.isGenStructure;
     }
 
+    // ディメンション確認
+    public boolean checkDimension (int dimId) {
+    	return dimId != 0;
+    }
+
     // 生成不可能なバイオーム
     public boolean checkBiome (World world, BlockPos pos, Biome biome) {
     	return biome != Biomes.PLAINS && biome != BiomeInit.FLUITFOREST;

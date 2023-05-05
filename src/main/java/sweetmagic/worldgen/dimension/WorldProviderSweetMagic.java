@@ -27,6 +27,11 @@ public class WorldProviderSweetMagic extends WorldProvider {
 	}
 
 	@Override
+	public boolean canRespawnHere() {
+		return this.world.getWorldInfo().isInitialized();
+	}
+
+	@Override
 	public IChunkGenerator createChunkGenerator() {
         return this.chunkGenerator;
 	}

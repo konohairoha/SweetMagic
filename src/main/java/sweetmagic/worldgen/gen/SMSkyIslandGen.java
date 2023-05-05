@@ -14,17 +14,18 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import sweetmagic.config.SMConfig;
 import sweetmagic.init.LootTableInit;
 import sweetmagic.init.base.BaseWorldGen;
-import sweetmagic.util.GenHelper;
+import sweetmagic.util.WorldHelper;
 import sweetmagic.worldgen.structures.WorldGenStructure;
 
 public class SMSkyIslandGen extends BaseWorldGen {
 
 	private static final WorldGenStructure SM_HOUSE = new WorldGenStructure("skyisland");
-	public List<GenHelper> skyList = new ArrayList<>();
+	private static final WorldGenStructure SM_HOUSE_OLD = new WorldGenStructure("skyland_old");
+	private List<BlockPos> skyList = new ArrayList<>();
 
     public SMSkyIslandGen() {
-		this.maxChance = SMConfig.dungeon_spawnchance * 12;
-		this.minChance = 0;
+		this.maxChance = SMConfig.dungeon_spawnchance * 4;
+		this.minChance = 2;
 		this.minY = 120;
 		this.maxY = 121;
 		this.seedRand = 31;
@@ -46,27 +47,36 @@ public class SMSkyIslandGen extends BaseWorldGen {
     }
 
     // 座標リストの取得
-    public List<GenHelper> geGenList () {
+    public List<BlockPos> getPosList () {
     	return this.skyList;
     }
 
     // 離れてる距離を取得
     public int getDistance () {
-    	return 800;
+    	return 512;
     }
 
     //生成物の内容
     public void generate(World world, BlockPos pos) {
 
-    	pos = pos.up(world.rand.nextInt(30));
+    	if (!this.checkDistance(this.getDistance(), pos, this.getPosList())) { return; }
+    	this.getPosList().add(pos);
 
-        WorldGenerator gen = this.SM_HOUSE;
+    	boolean isSMDim = WorldHelper.isSMDim(world) ? world.rand.nextFloat() < 0.375F: false;
+    	pos = pos.up(world.rand.nextInt(30));
+        WorldGenerator gen = isSMDim ? SM_HOUSE_OLD : SM_HOUSE;
     	gen.generate(world, this.rand, pos);
 
-		IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH);
-		world.setBlockState(pos.add(14, 12, 14), state, 3);
-		world.setBlockState(pos.add(15, 12, 14), state, 3);
-    	this.setLootTable(world, rand, pos.add(14, 12, 14), LootTableInit.SMFOODS);
-    	this.setLootTable(world, rand, pos.add(15, 12, 14), LootTableInit.SMFOODS);
+    	if (isSMDim) {
+        	this.setLootTable(world, this.rand, pos.add(5, 8, 5), LootTableInit.SKYLANDOLD, 0.33F);
+    	}
+
+    	else {
+    		IBlockState state = Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, EnumFacing.SOUTH);
+    		world.setBlockState(pos.add(14, 12, 14), state, 3);
+    		world.setBlockState(pos.add(15, 12, 14), state, 3);
+        	this.setLootTable(world, rand, pos.add(14, 12, 14), LootTableInit.SMFOODS);
+        	this.setLootTable(world, rand, pos.add(15, 12, 14), LootTableInit.SMFOODS);
+    	}
     }
 }

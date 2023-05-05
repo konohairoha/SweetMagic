@@ -26,18 +26,18 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.init.tile.magic.TileSMSpaner;
 import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.CastlePiece;
 
-public class MapGenCastle extends BaseMaoGen {
+public class MapGenCastle extends BaseMapGen {
 
     public MapGenCastle(SMChunkGen provider) {
         super(provider);
-        this.distance = 32;
+        this.distance = 31;
     }
 
     public String getStructureName() {
@@ -46,7 +46,7 @@ public class MapGenCastle extends BaseMaoGen {
 
     // バイオームリストの取得
     public List<Biome> getBiomeList () {
-    	return Arrays.<Biome>asList(BiomeInit.FROZENFOREST, BiomeInit.PRISMFOREST);
+    	return Arrays.<Biome>asList(BiomeInit.FROZENFOREST);
     }
 
     protected StructureStart getStructureStart(int chunkX, int chunkZ) {
@@ -97,7 +97,7 @@ public class MapGenCastle extends BaseMaoGen {
 					for (int z = sbb.minZ; z <= sbb.maxZ; ++z) {
 
 						BlockPos pos = new BlockPos(x, y, z);
-	                    Block block = world.getBlockState(pos).getBlock();
+	                    Block block = this.getBlock(world, pos);
 
 	                    if (y < this.posY && block == Blocks.AIR) {
 	                    	world.setBlockState(pos, DIRT, 2);
@@ -144,7 +144,7 @@ public class MapGenCastle extends BaseMaoGen {
 	                    else if (block == BlockInit.smspaner) {
 
 	                    	if (this.getBlock(world, pos.up()) != Blocks.BONE_BLOCK) {
-		                    	this.setSMSpaner(world, rand, pos);
+		                    	this.setSMSpaner(world, rand, pos, true);
 	                    	}
 
 	                    	else {
@@ -163,12 +163,13 @@ public class MapGenCastle extends BaseMaoGen {
 
 		                    Block underBlock = this.getBlock(world, pos.down());
 
-		                    if (underBlock != Blocks.PACKED_ICE && underBlock != Blocks.MAGMA && underBlock != BlockInit.ac_ore && underBlock != BlockInit.cosmic_crystal_ore) {
+		                    if (underBlock != BlockInit.ac_ore && underBlock != BlockInit.cosmic_crystal_ore) {
 
 								world.setBlockState(pos, BlockInit.spawn_stone.getDefaultState(), 2);
 								TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
 								tile.isPowerUp= 1;
 								tile.isBossSummon = false;
+								tile.isWCSide = true;
 		                    }
 						}
 

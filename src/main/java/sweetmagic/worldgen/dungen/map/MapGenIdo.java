@@ -20,13 +20,13 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.IdoPiece;
 
-public class MapGenIdo extends BaseMaoGen {
+public class MapGenIdo extends BaseMapGen {
 
     public MapGenIdo(SMChunkGen provider) {
         super(provider);
@@ -108,6 +108,7 @@ public class MapGenIdo extends BaseMaoGen {
 							TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
 							tile.isPowerUp= 1;
 							tile.isBossSummon = false;
+							tile.isWCSide = false;
 						}
 	                }
 				}

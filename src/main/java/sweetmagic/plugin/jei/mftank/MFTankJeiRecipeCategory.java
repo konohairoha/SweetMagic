@@ -21,7 +21,7 @@ public class MFTankJeiRecipeCategory implements IRecipeCategory<MFTankJeiRecipeW
 	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/gui/gui_jeitank.png");
 
 	public MFTankJeiRecipeCategory(IGuiHelper helper) {
-		this.background = helper.createDrawable(TEX, 0, 0, 176, 107);
+		this.background = helper.createDrawable(TEX, 0, 0, 176, 94);
 
 		this.icon = helper.createDrawableIngredient(new ItemStack(BlockInit.mftank));
 		this.localizedName = I18n.format("sweetmagic.jei.mftank.title");

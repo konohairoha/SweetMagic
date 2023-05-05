@@ -22,14 +22,14 @@ import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.LootTableInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.init.tile.magic.TileSpawnStone;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.MekyuPiece;
 
-public class MapGenMekyu extends BaseMaoGen {
+public class MapGenMekyu extends BaseMapGen {
 
     public MapGenMekyu(SMChunkGen provider) {
         super(provider);
@@ -91,7 +91,7 @@ public class MapGenMekyu extends BaseMaoGen {
 					for (int y = sbb.minY; y <= sbb.maxY; ++y) {
 
 						BlockPos pos = new BlockPos(x, y, z);
-	                    Block block = world.getBlockState(pos).getBlock();
+	                    Block block = this.getBlock(world, pos);
 	                    if (block == Blocks.AIR) { continue; }
 
 	                    if (block == Blocks.DIAMOND_BLOCK) {
@@ -105,7 +105,7 @@ public class MapGenMekyu extends BaseMaoGen {
 
 	                    else if (block == Blocks.GOLD_BLOCK) {
 	                    	world.setBlockState(pos, BlockInit.smspaner.getDefaultState(), 2);
-	                    	this.setSMSpaner(world, rand, pos);
+	                    	this.setSMSpaner(world, rand, pos, true);
 	                    }
 
 	                    else if (block == Blocks.CHEST) {
@@ -116,17 +116,33 @@ public class MapGenMekyu extends BaseMaoGen {
 	                    	this.setLootTable(world, rand, pos, LootTableInit.PYM);
 	                    }
 
+	                    else if (block == BlockInit.cosmos_light_block) {
+	                    	world.setBlockState(pos, BlockInit.treasure_chest.getDefaultState().withProperty(BlockWoodChest.FACING, EnumFacing.SOUTH), 2);
+	                    	this.setLootTable(world, rand, pos, LootTableInit.FLUGELCHEST, 0.525F);
+	                    }
+
 						else if (block == BlockInit.spawn_stone) {
 
-		                    Block underBlock = world.getBlockState(pos.down()).getBlock();
+		                    Block under = this.getBlock(world, pos.down());
 
-		                    if (underBlock == BlockInit.longtile_brick_r || underBlock == BlockInit.longtile_brick_p) {
+		                    if (under == BlockInit.longtile_brick_r || under == BlockInit.longtile_brick_p) {
 
 								world.setBlockState(pos, BlockInit.spawn_stone.getDefaultState(), 2);
 
 								TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
 								tile.isPowerUp= 1;
 								tile.isBossSummon = false;
+								tile.isWCSide = true;
+		                    }
+
+		                    else if (under == Blocks.SKULL) {
+								TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
+								tile.isPowerUp= 1;
+		                    }
+
+		                    else {
+								TileSpawnStone tile = (TileSpawnStone) world.getTileEntity(pos);
+								tile.isWCSide = true;
 		                    }
 						}
 

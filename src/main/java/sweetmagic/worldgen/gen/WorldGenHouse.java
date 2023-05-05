@@ -69,8 +69,9 @@ public class WorldGenHouse extends WorldGenerator implements IStructure {
 			IBlockState state = world.getBlockState(pos);
 			world.notifyBlockUpdate(pos, state, state, 3);
 			template.addBlocksToWorldChunk(world, pos, place);
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 }

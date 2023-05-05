@@ -24,6 +24,7 @@ public class PedalJeiRecipeWrapper implements IRecipeWrapper {
 	public List<List<ItemStack>> inputList;
 	public List<List<ItemStack>> prevList;
 	public ItemStack[] outputs;
+	private int needMF;
 	public IDrawable item;
 	private IGuiHelper guiHelper;
 
@@ -40,6 +41,8 @@ public class PedalJeiRecipeWrapper implements IRecipeWrapper {
 			this.inputList.add(stackList);
 			this.prevList.add(stackList);
 		}
+
+		this.needMF = recipe.getNeedMF();
 	}
 
 	// ここでセットすることが必ず必要っぽい…？でも未検証
@@ -55,12 +58,17 @@ public class PedalJeiRecipeWrapper implements IRecipeWrapper {
 
 		String rClick = I18n.format("info.right_click.name");
 		String inv = I18n.format("info.inv_in.name");
+		String needMF = I18n.format("info.needmf.name") + "： " + String.format("%,d", this.needMF) + "MF";
 
 		// Splitで指定した文字列を使用して文字配列を分割し、改行コードのような扱いにしている
 		String[] spInv = inv.split("<br>");
 
 		// 文字列(テキストフォーマット付き可能)、X、Y、色コード、文字に影をつけるか
 		minecraft.fontRenderer.drawString(rClick, recipeWidth / 2 - 20, 16, 0xFFFFFF, true);
+
+		// 文字列(テキストフォーマット付き可能)、X、Y、色コード、文字に影をつけるか
+		minecraft.fontRenderer.drawString(needMF, recipeWidth / 2 - 40, 68, 0xFF4830, true);
+
 		this.drawStrings(spInv, minecraft);
 	}
 

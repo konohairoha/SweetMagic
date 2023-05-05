@@ -79,7 +79,7 @@ public class MFTableJeiRecipeWrapper implements IRecipeWrapper {
 
 		// 改行を再現しつつ描画
 		for (int i = 0; i < splits.length; i++) {
-			minecraft.fontRenderer.drawString(splits[i], 20, i * 9 + 85, 0xFFA000, true);
+			minecraft.fontRenderer.drawString(splits[i], 20, i * 9 + 77, 0xFFA000, true);
 		}
 	}
 

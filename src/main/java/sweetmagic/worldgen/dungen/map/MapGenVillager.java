@@ -22,13 +22,13 @@ import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import sweetmagic.init.BiomeInit;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseMaoGen;
+import sweetmagic.init.base.BaseMapGen;
 import sweetmagic.init.base.BaseStructureStart;
 import sweetmagic.util.SweetState;
 import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.VillagerPiece;
 
-public class MapGenVillager extends BaseMaoGen {
+public class MapGenVillager extends BaseMapGen {
 
     public MapGenVillager(SMChunkGen provider) {
         super(provider);
@@ -54,7 +54,7 @@ public class MapGenVillager extends BaseMaoGen {
     	private static final IBlockState dirt = Blocks.DIRT.getDefaultState();
     	private static final IBlockState glass = Blocks.GRASS.getDefaultState();
     	private List<BlockPos> posList = new ArrayList<>();
-    	public int posY;
+    	private int posY;
 
         public Start() { }
 
@@ -105,7 +105,15 @@ public class MapGenVillager extends BaseMaoGen {
 						IBlockState state = world.getBlockState(pos);
 						Block block = state.getBlock();
 
-						if (!world.isRemote && this.checkBlock(block, state)) {
+	                    if (y <= this.posY && ( block == Blocks.AIR || !block.isFullBlock(state)) ) {
+	                    	world.setBlockState(pos, dirt, 2);
+	                    }
+
+	                    else if (y == this.posY + 1 && block == Blocks.AIR) {
+	                    	world.setBlockState(pos, glass, 2);
+	                    }
+
+	                    else if (!world.isRemote && this.checkBlock(block, state)) {
 							EntityVillager entity = new EntityVillager(world);
 							VillagerRegistry.setRandomProfession(entity, world.rand);
 							entity.setGrowingAge(0);
@@ -140,14 +148,6 @@ public class MapGenVillager extends BaseMaoGen {
 						else if (block == BlockInit.magic_circle) {
 	                    	world.setBlockState(pos, babu, 2);
 						}
-
-	                    if (y <= this.posY && block == Blocks.AIR) {
-	                    	world.setBlockState(pos, dirt, 2);
-	                    }
-
-	                    else if (y == this.posY + 1 && block == Blocks.AIR) {
-	                    	world.setBlockState(pos, glass, 2);
-	                    }
 					}
                 }
             }

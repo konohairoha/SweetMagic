@@ -21,7 +21,7 @@ public class CFlowerGen extends BaseFlowerGen {
 	// IBlockStateの取得
 	public IBlockState getState () {
 
-		switch (this.rand.nextInt(20)) {
+		switch (this.rand.nextInt(22)) {
 		case 0:
 			return BlockInit.lily_valley.getDefaultState();
 		case 1:
@@ -62,6 +62,10 @@ public class CFlowerGen extends BaseFlowerGen {
 			return BlockInit.pansy_yellowmazenta.getDefaultState();
 		case 19:
 			return BlockInit.pansy_blue.getDefaultState();
+		case 20:
+			return BlockInit.marigold.getDefaultState();
+		case 21:
+			return BlockInit.christmarose_ericsmithii.getDefaultState();
 		}
 
 		return BlockInit.lily_valley.getDefaultState();

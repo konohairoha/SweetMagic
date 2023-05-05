@@ -48,7 +48,7 @@ public class SMBiomeProvider extends BiomeProvider {
 
     public static List<Biome> allowedBiomes = Lists.newArrayList(BiomeInit.FLOWERGARDEN);
     private final BiomeCache biomeCache;
-    private final List<Biome> biomesToSpawnIn;
+    private final List<Biome> biomesToSpawn;
     private ChunkGeneratorSettings settings;
     private GenLayer genBiomes;
     private GenLayer biomeIndexLayer;
@@ -72,7 +72,7 @@ public class SMBiomeProvider extends BiomeProvider {
 
     protected SMBiomeProvider() {
         this.biomeCache = new BiomeCache(this);
-        this.biomesToSpawnIn = Lists.newArrayList(allowedBiomes);
+        this.biomesToSpawn = Lists.newArrayList(allowedBiomes);
     }
 
     GenLayer[] initializeAllBiomeGenerators(long seed, WorldType type, ChunkGeneratorSettings setting) {
@@ -141,7 +141,7 @@ public class SMBiomeProvider extends BiomeProvider {
 
     @Override
     public List<Biome> getBiomesToSpawnIn() {
-        return this.biomesToSpawnIn;
+        return this.biomesToSpawn;
     }
 
     @Override
@@ -233,7 +233,9 @@ public class SMBiomeProvider extends BiomeProvider {
             }
 
             return true;
-        } catch (Throwable throwable) {
+        }
+
+		catch (Throwable throwable) {
             CrashReport report = CrashReport.makeCrashReport(throwable, "Invalid Biome id");
             CrashReportCategory category = report.makeCategory("Layer");
             category.addCrashSection("Layer", this.genBiomes.toString());

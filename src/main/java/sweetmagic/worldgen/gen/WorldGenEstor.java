@@ -11,6 +11,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.block.blocks.FruitLeaves;
+import sweetmagic.init.block.blocks.PlantPot;
 import sweetmagic.util.SweetState;
 
 public class WorldGenEstor extends WorldGenAbstractTree {
@@ -92,6 +93,6 @@ public class WorldGenEstor extends WorldGenAbstractTree {
 
 	// 草か土かチェック
 	public boolean checkBlock (Block block) {
-		return block != Blocks.DIRT && block != Blocks.GRASS;
+		return block != Blocks.DIRT && block != Blocks.GRASS && !(block instanceof PlantPot);
 	}
 }
