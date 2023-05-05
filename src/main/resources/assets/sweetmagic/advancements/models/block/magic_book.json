@@ -1,8 +1,8 @@
 {
 	"parent": "block/thin_block",
 	"textures": {
-		"0": "sweetmagic:block/magicbook",
-		"particle": "sweetmagic:block/magicbook"
+		"0": "#0",
+		"particle": "#0"
 	},
 	"elements": [
 		{
@@ -211,28 +211,6 @@
 				"up": {"uv": [1, 0, 2.5, 0.5], "rotation": 180, "texture": "#0"},
 				"down": {"uv": [1, 0, 2.5, 0.5], "rotation": 180, "texture": "#0"}
 			}
-		}
-	],
-	"groups": [
-		{
-			"name": "group",
-			"origin": [9, 8, 8],
-			"children": [0, 1, 2, 3]
-		},
-		{
-			"name": "group",
-			"origin": [9, 8, 8],
-			"children": [4, 5, 6, 7]
-		},
-		{
-			"name": "group",
-			"origin": [9, 8, 8],
-			"children": [8, 9, 10, 11]
-		},
-		{
-			"name": "group",
-			"origin": [9, 8, 8],
-			"children": [12, 13, 14, 15]
 		}
 	]
 }

@@ -1,7 +1,8 @@
 {
+	"parent": "block/thin_block",
 	"textures": {
 		"0": "sweetmagic:block/altarnative_iron_block",
-		"2": "sweetmagic:block/clerodendrum",
+		"2": "sweetmagic:block/clerodendrum_stage3",
 		"3": "sweetmagic:block/sugarglass",
 		"particle": "sweetmagic:block/altarnative_iron_block"
 	},

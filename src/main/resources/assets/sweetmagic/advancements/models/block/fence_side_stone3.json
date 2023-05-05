@@ -1,0 +1,21 @@
+{
+	"textures": {
+		"0": "sweetmagic:block/antique_brick_0w",
+		"particle": "sweetmagic:block/antique_brick_0w"
+	},
+	"elements": [
+		{
+			"from": [6, 11, 0],
+			"to": [10, 15, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 8, 14]},
+			"faces": {
+				"north": {"uv": [6, 4, 10, 8.5], "texture": "#0"},
+				"east": {"uv": [6, 4, 10, 8.5], "texture": "#0"},
+				"south": {"uv": [6, 4, 10, 8.5], "texture": "#0"},
+				"west": {"uv": [6, 4, 10, 8.5], "texture": "#0"},
+				"up": {"uv": [5.5, 4, 10, 8.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [5.5, 4, 10, 8.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}

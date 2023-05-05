@@ -1,0 +1,21 @@
+{
+	"textures": {
+		"0": "sweetmagic:block/pasteltile_brick_y",
+		"particle": "sweetmagic:block/pasteltile_brick_y"
+	},
+	"elements": [
+		{
+			"from": [6, 11, 0],
+			"to": [10, 15, 5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [14, 8, 14]},
+			"faces": {
+				"north": {"uv": [10, 3.5, 6, 8], "texture": "#0"},
+				"east": {"uv": [6, 3.5, 10, 8], "texture": "#0"},
+				"south": {"uv": [10, 3.5, 6, 8], "texture": "#0"},
+				"west": {"uv": [6, 3.5, 10, 8], "texture": "#0"},
+				"up": {"uv": [10.5, 8, 6, 3.5], "rotation": 90, "texture": "#0"},
+				"down": {"uv": [10.5, 8, 6, 3.5], "rotation": 90, "texture": "#0"}
+			}
+		}
+	]
+}
