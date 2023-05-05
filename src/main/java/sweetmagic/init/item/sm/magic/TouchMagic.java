@@ -22,7 +22,7 @@ import sweetmagic.init.item.sm.eitem.SMType;
 public class TouchMagic extends MFSlotItem {
 
 	private final int data;
-	ResourceLocation icon;
+	private ResourceLocation icon;
 
 	public TouchMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.MOB, ele, tier, coolTime, mf, false);

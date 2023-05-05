@@ -11,6 +11,7 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
@@ -21,6 +22,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.iitem.IMFTool;
+import sweetmagic.event.EntityItemTossEvent;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityMagicItem;
@@ -31,10 +33,12 @@ public class SMBookCosmic extends SMBook implements IMFTool {
 
 	public static final String ISPICKUP = "isPickUp";
 	private int maxMF = 0;
+	private static final ItemStack AETHER = new ItemStack(ItemInit.aether_crystal);
+	private static final ItemStack PURE = new ItemStack(ItemInit.pure_crystal);
 
-	public SMBookCosmic(String name) {
-		super(name);
-		this.setMaxMF(1000000);
+	public SMBookCosmic(String name, int data) {
+		super(name, data);
+		this.setMaxMF(data == 0 ? 3000000 : 6000000);
 	}
 
 	@Override
@@ -46,14 +50,16 @@ public class SMBookCosmic extends SMBook implements IMFTool {
 
 		if (!world.isRemote) {
 
+			Item item = this.data == 0 ? ItemInit.aether_crystal : ItemInit.pure_crystal;
+			ItemStack crystal = new ItemStack(item);
 			int mf = this.getMF(stack);
-			int aether_mf = this.getItemMF(new ItemStack(ItemInit.aether_crystal));
+			int aether_mf = this.getItemMF(crystal);
 
 			// MFが600以上あるなら
 			if (mf >= aether_mf) {
 				int amount = Math.min(64, mf / aether_mf);
 				this.setMF(stack, mf - aether_mf * amount);
-				world.spawnEntity(new EntityMagicItem(world, player, new ItemStack(ItemInit.aether_crystal, amount)));
+				world.spawnEntity(new EntityMagicItem(world, player, new ItemStack(item, amount)));
 			}
 
 			// 600未満ならGUIを開く
@@ -71,6 +77,10 @@ public class SMBookCosmic extends SMBook implements IMFTool {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag flag) {
   		super.addInformation(stack, world, tooltip, flag);
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.magicbook_cosmic.name") ));
+
+		if (this.data == 1) {
+			tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.magicbook_cosmic_summon.name") ));
+		}
 
 		// シフトを押したとき
 		if (Keyboard.isKeyDown(42)) {
@@ -111,4 +121,35 @@ public class SMBookCosmic extends SMBook implements IMFTool {
 		NBTTagCompound tags = this.getNBT(stack);
 		tags.setBoolean(ISPICKUP, !tags.getBoolean(ISPICKUP));
 	}
+
+	// エンチャントエフェクト描画
+	@Override
+    @SideOnly(Side.CLIENT)
+    public boolean hasEffect(ItemStack stack) {
+	    return false;
+    }
+
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return this.data == 1 && this.getMF(stack) != this.getMaxMF(stack);
+	}
+
+	public double getDurabilityForDisplay(ItemStack stack) {
+		return 1D - ( (double) this.getMF(stack) / (double) this.getMaxMF(stack) );
+	}
+
+	public boolean checkCrystal (Item item) {
+		return this.data == 0 ? EntityItemTossEvent.cosmicList.contains(item) : EntityItemTossEvent.scarletList.contains(item);
+	}
+
+	// tierの取得
+	public int getTier () {
+		return this.data + 2;
+	}
+
+//	@Override
+//	public List<String> magicToolTip(List<String> toolTip) {
+//		toolTip.add(TextFormatting.RED + ClientKeyHelper.getKeyName(SMKeybind.BACK) + TextFormatting.GOLD + this.getTip("tip.magicbook_acc.name"));
+//		return toolTip;
+//	}
 }

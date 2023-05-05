@@ -24,8 +24,8 @@ import sweetmagic.init.item.sm.eitem.SMType;
 
 public class MFWeather extends MFSlotItem implements IElementItem {
 
-	public int burnTime;
-	public int rainTime;
+	private int burnTime;
+	private int rainTime;
 
 	public MFWeather (String name, int time, SMElement ele, int rainTime) {
 		super(name, SMType.AIR, ele, 1, 40, 10, true);

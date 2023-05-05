@@ -1,7 +1,5 @@
 package sweetmagic.init.item.sm.armor;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -15,14 +13,13 @@ import sweetmagic.api.iitem.IMFTool;
 import sweetmagic.api.iitem.ISMArmor;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
-import sweetmagic.init.entity.model.ModelPouch;
 
 public class AetherChoker extends ItemArmor implements IChoker, ISMArmor {
 
-	public final int data;
-	public int maxMF;
-	public int tickTime = 0;
-	public static final EntityEquipmentSlot[] ARMORSLOT = new EntityEquipmentSlot[] { EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET, EntityEquipmentSlot.MAINHAND };
+	private final int data;
+	private int maxMF;
+	private int tickTime = 0;
+	private static final EntityEquipmentSlot[] ARMORSLOT = new EntityEquipmentSlot[] { EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET, EntityEquipmentSlot.MAINHAND };
 
 	public AetherChoker(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
 		super(material, render, slot);
@@ -46,14 +43,6 @@ public class AetherChoker extends ItemArmor implements IChoker, ISMArmor {
         return false;
     }
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelPouch next = new ModelPouch(0.375F, slot.getIndex());
-		next.setModelAttributes(model);
-		return next;
-	}
-
 	// 装備してる間機能する内容
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
@@ -69,7 +58,7 @@ public class AetherChoker extends ItemArmor implements IChoker, ISMArmor {
 
 			ItemStack armor = player.getItemStackFromSlot(slot);
 			Item item = armor.getItem();
-			if (!(item instanceof IMFTool)) { continue; }
+			if (!(item instanceof IMFTool) || item == ItemInit.magic_book_cosmic) { continue; }
 
 			IMFTool tool =  (IMFTool) item;
 			if (tool.isMaxMF(armor)) { continue; }

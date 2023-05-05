@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.handlers.SMGuiHandler;
+import sweetmagic.init.AdvancedInit;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.SoundHelper;
 
@@ -18,6 +19,14 @@ public class SMGuidBook extends SMReturn {
 	public SMGuidBook(String name) {
 		super(name);
 	}
+
+	// クラフト時に進捗達成
+	@Override
+	public void onCreated(ItemStack stack, World world, EntityPlayer player) {
+		if (player instanceof EntityPlayerMP) {
+			AdvancedInit.item_use.trigger((EntityPlayerMP) player, stack);
+		}
+    }
 
 	@Override
     public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {

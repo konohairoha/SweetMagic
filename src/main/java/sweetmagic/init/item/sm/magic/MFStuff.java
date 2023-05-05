@@ -4,10 +4,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
+import com.google.common.collect.Multimap;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumActionResult;
@@ -20,12 +24,22 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
+import sweetmagic.util.SMUtil;
 
 public class MFStuff extends SMItem {
 
 	public MFStuff (String name) {
 		super(name, ItemInit.magicList);
 	}
+
+	@Override
+	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
+        Multimap<String, AttributeModifier> map = super.getItemAttributeModifiers(slot);
+		if (slot == EntityEquipmentSlot.MAINHAND) {
+			map.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(SMUtil.TOOL_REACH, "modifier", 2D, 0));
+		}
+        return map;
+    }
 
 	// ブロックを右クリック
 	@Override
@@ -37,8 +51,10 @@ public class MFStuff extends SMItem {
 		if (tags == null || !tags.hasKey("X")) { return EnumActionResult.PASS; }
 
 		if (!world.isRemote) {
-			player.sendMessage(new TextComponentTranslation("tip.posremo.name", new Object[0]));
-		} else {
+			player.sendMessage(new TextComponentTranslation("tip.posremo.name"));
+		}
+
+		else {
 			player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
 		}
 

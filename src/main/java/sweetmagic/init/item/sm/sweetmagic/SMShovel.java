@@ -31,7 +31,7 @@ import sweetmagic.util.WorldHelper;
 public class SMShovel extends ItemSpade {
 
 	private static final List<Material> materialList = Arrays.<Material> asList(
-			Material.GROUND, Material.GRASS, Material.SAND
+		Material.GROUND, Material.GRASS, Material.SAND
 	);
 
 	public SMShovel(String name, ToolMaterial material) {
@@ -82,7 +82,7 @@ public class SMShovel extends ItemSpade {
 
 				//空気ブロックとたいるえんちちーなら何もしない
 				if(block == Blocks.AIR || block.hasTileEntity(target)){ continue; }
-				if (!materialList.contains(target.getMaterial())) { continue; }
+				if (!materialList.contains(target.getMaterial()) && block != Blocks.SNOW && block != Blocks.SNOW_LAYER) { continue; }
 
 				drop.addAll(WorldHelper.getBlockDrops(world, player, target, block, blockPos, canSilk, FOURTUNE));
 				world.setBlockToAir(blockPos);
@@ -100,6 +100,6 @@ public class SMShovel extends ItemSpade {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String tip = new TextComponentTranslation("tip.alt_shovel.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN  + tip));
+		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
 	}
 }

@@ -16,7 +16,7 @@ import sweetmagic.init.item.sm.eitem.SMType;
 
 public class MFTime extends MFSlotItem implements IElementItem {
 
-	public int time;
+	private int time;
 
 	public MFTime (String name, int time) {
 		super(name, SMType.AIR, SMElement.TIME, 1, 40, 10, true);

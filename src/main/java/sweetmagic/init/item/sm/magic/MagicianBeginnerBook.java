@@ -47,7 +47,6 @@ public class MagicianBeginnerBook extends SMItem {
 	public final static String X = "posX";
 	public final static String Y = "posY";
 	public final static String Z = "posZ";
-	public String name;
 
 	public MagicianBeginnerBook (String name, int data) {
 		super(name, ItemInit.magicList);
@@ -59,8 +58,7 @@ public class MagicianBeginnerBook extends SMItem {
 	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot slot) {
 		Multimap<String, AttributeModifier> modMap = super.getItemAttributeModifiers(slot);
 		if (slot == EntityEquipmentSlot.MAINHAND) {
-			modMap.put(EntityPlayer.REACH_DISTANCE.getName(),
-					new AttributeModifier(SMUtil.TOOL_REACH, "Weapon modifier", 12, 0));
+			modMap.put(EntityPlayer.REACH_DISTANCE.getName(), new AttributeModifier(SMUtil.TOOL_REACH, "Weapon modifier", 12, 0));
 		}
 		return modMap;
 	}
@@ -77,10 +75,13 @@ public class MagicianBeginnerBook extends SMItem {
 			BlockPos pos = new BlockPos(tags.getInteger(X), tags.getInteger(Y), tags.getInteger(Z));
 
 			if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
+
+				if (this.getPos(pos).getY() < 1) { return new ActionResult(EnumActionResult.SUCCESS, stack); }
+
 				this.genHouse(world, pos, tags);
 			}
 			if (!player.isCreative()) { stack.shrink(1); }
-			return new ActionResult(EnumActionResult.SUCCESS, player.getHeldItem(hand));
+			return new ActionResult(EnumActionResult.SUCCESS, stack);
 		}
 
 		return super.onItemRightClick(world, player, hand);
@@ -100,13 +101,15 @@ public class MagicianBeginnerBook extends SMItem {
 			pos = new BlockPos(tags.getInteger(X), tags.getInteger(Y) + 1, tags.getInteger(Z));
 		}
 
+		if (this.getPos(pos).getY() < 1) { return EnumActionResult.SUCCESS; }
+
 		if (!player.canPlayerEdit(pos.offset(face), face, stack)) { return EnumActionResult.FAIL; }
 		if (face != EnumFacing.UP || !world.isAirBlock(pos.up()) || world.isRemote) { return EnumActionResult.FAIL; }
 
 		IBlockState state = world.getBlockState(pos);
 		if (state.getBlockHardness(world, pos) <= 0.0D) { return EnumActionResult.FAIL; }
 
-		if (!player.isCreative()) { stack.shrink(1); }
+		this.shrinkItem(player, stack);
 
 		if (world instanceof WorldServer && !player.isPotionActive(PotionInit.breakblock)) {
 			this.genHouse(world, pos, tags);
@@ -178,10 +181,28 @@ public class MagicianBeginnerBook extends SMItem {
 			}
 		}
 
-        WorldGenerator gen = new WorldGenHouse("house", fa);
-		gen.generate(world, world.rand, pos);
+        WorldGenerator gen = new WorldGenHouse(this.getStructure(), fa);
+		gen.generate(world, world.rand, this.getPos(pos));
 
 		world.playSound(null, pos, SMSoundEvent.HORAMAGIC, SoundCategory.NEUTRAL, 0.5F, 1F);
+	}
+
+	public String getStructure () {
+
+		switch (this.data) {
+		case 0: return "house";
+		case 1: return "smhouse";
+		}
+
+		return null;
+	}
+
+	public BlockPos getPos (BlockPos pos) {
+		switch (this.data) {
+		case 0: return pos;
+		case 1: return pos.down(6);
+		}
+		return pos;
 	}
 
 	// ブロック破壊処理

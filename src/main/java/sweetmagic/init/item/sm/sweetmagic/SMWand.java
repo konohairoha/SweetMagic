@@ -81,7 +81,7 @@ public class SMWand extends SMItem implements IWand {
 		double d = Math.min(0.1 + (double) this.getEnchantLevel(EnchantInit.wandAddPower, stack) * 0.075D, 0.5D);
 		target.motionX += r.x * d;
 		target.motionZ += r.z * d;
-		ParticleHelper.spawnBoneMeal(target.world, target.getPosition().up(), EnumParticleTypes.CRIT);
+		ParticleHelper.spawnParticle(target.world, target.getPosition().up(), EnumParticleTypes.CRIT);
 		return true;
 	}
 
@@ -125,6 +125,8 @@ public class SMWand extends SMItem implements IWand {
 
 		// 空中タイプ
 		case AIR:
+		case FIELD:
+		case SUMMON:
 
 			// 空中処理
 			this.airActived(world, player, stack, slotItem, tags);
@@ -193,7 +195,7 @@ public class SMWand extends SMItem implements IWand {
 		switch (item.getType()) {
 
 		// 地面タイプ
-		case GROUND:
+		case SUMMON:
 			this.groundActived(world, player, stack, slotItem, tags);
 			break;
 		default:
@@ -364,7 +366,7 @@ public class SMWand extends SMItem implements IWand {
 
 	//全てのブロック（マテリアル）を破壊可能に
 	@Override
-	public boolean canHarvestBlock(IBlockState blockIn) {
+	public boolean canHarvestBlock(IBlockState state) {
 		return true;
 	}
 

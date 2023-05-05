@@ -10,6 +10,6 @@ public class SMIDoor extends ItemDoor {
 		super(block);
         setUnlocalizedName(name);
         setRegistryName(name);
-		ItemInit.itemList.add(this);
+		ItemInit.furniList.add(this);
     }
 }

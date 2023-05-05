@@ -15,7 +15,7 @@ import sweetmagic.init.ItemInit;
 
 public class SMDropItem extends SMItem {
 
-	public final String name;
+	private final String name;
 
 	public SMDropItem (String name) {
 		super(name, ItemInit.magicList);
@@ -57,10 +57,8 @@ public class SMDropItem extends SMItem {
   		}
 
   		if (!tipEntity.equals("")) {
-  			tipEntity = this.getTip(tipEntity);
-  	  		String tip = this.getTip("tip.drop.name") + " " + tipEntity;
+  	  		String tip = this.getTip("tip.drop.name") + " " + this.getTip(tipEntity);
   			tooltip.add(I18n.format(TextFormatting.GREEN + tip));
   		}
   	}
-
 }

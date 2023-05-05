@@ -59,8 +59,8 @@ public class SMSeedFood extends ItemFood implements IPlantable {
 	}
 
     public void setBlock (World world, EntityPlayer player, ItemStack stack, Material material, BlockPos pos) {
-		if (!player.capabilities.isCreativeMode) { stack.shrink(1); }
-		world.playSound(player, new BlockPos(player), SoundEvents.BLOCK_SNOW_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+		if (!player.isCreative()) { stack.shrink(1); }
+		world.playSound(null, pos, SoundEvents.BLOCK_SNOW_PLACE, SoundCategory.PLAYERS, 0.5F, 1F / (world.rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 		world.setBlockState(pos.up(), this.state, 3);
     }
 

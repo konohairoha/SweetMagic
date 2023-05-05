@@ -37,6 +37,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import sweetmagic.api.iitem.IMFTool;
+import sweetmagic.api.iitem.IRangePosTool;
 import sweetmagic.api.iitem.IRobe;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
@@ -48,7 +49,7 @@ import sweetmagic.key.SMKeybind;
 import sweetmagic.util.ItemHelper;
 import sweetmagic.util.WorldHelper;
 
-public class StarLightWand extends SMItem implements IMFTool{
+public class StarLightWand extends SMItem implements IMFTool, IRangePosTool {
 
 	private int maxMF;
 
@@ -60,10 +61,11 @@ public class StarLightWand extends SMItem implements IMFTool{
 	public final static String ENDY = "eY";
 	public final static String ENDZ = "eZ";
 	public final static String BLOCKDATA = "block_data";
+	private final static String METADATA = "metadata";
 
 	public StarLightWand (String name) {
 		super(name, ItemInit.magicList);
-		this.setMaxMF(500000);
+		this.setMaxMF(100000);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(100);
 	}
@@ -91,7 +93,7 @@ public class StarLightWand extends SMItem implements IMFTool{
 
 			boolean isCreative = player.isCreative();
 			boolean isReplace = tags.getBoolean(REPLACE);
-			IBlockState state = block.getDefaultState();
+			IBlockState state = block.getStateFromMeta(tags.getInteger(METADATA));
 
 			// プレイヤーのInventoryの取得
 			NonNullList<ItemStack> pInv = player.inventory.mainInventory;
@@ -130,17 +132,18 @@ public class StarLightWand extends SMItem implements IMFTool{
 				else {
 
 					// インベントリ分回す
-					for (ItemStack s : pInv) {
+					for (ItemStack blockStack : pInv) {
 
 						// アイテムが空かブロック以外なら次へ
-						if (s.isEmpty() || !(s.getItem() instanceof ItemBlock)) { continue; }
+						if (blockStack.isEmpty() || !(blockStack.getItem() instanceof ItemBlock)) { continue; }
 
 						// 設置ブロック以外なら終了
-						Block setBlock = ((ItemBlock) s.getItem()).getBlock();
-						if (setBlock != block) { continue; }
+
+						IBlockState setBlock = ((ItemBlock) blockStack.getItem()).getBlock().getStateFromMeta(blockStack.getMetadata());
+						if (setBlock != state) { continue; }
 
 						useMF += costMF;
-						this.setBlock(world, player, s, inv, b, blockState, state, pos, drop, isReplace);
+						this.setBlock(world, player, blockStack, inv, b, blockState, state, pos, drop, isReplace);
 						isFound = true;
 						break;
 					}
@@ -151,16 +154,16 @@ public class StarLightWand extends SMItem implements IMFTool{
 						for (int i = 0; i < robeInv.getSlots(); i++) {
 
 							// アイテムが空かブロック以外なら次へ
-							ItemStack s = robeInv.getStackInSlot(i);
-							if (s.isEmpty() || !(s.getItem() instanceof ItemBlock)) { continue; }
+							ItemStack blockStack = robeInv.getStackInSlot(i);
+							if (blockStack.isEmpty() || !(blockStack.getItem() instanceof ItemBlock)) { continue; }
 
 							// 設置ブロック以外なら終了
-							Block setBlock = ((ItemBlock) s.getItem()).getBlock();
-							if (setBlock != block) { continue; }
+							IBlockState setBlock = ((ItemBlock) blockStack.getItem()).getBlock().getStateFromMeta(blockStack.getMetadata());
+							if (setBlock != state) { continue; }
 
 							useMF += costMF;
 							inv.writeBack();
-							this.setBlock(world, player, s, inv, b, blockState, state, pos, drop, isReplace);
+							this.setBlock(world, player, blockStack, inv, b, blockState, state, pos, drop, isReplace);
 							isFound = true;
 							break;
 						}
@@ -171,7 +174,7 @@ public class StarLightWand extends SMItem implements IMFTool{
 						this.setMF(stack, mf - useMF);
 
 						// リストに入れたアイテムをドロップさせる
-						if (!drop.isEmpty()) {
+						if (!drop.isEmpty() && !world.isRemote) {
 							WorldHelper.createLootDrop(drop, world, player.posX, player.posY, player.posZ);
 						}
 
@@ -218,19 +221,21 @@ public class StarLightWand extends SMItem implements IMFTool{
 
 		NBTTagCompound tags = ItemHelper.getNBT(stack);
     	StarLightWand wand = (StarLightWand) stack.getItem();
-    	wand.saveBlockToTag(tags, world.getBlockState(pos).getBlock());
+    	wand.saveBlockToTag(tags, world.getBlockState(pos));
     	player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 0.5F, 1F);
 		return EnumActionResult.SUCCESS;
 	}
 
 	// ブロックの保存
-	public void saveBlockToTag (NBTTagCompound tags, Block block) {
+	public void saveBlockToTag (NBTTagCompound tags, IBlockState state) {
 
 		// nbtのリストを作成
+		Block block = state.getBlock();
 		NBTTagList nbtList = new NBTTagList();
         ItemStack stack = new ItemStack(block);
         nbtList.appendTag(stack.writeToNBT(new NBTTagCompound()));
         tags.setTag(BLOCKDATA, nbtList);
+        tags.setInteger(METADATA, block.getMetaFromState(state));
 	}
 
 	// ブロックの書き出し
@@ -252,27 +257,6 @@ public class StarLightWand extends SMItem implements IMFTool{
 		return null;
 	}
 
-	// 始点の座標取得
-	public BlockPos getStartPos (NBTTagCompound tags) {
-		return new BlockPos(tags.getInteger(STARTX), tags.getInteger(STARTY), tags.getInteger(STARTZ));
-	}
-
-	// 終点の座標取得
-	public BlockPos getEndPos (NBTTagCompound tags) {
-		return new BlockPos(tags.getInteger(ENDX), tags.getInteger(ENDY), tags.getInteger(ENDZ));
-	}
-
-	// 座標リセット
-	public void resetPos (ItemStack stack) {
-		NBTTagCompound tags = ItemHelper.getNBT(stack);
-		tags.removeTag(STARTX);
-		tags.removeTag(STARTY);
-		tags.removeTag(STARTZ);
-		tags.removeTag(ENDX);
-		tags.removeTag(ENDY);
-		tags.removeTag(ENDZ);
-	}
-
 	// リプレースモード切替
 	public void repaceMode (ItemStack stack) {
 
@@ -290,8 +274,8 @@ public class StarLightWand extends SMItem implements IMFTool{
   	// 最大MFを取得
 	@Override
   	public int getMaxMF (ItemStack stack) {
-		int addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 5) * (this.maxMF / 100);
-  		return this.maxMF + addMaxMF;
+		float addMaxMF = (this.getEnchantLevel(EnchantInit.maxMFUP, stack) * 7.5F) * (this.maxMF / 100F);
+  		return (int) (this.maxMF + addMaxMF);
   	}
 
 	// エンチャレベル取得
@@ -349,6 +333,6 @@ public class StarLightWand extends SMItem implements IMFTool{
 	}
 
 	public String getTip (TextFormatting type, String tip) {
-		return type + new TextComponentTranslation(tip, new Object[0]).getFormattedText();
+		return type + new TextComponentTranslation(tip).getFormattedText();
 	}
 }

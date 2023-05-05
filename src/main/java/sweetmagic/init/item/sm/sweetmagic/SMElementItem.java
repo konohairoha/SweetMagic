@@ -5,7 +5,7 @@ import sweetmagic.init.item.sm.eitem.SMElement;
 
 public class SMElementItem extends SMDropItem implements IElementItem {
 
-	public SMElement ele;
+	private SMElement ele;
 
 	public SMElementItem (String name, SMElement ele) {
 		super(name);

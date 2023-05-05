@@ -7,14 +7,12 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -38,6 +36,7 @@ public class SMLootBag extends SMItem {
      * 0 = 種袋
      * 1 = 卵袋
      * 2 = アクセ袋
+     * 3 = 花袋
      */
 
 	//右クリックをした際の処理
@@ -45,9 +44,9 @@ public class SMLootBag extends SMItem {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
 
 		ItemStack stack = player.getHeldItem(hand);
-		stack.shrink(1);
+		this.shrinkItem(player, stack);
 		BlockPos pos = new BlockPos(player);
-		world.playSound(null, pos, SMSoundEvent.ROBE, SoundCategory.PLAYERS, 0.5F, 1.075F);
+		this.playSound(world, player, SMSoundEvent.ROBE, 0.5F, 1.075F);
 		if (world.isRemote) { return new ActionResult(EnumActionResult.SUCCESS, stack); }
 
 		Random rand = world.rand;
@@ -64,6 +63,10 @@ public class SMLootBag extends SMItem {
 			// 鉱石辞書からランダムにアイテムを引っ張る
 			this.getOreLoot(world, pos, player, hand, rand, "magicAccessori", 1);
 			break;
+		case 3:
+			// 鉱石辞書からランダムにアイテムを引っ張る
+			this.getOreLoot(world, pos, player, hand, rand, "listAllflower", 5);
+			break;
 		}
 
 		return new ActionResult(EnumActionResult.SUCCESS, stack);
@@ -78,11 +81,6 @@ public class SMLootBag extends SMItem {
 		for (int i = 0; i < value; i ++) {
 			this.spawnItem(world, pos, seedList.get(rand.nextInt(seedList.size())));
 		}
-	}
-
-	// アイテムスポーン
-	public void spawnItem (World world, BlockPos pos, ItemStack stack) {
-		world.spawnEntity(new EntityItem(world, pos.getX(), pos.getY(), pos.getZ(), stack));
 	}
 
     //ツールチップの表示
@@ -101,6 +99,9 @@ public class SMLootBag extends SMItem {
   			break;
   		case 2:
   			text = "tip.accebag.name";
+  			break;
+  		case 3:
+  			text = "tip.flowerpack.name";
   			break;
   		}
 

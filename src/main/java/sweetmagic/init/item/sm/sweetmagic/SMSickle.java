@@ -173,7 +173,7 @@ public class SMSickle extends ItemHoe {
 			else if (b instanceof IGrowable) {
 				if (!((IGrowable) b).canGrow(world, p, state, false)) {
 					dropList = b.getDrops(world, p, state, 0);
-					ItemHelper.compactItemListNoStacksize(dropList);
+					ItemHelper.compactStackList(dropList);
 				}
 			}
 
@@ -183,10 +183,7 @@ public class SMSickle extends ItemHoe {
 			// 作物の種の取得
 			if (b instanceof BlockBush) {
 				item = b.getDrops(world, p, b.getDefaultState(), 0).get(0).getItem();
-				System.out.println("=====item:" + item);
 			}
-
-			System.out.println("=====dropList:" + dropList);
 
 			// ドロップリスト分回す
 			for (ItemStack drop : dropList) {
@@ -200,10 +197,8 @@ public class SMSickle extends ItemHoe {
 				}
 			}
 
-			ItemHelper.compactItemListNoStacksize(dropList);
-			System.out.println("=====dropList2:" + dropList);
-
 			// stackListに追加
+			ItemHelper.compactStackList(dropList);
 			stackList.addAll(dropList);
 			this.breakBlock(world, p);
 			this.playCropSound(world, rand, p);
@@ -237,6 +232,6 @@ public class SMSickle extends ItemHoe {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String tip = new TextComponentTranslation("tip.alt_sickle.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN  + tip));
+		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
 	}
 }

@@ -11,7 +11,7 @@ import sweetmagic.init.item.sm.eitem.SMElement;
 
 public class CosmicWand extends SMWand {
 
-	public int downTime = 0;
+	public float downTime = 0;
 	public final SMElement element;
 
 	public CosmicWand (String name, int tier, int maxMF, int slot, SMElement element) {
@@ -51,14 +51,10 @@ public class CosmicWand extends SMWand {
 		if (!this.isCreativeWand()) {
 
 			// 杖と魔法の属性一致してるなら
-			if (this.isNotElement() && this.isElementEqual(smItem)) {
-				this.downTime = 15;
-			}
+			this.downTime = this.isNotElement() && this.isElementEqual(smItem) ? 10F : 0F;
 
-			// それ以外の属性なら
-			else {
-				this.downTime = 0;
-			}
+			float bounus = 1F + (float) (this.getEnchantLevel(EnchantInit.elementBonus, stack)) * 0.2F;
+			this.downTime *= Math.min(3F, bounus);
 
 			// クールタイム
 			player.getCooldownTracker().setCooldown(item, this.getCoolTime(player, stack, smItem.getCoolTime()));
@@ -78,10 +74,9 @@ public class CosmicWand extends SMWand {
 		}
 	}
 
-
 	// クールタイム減少時間の値
 	@Override
-	public int getCoolTimeDown () {
+	public float getBounusValue () {
 		return this.downTime;
 	}
 

@@ -9,20 +9,21 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.item.sm.armor.MagiciansPouch;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 import sweetmagic.init.item.sm.sweetmagic.SMItem;
 
 public class MFSlotItem extends SMItem implements ISMItem {
 
-	public int time;
-	public SMElement ele;
-	public SMType type;
-	public int tier;
-	public int coolTime;
-	public int mf;
-	public boolean isShirink;
-	ResourceLocation icon;
+	private int time;
+	private SMElement ele;
+	private SMType type;
+	private int tier;
+	private int coolTime;
+	private int mf;
+	private boolean isShirink;
+	private ResourceLocation icon;
 
 	public MFSlotItem (String name, SMType type, SMElement ele, int tier, int coolTime, int useMF, boolean isShirink) {
 		super(name, ItemInit.magicList);
@@ -99,4 +100,9 @@ public class MFSlotItem extends SMItem implements ISMItem {
 	public List<String> magicToolTip (List<String> toolTip) {
 		return toolTip;
 	}
+
+	// 装備品を持っているか
+    public boolean hasAcce (EntityPlayer player, Item item) {
+        return MagiciansPouch.hasAcce(player, item);
+    }
 }

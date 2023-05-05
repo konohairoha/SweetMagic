@@ -30,9 +30,9 @@ import sweetmagic.init.ItemInit;
 
 public class SMSword extends ItemSword {
 
-	public double speed;
-	public final int data;
-	public static final String DODROP = "doDrop";
+	private double speed;
+	private final int data;
+	private static final String DODROP = "doDrop";
 
 	public SMSword(String name, int harvestLevel, int maxUses, float efficiency, float damage, int enchantability, Double atack, int data) {
 		super(EnumHelper.addToolMaterial(name, harvestLevel, maxUses, efficiency, damage, enchantability));
@@ -110,9 +110,7 @@ public class SMSword extends ItemSword {
   		}
 
   		if (!tip.equals("")) {
-
-  	  		//xx_xx.langファイルから文字を取得する方法
-  	  		String text =  new TextComponentTranslation(tip, new Object[0]).getFormattedText();
+  	  		String text = new TextComponentTranslation(tip, new Object[0]).getFormattedText();
   			tooltip.add(I18n.format(TextFormatting.GREEN + text ));
   		}
   	}

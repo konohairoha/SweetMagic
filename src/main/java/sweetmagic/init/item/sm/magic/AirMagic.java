@@ -1,5 +1,6 @@
 package sweetmagic.init.item.sm.magic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.entity.EntityLiving;
@@ -7,11 +8,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.FoodStats;
@@ -26,19 +29,20 @@ import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.entity.projectile.EntityFrostRain;
+import sweetmagic.init.entity.projectile.EntityMagicCycle;
 import sweetmagic.init.entity.projectile.EntityMeteorMagic;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
 import sweetmagic.util.ParticleHelper;
+import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SMUtil;
 import sweetmagic.util.WorldHelper;
 
 public class AirMagic extends MFSlotItem {
 
-	public final int data;
-	ResourceLocation icon;
-	public SMElement subEle = null;
+	private final int data;
+	private ResourceLocation icon;
+	private SMElement subEle = null;
 
 	public AirMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.AIR, ele, tier, coolTime, mf, false);
@@ -53,7 +57,7 @@ public class AirMagic extends MFSlotItem {
     }
 
 	public AirMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf, String dir, SMElement subEle) {
-		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
+		super(name, SMType.AIR, ele, tier, coolTime, mf, false);
         this.data = meta;
 		this.icon = new ResourceLocation(SweetMagicCore.MODID,"textures/items/" + dir + ".png");
 		this.setSubElement(subEle);
@@ -73,7 +77,7 @@ public class AirMagic extends MFSlotItem {
 	 * 10 = 氷雨魔法
 	 * 11 = ジャンプ力アップ
 	 * 12 = 弾のベクトル無効化
-	 * 13 = 敵スタン魔法
+	 * 13 = バフ延長魔法
 	 * 14 = 敵スタン + 反撃魔法
 	 * 15 = 持続回復 + バリア魔法
 	 * 16 = 持続回復Ⅲ + バリア魔法
@@ -81,11 +85,12 @@ public class AirMagic extends MFSlotItem {
 	 * 18 = 回避魔法2
 	 * 19 = 回避魔法3
 	 * 20 = 持続デバフ解除 + 全回復魔法 + 衝撃吸収
-	 * 21 = レベルアップ用
+	 * 21 =
 	 * 22 = 透明化魔法
 	 * 23 = 採掘速アップ魔法
 	 * 24 = 拡散バリア魔法
 	 * 25 = ディメンション・デバフ解除
+	 * 26 = 因果律予測
 	 */
 
 	// テクスチャのリソースを取得
@@ -156,9 +161,6 @@ public class AirMagic extends MFSlotItem {
 		case 20:
 			toolTip.add("tip.magic_healing_hightlow.name");
 			break;
-		case 21:
-			toolTip.add("tip.magic_creative.name");
-			break;
 		case 22:
 			toolTip.add("tip.magic_invisible.name");
 			break;
@@ -170,6 +172,9 @@ public class AirMagic extends MFSlotItem {
 			break;
 		case 25:
 			toolTip.add("tip.magic_refresh_gift.name");
+			break;
+		case 26:
+			toolTip.add("tip.magic_causality_prediction.name");
 			break;
 		}
 
@@ -237,10 +242,11 @@ public class AirMagic extends MFSlotItem {
 			flag = this.vectorHaltenMagic(world, player, stack, tags);
 			break;
 		case 13:
-			// 敵スタン
+			// バフ延長魔法
 			flag = this.deusOraMagic(world, player, stack, tags);
 			break;
 		case 14:
+		case 26:
 			// 敵スタン + 反撃魔法
 			flag = this.futureVisionMagic(world, player, stack, tags);
 			break;
@@ -254,10 +260,6 @@ public class AirMagic extends MFSlotItem {
 		case 19:
 			// 回避魔法
 			flag = this.rangeAvoid(world, player, stack, tags);
-			break;
-		case 21:
-			// レベルアップ魔法
-			flag = this.creativeAction(world, player, stack, tags);
 			break;
 		case 22:
 			// 透明化魔法
@@ -280,8 +282,12 @@ public class AirMagic extends MFSlotItem {
 
 	// 範囲回復
 	public boolean rangeHealAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+        double range = isRange ? 13.5D : 7D;
+
 		world.playSound(null, player.getPosition(), SMSoundEvent.HEAL, SoundCategory.NEUTRAL, 0.175F, 1);
-		WorldHelper.PlayerHeal(world, player.getEntityBoundingBox().grow(7D, 5D, 7D), player, stack, false);
+		WorldHelper.PlayerHeal(world, player.getEntityBoundingBox().grow(range), player, stack, false);
 		return false;
 	}
 
@@ -312,8 +318,9 @@ public class AirMagic extends MFSlotItem {
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		// switch文で回復量を変える予定
-		player.setHealth(player.getHealth() + level + 3);
+		// 最大体力 * ( 基礎回復量 + 補正値 * ( 杖レベル - 1 ) )
+		float healValue = player.getMaxHealth() * (0.25F + 0.01F * (level - 1));
+		player.setHealth(player.getHealth() + healValue);
 
 		// デバフ解除
 		player.removePotionEffect(MobEffects.HUNGER);
@@ -329,6 +336,9 @@ public class AirMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
+		System.out.println("=======level" + level);
+		System.out.println("=======Time" + this.effectTime(level));
+
 		this.addPotion(player, PotionInit.aether_barrier, this.effectTime(level), --level, true);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 		return true;
@@ -349,13 +359,15 @@ public class AirMagic extends MFSlotItem {
 	// デバフ除去魔法
 	public boolean effectRemoverAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = (int) (wand.isCreativeWand() ? wand.getCreativePower() : wand.getLevel(stack));
-		level += 2;
+		level += isRange ? 12 : 2;
 
 		this.playSound(world, player, SMSoundEvent.HEAL, 0.175F, 1F);
-		WorldHelper.effectRemoveRange(world, player.getEntityBoundingBox().grow(level, level, level));
+		WorldHelper.effectRemoveRange(world, player.getEntityBoundingBox().grow(level));
 
 		return true;
 	}
@@ -390,18 +402,20 @@ public class AirMagic extends MFSlotItem {
 	public boolean healingWish (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
 		// 杖の取得
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
 		IWand wand = IWand.getWand(stack);
-		int level = IWand.getLevel(wand, stack);
-		level += 2;
+		int level = IWand.getLevel(wand, stack) + (isRange ? 12 : 2);
 
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(level, level, level);
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(level);
 		WorldHelper.PlayerHeal(world, aabb, player, stack, true);
-		WorldHelper.addEffect(world, aabb, PotionInit.refresh_effect, (int) (this.effectTime(level) * 1.25), 1, EnumParticleTypes.WATER_SPLASH);
+		int time = (int) (this.effectTime(level) * (isRange ? 1.33F : 1));
+
+		WorldHelper.addEffect(world, aabb, PotionInit.refresh_effect, (int) (time * 1.25F), 1, EnumParticleTypes.WATER_SPLASH);
 		this.playSound(world, player, SMSoundEvent.HEAL, 0.175F, 1F);
 
 		if (this.data == 20) {
-			this.addPotion(player, MobEffects.ABSORPTION, (int) (this.effectTime(level) * 1.25), 2, true);
-			WorldHelper.addEffect(world, aabb, MobEffects.ABSORPTION, this.effectTime(level), 2, null);
+			this.addPotion(player, MobEffects.ABSORPTION, (int) (time * 1.25F), 2, true);
+			WorldHelper.addEffect(world, aabb, MobEffects.ABSORPTION, time, 2, null);
 		}
 
 		return true;
@@ -416,16 +430,29 @@ public class AirMagic extends MFSlotItem {
 
 		// 向き取得
         Vec3d vec3d = player.getLookVec();
-        vec3d = vec3d.normalize().scale(17);
+        vec3d = vec3d.normalize().scale(10);
+        int y = 16;
+        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + y, player.posZ + vec3d.z);
+
+		while(true) {
+
+			if (world.getBlockState(pos.down()).getBlock() == Blocks.AIR || pos.getY() <= 1) {
+				y--;
+				break;
+			}
+
+			pos = pos.down();
+			y--;
+		}
 
 		if (!world.isRemote) {
 	        EntityMeteorMagic entity = new EntityMeteorMagic(world, player, stack);
 			entity.setDamage(entity.getDamage() + this.getPower(level) * 3);
 			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
 			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 0, 0);									// 射撃速度
-			entity.motionY -= 1.5;
-	        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + vec3d.y, player.posZ + vec3d.z);
-			entity.setPosition(pos.getX(), pos.getY() + 15, pos.getZ());
+			entity.motionY -= 2D;
+
+			entity.setPosition(player.posX + vec3d.x, player.posY + y, player.posZ + vec3d.z);
 			entity.plusTick = -400;
 	        world.spawnEntity(entity);
 		}
@@ -441,17 +468,24 @@ public class AirMagic extends MFSlotItem {
 
 		// 向き取得
         Vec3d vec3d = player.getLookVec();
-        vec3d = vec3d.normalize().scale(17);
+        vec3d = vec3d.normalize().scale(10);
+        int y = 11;
+        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + y, player.posZ + vec3d.z);
+
+		while(true) {
+
+			if (world.getBlockState(pos.down()).getBlock() == Blocks.AIR || pos.getY() <= 1) {
+				break;
+			}
+
+			pos = pos.down();
+			y--;
+		}
 
 		if (!world.isRemote) {
-			EntityFrostRain entity = new EntityFrostRain(world, player, stack);
-			entity.setDamage(entity.getDamage() + this.getPower(level) * 2);
-			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
-			entity.shoot(0, entity.motionY, 0, 0, 0);									// 射撃速度
-			entity.motionY -= 16;
-			entity.isHitDead = true;
-	        BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + vec3d.y + 10, player.posZ + vec3d.z);
-			entity.setPosition(pos.getX(), pos.getY() + 10, pos.getZ());
+			float scale = level * 0.5F;
+			EntityMagicCycle entity = new EntityMagicCycle(player, 103, 42, 35, scale, level, 200, 8);
+			entity.setPosition(player.posX + vec3d.x, player.posY + y, player.posZ + vec3d.z);
 	        world.spawnEntity(entity);
 		}
 		return true;
@@ -490,9 +524,38 @@ public class AirMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
+		boolean isCreativeWand = wand.isCreativeWand();
+		int mf = wand.getMF(stack);
+		int useMF = 0;
 
-		this.addPotion(player, PotionInit.timestop, this.effectTime(level), 0, true);
-		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
+		List<PotionEffect> pList = new ArrayList<>();
+		pList.addAll(player.getActivePotionEffects());
+		if (pList.isEmpty()) { return false; }
+
+		try {
+
+			for (PotionEffect effect : pList) {
+
+				Potion potion = effect.getPotion();
+
+				// バフなら時間延長
+				if (!potion.isBadEffect()) {
+
+					int pLevel = effect.getAmplifier();
+					int pTime = (int) ( effect.getDuration() * (1 + Math.min(0.5F, level * 0.025F)) );
+					if (!isCreativeWand && mf < useMF + pTime) { break; }
+
+					useMF += pTime;
+					player.removePotionEffect(potion);
+					PlayerHelper.addPotion(player, potion, pTime, pLevel, false);
+				}
+			}
+
+			wand.setMF(stack, mf - useMF);
+			this.playSound(world, player, SMSoundEvent.REVERTIME, 1F, 1F);
+		}
+
+		catch (Throwable e) { }
 
 		return true;
 	}
@@ -504,7 +567,7 @@ public class AirMagic extends MFSlotItem {
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		this.addPotion(player, PotionInit.timestop, this.effectTime(level), 1, true);
+		this.addPotion(player, PotionInit.timestop, this.effectTime(level), this.data == 26 ? 1 : 0, true);
 		this.playSound(world, player, SoundEvents.BLOCK_ENCHANTMENT_TABLE_USE, 1F, 1.175F);
 
 		return true;
@@ -530,6 +593,9 @@ public class AirMagic extends MFSlotItem {
 	// 回避魔法
 	public boolean rangeAvoid (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+        double range = isRange ? 15D : 7D;
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
@@ -547,28 +613,12 @@ public class AirMagic extends MFSlotItem {
 			break;
 		}
 
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(7D, 7D, 7D);
-		List<EntityPlayer> playerList = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+		List<EntityPlayer> playerList = this.getEntityList(EntityPlayer.class, player, range, range, range);
 
 		for (EntityPlayer p : playerList) {
 			this.addPotion(p, PotionInit.cyclone, this.effectTime(level), potionLevel, true);
 			this.playSound(world, player, SMSoundEvent.CYCLON, 0.5F, 1F);
 		}
-
-		return true;
-	}
-
-	// レベルアップ魔法
-	public boolean creativeAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
-
-		// 杖の取得
-		IWand wand = IWand.getWand(stack);
-		int level = IWand.getLevel(wand, stack) + 1;
-		int needExp = wand.needExp(wand.getMaxLevel(), level, stack);
-
-		tags.setInteger(wand.LEVEL, level);
-		tags.setInteger(wand.EXP, needExp);
-		this.playSound(world, player, SMSoundEvent.LEVELUP, 0.2F, 1F);
 
 		return true;
 	}
@@ -579,8 +629,7 @@ public class AirMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(64D, 64D, 64D);
-		List<EntityLiving> entityList = world.getEntitiesWithinAABB(EntityLiving.class, aabb);
+		List<EntityLiving> entityList = this.getEntityList(EntityLiving.class, player, 64D, 64D, 64D);
 
 		for (EntityLiving entity : entityList) {
 
@@ -610,13 +659,15 @@ public class AirMagic extends MFSlotItem {
 	// 拡散バリア魔法
 	public boolean expandBarrierAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+        double range = isRange ? 15D : 7.5D;
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
-		int time = (int) (this.effectTime(level) * 0.67);
+		int time = (int) (this.effectTime(level) * (isRange ? 1F : 0.67F));
 
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(7.5D, 7.5D, 7.5D);
-		List<EntityLivingBase> entityList = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, player, range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
 
@@ -666,18 +717,6 @@ public class AirMagic extends MFSlotItem {
 	// 魔法が使えるかチェック
 	@Override
 	public boolean canItemMagic (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
-
-		// 杖の取得
-		IWand wand = IWand.getWand(stack);
-
-		switch (this.data) {
-		case 9:
-	        // 空が見えるなら打てる
-	        return world.canSeeSky(player.getPosition()) || wand.isEquipment(player, ItemInit.magician_quillpen);
-		case 21:
-			return wand.getLevel(stack) < wand.getMaxLevel();
-		}
-
 		return true;
 	}
 

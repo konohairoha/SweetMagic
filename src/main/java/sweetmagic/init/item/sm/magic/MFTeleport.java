@@ -15,7 +15,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -28,9 +28,8 @@ import sweetmagic.util.TeleportUtil;
 
 public class MFTeleport extends MFSlotItem implements IElementItem {
 
-
 	public MFTeleport (String name, boolean isShrink) {
-		super(name, SMType.AIR, SMElement.TIME, 1, 40, 10, isShrink);
+		super(name, SMType.CHARGE, SMElement.TIME, 1, 40, 10, isShrink);
 	}
 
 	// ツールチップ
@@ -44,11 +43,6 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 
 		IWand wand = IWand.getWand(stack);
 
-		if (wand.isCreativeWand()) {
-			TeleportUtil.teleportToDimension(player, 1222, new BlockPos(player));
-			return true;
-		}
-
 		// 選択中のアイテムを取得
 		ItemStack slotStack= wand.getSlotItem(player, stack, wand.getNBT(stack));
 		NBTTagCompound tags = slotStack.getTagCompound();
@@ -57,7 +51,7 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 		if (tags.hasKey("dim") && player.dimension != tags.getInteger("dim")) {
 
 			int dim = tags.getInteger("dim");
-            BlockPos pos = new BlockPos(tags.getInteger("posX") + 0.5, tags.getInteger("posY") + 1, tags.getInteger("posZ") + 0.5);
+            BlockPos pos = new BlockPos(tags.getInteger("posX") + 0.5F, tags.getInteger("posY") + 1F, tags.getInteger("posZ") + 0.5F);
 			TeleportUtil.teleportToDimension(player, dim, pos);
 		}
 
@@ -86,9 +80,8 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 		tags.setInteger("posZ", (int) player.posZ);
 		tags.setInteger("dim", world.provider.getDimension());
 
-
 		if (!world.isRemote) {
-			player.sendMessage(new TextComponentString(this.getTip("tip.posregi.name")));
+			player.sendMessage(new TextComponentTranslation("tip.posregi.name"));
 		}
 
 		else {
@@ -106,7 +99,7 @@ public class MFTeleport extends MFSlotItem implements IElementItem {
 		ItemStack slotStack= wand.getSlotItem(player, stack, wand.getNBT(stack));
 		NBTTagCompound nbt = slotStack.getTagCompound();
 
-		return nbt != null && nbt.hasKey("posX");
+		return nbt != null && nbt.hasKey("posX") && wand.getChargeTick() >= 0.75F;
 	}
 
 	//ツールチップの表示

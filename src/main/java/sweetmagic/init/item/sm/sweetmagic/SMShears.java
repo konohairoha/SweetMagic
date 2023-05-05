@@ -65,6 +65,6 @@ public class SMShears extends ItemShears {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String tip = new TextComponentTranslation("tip.alt_shears.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN  + tip));
+		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
 	}
 }

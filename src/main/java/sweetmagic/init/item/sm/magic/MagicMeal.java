@@ -7,7 +7,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirt;
+import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -37,7 +38,7 @@ import sweetmagic.worldgen.gen.WorldGenPrsmTree;
 
 public class MagicMeal extends SMItem implements IElementItem {
 
-	public SMElement ele;
+	private SMElement ele;
 
 	public MagicMeal(String name) {
 		super(name, ItemInit.magicList);
@@ -51,14 +52,15 @@ public class MagicMeal extends SMItem implements IElementItem {
 
 		if (!world.isRemote) {
 
-			Block block = world.getBlockState(pos).getBlock();
+			IBlockState state = world.getBlockState(pos);
+			Block block = state.getBlock();
 
 			// 地面が土だった時の処理
 			if (block instanceof BlockGrass || block instanceof BlockDirt) {
 
 				//設置するブロックの内容（追加も可能）
 				Block bloS[] = new Block[] {
-						BlockInit.moonblossom_plant, BlockInit.sugarbell_plant, BlockInit.sannyflower_plant
+					BlockInit.moonblossom_plant, BlockInit.sugarbell_plant, BlockInit.sannyflower_plant
 				};
 
 				this.dirtAction(world, rand, block, pos, player, stack, bloS, 0);
@@ -66,25 +68,22 @@ public class MagicMeal extends SMItem implements IElementItem {
 
 			// プリズム、バナナ以外の苗木なら
 			else if (block instanceof SMSapling && block != BlockInit.prism_sapling&& block != BlockInit.banana_sapling) {
-
-				if (!player.isCreative()) { stack.shrink(1); }
-
-				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+				this.shrinkItem(player, stack);
+				ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
 				SMSapling sap = (SMSapling) block;
 				WorldGenerator gen = new WorldGenPrsmTree(sap.getLog(), sap.getLeave(), false);
 		    	gen.generate(world, rand, pos);
 			}
 
 			// スイマジの花なら
-			else if (block instanceof BlockCornFlower) {
-				if (!player.isCreative()) { stack.shrink(1); }
-				ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
-				world.spawnEntity(new EntityMagicItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(block, rand.nextInt(4) + 3)));
+			else if (block instanceof BlockCornFlower || block instanceof BlockFlower) {
+				this.shrinkItem(player, stack);
+				ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+				world.spawnEntity(new EntityMagicItem(world, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, new ItemStack(block, rand.nextInt(7) + 4, block.getMetaFromState(state))));
 			}
 		}
 
-		world.playSound(player, pos, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, SoundCategory.VOICE, 0.8F,
-				1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+        this.playSound(world, player, SoundEvents.ENTITY_FIREWORK_BLAST_FAR, 0.8F, 1F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
 
 		return EnumActionResult.SUCCESS;
 	}
@@ -92,7 +91,7 @@ public class MagicMeal extends SMItem implements IElementItem {
 	// 地面が土だった時の処理
 	public void dirtAction (World world, Random rand, Block block, BlockPos pos, EntityPlayer player, ItemStack stack, Block[] bloS, int count) {
 
-		if (!player.isCreative()) { stack.shrink(1); }
+		this.shrinkItem(player, stack);
 
 		//渡された座標から再開
 		for (BlockPos p : BlockPos.getAllInBox(pos.add(-1, -1, -1), pos.add(1, 1, 1))) {

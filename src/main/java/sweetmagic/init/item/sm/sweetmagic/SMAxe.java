@@ -14,7 +14,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemAxe;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
@@ -31,7 +33,7 @@ import net.minecraftforge.oredict.OreDictionary;
 import sweetmagic.init.ItemInit;
 import sweetmagic.util.WorldHelper;
 
-public class SMAxe extends ItemAxe{
+public class SMAxe extends ItemAxe {
 
 	public SMAxe(String name, ToolMaterial material, float damage, float speed) {
 		super(material,damage,speed);
@@ -48,7 +50,8 @@ public class SMAxe extends ItemAxe{
         if (!isLog(world, pos) || player.isSneaking()) { return false; }
         if(world.isRemote) { return true; }
 
-        MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos, player, 1));
+        int level = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, stack) / 2;
+        MinecraftForge.EVENT_BUS.register(new TreeChopTask(pos, player, 1 + level));
 		stack.damageItem(7, player);
         return true;
     }
@@ -173,6 +176,6 @@ public class SMAxe extends ItemAxe{
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		String tip = new TextComponentTranslation("tip.alt_axe.name", new Object[0]).getFormattedText();
-		tooltip.add(I18n.format(TextFormatting.GREEN  + tip));
+		tooltip.add(I18n.format(TextFormatting.GREEN + tip));
 	}
 }

@@ -8,16 +8,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.api.iitem.IWand;
-import sweetmagic.init.entity.projectile.EntityAbsoluteZeroMagic;
 import sweetmagic.init.entity.projectile.EntityBabuleMagic;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityBlackHole;
-import sweetmagic.init.entity.projectile.EntityBlazeEndMagic;
 import sweetmagic.init.entity.projectile.EntityCyclonMagic;
 import sweetmagic.init.entity.projectile.EntityDigMagic;
 import sweetmagic.init.entity.projectile.EntityExplosionMagic;
@@ -35,9 +32,9 @@ import sweetmagic.init.item.sm.eitem.SMType;
 
 public class ShotMagic extends MFSlotItem {
 
-	public final int data;
-	ResourceLocation icon;
-	public SMElement subEle = null;
+	private final int data;
+	private ResourceLocation icon;
+	private SMElement subEle = null;
 
 	public ShotMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.SHOTTER, ele, tier, coolTime, mf, false);
@@ -86,12 +83,13 @@ public class ShotMagic extends MFSlotItem {
 	 * 24 = 泡窒息リジェネ解除魔法
 	 * 25 = 炎/光魔法
 	 * 26 = 泡/爆発魔法
-	 * 27 = 絶対零度魔法
-	 * 28 = ブレイズエンド魔法
+	 * 27 =
+	 * 28 =
 	 * 29 = ブラックホール魔法
 	 * 30 = 連鎖爆発魔法
 	 * 31 = ロックブラスト魔法
 	 * 32 = 巨石落とし魔法
+	 * 33 = 超猛毒魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -185,10 +183,8 @@ public class ShotMagic extends MFSlotItem {
 			toolTip.add("tip.magic_bleb_burst.name");
 			break;
 		case 27:
-			toolTip.add("tip.magic_absolute_zero.name");
 			break;
 		case 28:
-			toolTip.add("tip.magic_blaze_end.name");
 			break;
 		case 29:
 			toolTip.add("tip.magic_blackhole.name");
@@ -201,6 +197,9 @@ public class ShotMagic extends MFSlotItem {
 			break;
 		case 32:
 			toolTip.add("tip.magic_hugerock_fall.name");
+			break;
+		case 33:
+			toolTip.add("tip.magic_endpoison.name");
 			break;
 		}
 
@@ -310,9 +309,11 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 20:
 				entity = new EntityBabuleMagic(world, player, stack, 0);
+				entity.setDamage(2);
 				break;
 			case 21:
 				entity = new EntityBabuleMagic(world, player, stack, 1);
+				entity.setDamage(3);
 				break;
 			case 22:
 				entity = new EntityPoisonMagic(world, player, stack, 1);
@@ -322,6 +323,7 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 24:
 				entity = new EntityBabuleMagic(world, player, stack, 2);
+				entity.setDamage(5);
 				break;
 			case 25:
 				entity = new EntityShinigFlare(world, player, stack);
@@ -330,17 +332,11 @@ public class ShotMagic extends MFSlotItem {
 			case 26:
 				entity = new EntityBabuleMagic(world, player, stack, 3);
 				entity.isHitDead = true;
-				entity.setDamage(3);
+				entity.setDamage(7);
 				break;
 			case 27:
-				entity = new EntityAbsoluteZeroMagic(world, player, stack);
-				entity.setDamage(5);
-				flag = true;
 				break;
 			case 28:
-				entity = new EntityBlazeEndMagic(world, player, stack);
-				entity.setDamage(5);
-				flag = true;
 				break;
 			case 29:
 				entity = new EntityBlackHole(world, player, stack);
@@ -354,11 +350,17 @@ public class ShotMagic extends MFSlotItem {
 				break;
 			case 31:
 				entity = new EntityRockBlast(world, player, stack, 0);
-				entity.setDamage(3);
+				entity.setDamage(5);
 				break;
 			case 32:
 				entity = new EntityRockBlast(world, player, stack, 1);
-				entity.setDamage(5);
+				entity.isHitDead = true;
+				entity.setDamage(8);
+				break;
+			case 33:
+				entity = new EntityPoisonMagic(world, player, stack, 2);
+				entity.isHitDead = true;
+				entity.setDamage(6);
 				break;
 			}
 
@@ -397,7 +399,7 @@ public class ShotMagic extends MFSlotItem {
 			}
 		}
 
-		world.playSound(null, new BlockPos(player), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+		world.playSound(null, player.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
 
 		// falseを返してえんちちーでレベルアップ処理を呼び出す
 		return flag;

@@ -2,8 +2,6 @@ package sweetmagic.init.item.sm.armor;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,13 +18,12 @@ import sweetmagic.api.iitem.ISMArmor;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.entity.model.ModelPouch;
 
 public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 
-	public final int data;
-	public int maxMF;
-	public int tickTime = 0;
+	private final int data;
+	private int maxMF;
+	private int tickTime = 0;
     private static final AttributeModifier MOVESPEED = new AttributeModifier("ArmorSpeed", 0.1892D, 2);
 
 	public AngelHarness(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
@@ -35,7 +32,6 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
         setRegistryName(name);
         this.data = data;
         this.setMaxMF(maxMF);
-//        this.moveSpeed = new AttributeModifier("ArmorSpeed", 0.1892D, 2);
 		ItemInit.magicList.add(this);
 	}
 
@@ -58,14 +54,6 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 	public boolean getIsRepairable(ItemStack toRepair, ItemStack repair) {
         return false;
     }
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelPouch next = new ModelPouch(0.375F, slot.getIndex());
-		next.setModelAttributes(model);
-		return next;
-	}
 
 	// 装備してる間機能する内容
 	@Override
@@ -101,7 +89,7 @@ public class AngelHarness extends ItemArmor implements IHarness, ISMArmor {
 		}
 
 		else {
-			player.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 201, 0));
+			player.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 201, 0, true, false));
 		}
 
 		// ダッシュボタン押してるなら

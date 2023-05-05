@@ -24,13 +24,14 @@ import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.EnchantInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.model.ModelRobe;
+import sweetmagic.init.entity.model.ModelRobeOnly;
 import sweetmagic.packet.PlayerSoundPKT;
 import sweetmagic.util.SoundHelper;
 
 public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 
 	private final int data;
-	public int maxMF;
+	private int maxMF;
 
 	public MagiciansRobe(String name, ArmorMaterial material, int render, EntityEquipmentSlot slot, int data, int maxMF) {
 		super(material, render, slot);
@@ -48,6 +49,9 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	 * 3 = ウィンディーネローブ
 	 * 4 = イフリートローブ
 	 * 5 = サンドリヨンローブ
+	 * 6 = ウィッチマスターローブ
+	 * 7 = キュリオスローブ
+	 * 8 = キットローブ
 	 */
 
 	// 特定のアイテムで修復可能に
@@ -59,7 +63,18 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ModelBiped getArmorModel(EntityLivingBase living, ItemStack stack, EntityEquipmentSlot slot, ModelBiped model) {
-		ModelRobe next = new ModelRobe(0.375F, slot.getSlotIndex());
+
+		if (this.data == 5) {
+			return null;
+		}
+
+		else if (this.data == 8) {
+			ModelRobe next = new ModelRobe( 0.25F, 10);
+			next.setModelAttributes(model);
+			return next;
+		}
+
+		ModelRobeOnly next = new ModelRobeOnly( this.data == 6 ? 0.25F : 0.375F, slot.getSlotIndex());
 		next.setModelAttributes(model);
 		return next;
 	}
@@ -67,10 +82,9 @@ public class MagiciansRobe extends ItemArmor implements IRobe, IMFTool {
 	@Override
   	public void openGUI (World world, EntityPlayer player, ItemStack stack) {
 
+		// クライアント（プレイヤー）へ送りつける
 		if (!world.isRemote) {
 			player.openGui(SweetMagicCore.INSTANCE, SMGuiHandler.MFROBE_GUI, world, 0, -1, -1);
-
-			// クライアント（プレイヤー）へ送りつける
 			PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_ROBE, 1F, 0.25F), (EntityPlayerMP) player);
 		}
   	}

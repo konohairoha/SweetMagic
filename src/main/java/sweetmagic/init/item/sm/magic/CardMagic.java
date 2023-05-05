@@ -1,15 +1,16 @@
 package sweetmagic.init.item.sm.magic;
 
+import java.util.List;
+
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.EnumAction;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
@@ -18,12 +19,19 @@ import sweetmagic.init.item.sm.sweetmagic.SMItem;
 
 public class CardMagic extends SMItem {
 
-	private int data;
+	private final int data;
 
 	public CardMagic (String name, int value, int meta) {
 		super(name, ItemInit.magicList);
 		this.setMaxStackSize(1);
 		this.setMaxDamage(value);
+		this.data = meta;
+	}
+
+	public CardMagic (String name, int meta, List<Item> list) {
+		super(name, list);
+		this.setMaxStackSize(1);
+		this.setMaxDamage(32767);
 		this.data = meta;
 	}
 
@@ -49,9 +57,9 @@ public class CardMagic extends SMItem {
 
 		EntityPlayer player = (EntityPlayer) living;
 		int i = this.getMaxItemUseDuration(stack) - timeLeft;
-		float f = getArrowVelocity(i);
 
 		if (!world.isRemote) {
+
 			EntityBaseMagicShot entity = null;
 			if (this.data == 0) {
 				entity = new EntityNomal(world, player);
@@ -59,7 +67,7 @@ public class CardMagic extends SMItem {
 
 			float shot = 1F;
 			entity.setDamage(entity.getDamage() + 4);
-			if (f == 1f) {
+			if (getArrowVelocity(i) == 1F) {
 				entity.setDamage(entity.getDamage() + 4);
 				shot = 1.5F;
 			}
@@ -70,7 +78,8 @@ public class CardMagic extends SMItem {
 			stack.damageItem(1, player);
 			player.getCooldownTracker().setCooldown(this, 5);
 		}
-		world.playSound(null, new BlockPos(player), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+
+        this.playSound(world, player, SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
 	}
 
 	//最大１分間出来るように

@@ -1,21 +1,30 @@
 package sweetmagic.init.item.sm.magic;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.monster.EntityEnderman;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.CooldownTracker;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
@@ -23,24 +32,32 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.IPlantable;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.api.iitem.ISMItem;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.block.crop.MagiaFlower;
+import sweetmagic.init.block.crop.icrop.ISMCrop;
+import sweetmagic.init.entity.monster.EntityEnderShadow;
 import sweetmagic.init.entity.projectile.EntityElectricMagic;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.init.item.sm.eitem.SMType;
+import sweetmagic.util.EventUtil;
+import sweetmagic.util.ItemHelper;
 import sweetmagic.util.ParticleHelper;
+import sweetmagic.util.SMDamage;
 import sweetmagic.util.WorldHelper;
 
 public class ChargeMagic extends MFSlotItem {
 
-	public final int data;
-	ResourceLocation icon;
-	public final static String CYCLONEINT = "cyclonInt";
-	public final static String GRAVITYINT = "gravityInt";
+	private final int data;
+	private ResourceLocation icon;
+	private final static String CYCLONEINT = "cyclonInt";
+	private final static String GRAVITYINT = "gravityInt";
 
 	public ChargeMagic(String name, int meta, SMElement ele, int tier, int coolTime, int mf) {
 		super(name, SMType.CHARGE, ele, tier, coolTime, mf, false);
@@ -59,12 +76,15 @@ public class ChargeMagic extends MFSlotItem {
 	 * 1 = 重力魔法
 	 * 2 = 雷魔法
 	 * 3 = 単体雷魔法
-	 * 4 = 時間低速化魔法
+	 * 4 = クールタイム減少魔法
 	 * 5 = 範囲作物成長魔法
 	 * 6 = 小範囲作物成長魔法
 	 * 7 = 作物広範囲魔法
 	 * 8 = 無敵魔法
 	 * 9 = 無敵魔法Ⅱ
+	 * 10 = 作物成長&回収
+	 * 11 = オシリス魔法
+	 * 12 = 地震魔法
 	 */
 
 	// テクスチャのリソースを取得
@@ -106,6 +126,15 @@ public class ChargeMagic extends MFSlotItem {
 		case 9:
 			toolTip.add("tip.magic_aether_shield2.name");
 			break;
+		case 10:
+			toolTip.add("tip.magic_growth_collect.name");
+			break;
+		case 11:
+			toolTip.add("tip.magic_thunderforce.name");
+			break;
+		case 12:
+			toolTip.add("tip.magic_earthquake.name");
+			break;
 		}
 
 		return toolTip;
@@ -135,7 +164,7 @@ public class ChargeMagic extends MFSlotItem {
 			flag = this.singleElecAction(world, player, stack, tags);
 			break;
 		case 4:
-			// 時間低速化魔法
+			// クールタイム減少魔法
 			flag = this.slowBuff(world, player, stack, tags);
 			break;
 		case 5:
@@ -155,6 +184,18 @@ public class ChargeMagic extends MFSlotItem {
 			// 無敵魔法
 			flag = this.aetherShield(world, player, stack, tags);
 			break;
+		case 10:
+			// 作物成長&回収
+			flag = this.growthCollect(world, player, stack, tags);
+			break;
+		case 11:
+			// オシリス魔法
+			flag = this.thunderForceAction(world, player, stack, tags);
+			break;
+		case 12:
+			// 地震魔法
+			flag = this.earthquakeAction(world, player, stack, tags);
+			break;
 		}
 
 		return flag;
@@ -163,16 +204,19 @@ public class ChargeMagic extends MFSlotItem {
 	// 風魔法
 	public boolean cyclonAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+        double range = isRange ? 20D : 10D;
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(10, 5, 10);
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(range);
 		WorldHelper.addEffect(world, aabb, PotionInit.cyclone, this.effectTime(level), 0, EnumParticleTypes.SWEEP_ATTACK);
 
 		// 疾風を与える
 		this.addPotion(player, PotionInit.cyclone, this.effectTime(level), 1);
-		world.playSound(null, new BlockPos(player), SMSoundEvent.CYCLON, SoundCategory.NEUTRAL, 3F, 1F);
+		world.playSound(null, player.getPosition(), SMSoundEvent.CYCLON, SoundCategory.NEUTRAL, 3F, 1F);
 		player.getEntityData().setInteger(CYCLONEINT, 5);
 		return true;
 	}
@@ -180,18 +224,21 @@ public class ChargeMagic extends MFSlotItem {
 	// 重力魔法
 	public boolean gravityAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+        double range = isRange ? 20D : 10D;
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
 
-		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(10, 5, 10);
+		AxisAlignedBB aabb = player.getEntityBoundingBox().grow(range);
 		WorldHelper.addEffect(world, aabb, PotionInit.gravity_accele, this.effectTime(level), 0, EnumParticleTypes.FALLING_DUST);
 
 		// 疾風を与える
 		this.addPotion(player, PotionInit.gravity_accele, this.effectTime(level), 1);
 
 		// パーティクルを出す
-		world.playSound(null, new BlockPos(player), SMSoundEvent.GRAVITY, SoundCategory.NEUTRAL, 1.5F, 1F);
+		world.playSound(null, player.getPosition(), SMSoundEvent.GRAVITY, SoundCategory.NEUTRAL, 1.5F, 1F);
 		player.getEntityData().setInteger(GRAVITYINT, 5);
 		return true;
 	}
@@ -204,10 +251,11 @@ public class ChargeMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
-		double range = 8D + (level * 0.5D);
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+		double range = (isRange ? 8D : 20D) + (level * 0.5D);
 
 		// 範囲内のえんちちーを取得
-		List<EntityLivingBase> entityList = this.getEntityList(world, player, range, range, range);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, player, range, range, range);
 
 		for (EntityLivingBase living : entityList) {
 
@@ -223,7 +271,7 @@ public class ChargeMagic extends MFSlotItem {
 
 		}
 
-		return false;
+		return true;
 	}
 
 	// 単体雷魔法
@@ -247,7 +295,7 @@ public class ChargeMagic extends MFSlotItem {
 
         // 座標取得
         BlockPos pos = new BlockPos(player.posX + vec3d.x, player.posY + vec3d.y, player.posZ + vec3d.z);
-		List<EntityLivingBase> entityList = this.getEntityList(world, pos.add(-7.5, -3, -7.5), pos.add(7.5, 3, 7.5));
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, player, 7.5D, 3D, 7.5D);
 
 		// えんちちー見つからんかった
 		if (entityList.isEmpty()) {
@@ -275,18 +323,26 @@ public class ChargeMagic extends MFSlotItem {
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
 		int level = IWand.getLevel(wand, stack);
-		double range = 8D + (level * 0.5D);
+		float rate = 1F + Math.min(1F, level * 0.5F);
+		CooldownTracker cool = player.getCooldownTracker();
+		List<ItemStack> magicList = wand.getMagicList(player, stack);
 
-		// 範囲内のえんちちーを取得
-		List<EntityLivingBase> entityList = this.getEntityList(world, player, range, range, range);
+		for (ItemStack magic : magicList) {
 
-		for (EntityLivingBase living : entityList) {
+			// クールタイムが付いてないなら次へ
+			Item item = magic.getItem();
+			if (!cool.hasCooldown(item) || item == this) { continue; }
 
-			if (living instanceof EntityPlayer) { continue; }
-			living.addPotionEffect(new PotionEffect(PotionInit.slow, this.effectTime(level), level, true, false));
+			// クールタイムの取得
+			float coolTime = cool.getCooldown(item, 0F) * ((ISMItem) item).getCoolTime();
+
+			// クールタイムの再設定
+			cool.removeCooldown(item);
+			cool.setCooldown(item, (int) (coolTime / rate));
 		}
 
 		this.playSound(world, player, SMSoundEvent.REVERTIME, 1F, 1F);
+		cool.setCooldown(stack.getItem(), 120);
 
 		return true;
 	}
@@ -294,43 +350,35 @@ public class ChargeMagic extends MFSlotItem {
 	// 作物育成魔法
 	public boolean growthAura (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+
 		// 杖の取得
-		int level = 5;
-		this.rangeGrow(world, new BlockPos(player), level);
+		int level = isRange ? 10 : 5;
+		this.rangeGrow(world, player.getPosition(), level, 3);
 		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
-		return this.rangeGrow(world, new BlockPos(player), level);
+		return this.rangeGrow(world, player.getPosition(), level, 3);
 	}
 
 	// 固定範囲作物育成魔法
 	public boolean growthEffect (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
-		int level = 1;
-		this.rangeGrow(world, new BlockPos(player), level);
+
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+
+		int level = isRange ? 5 : 1;
+		this.rangeGrow(world, player.getPosition(), level, 3);
 		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
-		return this.rangeGrow(world, new BlockPos(player), level);
+		return this.rangeGrow(world, player.getPosition(), level, 3);
 	}
 
 
 	// 範囲成長
-	public boolean rangeGrow (World world, BlockPos range, int level) {
+	public boolean rangeGrow (World world, BlockPos range, int level, int valaue) {
 
 		if(world.isRemote) { return false; }
 
 		boolean isGrow = false;
-		int underRange = 2;
 
-		switch (this.data) {
-		case 5:
-			underRange = 3;
-			break;
-		case 6:
-			underRange = 2;
-			break;
-		case 7:
-			underRange = 5;
-			break;
-		}
-
-		for (BlockPos pos : BlockPos.getAllInBoxMutable(range.add(-level, -underRange, -level), range.add(level, underRange, level))) {
+		for (BlockPos pos : BlockPos.getAllInBoxMutable(range.add(-level, -level, -level), range.add(level, level, level))) {
 
 			//ブロックを取得するための定義
 			IBlockState state = world.getBlockState(pos);
@@ -350,7 +398,9 @@ public class ChargeMagic extends MFSlotItem {
 			}
 
 			isGrow = true;
-			ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+
+
+			ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY, valaue);
 		}
 
 		return isGrow;
@@ -359,12 +409,14 @@ public class ChargeMagic extends MFSlotItem {
 	// 広範囲作物育成魔法
 	public boolean growthVerre (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
 
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+
 		// 杖の取得
 		IWand wand = IWand.getWand(stack);
-		int level = IWand.getLevel(wand, stack) + 4;
-		this.rangeGrow(world, new BlockPos(player), level);
+		int level = IWand.getLevel(wand, stack) + (isRange ? 14 : 4);
+		this.rangeGrow(world, player.getPosition(), level, 3);
 		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
-		return this.rangeGrow(world, player.getPosition(), level);
+		return this.rangeGrow(world, player.getPosition(), level, 3);
 	}
 
 
@@ -378,6 +430,237 @@ public class ChargeMagic extends MFSlotItem {
 		player.getCooldownTracker().setCooldown(stack.getItem(), time);
 
 		return true;
+	}
+
+	// 作物成長&回収
+	public boolean growthCollect (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack) +  (isRange ? 18 : 4);
+		BlockPos pos = player.getPosition();
+		this.rangeGrow(world, pos, level, 1);
+		this.rangeGrow(world, pos, level, 1);
+		boolean flag = this.rangeGrow(world, pos, level, 1);
+		this.playSound(world, player, SMSoundEvent.GROW, 0.425F, 1F);
+
+		if (!world.isRemote) {
+			this.plantCollect(world, pos, player, stack, level);
+		}
+
+		return flag;
+	}
+
+	// オシリス魔法
+	public boolean thunderForceAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		if (world.isRemote) { return false; }
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+		double range = (isRange ? 12D : 24D) + (level * 0.75D);
+		double damage = wand.getMagicList(player, stack).size() * this.getPower(level) * 0.25D;
+
+		// 範囲内のえんちちーを取得
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, player, range, range, range);
+
+		for (EntityLivingBase living : entityList) {
+
+			if (!(living instanceof IMob)) { continue; }
+
+			EntityElectricMagic entity = new EntityElectricMagic(world, player, stack, 2);
+			entity.setDamage(entity.getDamage() + damage);
+			entity.setHeadingFromThrower(player, player.rotationPitch, player.rotationYaw, 0.0F, 2.5F, 0.0F);	//　弾の初期弾速と弾のばらつき
+			entity.shoot(entity.motionX, entity.motionY, entity.motionZ, 0, 0);									// 射撃速度
+			entity.motionY -= 1.5D;
+			entity.setPosition(living.posX, living.posY + 2, living.posZ);
+	        world.spawnEntity(entity);
+
+		}
+
+		return true;
+	}
+
+
+	// 地震魔法
+	public boolean earthquakeAction (World world, EntityPlayer player, ItemStack stack, NBTTagCompound tags) {
+
+		// 杖の取得
+		IWand wand = IWand.getWand(stack);
+		int level = IWand.getLevel(wand, stack);
+        boolean isRange = this.hasAcce(player, ItemInit.extension_ring);
+		double range = (isRange ? 8D : 12D) + (level * 0.75D);
+		float dame = 6F + level * 0.67F;
+
+		// 範囲内のえんちちーを取得
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, player, range, range, range);
+
+		for (EntityLivingBase living : entityList) {
+
+			if (!(living instanceof IMob)) { continue; }
+
+			this.attackDamage(player, living, dame);
+			this.checkShadow(living);
+			living.hurtResistantTime = 0;
+
+			this.attackDamage(player, living, dame * 0.5F);
+			living.hurtResistantTime = 0;
+
+			float armorValue = (float) living.getEntityAttribute(SharedMonsterAttributes.ARMOR).getBaseValue() * 2F;
+
+			if (armorValue > 0F) {
+				this.attackDamage(player, living, armorValue);
+				living.hurtResistantTime = 0;
+			}
+
+			// 地面に付いている場合1秒間停止
+			if (living.onGround) {
+				if (living instanceof EntityLiving) {
+					EventUtil.tameAIDonmov((EntityLiving) living, 1);
+				}
+
+				living.motionY += 0.75D;
+			}
+
+			// 浮いている敵なら地面に落として追加ダメージ
+			else {
+				living.motionY -= 2D;
+				this.attackDamage(player, living, 6F);
+				living.hurtResistantTime = 0;
+			}
+
+		}
+
+		this.playSound(world, player, SoundEvents.BLOCK_ANVIL_PLACE, 0.5F, 0.25F);
+
+		if (world instanceof WorldServer) {
+
+			BlockPos pos = player.getPosition();
+			for (BlockPos p : BlockPos.getAllInBox(pos.add(-4, -1, -4), pos.add(4, -1, 4))) {
+
+				if (world.getBlockState(p).getBlock() == Blocks.AIR) { continue; }
+
+				ParticleHelper.spawnParticle(world, p.up(), EnumParticleTypes.FALLING_DUST);
+			}
+		}
+
+		return true;
+	}
+
+	public void plantCollect (World world, BlockPos pos, EntityPlayer player, ItemStack stack, int level) {
+
+		Random rand = world.rand;
+
+		// 範囲とstackListの初期化
+		List<ItemStack> stackList = new ArrayList();
+
+		// 範囲分回す
+		for (BlockPos p : BlockPos.getAllInBoxMutable(pos.add(-level, -level, -level), pos.add(level, level, level))) {
+
+			Item item = null;
+			IBlockState plant = null;
+			IBlockState state = world.getBlockState(p);
+			Block b = state.getBlock();
+			List<ItemStack> dropList = new ArrayList<>();
+
+			if (b == Blocks.AIR || b == Blocks.DIRT || b == Blocks.GRASS || b == Blocks.STONE || b == Blocks.PUMPKIN_STEM || b == Blocks.MELON_STEM) { continue; }
+
+			// まずはスイマジ作物なら右クリック処理を呼び出し
+			if (b instanceof ISMCrop) {
+				if (!((IGrowable) b).canGrow(world, p, state, false)) {
+					((ISMCrop) b).getPickPlant(world, player, p, stack);
+				}
+			}
+
+			// 通常の作物なら
+			else if (b instanceof IGrowable) {
+				if (!((IGrowable) b).canGrow(world, p, state, false)) {
+					dropList = b.getDrops(world, p, state, 0);
+					ItemHelper.compactStackList(dropList);
+				}
+			}
+
+			// リストが空なら終了
+			if (dropList.isEmpty()) { continue; }
+
+			// 作物の種の取得
+			if (b instanceof BlockBush) {
+				List<ItemStack> itemList = b.getDrops(world, p, b.getDefaultState(), 0);
+				if (!itemList.isEmpty()) {
+					item = itemList.get(0).getItem();
+				}
+			}
+
+			// ドロップリスト分回す
+			for (ItemStack drop : dropList) {
+
+				Item dropItem = drop.getItem();
+
+				// 取得した種を植える
+				if (plant == null && item != null && item == dropItem && dropItem instanceof IPlantable) {
+					drop.shrink(1);
+					plant = ((IPlantable) item).getPlant(world, p);
+				}
+			}
+
+			// stackListに追加
+			ItemHelper.compactStackList(dropList);
+			stackList.addAll(dropList);
+			this.breakBlock(world, p);
+			this.playCropSound(world, rand, p);
+
+			if (plant == null && b == Blocks.WHEAT) {
+				plant = Blocks.WHEAT.getDefaultState();
+			}
+
+			if (plant != null) {
+				world.setBlockState(p, plant, 2);
+			}
+		}
+
+		// Listが空なら終了
+		if (stackList.isEmpty()) { return; }
+
+		// リスト分スポーン
+		for (ItemStack s : stackList) {
+			world.spawnEntity(new EntityItem(world, player.posX + 0.5D, player.posY, player.posZ + 0.5D, s));
+		}
+	}
+
+	// ブロック破壊処理
+	public boolean breakBlock(World world, BlockPos pos) {
+        return world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+    }
+
+	// 作物回収時の音
+	public void playCropSound (World world, Random rand, BlockPos pos) {
+        world.playSound(null, pos, SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+	}
+
+	// 攻撃
+	public boolean attackDamage (EntityPlayer player, EntityLivingBase entity, float dame) {
+
+		// エンダーマンなら
+		if (entity instanceof EntityEnderman) {
+			DamageSource src = DamageSource.causePlayerDamage(player);
+			return entity.attackEntityFrom(src, dame);
+		}
+
+		return entity.attackEntityFrom(SMDamage.MagicDamage(player, player), dame);
+	}
+
+	// エンダーシャドーの分身なら
+	public void checkShadow (EntityLivingBase entity) {
+		if (entity instanceof EntityEnderShadow) {
+			EntityEnderShadow ender = (EntityEnderShadow) entity;
+			if (ender.isShadow) {
+				ender.setDead();
+			}
+		}
 	}
 
 	@Override
