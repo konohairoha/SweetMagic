@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:blueberry_stage2",
+    "textures": {
+    	"3": "sweetmagic:block/peach_leaves_stage1"
+    }
+  },
+    "variants": {
+        "normal": [{}],
+        "inventory": [{}]
+    }
+}

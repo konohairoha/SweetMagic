@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "minecraft:cross",
+        "textures": {
+          "cross": "sweetmagic:block/peach_sapling",
+          "layer0": "sweetmagic:block/peach_sapling"
+        },
+    "transform": "forge:default-item"
+  },
+  "variants": {
+    "normal": [{}],
+     "inventory": [{ "model": "builtin/generated" }]
+  }
+}
