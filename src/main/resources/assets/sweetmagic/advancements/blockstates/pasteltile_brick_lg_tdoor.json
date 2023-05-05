@@ -1,0 +1,35 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {
+      "0": "sweetmagic:block/pasteltile_brick_lg"
+    }
+  },
+  "variants": {
+    "inventory": [{ "model": "sweetmagic:an_trapdoor_bot", "y": 180 }],
+
+    "facing": { "north": {}, "east": {}, "south": {}, "west": {} },
+    "open"  : { "true": {}, "false": {} },
+    "half"  : { "bottom": {}, "top": {} },
+
+    "facing=south,half=bottom,open=false": { "model": "sweetmagic:an_trapdoor_bot"          },
+    "facing=west,half=bottom,open=false" : { "model": "sweetmagic:an_trapdoor_bot", "y":  90},
+    "facing=north,half=bottom,open=false": { "model": "sweetmagic:an_trapdoor_bot", "y": 180},
+    "facing=east,half=bottom,open=false" : { "model": "sweetmagic:an_trapdoor_bot", "y": 270},
+
+    "facing=south,half=top,open=false"   : { "model": "sweetmagic:an_trapdoor_top"          },
+    "facing=west,half=top,open=false"    : { "model": "sweetmagic:an_trapdoor_top", "y":  90},
+    "facing=north,half=top,open=false"   : { "model": "sweetmagic:an_trapdoor_top", "y": 180},
+    "facing=east,half=top,open=false"    : { "model": "sweetmagic:an_trapdoor_top", "y": 270},
+
+    "facing=north,half=bottom,open=true" : { "model": "sweetmagic:an_trapdoor_open", "transform": { "post-rotation": { "z": 180 }     } },
+    "facing=east,half=bottom,open=true"  : { "model": "sweetmagic:an_trapdoor_open", "transform": { "post-rotation": { "x": 180 }, "rotation": { "y":  90 } } },
+    "facing=south,half=bottom,open=true" : { "model": "sweetmagic:an_trapdoor_open", "transform": { "post-rotation": { "z": 180 }, "rotation": { "y": 180 } } },
+    "facing=west,half=bottom,open=true"  : { "model": "sweetmagic:an_trapdoor_open", "transform": { "post-rotation": { "x": 180 }, "rotation": { "y": 270 } } },
+
+    "facing=north,half=top,open=true"    : { "model": "sweetmagic:an_trapdoor_open"          },
+    "facing=east,half=top,open=true"     : { "model": "sweetmagic:an_trapdoor_open", "y":  90},
+    "facing=south,half=top,open=true"    : { "model": "sweetmagic:an_trapdoor_open", "y": 180},
+    "facing=west,half=top,open=true"     : { "model": "sweetmagic:an_trapdoor_open", "y": 270}
+  }
+}

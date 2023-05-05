@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:fence_stone_both",
+		"textures": {
+			"0": "sweetmagic:block/antique_brick_0"
+		}
+    },
+    "variants": {
+        "forward": {
+            "true": { "submodel": { "north_side": { "model": "sweetmagic:fence_stone_side" } } },
+            "false": { }
+        },
+        "back": {
+            "true": { "submodel": { "south_side": { "model": "sweetmagic:fence_stone_side_re", "y": 180 } } },
+            "false": { }
+        },
+        "left": {
+            "true": { "submodel": { "west_side": { "model": "sweetmagic:fence_stone_side", "y": 270 } } },
+            "false": { }
+        },
+        "right": {
+            "true": { "submodel": { "east_side": { "model": "sweetmagic:fence_stone_side_re", "y": 90 } } },
+            "false": { }
+        },
+     "inventory": [{ "submodel": { "west_side": { "model": "sweetmagic:fence_stone_side", "y": 270 }, "east_side": { "model": "sweetmagic:fence_stone_side", "y": 90 } } }]
+    }
+}

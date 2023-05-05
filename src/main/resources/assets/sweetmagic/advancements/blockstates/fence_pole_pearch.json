@@ -1,0 +1,17 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:pole_s_fence",
+        "textures": {
+			"0": "sweetmagic:block/peach_side",
+			"1": "sweetmagic:block/peach_top"
+        }
+    },
+    "variants": {
+    	"parasol": {
+			"0": { },
+			"1": { "model": "sweetmagic:pole_s_fence_s" }
+		},
+        "inventory": [{}]
+    }
+}

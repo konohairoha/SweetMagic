@@ -1,0 +1,18 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:pole_s_down",
+        "textures": {
+			"0": "sweetmagic:block/peach_side",
+			"1": "sweetmagic:block/peach_top",
+			"2": "sweetmagic:block/orange_planks_90"
+        }
+    },
+    "variants": {
+    	"parasol": {
+			"0": { },
+			"1": { }
+		},
+        "inventory": [{}]
+    }
+}

@@ -1,18 +1,23 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:modern_wallrack",
-    "textures": {
-      "0": "sweetmagic:block/wood_rightbrown"
-    }
-  },
-  "variants": {
-    "facing": {
-      "north": {},
-      "south": { "y": 180 },
-      "west": { "y": 270 },
-      "east": { "y": 90 }
-    },
-    "inventory": [{}]
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:cafe_wallrack",
+		"textures": {
+			"0": "sweetmagic:block/wood_rightbrown",
+			"1": "sweetmagic:block/darkglay"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+		"top": {
+			"true": {},
+			"false": { }
+		},
+		"inventory": [{}]
+	}
 }

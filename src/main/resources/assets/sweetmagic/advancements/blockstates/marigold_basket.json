@@ -1,0 +1,20 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "cross",
+    	"textures": {
+      		"cross": "sweetmagic:block/marigold_basket",
+          "layer0": "sweetmagic:block/marigold_basket"
+    	},
+    	"transform": "forge:default-item"
+    },
+	"variants": {
+		"local": {
+			"normal": { },
+			"top": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_top" } },
+			"center": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_middle" } },
+			"bottom": { "model": "cross", "textures": { "cross": "sweetmagic:block/marigold_basket_chain" } }
+		},
+    	 "inventory": [{ "model": "builtin/generated" }]
+    }
+}

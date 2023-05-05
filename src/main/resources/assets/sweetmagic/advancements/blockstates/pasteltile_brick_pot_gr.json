@@ -1,0 +1,30 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:plantpot_alt",
+    	"textures": {
+      		"0": "sweetmagic:block/pasteltile_brick_gr"
+    	}
+    },
+"variants": {
+    "back=false,forward=true,left=false,right=true": {"model": "sweetmagic:plantpot_side_l", "y": 90 },
+    "back=false,forward=true,left=true,right=false": {"model": "sweetmagic:plantpot_side_l" },
+    "back=true,forward=false,left=false,right=true": {"model": "sweetmagic:plantpot_side_l", "y": 180 },
+    "back=true,forward=false,left=true,right=false": {"model": "sweetmagic:plantpot_side_l", "y": 270 },
+    "back=false,forward=true,left=false,right=false": { "model": "sweetmagic:plantpot_side0" },
+    "back=false,forward=false,left=false,right=true": { "model": "sweetmagic:plantpot_side0", "y": 90 },
+    "back=false,forward=false,left=true,right=false": { "model": "sweetmagic:plantpot_side0", "y": 270 },
+    "back=true,forward=false,left=false,right=false": { "model": "sweetmagic:plantpot_side0", "y": 180 },
+    "back=false,forward=false,left=false,right=false": { "model": "sweetmagic:plantpot_alt" },
+    "back=true,forward=true,left=false,right=false": { "model": "sweetmagic:plantpot_side_i", "y": 180 },
+    "back=false,forward=false,left=true,right=true": { "model": "sweetmagic:plantpot_side_i", "y": 90 },
+
+    "back=false,forward=true,left=true,right=true": { "model": "sweetmagic:plantpot_side3", "y": 0 },
+    "back=true,forward=false,left=true,right=true": { "model": "sweetmagic:plantpot_side3", "y": 180 },
+    "back=true,forward=true,left=false,right=true": { "model": "sweetmagic:plantpot_side3", "y": 90 },
+    "back=true,forward=true,left=true,right=false": { "model": "sweetmagic:plantpot_side3", "y": 270 },
+    "back=true,forward=true,left=true,right=true": { "model": "sweetmagic:plantpot_noside", "y": 90 },
+
+    "inventory": [{}]
+    }
+}

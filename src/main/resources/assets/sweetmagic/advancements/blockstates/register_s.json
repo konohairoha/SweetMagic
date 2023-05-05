@@ -1,10 +1,10 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:magic_book",
-	"textures": {
-		"0": "sweetmagic:block/magicbook"
-	}
+    "model": "sweetmagic:register",
+    "textures": {
+      "0": "sweetmagic:block/vase_skyblue"
+    }
   },
   "variants": {
     "facing": {
@@ -13,6 +13,6 @@
       "west": { "y": 270 },
       "east": { "y": 90 }
     },
-    "inventory": [{}]
+        "inventory": [{}]
   }
 }

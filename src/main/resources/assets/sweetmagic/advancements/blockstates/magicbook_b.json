@@ -3,7 +3,7 @@
   "defaults": {
     "model": "sweetmagic:magic_book",
 	"textures": {
-		"0": "sweetmagic:block/magicbook"
+		"0": "sweetmagic:block/magicbook_b"
 	}
   },
   "variants": {

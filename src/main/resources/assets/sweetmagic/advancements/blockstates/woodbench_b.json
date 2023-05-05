@@ -1,0 +1,32 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:woodbench",
+		"textures": {
+			"0": "sweetmagic:block/smstone_down"
+		}
+	},
+	"variants": {
+		"facing=north,left=false,right=false": { "model": "sweetmagic:woodbench"},
+		"facing=north,left=true,right=false": { "model": "sweetmagic:woodbench_r"},
+		"facing=north,left=false,right=true": { "model": "sweetmagic:woodbench_l"},
+		"facing=north,left=true,right=true": { "model": "sweetmagic:woodbench_c"},
+
+		"facing=south,left=false,right=false": { "y": 180, "model": "sweetmagic:woodbench"},
+		"facing=south,left=true,right=false": { "y": 180, "model": "sweetmagic:woodbench_r"},
+		"facing=south,left=false,right=true": { "y": 180, "model": "sweetmagic:woodbench_l"},
+		"facing=south,left=true,right=true": { "y": 180, "model": "sweetmagic:woodbench_c"},
+
+		"facing=west,left=false,right=false": { "y": 270, "model": "sweetmagic:woodbench"},
+		"facing=west,left=true,right=false": { "y": 270, "model": "sweetmagic:woodbench_r"},
+		"facing=west,left=false,right=true": { "y": 270, "model": "sweetmagic:woodbench_l"},
+		"facing=west,left=true,right=true": { "y": 270, "model": "sweetmagic:woodbench_c"},
+
+		"facing=east,left=false,right=false": { "y": 90, "model": "sweetmagic:woodbench"},
+		"facing=east,left=true,right=false": { "y": 90, "model": "sweetmagic:woodbench_r"},
+		"facing=east,left=false,right=true": { "y": 90, "model": "sweetmagic:woodbench_l"},
+		"facing=east,left=true,right=true": { "y": 90, "model": "sweetmagic:woodbench_c"},
+
+		"inventory": [{ }]
+	}
+}

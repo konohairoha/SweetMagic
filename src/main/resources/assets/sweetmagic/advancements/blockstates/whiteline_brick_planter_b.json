@@ -1,0 +1,26 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:planter",
+		"textures": {
+			"0": "sweetmagic:block/whiteline_brick_b"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": { },
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+    	"top": {
+			"false": { },
+			"true": { }
+		},
+    	"side": {
+			"false": { },
+			"true": { "model": "sweetmagic:planter_side" }
+		},
+		"inventory": [{ }]
+	}
+}

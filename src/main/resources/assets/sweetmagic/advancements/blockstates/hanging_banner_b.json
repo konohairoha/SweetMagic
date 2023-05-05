@@ -1,0 +1,22 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:hanging_banner",
+		"textures": {
+			"1": "sweetmagic:block/stripe_blue"
+		}
+	},
+	"variants": {
+	"facing": {
+		"north": {},
+		"south": { "y": 180 },
+		"west": { "y": 270 },
+		"east": { "y": 90 }
+	},
+	"pole": {
+		"true": { "model": "sweetmagic:hanging_banner_pole" },
+		"false": { }
+	},
+	"inventory": [{}]
+	}
+}
