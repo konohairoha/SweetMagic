@@ -7,7 +7,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleBabule;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
@@ -55,8 +54,8 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i * 0.25F);
 			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-			Particle effect = new ParticleBabule.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			Particle effect = ParticleBabule.create(this.world, f1, f2, f3, x, y, z);
+			this.getParticle().addEffect(effect);
 		}
 	}
 
@@ -64,11 +63,23 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 	@Override
 	protected void entityHit(EntityLivingBase living) {
 
-		this.playSound(SMSoundEvent.BABULE, 1F, 1F);
 		int level = this.getWandLevel();
+		this.playSound(SMSoundEvent.BABULE, 1F, 1F);
 
-		// 経験値追加処理
-		this.addExp();
+
+		// プレイヤーが攻撃した場合
+		if (this.isPlayerThrower) {
+
+			// 経験値追加処理
+			this.addExp();
+
+			int value = 1 + (this.potionnLevel - 1);
+			for (int i = 0; i < value ; i++) {
+				this.attackDamage(living, (float) this.getDamage());
+			}
+		}
+
+
 		this.playSound(living, SoundEvents.ENTITY_PLAYER_SPLASH, 0.5F, 1.25F);
 		int time = 10 * level;
 
@@ -82,5 +93,6 @@ public class EntityBabuleMagic extends EntityBaseMagicShot {
 		if (this.potionnLevel >= 2 && living.isPotionActive(PotionInit.refresh_effect) && living.isNonBoss()) {
 			living.removePotionEffect(PotionInit.refresh_effect);
 		}
+
 	}
 }

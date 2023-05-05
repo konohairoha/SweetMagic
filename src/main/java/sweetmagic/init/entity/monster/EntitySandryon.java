@@ -36,7 +36,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -53,6 +52,7 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBabuleMagic;
@@ -72,16 +72,16 @@ import sweetmagic.util.SMUtil;
 
 public class EntitySandryon extends EntityMob implements ISMMob {
 
-	public int deathTicks = 0;
-    public int spellTicks = 0;
+	private int deathTicks = 0;
+	private int spellTicks = 0;
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
 	private final BossInfoServer bossInfo = new BossInfoServer(this.getBossName(), BossInfo.Color.YELLOW, BossInfo.Overlay.NOTCHED_6);
 	private List<ItemStack> wandList = new ArrayList<>();
 	private List<EntityPlayer> playerList = new ArrayList<>();
-    public static final DataParameter<Boolean> ISWAND = EntityDataManager.<Boolean>createKey(EntitySandryon.class, DataSerializers.BOOLEAN);
-    public static final DataParameter<Integer> WANDSIZE = EntityDataManager.<Integer>createKey(EntitySandryon.class, DataSerializers.VARINT);
-    public static final DataParameter<Boolean> STARTMAGIC = EntityDataManager.<Boolean>createKey(EntitySandryon.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ISWAND = EntityDataManager.<Boolean>createKey(EntitySandryon.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Integer> WANDSIZE = EntityDataManager.<Integer>createKey(EntitySandryon.class, DataSerializers.VARINT);
+	private static final DataParameter<Boolean> STARTMAGIC = EntityDataManager.<Boolean>createKey(EntitySandryon.class, DataSerializers.BOOLEAN);
 
 	private int chargeTime = 0;
 	private int coolTime = 0;
@@ -102,6 +102,14 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 		this.dataManager.register(ISWAND, Boolean.valueOf(false));
 		this.dataManager.register(WANDSIZE, Integer.valueOf((int) 0));
 		this.dataManager.register(STARTMAGIC, Boolean.valueOf(false));
+	}
+
+	public boolean getSpecial () {
+		return this.dataManager.get(STARTMAGIC);
+	}
+
+	public void setSpecial (boolean isSpecial) {
+		this.dataManager.set(STARTMAGIC, isSpecial);
 	}
 
 	public static void registerFixesWitch(DataFixer fixer) {
@@ -196,6 +204,10 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 			if (this.isPotionActive(potion)) {
 				this.removePotionEffect(potion);
 			}
+		}
+
+		if (this.isPotionActive(MobEffects.GLOWING)) {
+			this.removePotionEffect(MobEffects.GLOWING);
 		}
 
 		this.addPotion();
@@ -312,7 +324,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 
 	// プレイヤーリストの取得
 	public List<EntityPlayer> getPlayerList () {
-		return this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(64D));
+		return this.getEntityList(EntityPlayer.class, this, 64D, 64D, 64D);
 	}
 
 	public float getHealValue () {
@@ -576,7 +588,8 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 
     		if (!this.isSMDamage(src) && src.getImmediateSource() instanceof EntityLivingBase) {
     			EntityLivingBase entity = (EntityLivingBase) src.getImmediateSource();
-    			entity.attackEntityFrom(DamageSource.MAGIC, amount);
+    			entity.attackEntityFrom(DamageSource.MAGIC, amount * 2F);
+    			this.addPotionEffect(new PotionEffect(PotionInit.wind_relief, 30, 0));
     		}
 
     		return false;
@@ -673,6 +686,11 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 		}
 	}
 
+	// 腕の状態を返す
+	public ArmMode getArm () {
+		return this.getSpecial() ? ArmMode.SPECIAL_MAGIC : ArmMode.NONE;
+	}
+
 	@Override
 	protected void onDeathUpdate() {
 
@@ -683,7 +701,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 			this.bossInfo.setPercent(0);
 
 			if (this.deathTicks % 11 == 0) {
-			    this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, 0.5F, 1.0F);
+			    this.playSound(SoundEvents.ENTITY_GENERIC_EXPLODE, 0.5F, 1F);
 			}
 
 			if (this.deathTicks % 5 == 0) {
@@ -711,6 +729,10 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 			this.dropItem(this.world, this, ItemInit.magician_quillpen, 1);
 			this.dropItem(this.world, this, ItemInit.accebag, 3);
 			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(4) + 2);
+			this.dropItem(this.world, this, new ItemStack(BlockInit.figurine_sa));
+			this.dropItem(this.world, this, ItemInit.magic_cosmic_force, this.rand.nextInt(3) + 1);
+			this.dropItem(this.world, this, ItemInit.magic_creative, this.rand.nextInt(2));
+			this.entityDropItem(new ItemStack(ItemInit.witch_cake, this.rand.nextInt(4) + 2), 0F);
 		}
 
 		super.onDeath(cause);
@@ -739,7 +761,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 		return false;
 	}
 
-	public void setSwingingArms(boolean swingingArms) { }
+	public void setSwingingArms(boolean swing) { }
 
 	@Override
 	public void addTrackingPlayer(EntityPlayerMP player) {
@@ -960,7 +982,7 @@ public class EntitySandryon extends EntityMob implements ISMMob {
 		}
 
 		public void setMagicData (boolean flag) {
-			this.entity.dataManager.set(this.entity.STARTMAGIC, flag);
+			this.entity.setSpecial(flag);
 		}
 	}
 }

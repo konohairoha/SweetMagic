@@ -5,6 +5,7 @@ import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
@@ -13,6 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import sweetmagic.init.ItemInit;
 import sweetmagic.util.ParticleHelper;
 
 public class EntitySuperNova extends EntityExplosionMagic {
@@ -34,6 +36,10 @@ public class EntitySuperNova extends EntityExplosionMagic {
 		this.exp = 1F;
 		this.plusTick = -200;
 		this.isHit = true;
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 	}
 
 	// パーティクルスポーン
@@ -88,6 +94,7 @@ public class EntitySuperNova extends EntityExplosionMagic {
 
 	public void createExplo (float explo, BlockPos pos) {
 
+		explo = this.isRange ? explo * 1.33F : explo;
         AxisAlignedBB aabb = new AxisAlignedBB(pos.add(-explo, -explo, -explo), pos.add(explo, explo, explo));
 		List<EntityLivingBase> list = this.world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
 		boolean isIMob = this.getThrower() instanceof IMob;
@@ -104,7 +111,7 @@ public class EntitySuperNova extends EntityExplosionMagic {
 		}
 
 		this.world.playSound(null, pos, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.NEUTRAL, 1.75F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
-		ParticleHelper.spawnBoneMeal(this.world, pos, EnumParticleTypes.EXPLOSION_HUGE);
+		ParticleHelper.spawnParticle(this.world, pos, EnumParticleTypes.EXPLOSION_HUGE);
 	}
 
 	// 地面についたときの処理

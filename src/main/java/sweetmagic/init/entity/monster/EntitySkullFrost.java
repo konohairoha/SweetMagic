@@ -10,6 +10,7 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
 import net.minecraft.init.Items;
@@ -20,16 +21,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleMagicFrost;
-import sweetmagic.init.ItemInit;
+import sweetmagic.config.SMConfig;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityFrostMagic;
 
 public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
@@ -87,14 +87,14 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 		// ユニーク状態なら
 		if (this.isUnique()) {
 
-			EntityBaseMagicShot entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, false);
+			EntityFrostMagic entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, false);
 	        double x = target.posX - this.posX;
 	        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
 	        double z = target.posZ - this.posZ;
 	        double xz = (double)MathHelper.sqrt(x * x + z * z);
 			entity.shoot(x, y - xz * 0.015D, z, 2F, 0);	// 射撃速度
 			entity.setDamage(entity.getDamage() + 6);
-			this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+			this.world.playSound(null, this.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
 	        this.world.spawnEntity(entity);
 		}
 
@@ -115,14 +115,14 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 
 			else {
 
-				EntityBaseMagicShot entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, false);
+				EntityFrostMagic entity = new EntityFrostMagic(this.world, this, ItemStack.EMPTY, false);
 		        double x = target.posX - this.posX;
 		        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
 		        double z = target.posZ - this.posZ;
 		        double xz = (double)MathHelper.sqrt(x * x + z * z);
 				entity.shoot(x, y - xz * 0.015D, z, 2F, 0);	// 射撃速度
 				entity.setDamage(entity.getDamage() + 4);
-				this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+				this.world.playSound(null, this.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
 		        this.world.spawnEntity(entity);
 			}
 		}
@@ -135,7 +135,7 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.canSpawn(world, this, 3);
+		return super.getCanSpawnHere() && this.canSpawn(this.world, this, SMConfig.spawnDay);
 	}
 
 	// 二つ名かどうか
@@ -150,10 +150,14 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 		if (!this.world.isRemote || !this.isRender()) { return; }
 
 		this.tickTime++;
-		if (this.tickTime % 60 != 0) { return; }
+		if (this.tickTime % 60 != 0 || !this.findRangePlayer() ) { return; }
 
 		this.tickTime = 0;
 		this.spawnParticle();
+	}
+
+	public boolean findRangePlayer () {
+		return !this.getEntityList(EntityPlayer.class, this, 32D, 16D, 32D).isEmpty();
 	}
 
 	public void spawnParticle() {
@@ -163,11 +167,11 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
 		float z = (float) (-this.motionZ / 80);
 
 		for (int i = 0; i < 6; i++) {
-			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
-			float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
-			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-			Particle effect = new ParticleMagicFrost.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4F);
+			float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5F + this.motionY * i / 4F);
+			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4F);
+			Particle effect = ParticleMagicFrost.create(this.world, f1, f2, f3, x, y, z);
+			this.getParticle().addEffect(effect);
 		}
 	}
 
@@ -194,12 +198,9 @@ public class EntitySkullFrost extends EntitySkeleton implements ISMMob {
         tags.setBoolean("IsChickenJockey", this.chickenJockey);
     }
 
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.unmeltable_ice, this.rand.nextInt(3) + 1), 0F);
-		}
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.SKULLFROST;
 	}
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {

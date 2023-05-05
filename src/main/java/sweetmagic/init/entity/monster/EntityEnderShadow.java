@@ -33,10 +33,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 
 public class EntityEnderShadow extends EntityZombie implements ISMMob {
 
@@ -109,6 +108,11 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 		return super.onInitialSpawn(dif, entity);
 	}
 
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.ENDERSHADOW;
+	}
+
 	// 死んだとき
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
@@ -118,12 +122,6 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 			if (ender.getOwner() != null && ender.getOwner() == this) {
 				ender.setDead();
 			}
-		}
-
-		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.ender_shard, this.rand.nextInt(3) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.stray_soul, this.rand.nextInt(3) + 1), 0F);
 		}
     }
 
@@ -154,8 +152,9 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 
 		if (this.isEntityInvulnerable(src)) {
 			return false;
+		}
 
-		} else if (src instanceof EntityDamageSourceIndirect) {
+		else if (src instanceof EntityDamageSourceIndirect) {
 
 			for (int i = 0; i < 64; ++i) {
 				if (this.teleportRandomly(this.rand)) {
@@ -163,10 +162,13 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 					return true;
 				}
 			}
+
 			return false;
 
 
-		} else {
+		}
+
+		else {
 
 			boolean flag = super.attackEntityFrom(src, amount);
 
@@ -212,9 +214,9 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	}
 
 	private boolean teleportRandomly(Random rand) {
-		double targetX = this.posX + (rand.nextDouble() - 0.5) * 20.0;
+		double targetX = this.posX + (rand.nextDouble() - 0.5D) * 20D;
 		double targetY = this.posY + (double) (rand.nextInt(12) - 4);
-		double targetZ = this.posZ + (rand.nextDouble() - 0.5) * 20.0;
+		double targetZ = this.posZ + (rand.nextDouble() - 0.5D) * 20D;
 		this.spawnParticle();
 		return teleportTo(targetX, targetY, targetZ);
 	}
@@ -232,7 +234,7 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 	public void spawnParticle() {
 		for (int i = 0; i < 8; i++) {
 			float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-			float f2 = (float) ((float) this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+			float f2 = (float) this.posY + 0.25F + this.rand.nextFloat() * 1.5F;
 			float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
 			this.world.spawnParticle(EnumParticleTypes.PORTAL, f1, f2, f3, 0, 0, 0);
 		}
@@ -253,11 +255,6 @@ public class EntityEnderShadow extends EntityZombie implements ISMMob {
 
 	protected SoundEvent getDeathSound() {
 		return SoundEvents.ENTITY_ENDERMEN_DEATH;
-	}
-
-	@Nullable
-	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_ENDERMAN;
 	}
 
 	public EntityLiving getOwner() {

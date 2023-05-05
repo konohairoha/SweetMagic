@@ -1,7 +1,10 @@
 package sweetmagic.init.entity.monster;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityAreaEffectCloud;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIAvoidEntity;
@@ -16,17 +19,18 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
-import sweetmagic.init.ItemInit;
+import sweetmagic.config.SMConfig;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.WorldHelper;
 
@@ -79,9 +83,12 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 
 			if (this.timeSinceIgnited < 0) {
 				this.timeSinceIgnited = 0;
-			} else if (this.timeSinceIgnited > 0) {
+			}
 
-				WorldHelper.suctionPlayer(world, this.getEntityBoundingBox().grow(1.5D), this.posX, this.posY, this.posZ, this, 0.0775D);
+			else if (this.timeSinceIgnited > 0) {
+
+				double range = this.getStrength() == 0 ? 0.9D : 1.5D;
+				WorldHelper.suctionPlayer(world, this.getEntityBoundingBox().grow(range), this.posX, this.posY, this.posZ, this, 0.0775D);
 
 				if (this.world.isRemote && this.isRender()) {
 					for(int k = 0; k <= (this.timeSinceIgnited / 4); k++) {
@@ -97,8 +104,8 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 						float ySpeed = -randY * 0.075F;
 						float zSpeed = -randZ * 0.075F;
 
-						Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
-						FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+						Particle effect = ParticleNomal.create(this.world, x, y, z, xSpeed, ySpeed, zSpeed);
+						this.getParticle().addEffect(effect);
 					}
 				}
 			}
@@ -113,25 +120,36 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 		super.onUpdate();
 	}
 
+	@Nullable
+	@Override
+	public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData livingdata) {
+		this.setHardHealth(this);
+		return livingdata;
+	}
+
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.canSpawn(this.world, this, 3);
+		return super.getCanSpawnHere() && this.canSpawn(this.world, this, SMConfig.spawnDay);
 	}
 
 	public void explodeCal() {
 		if (!this.world.isRemote) {
 
-			EntityAreaEffectCloud entity = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
-			entity.setRadiusOnUse(-0.5F);
-			entity.setWaitTime(10);
-	        entity.setParticle(EnumParticleTypes.EXPLOSION_NORMAL);
-	        entity.setRadius(3);
-			entity.setDuration(100);
-			entity.setRadiusPerTick((7F - entity.getRadius()) / (float) entity.getDuration());
-	        entity.addEffect(new PotionEffect(PotionInit.gravity, 201, 0));
-	        this.world.spawnEntity(entity);
+			boolean isEasy = this.getStrength() == 0;
 
-	        float explo = 1.5F;
+			if (!isEasy) {
+				EntityAreaEffectCloud entity = new EntityAreaEffectCloud(this.world, this.posX, this.posY, this.posZ);
+				entity.setRadiusOnUse(-0.5F);
+				entity.setWaitTime(10);
+		        entity.setParticle(EnumParticleTypes.EXPLOSION_NORMAL);
+		        entity.setRadius(3);
+				entity.setDuration(100);
+				entity.setRadiusPerTick((7F - entity.getRadius()) / (float) entity.getDuration());
+		        entity.addEffect(new PotionEffect(PotionInit.gravity, 201, 0));
+		        this.world.spawnEntity(entity);
+			}
+
+	        float explo = isEasy ? 1F : 1.5F;
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, this.getPowered() ? explo * 3F : explo, false);
 			this.setDead();
 			this.dead = true;
@@ -142,13 +160,9 @@ public class EntityCreeperCal extends EntityCreeper implements ISMMob {
 		this.dataManager.register(POWERED, Boolean.valueOf(flag));
 	}
 
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.magicmeal, this.rand.nextInt(2) + 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.grav_powder, this.rand.nextInt(2) + 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-		}
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.CREEPERCALAMITY;
 	}
 
     public boolean attackEntityFrom(DamageSource src, float amount) {

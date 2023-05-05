@@ -5,6 +5,8 @@ import java.util.Random;
 
 import com.google.common.collect.Lists;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.init.Blocks;
@@ -13,6 +15,7 @@ import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -22,6 +25,8 @@ import net.minecraft.world.chunk.ChunkPrimer;
 import net.minecraft.world.gen.structure.StructureStart;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
+import sweetmagic.init.BlockInit;
+import sweetmagic.init.block.blocks.BlockWoodChest;
 import sweetmagic.init.entity.monster.EntityBlazeTempest;
 import sweetmagic.init.entity.monster.EntityPhantomZombie;
 import sweetmagic.init.entity.monster.EntitySkullFrost;
@@ -31,6 +36,8 @@ import sweetmagic.worldgen.dimension.SMChunkGen;
 import sweetmagic.worldgen.dungen.piece.PyramidPiece;
 
 public class BaseStructureStart extends StructureStart {
+
+	private static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
     public BaseStructureStart() { }
 
@@ -44,14 +51,10 @@ public class BaseStructureStart extends StructureStart {
         Rotation rot = Rotation.NONE;
 
         switch (rand.nextInt(4)) {
-        case 0:
-        	return Rotation.NONE;
-        case 1:
-        	return Rotation.CLOCKWISE_90;
-        case 2:
-        	return Rotation.CLOCKWISE_180;
-        case 3:
-        	return Rotation.COUNTERCLOCKWISE_90;
+        case 0: return Rotation.NONE;
+        case 1: return Rotation.CLOCKWISE_90;
+        case 2: return Rotation.CLOCKWISE_180;
+        case 3: return Rotation.COUNTERCLOCKWISE_90;
         }
 
         return rot;
@@ -159,18 +162,35 @@ public class BaseStructureStart extends StructureStart {
     	}
 	}
 
-	public void setSMSpaner (World world, Random rand, BlockPos pos) {
+	public void setChest (World world, Block block, IBlockState state, BlockPos pos) {
+
+		BlockWoodChest wood = (BlockWoodChest) block;
+		wood.isSet = true;
+		EnumFacing face = state.getValue(wood.FACING);
+
+		world.setBlockState(pos, BlockInit.treasure_chest.getDefaultState().withProperty(wood.FACING, face), 2);
+	}
+
+	public void setSMSpaner (World world, Random rand, BlockPos pos, boolean isWCSide) {
 
 		//宝箱の生成
 		TileEntity tile = world.getTileEntity(pos);
 		if (tile == null || !(tile instanceof TileSMSpaner)) { return; }
 
 		TileSMSpaner spaner = (TileSMSpaner) tile;
+		spaner.isWCSide = isWCSide;
 		spaner.setSpaner();
 	}
 
-
     public boolean isSizeableStructure() {
     	return true;
+    }
+
+    public Block getBlock (World world, BlockPos pos) {
+    	return world.getBlockState(pos).getBlock();
+    }
+
+    public void setAir (World world, BlockPos pos) {
+    	world.setBlockState(pos, AIR, 2);
     }
 }

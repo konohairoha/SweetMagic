@@ -1,6 +1,5 @@
 package sweetmagic.init.entity.monster;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
@@ -18,6 +17,10 @@ import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
@@ -26,14 +29,41 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
+import sweetmagic.init.item.sm.sweetmagic.SMBook;
 
 public class EntityShadowWolf extends EntityWolf {
 
 	private static final int DISPEL_TIME = 10;
+	private static final DataParameter<Boolean> ISPROTECT = EntityDataManager.<Boolean>createKey(EntityShadowWolf.class, DataSerializers.BOOLEAN);
 
 	public EntityShadowWolf(World world) {
 		super(world);
 		this.experienceValue = 0;
+	}
+
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(ISPROTECT, false);
+	}
+
+	public void setProtect(boolean isProtect) {
+		this.dataManager.set(ISPROTECT, isProtect);
+	}
+
+	public boolean getProtect() {
+		return this.dataManager.get(ISPROTECT);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound tag) {
+		super.readEntityFromNBT(tag);
+		this.setProtect(tag.getBoolean("isProtect"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tag) {
+		super.writeEntityToNBT(tag);
+		tag.setBoolean("isProtect", this.getProtect());
 	}
 
 	@Override
@@ -80,10 +110,13 @@ public class EntityShadowWolf extends EntityWolf {
 		this.spawnAppearParticles();
 	}
 
-
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if (this.isTamed()) {
+
+			if (player.isSneaking() && player.getHeldItem(hand).getItem() instanceof SMBook) {
+				this.isDead = true;
+			}
 
 			ItemStack stack = player.getHeldItem(hand);
 			if (stack.getItem() instanceof IWand && this.getOwner() == player && player.isSneaking()) {
@@ -96,10 +129,16 @@ public class EntityShadowWolf extends EntityWolf {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
-		Entity entity = src.getImmediateSource();
+		if (this.getProtect()) {
+			return false;
+		}
 
-    	if (!(entity instanceof ISMMob) && entity instanceof EntityBaseMagicShot) {
-    		return false;
+    	if (src.getImmediateSource() instanceof ISMMob) {
+    		amount *= 0.5F;
+		}
+
+    	else if (src.getImmediateSource() instanceof EntityBaseMagicShot || src == DamageSource.MAGIC) {
+    		amount *= 0.25F;
     	}
 
 		return super.attackEntityFrom(src, amount);

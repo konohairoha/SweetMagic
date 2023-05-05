@@ -17,6 +17,10 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
@@ -29,6 +33,7 @@ import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
+import sweetmagic.init.item.sm.sweetmagic.SMBook;
 import sweetmagic.util.EventUtil;
 import sweetmagic.util.SMDamage;
 
@@ -45,10 +50,36 @@ public class EntityShadowGolem extends EntityIronGolem {
 	protected double lastYaw;
 	protected double lastRot;
 	public double lastMoveY;
+	private static final DataParameter<Boolean> ISPROTECT = EntityDataManager.<Boolean>createKey(EntityShadowGolem.class, DataSerializers.BOOLEAN);
 
 	public EntityShadowGolem (World world) {
 		super(world);
         this.moveHelper = new GolemMoveHelper(this);
+	}
+
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(ISPROTECT, false);
+	}
+
+	public void setProtect(boolean isProtect) {
+		this.dataManager.set(ISPROTECT, isProtect);
+	}
+
+	public boolean getProtect() {
+		return this.dataManager.get(ISPROTECT);
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound tag) {
+		super.readEntityFromNBT(tag);
+		this.setProtect(tag.getBoolean("isProtect"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tag) {
+		super.writeEntityToNBT(tag);
+		tag.setBoolean("isProtect", this.getProtect());
 	}
 
 	protected void collideWithEntity(Entity entity) {
@@ -88,14 +119,24 @@ public class EntityShadowGolem extends EntityIronGolem {
 			float y = (this.rand.nextFloat() + this.rand.nextFloat()) * 0.0825F;
 			float z = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 
-			Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z, 48);
+			Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z, 48);
 			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
 		}
 	}
 
 	@Override
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
-		player.startRiding(this);
+
+		if (!player.isSneaking()) {
+			player.startRiding(this);
+		}
+
+		else {
+			if (player.getHeldItem(hand).getItem() instanceof SMBook) {
+				this.isDead = true;
+			}
+		}
+
 		return super.processInteract(player, hand);
 	}
 
@@ -130,6 +171,10 @@ public class EntityShadowGolem extends EntityIronGolem {
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
+		if (this.getProtect()) {
+			return false;
+		}
+
     	if (src.getImmediateSource() instanceof ISMMob) {
     		amount *= 0.5F;
 		}
@@ -144,11 +189,16 @@ public class EntityShadowGolem extends EntityIronGolem {
 	@Override
 	public void onUpdate() {
 
+		// 壁に当たったら
+		if (this.collidedHorizontally) {
+			this.setPosition(this.posX, this.posY + 1D, this.posZ);
+		}
+
 		this.prevHeadYaw = this.headYaw;
-		this.prevPosX = this.posX;
-		this.prevPosY = this.posY;
-		this.prevPosZ = this.posZ;
-		this.setPosition(this.prevPosX, this.prevPosY, this.prevPosZ);
+//		this.prevPosX = this.posX;
+//		this.prevPosY = this.posY;
+//		this.prevPosZ = this.posZ;
+//		this.setPosition(this.prevPosX, this.prevPosY, this.prevPosZ);
 		super.onUpdate();
 		this.tickLerp();
 
@@ -215,12 +265,15 @@ public class EntityShadowGolem extends EntityIronGolem {
 
 		if ((this.rotationYaw - f1) > 5F) {
 			this.headYaw = 45F;
-		} else if ((this.rotationYaw - f1) < -5F) {
-			this.headYaw = -45F;
-		} else {
-			this.headYaw = 0F;
 		}
 
+		else if ((this.rotationYaw - f1) < -5F) {
+			this.headYaw = -45F;
+		}
+
+		else {
+			this.headYaw = 0F;
+		}
 	}
 
 	protected void updateSpeed(EntityPlayer rider) {

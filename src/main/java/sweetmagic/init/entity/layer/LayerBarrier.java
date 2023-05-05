@@ -16,6 +16,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
+import sweetmagic.init.entity.monster.ISMMob;
 
 public class LayerBarrier extends LayerEffectBase<EntityLivingBase> {
 
@@ -27,7 +28,8 @@ public class LayerBarrier extends LayerEffectBase<EntityLivingBase> {
 
 	@Override
 	public boolean shouldRender(EntityLivingBase entity, float parTick) {
-		return entity.isPotionActive(PotionInit.aether_barrier);
+		boolean isSMMob = entity instanceof ISMMob;
+		return entity.isPotionActive(PotionInit.aether_barrier) && ( !isSMMob || (isSMMob && ((ISMMob) entity).isRenderEffect() ) );
 	}
 
 	@Override

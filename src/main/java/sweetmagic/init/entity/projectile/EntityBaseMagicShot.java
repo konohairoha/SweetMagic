@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.particle.ParticleManager;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +21,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketChangeGameState;
@@ -80,6 +82,8 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
     public int data = 0;
     public int mobPower = 3;
     public boolean isCritical = false;
+    public boolean isPlayerThrower = true;
+    public boolean isRange = false;
 
 	public EntityBaseMagicShot(World world) {
 		super(world);
@@ -180,8 +184,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 
 		if (state.getMaterial() != Material.AIR) {
 			AxisAlignedBB aabb = state.getCollisionBoundingBox(this.world, pos);
-			if (aabb != Block.NULL_AABB
-					&& aabb.offset(pos).contains(new Vec3d(this.posX, this.posY, this.posZ))) {
+			if (aabb != Block.NULL_AABB && aabb.offset(pos).contains(new Vec3d(this.posX, this.posY, this.posZ))) {
 				this.inGround = true;
 			}
 		}
@@ -257,8 +260,6 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 				this.spawnParticle();
 			}
 
-			else { }
-
 			if (this.isWet()) {
 				this.extinguish();
 			}
@@ -293,9 +294,10 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 			}
 
 			DamageSource damage = this.damageSource();
+			float dame = PlayerHelper.isPlayer(this.thrower) && entity instanceof EntityPlayer ? (float) this.damage * 0.1F : (float) this.damage;
 
 			// エンダーマン以外
-			if (!(entity instanceof EntityEnderman) && entity.attackEntityFrom(damage, (float) this.damage)) {
+			if (!(entity instanceof EntityEnderman) && entity.attackEntityFrom(damage, dame)) {
 
 				if (entity instanceof EntityLivingBase) {
 
@@ -384,12 +386,17 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		}
 
 		DamageSource damage = this.damageSource();
+
+		if (this.getThrower() instanceof EntityPlayer && entity instanceof EntityPlayer) {
+			dame = 0F;
+		}
+
 		return entity.attackEntityFrom(damage, dame);
 	}
 
 	public void criticalEffect (EntityLivingBase target) {
 		if (this.isCritical) {
-			ParticleHelper.spawnParticle(this.world, new BlockPos(target).add(0, 1.5D, 0), EnumParticleTypes.SPELL_WITCH, 16, 0.5D);
+			ParticleHelper.spawnParticle(this.world, target.getPosition().add(0.5D, 1.5D, 0.5D), EnumParticleTypes.SPELL_WITCH, 16, 0.5D);
 			this.playSound(this.getThrower(), SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.125F, 1.25F);
 		}
 	}
@@ -484,6 +491,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public void setThrower (EntityLivingBase thrower) {
 		this.thrower = thrower;
         this.throwerId = thrower == null ? null : thrower.getUniqueID();
+        this.isPlayerThrower = thrower instanceof EntityPlayer;
 	}
 
 	public EntityLivingBase getThrower () {
@@ -512,6 +520,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		tags.setDouble("damage", this.damage);
 		tags.setBoolean("isHitDead", this.isHitDead);
 		tags.setBoolean("isHit", this.isHit);
+		tags.setBoolean("isRange", this.isRange);
 		tags.setTag("Item", this.stack.writeToNBT(new NBTTagCompound()));
 		tags.setInteger("level", this.level);
 		tags.setInteger("plusTick", this.plusTick);
@@ -527,9 +536,12 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		this.yTile = tags.getInteger("yTile");
 		this.zTile = tags.getInteger("zTile");
 		this.ticksInGround = tags.getShort("life");
+
 		if (tags.hasKey("inTile", 8)) {
 			this.inTile = Block.getBlockFromName(tags.getString("inTile"));
-		} else {
+		}
+
+		else {
 			this.inTile = Block.getBlockById(tags.getByte("inTile") & 255);
 		}
 		this.inData = tags.getByte("inData") & 255;
@@ -539,6 +551,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 		}
 		this.isHitDead = tags.getBoolean("isHitDead");
 		this.isHit = tags.getBoolean("isHit");
+		this.isRange = tags.getBoolean("isRange");
 		this.stack = this.read(tags.getCompoundTag("Item"));
 		this.level = tags.getInteger("level");
 		this.plusTick = tags.getInteger("plusTick");
@@ -549,7 +562,9 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public ItemStack read(NBTTagCompound tags) {
 		try {
 			return new ItemStack(tags);
-		} catch (RuntimeException run) {
+		}
+
+		catch (RuntimeException run) {
 			return ItemStack.EMPTY;
 		}
 	}
@@ -580,7 +595,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public float getCriticalChance (EntityLivingBase entity) {
 
 		ItemStack leg = entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
-		if (!(leg.getItem() instanceof IPouch) || !(entity instanceof EntityPlayer) || entity.getHealth() > (entity.getMaxHealth() / 2)) { return 0F; }
+		if (!(leg.getItem() instanceof IPouch) || !(entity instanceof EntityPlayer)) { return 0F; }
 
 		// インベントリを取得
 		InventoryPouch neo = new InventoryPouch((EntityPlayer) entity);
@@ -599,9 +614,9 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 			ItemStack st = inv.getStackInSlot(i);
 			if (st.isEmpty() || !(st.getItem() instanceof IAcce)) { continue; }
 
-			// エメラルドピアスを持ってるならダメージ増加
+			// 毒の牙を持ってるならダメージ増加
 			if (st.getItem() == ItemInit.poison_fang) {
-				return criticalRate + 0.5F;
+				return criticalRate + ( 0.15F + 0.7F * ( 1F - Math.max(0.5F, entity.getHealth()) ) );
 			}
 		}
 
@@ -699,8 +714,12 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	}
 
 	// えんちちーリスト取得
-	public List<EntityLivingBase> getEntityList (double x, double  y, double  z) {
-		return this.world.getEntitiesWithinAABB(EntityLivingBase.class, this.getAABB(x, y, z));
+	public <T extends Entity> List<T> getEntityList (Class <? extends T > classEntity, double x, double  y, double  z) {
+		return this.world.getEntitiesWithinAABB(classEntity, this.getAABB(x, y, z));
+	}
+
+	public ParticleManager getParticle () {
+		return ParticleHelper.spawnParticl();
 	}
 
 	// プレイヤーかどうか
@@ -717,6 +736,28 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public AxisAlignedBB getAABB (double x, double  y, double  z) {
 		return this.getEntityBoundingBox().grow(x, y, z);
 	}
+
+    public boolean hasAcce (EntityPlayer player, Item item) {
+
+        Item porchItem = player.getItemStackFromSlot(EntityEquipmentSlot.LEGS).getItem();
+
+        if (porchItem instanceof IPouch) {
+
+			InventoryPouch neo = new InventoryPouch(player);
+			List<ItemStack> stackList = neo.getStackList();
+
+			// インベントリの分だけ回す
+			for (ItemStack acce : stackList) {
+
+				// アクセサリーの取得
+				if (acce.getItem() != item) { continue; }
+
+				return true;
+			}
+        }
+
+        return false;
+    }
 
 	// プレイヤーがの取得
 	public EntityPlayer getPlayer () {
@@ -736,7 +777,7 @@ public class EntityBaseMagicShot extends Entity implements IProjectile {
 	public boolean checkThrower (EntityLivingBase entity) {
 
 		// プレイヤーが射撃者なら
-		if (!(this.getThrower() instanceof IMob)) {
+		if (this.isPlayerThrower) {
 
 			// ヒットしたえんちちーが敵モブ以外ならfalse
 			if (!(entity instanceof IMob)) { return false; }

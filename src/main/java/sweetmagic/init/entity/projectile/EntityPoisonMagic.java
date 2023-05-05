@@ -5,12 +5,14 @@ import java.util.List;
 import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.ParticleHelper;
 
@@ -28,6 +30,10 @@ public class EntityPoisonMagic extends EntityBaseMagicShot {
 	public EntityPoisonMagic(World world, EntityLivingBase thrower, ItemStack stack, int data) {
 		super(world, thrower, stack);
 		this.data = data;
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 	}
 
 	// 地面についたときの処理
@@ -59,9 +65,9 @@ public class EntityPoisonMagic extends EntityBaseMagicShot {
 			// tier3
 			else if (this.data == 1) {
 
-				float range = 2 + level * 0.75F;
+				float range = (2 + level * 0.75F) * (this.isRange ? 1.33F : 1F);
 				float dame = level;
-				List<EntityLivingBase> list = this.getEntityList(range, range, range);
+				List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
 				if (list.isEmpty()) { return; }
 
 				for (EntityLivingBase entity : list ) {
@@ -71,10 +77,55 @@ public class EntityPoisonMagic extends EntityBaseMagicShot {
 					this.attackDamage(entity, dame);
 					entity.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, 40 * (level + 1), 2));
 					entity.hurtResistantTime = 0;
+
 					BlockPos pos = new BlockPos(entity);
 
-					ParticleHelper.spawnBoneMeal(this.world, pos, EnumParticleTypes.SPELL_WITCH);
-					ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.SPELL_WITCH);
+					ParticleHelper.spawnParticle(this.world, pos, EnumParticleTypes.SPELL_WITCH);
+					ParticleHelper.spawnParticle(this.world, pos.up(), EnumParticleTypes.SPELL_WITCH);
+				}
+			}
+
+			// tier3
+			else if (this.data == 2) {
+
+				float range = (5 + level * 0.875F) * (this.isRange ? 1.4F : 1F);
+				float dame = (float) (level + this.getDamage() * 0.25F);
+				List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
+				if (list.isEmpty()) { return; }
+
+				for (EntityLivingBase entity : list ) {
+
+					if (!(entity instanceof IMob)) { continue; }
+
+					boolean isHit = this.attackDamage(entity, dame);
+
+					if (entity.isEntityAlive()) {
+						entity.addPotionEffect(new PotionEffect(PotionInit.deadly_poison, 40 * (level + 1), 3));
+					}
+
+					entity.hurtResistantTime = 0;
+					BlockPos pos = new BlockPos(entity);
+
+					ParticleHelper.spawnParticle(this.world, pos, EnumParticleTypes.SPELL_WITCH);
+					ParticleHelper.spawnParticle(this.world, pos.up(), EnumParticleTypes.SPELL_WITCH);
+
+					if (isHit) {
+
+						// リフレッシュエフェクトが付いてる場合は強制体力削り
+						if (entity.isPotionActive(PotionInit.refresh_effect) && entity.isEntityAlive()) {
+							entity.setHealth(Math.max(1F, entity.getHealth() - entity.getMaxHealth() * 0.05F));
+						}
+
+						// 防御力ダウン付与
+						else {
+							entity.addPotionEffect(new PotionEffect(PotionInit.armor_break, 40 * (level + 1), 3));
+						}
+					}
+
+					// 攻撃が通らなかった場合強制体力半減
+					else {
+						entity.setHealth(Math.max(1F, entity.getHealth() - entity.getMaxHealth() * 0.5F));
+					}
 				}
 			}
 		}

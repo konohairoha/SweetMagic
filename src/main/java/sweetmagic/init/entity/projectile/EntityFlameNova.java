@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
@@ -49,14 +48,13 @@ public class EntityFlameNova extends EntityFireMagic {
 		double range = 5D;
 
 		// 範囲内のえんちちーを取得
-		List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
 
 			if (!this.checkThrower(entity)) { continue; }
 
-
-			if (!(this.getThrower() instanceof IMob)) {
+			if (this.isPlayerThrower) {
 				entity.setFire(3 * (level + 1));
 			}
 

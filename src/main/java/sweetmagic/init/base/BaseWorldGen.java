@@ -11,6 +11,7 @@ import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityMobSpawner;
@@ -24,6 +25,7 @@ import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.LootTable;
 import net.minecraftforge.fml.common.IWorldGenerator;
+import sweetmagic.init.DimensionInit;
 import sweetmagic.init.tile.chest.TileWoodChest;
 import sweetmagic.util.WorldHelper;
 
@@ -67,11 +69,24 @@ public class BaseWorldGen implements IWorldGenerator {
     }
 
     public boolean checkDimension (int dimId) {
-    	return dimId == 1 || dimId == -1;
+    	return dimId != 0 && dimId != DimensionInit.dimID;
     }
 
     public boolean checkVillage (World world, BlockPos pos) {
     	return world.villageCollection.getNearestVillage(pos, 6) != null;
+    }
+
+    public boolean checkDistance (int dis, BlockPos getPos, List<BlockPos> posList) {
+
+    	if (posList.isEmpty()) { return true; }
+
+    	for (BlockPos pos : posList) {
+    		if (Math.abs(pos.getX() - getPos.getX()) < dis || Math.abs(pos.getZ() - getPos.getZ()) < dis) {
+    			return false;
+    		}
+    	}
+
+    	return true;
     }
 
     //生成条件
@@ -126,7 +141,7 @@ public class BaseWorldGen implements IWorldGenerator {
 	}
 
     // 生成物の内容
-    public void generate(World world, BlockPos pos) {}
+    public void generate(World world, BlockPos pos) { }
 
 	public void setMobSpawner (World world, Random rand, BlockPos pos) {
 		world.setBlockToAir(pos);
@@ -140,16 +155,14 @@ public class BaseWorldGen implements IWorldGenerator {
 		int rnd = rand.nextInt(2);
 		if (tile instanceof TileEntityMobSpawner) {
 
-			TileEntityMobSpawner sp = (TileEntityMobSpawner) tile;
+			MobSpawnerBaseLogic sp = ((TileEntityMobSpawner) tile).getSpawnerBaseLogic();
 
 			switch (rnd) {
 			case 0:
-				(sp).getSpawnerBaseLogic()
-						.setEntityId(EntityList.getKey(EntitySkeleton.class));
+				sp.setEntityId(EntityList.getKey(EntitySkeleton.class));
 				break;
 			case 1:
-				(sp).getSpawnerBaseLogic()
-						.setEntityId(EntityList.getKey(EntityZombie.class));
+				sp.setEntityId(EntityList.getKey(EntityZombie.class));
 				break;
 			}
 		}

@@ -11,11 +11,11 @@ import sweetmagic.util.EventUtil;
 
 public class EntityAIDonMov extends EntityAIBase {
 
-    public int tickTime = 20;
-    public final EntityLiving living;
-    public final IAttributeInstance attri;
-    public World world;
-    public Random rand;
+	public int tickTime = 20;
+	private final EntityLiving living;
+	private final IAttributeInstance attri;
+	private World world;
+	private Random rand;
 
     public EntityAIDonMov(EntityLiving living) {
         this.living = living;

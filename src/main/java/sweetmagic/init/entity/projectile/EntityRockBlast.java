@@ -6,7 +6,6 @@ import net.minecraft.block.Block;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -16,7 +15,6 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.entity.monster.EntityPixieVex;
 
@@ -66,14 +64,14 @@ public class EntityRockBlast extends EntityBaseMagicShot {
 			Particle particle = null;
 
 			if (isPlayer) {
-				particle = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0);
+				particle = ParticleNomal.create(this.world, f1, f2, f3, 0, 0, 0);
 			}
 
 			else {
-				particle = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0, 48);
+				particle = ParticleNomal.create(this.world, f1, f2, f3, 0, 0, 0, 48);
 			}
 
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(particle);
+			this.getParticle().addEffect(particle);
 		}
 	}
 
@@ -81,19 +79,18 @@ public class EntityRockBlast extends EntityBaseMagicShot {
 	@Override
 	protected void entityHit(EntityLivingBase living) {
 
-		EntityLivingBase entity = this.getThrower();
 		int level = this.getWandLevel();
 		int data = this.getData();
 
 		// 敵モブなら
-		if (entity != null && entity instanceof IMob) {
+		if (!this.isPlayerThrower) {
 
 			float rate = (data == 0) ? 1.5F : 2.25F;
 			double range = (data == 0) ? 2.5D : 3.75D;
 			int time = 40 * (level + 1);
 
 			// えんちちーリストの取得
-			List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
+			List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 			// 範囲のモブに攻撃力ダウン + 防御力分のダメージ
 			for (EntityLivingBase target : entityList) {
@@ -110,8 +107,12 @@ public class EntityRockBlast extends EntityBaseMagicShot {
 		// 味方なら
 		else {
 
-			if (data == 2) {
-				living.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 40 * (level + 1), 2));
+			int value = 1 + data * 3;
+			float damage = (float) (this.getDamage() * 0.35F + living.getEntityAttribute(SharedMonsterAttributes.ARMOR).getBaseValue() * 1.5F);
+
+			for (int i = 0; i < value ; i++) {
+				this.attackDamage(living, damage);
+				living.hurtResistantTime = 0;
 			}
 		}
 

@@ -23,23 +23,23 @@ import sweetmagic.init.entity.monster.EntitySandryon;
 
 public class LayerWandSandryon extends LayerEffectBase<EntityLivingBase> {
 
-	private static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
 
 	private static final ItemStack[] WAND = new ItemStack[] {
-			new ItemStack(ItemInit.deuscrystal_wand_r),
-			new ItemStack(ItemInit.deuscrystal_wand_b),
-			new ItemStack(ItemInit.deuscrystal_wand_g),
-			new ItemStack(ItemInit.deuscrystal_wand_y),
-			new ItemStack(ItemInit.deuscrystal_wand_p)
+		new ItemStack(ItemInit.deuscrystal_wand_r),
+		new ItemStack(ItemInit.deuscrystal_wand_b),
+		new ItemStack(ItemInit.deuscrystal_wand_g),
+		new ItemStack(ItemInit.deuscrystal_wand_y),
+		new ItemStack(ItemInit.deuscrystal_wand_p)
 	};
 
 	private static final ItemStack[] SACRED = new ItemStack[] {
-			new ItemStack(ItemInit.sacred_meteor_wand),
-			new ItemStack(ItemInit.sacred_meteor_wand),
-			new ItemStack(ItemInit.sacred_meteor_wand),
-			new ItemStack(ItemInit.sacred_meteor_wand),
-			new ItemStack(ItemInit.sacred_meteor_wand),
-			new ItemStack(ItemInit.sacred_meteor_wand)
+		new ItemStack(ItemInit.sacred_meteor_wand),
+		new ItemStack(ItemInit.sacred_meteor_wand),
+		new ItemStack(ItemInit.sacred_meteor_wand),
+		new ItemStack(ItemInit.sacred_meteor_wand),
+		new ItemStack(ItemInit.sacred_meteor_wand),
+		new ItemStack(ItemInit.sacred_meteor_wand)
 	};
 
 	public LayerWandSandryon(RenderLivingBase<?> render) {
@@ -101,9 +101,10 @@ public class LayerWandSandryon extends LayerEffectBase<EntityLivingBase> {
 
 		if (entity.isInfiniteWand()) {
 			GlStateManager.pushMatrix();
-			GlStateManager.translate(0F, 1.25F, 0F);
+			GlStateManager.translate(0F, 1.4F, 0F);
 			scale *= 3F;
 			GlStateManager.scale(scale, -scale, scale);
+			GlStateManager.rotate(-rotY  / 2 * pi + (360 / count), 0F, 1F, 0F);
 			this.renderWand(scale, entity, parTick);
 			GlStateManager.popMatrix();
 		}
@@ -116,7 +117,7 @@ public class LayerWandSandryon extends LayerEffectBase<EntityLivingBase> {
 		GlStateManager.rotate(180F, 0F, 0F, 1F);
 		Tessellator tessellator = Tessellator.getInstance();
 		BufferBuilder buffer = tessellator.getBuffer();
-		Minecraft.getMinecraft().getTextureManager().bindTexture(RUNE_TEX);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(TEX);
 
 		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
 		buffer.pos(-0.5F, 0, -0.5F).tex(0, 0).endVertex();

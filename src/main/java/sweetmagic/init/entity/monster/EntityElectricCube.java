@@ -18,16 +18,17 @@ import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IWand;
+import sweetmagic.config.SMConfig;
 import sweetmagic.event.SMSoundEvent;
-import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.PlayerHelper;
 
@@ -111,16 +112,16 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 		float damage = 1;
 		switch (size) {
 		case 1:
-			damage = 0.5F;
+			damage = 1.5F;
 			break;
 		case 2:
-			damage = 1.5F;
+			damage = 2F;
 			break;
 		case 4:
 			damage = 2.5F;
 			break;
 		case 8:
-			damage = 3F;
+			damage = 4F;
 			break;
 		}
 		return damage;
@@ -129,7 +130,7 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
 		return this.world.getDifficulty() != EnumDifficulty.PEACEFUL && this.isValidLightLevel() &&
-				this.world.getBlockState((new BlockPos(this)).down()).canEntitySpawn(this) && this.canSpawn(this.world, this, 3);
+				this.world.getBlockState((new BlockPos(this)).down()).canEntitySpawn(this) && this.canSpawn(this.world, this, SMConfig.spawnDay);
 	}
 
 	// 光レベル
@@ -181,8 +182,8 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	// 近くにいるプレイヤーダメージ
 	public void rangeElectricDamage (EntityPlayer player) {
 
-		BlockPos pos = new BlockPos(player.posX, player.posY, player.posZ);
-		List<EntityPlayer> playerList = this.world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.add(-5, -2, -5), pos.add(5, 2, 5)));
+		List<EntityPlayer> playerList = this.getEntityList(EntityPlayer.class, this, 4D, 4D, 4D);
+		if (playerList.isEmpty()) { return; }
 
 		for (EntityPlayer pl : playerList) {
 
@@ -196,7 +197,8 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 	// メインハンドのアイテムを飛ばす
 	public void outStack (EntityLivingBase living) {
 
-		if (living.isPotionActive(PotionInit.refresh_effect) || PlayerHelper.isPlayer(living) && PlayerHelper.isCleative((EntityPlayer) living)) { return; }
+		if (living.isPotionActive(PotionInit.refresh_effect) || PlayerHelper.isPlayer(living) && ((EntityPlayer) living).isCreative()
+				|| !this.isSMDimension(this.world)) { return; }
 
 		ItemStack stack = living.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND);
 
@@ -217,7 +219,7 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 			this.world.spawnEntity(item);
 			stack.shrink(1);
 
-			this.world.playSound(null, new BlockPos(living) , SMSoundEvent.ELECTRIC, SoundCategory.NEUTRAL, 0.175F, 1F);
+			this.world.playSound(null, living.getPosition(), SMSoundEvent.ELECTRIC, SoundCategory.NEUTRAL, 0.175F, 1F);
 		}
 	}
 
@@ -236,15 +238,9 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 		return new EntityElectricCube(this.world);
 	}
 
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
-
-			if (this.getSlimeSize() * 0.35F >= this.rand.nextFloat()) {
-				this.entityDropItem(new ItemStack(ItemInit.electronic_orb, 1), 0.0F);
-				this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(2)), 0F);
-			}
-		}
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.ELECTRICCUBE;
 	}
 
 	@Nullable
@@ -260,15 +256,8 @@ public class EntityElectricCube extends EntitySlime implements ISMMob {
 
 		int j = 1 << i;
 		this.setSlimeSize(j, true);
-
-		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE)
-				.applyModifier(new AttributeModifier("Random spawn bonus", this.rand.nextGaussian() * 0.05D, 1));
-
-		if (this.rand.nextFloat() < 0.05F) {
-			this.setLeftHanded(true);
-		} else {
-			this.setLeftHanded(false);
-		}
+		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).applyModifier(new AttributeModifier("Random spawn bonus", this.rand.nextGaussian() * 0.05D, 1));
+		this.setLeftHanded(this.rand.nextFloat() < 0.05F);
 
 		return livingdata;
 	}

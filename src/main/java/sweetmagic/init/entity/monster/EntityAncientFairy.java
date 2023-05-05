@@ -1,10 +1,10 @@
 package sweetmagic.init.entity.monster;
 
+import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -30,7 +30,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.BossInfo;
@@ -40,24 +39,24 @@ import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import sweetmagic.client.particle.ParticleNomal;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.util.WorldHelper;
+import sweetmagic.util.ParticleHelper;
 
 public class EntityAncientFairy extends EntityMob implements ISMMob {
 
+	private int deathTicks = 0;
+	private int spellTicks = 0;
+	private int spellTick = 0;
+	private int randTick = 0;
+	private int tickTime = 0;
+	private int attractTime = 0;
+	private BlockPos boundOrigin;
+	private int pX = (int) this.posX;
+	private int pY = (int) this.posY;
+	private int pZ = (int) this.posZ;
 	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), this.getColor(), BossInfo.Overlay.NOTCHED_12);
-	public int deathTicks = 0;
-	public BlockPos boundOrigin;
-	public int pX = (int) this.posX;
-	public int pY = (int) this.posY;
-	public int pZ = (int) this.posZ;
-	public int spellTick = 0;
-	public int randTick = 0;
-	public int tickTime = 0;
-	public int attractTime = 0;
 
 	public EntityAncientFairy(World world) {
 		super(world);
@@ -74,6 +73,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 	protected void initEntityAI() {
 		super.initEntityAI();
 		this.tasks.addTask(0, new EntityAISwimming(this));
+		this.tasks.addTask(5, new EntityAIPoisonFog(this));
 		this.tasks.addTask(8, new EntityAncientFairy.AIMoveRandom());
 		this.tasks.addTask(10, new EntityAIWatchClosest(this, EntityLiving.class, 8.0F));
 		this.targetTasks.addTask(1, new EntityAIHurtByTarget(this, true, new Class[] { EntityAncientFairy.class }));
@@ -90,43 +90,14 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 	@Nullable
 	@Override
-	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+	public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData livingdata) {
 		this.setHardHealth(this);
+		this.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 99999, 1, true, false));
 		return livingdata;
 	}
 
-	public static void registerFixesVex(DataFixer fixer) {
+	public static void registerFixesentity(DataFixer fixer) {
 		EntityLiving.registerFixesMob(fixer, EntityAncientFairy.class);
-	}
-
-	public void onUpdate() {
-
-		super.onUpdate();
-
-		if (this.attractTime  <= 0) {
-			this.attractTime  = 200 + this.world.rand.nextInt(200);
-		}
-
-		this.tickTime ++;
-
-		if (this.attractTime <= this.tickTime) {
-
-			if (this.world.isRemote) {
-				for(int k = 0; k <= 3; k++) {
-					float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-					float f2 = (float) this.posY + 0.25F + this.rand.nextFloat() * 1.5F;
-					float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
-					FMLClientHandler.instance().getClient().effectRenderer.addEffect(new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0));
-				}
-			}
-
-			WorldHelper.suctionPlayer(this.world, this.getEntityBoundingBox().grow(32), this.posX, this.posY, this.posZ, this, 0.0775D);
-
-			if (this.attractTime + 4 <= this.tickTime) {
-				this.attractTime  = 200 + this.world.rand.nextInt(200);
-				this.tickTime = 0;
-			}
-		}
 	}
 
 	@Override
@@ -137,14 +108,12 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 		this.bossInfo.setColor(this.getColor());
 
-
 		// ターゲットの取得していないなら終了
 		EntityLivingBase target = this.getAttackTarget();
 		if (target == null) { return; }
 
 		this.spellTick++;
 		boolean isHalf = this.isHalfHelth();
-
 		this.motionY *= 0.25D;
 
 		if (this.posY < target.posY || this.posY < target.posY + 2.0D) {
@@ -174,7 +143,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 			entity.setPosition(x, this.posY + this.rand.nextDouble() * 2, z);
 			entity.setData(this.rand.nextInt(3));
-			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 2400, 0, true, false));
+			entity.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 1600, 0, true, false));
 			entity.addPotionEffect(new PotionEffect(PotionInit.magic_array, 60, 0));
 			this.world.spawnEntity(entity);
 		}
@@ -207,7 +176,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 				break;
 			}
 
-			target.attackEntityFrom(DamageSource.MAGIC, 6F);
+			target.attackEntityFrom(DamageSource.MAGIC, 10F);
 		}
 
 		else {
@@ -244,7 +213,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 					break;
 				}
 
-				target.attackEntityFrom(DamageSource.MAGIC, 3F);
+				target.attackEntityFrom(DamageSource.MAGIC, 6F);
 			}
 		}
 	}
@@ -274,34 +243,23 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
     	}
 
     	if (this.isHalfHelth()) {
-    		amount =  Math.min(amount, 15);
+    		amount = Math.min(amount, 15);
 			this.teleportRandomly(this.rand);
     	}
 
     	else {
-    		amount =  Math.min(amount, 25);
+    		amount = Math.min(amount, 25);
     	}
 
 		return super.attackEntityFrom(src, amount);
 	}
 
 	public boolean teleportRandomly(Random rand) {
-		double x = this.pX + (rand.nextDouble() - 0.5) * 8;
-		double y = this.pY + (double) (rand.nextInt(4));
-		double z = this.pZ + (rand.nextDouble() - 0.5) * 8;
+		double x = this.pX + (rand.nextDouble() - 0.5) * 4;
+		double y = this.pY;
+		double z = this.pZ + (rand.nextDouble() - 0.5) * 4;
 		this.spawnParticle();
 		return teleportTo(x, y, z);
-	}
-
-	// エンティティに対してテレポート
-	public boolean teleportToEntity (Entity entity ) {
-		Vec3d vec3d = new Vec3d(this.posX - entity.posX, getEntityBoundingBox().minY + this.height / 2.0F - entity.posY + entity.getEyeHeight( ), this.posZ - entity.posZ);
-		vec3d = vec3d.normalize();
-		double targetX = this.posX + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.x * 16.0;
-		double targetY = this.posY + (this.rand.nextInt(8) - 2) - vec3d.y * 16.0;
-		double targetZ = this.posZ + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.z * 16.0;
-		this.spawnParticle();
-		return this.teleportTo(targetX, targetY, targetZ);
 	}
 
 	// テレポート実施
@@ -321,7 +279,7 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 	public void spawnParticle() {
 		for (int i = 0; i < 16; i++) {
 			float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-			float f2 = (float) ((float) this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+			float f2 = (float) this.posY + 0.25F + this.rand.nextFloat() * 1.5F;
 			float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
 			this.world.spawnParticle(EnumParticleTypes.FLAME, f1, f2, f3, 0, 0, 0);
 		}
@@ -334,13 +292,16 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 		this.deathTicks++;
 		if (!this.world.isRemote) {
 
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
+			this.dropItem(this.world, this, ItemInit.aether_crystal, this.rand.nextInt(24) + 24);
 			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 5);
 			this.dropItem(this.world, this, ItemInit.pure_crystal, this.rand.nextInt(7) + 1);
 			this.dropItem(this.world, this, ItemInit.mf_sbottle, this.rand.nextInt(32) + 12);
 			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
 			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 6);
 			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(3) + 1);
+			this.dropItem(this.world, this, new ItemStack(BlockInit.figurine_af));
+			this.dropItem(this.world, this, ItemInit.magic_pure_force, this.rand.nextInt(6) + 1);
+			this.dropItem(this.world, this, ItemInit.devil_cake, this.rand.nextInt(2) + 1);
 
 			if (this.rand.nextFloat() <= 0.5F) {
 				this.dropItem(this.world, this, ItemInit.varrier_pendant, 1);
@@ -423,46 +384,46 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 	public class AIMoveControl extends EntityMoveHelper {
 
-		public EntityAncientFairy vex;
+		private EntityAncientFairy entity;
 
-		public AIMoveControl(EntityAncientFairy vex) {
-			super(vex);
-			this.vex = vex;
+		public AIMoveControl(EntityAncientFairy entity) {
+			super(entity);
+			this.entity = entity;
 		}
 
 		public void onUpdateMoveHelper() {
 
 			if (this.action != EntityMoveHelper.Action.MOVE_TO) { return; }
 
-			double d0 = this.posX - this.vex.posX;
-			double d1 = this.posY - this.vex.posY;
-			double d2 = this.posZ - this.vex.posZ;
+			double d0 = this.posX - this.entity.posX;
+			double d1 = this.posY - this.entity.posY;
+			double d2 = this.posZ - this.entity.posZ;
 			double d3 = d0 * d0 + d1 * d1 + d2 * d2;
 			d3 = (double) MathHelper.sqrt(d3);
 
-			if (d3 < this.vex.getEntityBoundingBox().getAverageEdgeLength()) {
+			if (d3 < this.entity.getEntityBoundingBox().getAverageEdgeLength()) {
 				this.action = EntityMoveHelper.Action.WAIT;
-				this.vex.motionX *= 0.5D;
-				this.vex.motionY *= 0.5D;
-				this.vex.motionZ *= 0.5D;
+				this.entity.motionX *= 0.5D;
+				this.entity.motionY *= 0.5D;
+				this.entity.motionZ *= 0.5D;
 			}
 
 			else {
-				this.vex.motionX += d0 / d3 * 0.05D * this.speed;
-				this.vex.motionY += d1 / d3 * 0.05D * this.speed;
-				this.vex.motionZ += d2 / d3 * 0.05D * this.speed;
+				this.entity.motionX += d0 / d3 * 0.05D * this.speed;
+				this.entity.motionY += d1 / d3 * 0.05D * this.speed;
+				this.entity.motionZ += d2 / d3 * 0.05D * this.speed;
+				EntityLivingBase target = this.entity.getAttackTarget();
 
-				if (this.vex.getAttackTarget() == null) {
-					this.vex.rotationYaw = -((float) MathHelper.atan2(this.vex.motionX,
-							this.vex.motionZ)) * (180F / (float) Math.PI);
-					this.vex.renderYawOffset = this.vex.rotationYaw;
+				if (target == null) {
+					this.entity.rotationYaw = -((float) MathHelper.atan2(this.entity.motionX, this.entity.motionZ)) * (180F / (float) Math.PI);
+					this.entity.renderYawOffset = this.entity.rotationYaw;
 				}
 
 				else {
-					double d4 = this.vex.getAttackTarget().posX - this.vex.posX;
-					double d5 = this.vex.getAttackTarget().posZ - this.vex.posZ;
-					this.vex.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
-					this.vex.renderYawOffset = this.vex.rotationYaw;
+					double d4 = target.posX - this.entity.posX;
+					double d5 = target.posZ - this.entity.posZ;
+					this.entity.rotationYaw = -((float) MathHelper.atan2(d4, d5)) * (180F / (float) Math.PI);
+					this.entity.renderYawOffset = this.entity.rotationYaw;
 				}
 			}
 		}
@@ -470,14 +431,14 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 	public class AIMoveRandom extends EntityAIBase {
 
-		public EntityAncientFairy vex = EntityAncientFairy.this;
+		private EntityAncientFairy entity = EntityAncientFairy.this;
 
 		public AIMoveRandom() {
 			this.setMutexBits(1);
 		}
 
 		public boolean shouldExecute() {
-			return !this.vex.getMoveHelper().isUpdating() && this.vex.rand.nextInt(7) == 0;
+			return !this.entity.getMoveHelper().isUpdating() && this.entity.rand.nextInt(7) == 0;
 		}
 
 		public boolean shouldContinueExecuting() {
@@ -486,27 +447,113 @@ public class EntityAncientFairy extends EntityMob implements ISMMob {
 
 		public void updateTask() {
 
-			Random rand = this.vex.rand;
-			BlockPos pos = this.vex.getBoundOrigin();
+			Random rand = this.entity.rand;
+			BlockPos pos = this.entity.getBoundOrigin();
 
 			if (pos == null) {
-				pos = new BlockPos(this.vex);
+				pos = new BlockPos(this.entity);
 			}
 
 			for (int i = 0; i < 3; ++i) {
 
 				BlockPos pos1 = pos.add(rand.nextInt(15) - 7, rand.nextInt(11) - 5, rand.nextInt(15) - 7);
+				if (!this.entity.world.isAirBlock(pos1)) { continue; }
 
-				if (!this.vex.world.isAirBlock(pos1)) { continue; }
+				this.entity.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
 
-				this.vex.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
-
-				if (this.vex.getAttackTarget() == null) {
-					this.vex.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
+				if (this.entity.getAttackTarget() == null) {
+					this.entity.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
 				}
 
 				break;
 			}
+		}
+	}
+
+	public class EntityAIPoisonFog extends EntityAIBase {
+
+		protected int spellWarmup;
+		protected int spellCooldown;
+		public World world;
+		public EntityAncientFairy entity;
+
+		public EntityAIPoisonFog (EntityAncientFairy entity) {
+			this.entity = entity;
+			this.world = this.entity.world;
+		}
+
+		// AIを実行できるか
+		public boolean shouldExecute() {
+			return this.getTarget() != null && this.entity.ticksExisted >= this.spellCooldown && this.entity.isHalfHelth();
+		}
+
+		// 実行できるか
+		public boolean shouldContinueExecuting() {
+			return this.entity.getAttackTarget() != null && this.spellWarmup > 0;
+		}
+
+		public void startExecuting() {
+			this.spellWarmup = this.getCastWarmupTime();
+			this.entity.spellTicks = this.getCastingTime();
+			this.spellCooldown = this.entity.ticksExisted + this.getCastingInterval();
+		}
+
+		// タスク処理
+		public void updateTask() {
+
+			--this.spellWarmup;
+
+			if (this.spellWarmup % 4 == 0) {
+
+				BlockPos pos = new BlockPos(this.entity);
+				Random rand = this.world.rand;
+				float chance = this.entity.isRender() ? 0.1F : 0.02F;
+
+				for (BlockPos p : BlockPos.getAllInBox(pos.add(-16, -1, -16), pos.add(16, 4, 16))) {
+					if (rand.nextFloat() > chance) { continue; }
+
+					ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.SPELL_WITCH, 1, 0.075D);
+				}
+			}
+
+			if (this.spellWarmup == 0) {
+				this.castSpell();
+			}
+		}
+
+		// 特殊行動開始
+		protected void castSpell() {
+
+			List<EntityPlayer> playerList = this.entity.getEntityList(EntityPlayer.class, this.entity, 16D, 16D, 16);
+
+			for (EntityPlayer player : playerList) {
+
+				if (player.isCreative() || player.isSpectator() || player.getHealth() <= 1F) { continue; }
+
+				float health = player.getHealth() * ( player.isPotionActive(PotionInit.refresh_effect) ? 0.5F : 0.75F ) ;
+				player.setHealth(health);
+				player.attackEntityFrom(DamageSource.MAGIC, 1F);
+			}
+		}
+
+		// キャストタイム
+		protected int getCastingTime() {
+			return this.spellCooldown;
+		}
+
+		// ウォームアップタイム
+		protected int getCastWarmupTime() {
+			return 160;
+		}
+
+		// インターバル
+		protected int getCastingInterval() {
+			return 700;
+		}
+
+		// ターゲット取得
+		public EntityLivingBase getTarget () {
+			return this.entity.getAttackTarget();
 		}
 	}
 }

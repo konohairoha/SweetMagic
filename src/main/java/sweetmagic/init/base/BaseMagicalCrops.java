@@ -25,7 +25,6 @@ import sweetmagic.util.SweetState;
 
 public class BaseMagicalCrops extends BlockBush implements IGrowable {
 
-	//	public final int data;
 	Random srand = new Random();
 	public static float toGrowValue = 10.0F;
 
@@ -34,7 +33,7 @@ public class BaseMagicalCrops extends BlockBush implements IGrowable {
 		return new BlockStateContainer(this, new IProperty[] { SweetState.STAGE4 });
 	}
 
-	public static PropertyInteger getSweetState() {
+	public PropertyInteger getSweetState() {
 		return SweetState.STAGE4;
 	}
 
@@ -104,14 +103,13 @@ public class BaseMagicalCrops extends BlockBush implements IGrowable {
 		if (!world.isAreaLoaded(pos, 1) || world.getLightFromNeighbors(pos.up()) < 9) { return; }
 
 		int i = this.getNowStateMeta(state);
-		if (i < this.getMaxBlockState()) {
+		if (i >= this.getMaxBlockState()) { return; }
 
-			float f = SMUtil.getGrowthChance(this, world, pos, 2F);
-			if (ForgeHooks.onCropsGrowPre(world, pos, state, rand.nextInt((int) (toGrowValue / f) + 1) <= 0)) {
+		float f = SMUtil.getGrowthChance(this, world, pos, 2F);
 
-				world.setBlockState(pos, this.growStage(world, state, i + 1), 2);
-				ForgeHooks.onCropsGrowPost(world, pos, state, world.getBlockState(pos));
-			}
+		if (ForgeHooks.onCropsGrowPre(world, pos, state, rand.nextInt((int) (toGrowValue / f) + 1) <= 0)) {
+			world.setBlockState(pos, this.growStage(world, state, i + 1), 2);
+			ForgeHooks.onCropsGrowPost(world, pos, state, world.getBlockState(pos));
 		}
 	}
 
@@ -121,7 +119,7 @@ public class BaseMagicalCrops extends BlockBush implements IGrowable {
 	}
 
 	// 骨粉が使用できるかどうか
-	public boolean canUseBonemeal(World worldIn, Random rand, BlockPos pos, IBlockState state) {
+	public boolean canUseBonemeal(World world, Random rand, BlockPos pos, IBlockState state) {
 		return false;
 	}
 
@@ -130,7 +128,7 @@ public class BaseMagicalCrops extends BlockBush implements IGrowable {
 		return 0;
 	}
 
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		return !this.isMaxAge(state);
 	}
 

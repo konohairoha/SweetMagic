@@ -49,7 +49,9 @@ public class SMTradeRecipes {
 					stack.setCount(emerald.getCount() > 4 ? 1 : stack.getCount() * emerald.getCount());
 
 					recipe.add(new MerchantRecipe(emerald, stack));
-				} else {
+				}
+
+				else {
 					int value = stack.getCount() * emerald.getCount();
 					stack.setCount(value >= 64 ? 32 : value);
 
@@ -90,7 +92,45 @@ public class SMTradeRecipes {
 
 				if (trade.type == TradeType.BUY) {
 					recipe.add(new MerchantRecipe(emerald, stack));
-				} else {
+				}
+
+				else {
+					recipe.add(new MerchantRecipe(stack, emerald));
+				}
+			}
+		}
+	}
+
+	// 魔法交換
+	public class MagicRareTrade implements ITradeList {
+
+		@Nullable
+		private final PriceInfo info;
+		private final List<SMTradeInit> data;
+
+		public MagicRareTrade(List<SMTradeInit> list, @Nullable PriceInfo priceInfo) {
+			this.info = priceInfo;
+			this.data = list;
+		}
+
+		@Override
+		public void addMerchantRecipe(IMerchant merchant, MerchantRecipeList recipe, Random rand) {
+
+			if (this.data != null && !this.data.isEmpty()) {
+
+				int amount = this.info != null ? this.info.getPrice(rand) : 1;
+
+				int listSize = this.data.size();
+				SMTradeInit trade = this.data.get(rand.nextInt(listSize));
+				ItemStack stack = trade.stack;
+				amount += trade.price;
+				ItemStack emerald = new ItemStack(ItemInit.mf_magiabottle, amount);
+
+				if (trade.type == TradeType.BUY) {
+					recipe.add(new MerchantRecipe(emerald, stack));
+				}
+
+				else {
 					recipe.add(new MerchantRecipe(stack, emerald));
 				}
 			}

@@ -5,14 +5,15 @@ import java.util.List;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleMagicDig;
+import sweetmagic.init.ItemInit;
 import sweetmagic.util.ParticleHelper;
 
 public class EntityExplosionMagic extends EntityBaseMagicShot {
@@ -31,6 +32,10 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 	public EntityExplosionMagic(World world, EntityLivingBase thrower, ItemStack stack, int data) {
 		super(world, thrower, stack);
 		this.data = data;
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 
 		switch (this.data) {
 		case 0:
@@ -59,8 +64,8 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 	// パーティクルスポーン
 	@Override
 	protected void spawnParticle() {
-		Particle effect = new ParticleMagicDig.Factory().createParticle(0, this.world, this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
-		FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+		Particle effect = ParticleMagicDig.create(this.world, this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
+		this.getParticle().addEffect(effect);
 	}
 
 	// えんちちーに当たった時の処理
@@ -87,7 +92,9 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 
 	public void createExplo (float explo) {
 
-		List<EntityLivingBase> list = this.getEntityList(explo, explo, explo);
+		explo = this.isRange ? explo * 1.33F : explo;
+
+		List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, explo, explo, explo);
 		if (list.isEmpty()) { return; }
 
 		boolean isIMob = this.getThrower() instanceof IMob;
@@ -104,6 +111,6 @@ public class EntityExplosionMagic extends EntityBaseMagicShot {
 		}
 
 		this.playSound(this, SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 1F / (this.rand.nextFloat() * 0.2F + 0.9F));
-		ParticleHelper.spawnBoneMeal(this.world, new BlockPos(this.posX, this.posY + 0.5, this.posZ), EnumParticleTypes.EXPLOSION_HUGE);
+		ParticleHelper.spawnParticle(this.world, new BlockPos(this.posX, this.posY + 0.5, this.posZ), EnumParticleTypes.EXPLOSION_HUGE);
 	}
 }

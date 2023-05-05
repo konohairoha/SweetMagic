@@ -7,12 +7,13 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntitySpider;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import sweetmagic.init.ItemInit;
+import sweetmagic.config.SMConfig;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 
 public class EntityArchSpider extends EntitySpider implements ISMMob {
@@ -39,8 +40,8 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 
 			// リフレッシュエフェクトが付いてるなら
 			if (living.isPotionActive(PotionInit.refresh_effect)) {
-				entity.attackEntityFrom(DamageSource.MAGIC, 4F);
-				entity.hurtResistantTime = 0;
+				living.attackEntityFrom(DamageSource.MAGIC, 4F);
+				living.hurtResistantTime = 0;
 			}
 
 			else {
@@ -57,13 +58,10 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
     	return this.getMaxHealth() >= 40F;
     }
 
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.poison_bottle, this.rand.nextInt(2) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-		}
-    }
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.ARCHSPIDER;
+	}
 
 	public boolean attackEntityFrom(DamageSource src, float amount) {
 
@@ -99,6 +97,6 @@ public class EntityArchSpider extends EntitySpider implements ISMMob {
 
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.canSpawn(this.world, this, 3);
+		return super.getCanSpawnHere() && this.canSpawn(this.world, this, SMConfig.spawnDay);
 	}
 }

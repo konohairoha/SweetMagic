@@ -41,6 +41,7 @@ public class ModelHora extends ModelBiped {
 		this.bipedRightArm.rotateAngleX += MathHelper.sin(ageTick * 0.067F) * 0.05F;
 		this.bipedLeftArm.rotateAngleX -= MathHelper.sin(ageTick * 0.067F) * 0.05F;
 
+		if (entity.isNonBoss()) { return; }
         AbstractIllager.IllagerArmPose armpose = ((AbstractIllager)entity).getArmPose();
 
 		if (armpose == AbstractIllager.IllagerArmPose.ATTACKING) {

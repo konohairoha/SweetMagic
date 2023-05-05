@@ -12,7 +12,6 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.EventUtil;
@@ -54,8 +53,8 @@ public class EntityBlackHole extends EntityGravityMagic {
 			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + moX * i * 0.25F);
 			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5F + moY * i * 0.25F);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + moZ * i * 0.25F);
-			Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z, 48);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z, 48);
+			this.getParticle().addEffect(effect);
 		}
 	}
 
@@ -88,7 +87,7 @@ public class EntityBlackHole extends EntityGravityMagic {
 
 			DamageSource src = SMDamage.flostDamage;
 			double range = Math.min(16D, 2.5D + this.getWandLevel() * 0.5D);
-			List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
+			List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 			for (EntityLivingBase entity : entityList) {
 
@@ -128,8 +127,8 @@ public class EntityBlackHole extends EntityGravityMagic {
 						float y = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.15F;
 						float z = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.15F;
 
-						Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-						FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+						Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z);
+						this.getParticle().addEffect(effect);
 					}
 				}
 
@@ -180,7 +179,7 @@ public class EntityBlackHole extends EntityGravityMagic {
 
 		int level = this.getWandLevel();
 		double range = Math.min(16D, 2.5D + this.getWandLevel() * 0.35D);
-		List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
 

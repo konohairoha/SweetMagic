@@ -68,7 +68,9 @@ public class EntityFireMagic extends EntityBaseMagicShot {
 
 		if (PlayerHelper.isThowerPlayer(living, this.getThrower())) {
 			living.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 60 * (level + 1), 0));
-		} else {
+		}
+
+		else {
 			living.setFire(3 * (level + 1));
 		}
 
@@ -79,7 +81,7 @@ public class EntityFireMagic extends EntityBaseMagicShot {
 			float dame = living.getActivePotionEffect(PotionInit.frosty).getDuration() / 80 + 1;
 			living.removePotionEffect(PotionInit.frosty);
 			this.playSound(SoundEvents.ENTITY_GENERIC_EXTINGUISH_FIRE, 1F, 1F);
-			ParticleHelper.spawnBoneMeal(this.world, this.getPosition(), EnumParticleTypes.CLOUD);
+			ParticleHelper.spawnParticle(this.world, this.getPosition(), EnumParticleTypes.CLOUD);
 
 			// 射撃者がプレイヤーなら
 			if (PlayerHelper.isPlayer(this.getThrower())) {

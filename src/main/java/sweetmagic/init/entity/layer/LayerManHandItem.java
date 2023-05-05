@@ -11,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHandSide;
 
 public class LayerManHandItem implements LayerRenderer<EntityLivingBase> {
+
 	protected final RenderLivingBase<?> render;
 
 	public LayerManHandItem(RenderLivingBase<?> render) {

@@ -8,7 +8,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleIceCrystal;
 import sweetmagic.client.particle.ParticleMagicFrost;
 import sweetmagic.event.SMSoundEvent;
@@ -35,7 +34,7 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 	protected void inGround(RayTraceResult result) {
 
 		if (this.motionX == 0 || this.motionZ == 0) {
-			this.rangeAttack(1.5D);
+			this.rangeAttack(1D);
 		}
 
 		this.setEntityDead();
@@ -57,8 +56,8 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
 				float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-				Particle effect = new ParticleMagicFrost.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+				Particle effect = ParticleMagicFrost.create(this.world, f1, f2, f3, x, y, z);
+				this.getParticle().addEffect(effect);
 			}
 		}
 
@@ -67,8 +66,8 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat());
 			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat());
-			Particle effect = new ParticleIceCrystal.Factory().createParticle(0, this.world, f1, f2, f3, 0, 0, 0);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			Particle effect = ParticleIceCrystal.create(this.world, f1, f2, f3, 0, 0, 0);
+			this.getParticle().addEffect(effect);
 		}
 	}
 
@@ -86,14 +85,14 @@ public class EntityFrostMagic extends EntityBaseMagicShot {
 		living.hurtResistantTime = 0;
 
 		if (this.motionX == 0 || this.motionZ == 0) {
-			this.rangeAttack(0.75D);
+			this.rangeAttack(0.5D);
 		}
 	}
 
 	public void rangeAttack (double range) {
 
-		List<EntityLivingBase> list = this.getEntityList(range, range / 2, range);
-		float dame = (float) range;
+		List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
+		float dame = (float) this.getDamage() * 0.2F;
 
 		for (EntityLivingBase entity : list ) {
 

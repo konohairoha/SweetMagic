@@ -10,8 +10,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class ModelPixelVex extends ModelBiped {
 
-	protected ModelRenderer leftWing;
-	protected ModelRenderer rightWing;
+	private ModelRenderer leftWing;
+	private ModelRenderer rightWing;
 
 	public ModelPixelVex() {
 		this(0.0F);

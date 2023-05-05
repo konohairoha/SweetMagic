@@ -6,6 +6,7 @@ import java.util.Random;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
@@ -16,6 +17,7 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.client.particle.ParticleEntityMagicLight;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.ParticleHelper;
 
@@ -32,6 +34,10 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 
 	public EntityShinigFlare(World world, EntityLivingBase thrower, ItemStack stack) {
 		super(world, thrower, stack);
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 	}
 
 	// 地面についたときの処理
@@ -62,8 +68,8 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 
 				this.world.spawnParticle(EnumParticleTypes.FLAME, x, this.posY, z, f1, f2, f3);
 
-				Particle effect = new ParticleEntityMagicLight.Factory().createParticle(0, this.world, x, this.posY, z, f1, f2, f3);
-				ParticleHelper.spawnParticl().addEffect(effect);
+				Particle effect = ParticleEntityMagicLight.create(this.world, x, this.posY, z, f1, f2, f3);
+				this.getParticle().addEffect(effect);
 			}
 		}
 
@@ -87,8 +93,8 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
 			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-			Particle effect = new ParticleEntityMagicLight.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-			ParticleHelper.spawnParticl().addEffect(effect);
+			Particle effect = ParticleEntityMagicLight.create(this.world, f1, f2, f3, x, y, z);
+			this.getParticle().addEffect(effect);
 		}
 
 		for (int i = 0; i < 4; i++) {
@@ -114,8 +120,8 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 
 		addDamage += this.getDamage() / 2;
 		int level = this.getWandLevel();
-		double range = 5D + IWand.getWand(this.stack).getLevel(this.stack) * 0.75;
-		List<EntityLivingBase> entityList = this.getEntityList(range, range * 0.5, range);
+		double range = (5D + IWand.getWand(this.stack).getLevel(this.stack) * 0.75D) * (this.isRange ? 1.33D : 1D);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
 
@@ -125,9 +131,9 @@ public class EntityShinigFlare extends EntityBaseMagicShot {
 			entity.hurtResistantTime = 0;
 			this.checkShadow(entity);
 
-			BlockPos pos = new BlockPos(entity);
-			ParticleHelper.spawnBoneMeal(this.world, pos, EnumParticleTypes.END_ROD);
-			ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.END_ROD);
+			BlockPos pos = entity.getPosition();
+			ParticleHelper.spawnParticle(this.world, pos, EnumParticleTypes.END_ROD);
+			ParticleHelper.spawnParticle(this.world, pos.up(), EnumParticleTypes.END_ROD);
 
 			// バフなら
 			if (entity.isNonBoss()) {

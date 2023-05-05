@@ -4,12 +4,13 @@ import java.util.List;
 
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.PlayerHelper;
 
@@ -27,6 +28,10 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 
 	public EntityGravityMagic(World world, EntityLivingBase thrower, ItemStack stack) {
 		super(world, thrower, stack);
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 	}
 
 	// 地面についたときの処理
@@ -38,7 +43,9 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 
 			this.ticksInAir = 0;
 			this.tickTime++;
-			List<EntityLivingBase> list = this.getEntityList(this.range, this.range * 0.5D, this.range);
+			double range = this.isRange ? this.range * 1.33D : this.range;
+
+			List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 			for (EntityLivingBase ent : list) {
 
@@ -53,8 +60,8 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 			if (this.tickTime > 12) {
 
 				float power = this.range == 3 ? 0.5F : 0.825F;
-				float dame = 1F + power * this.getWandLevel();
-				List<EntityLivingBase> entityList = this.getEntityList(this.range, this.range * 0.5D, this.range);
+				float dame =  power * this.getWandLevel() + (this.isRange ? 8F : 1F);
+				List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 				for (EntityLivingBase ent : entityList) {
 
@@ -111,8 +118,8 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 				float ySpeed = -randY * 0.075F;
 				float zSpeed = -randZ * 0.075F;
 
-				Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, x, y, z, xSpeed, ySpeed, zSpeed);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+				Particle effect = ParticleNomal.create(this.world, x, y, z, xSpeed, ySpeed, zSpeed);
+				this.getParticle().addEffect(effect);
 			}
 		}
 	}
@@ -123,13 +130,13 @@ public class EntityGravityMagic extends EntityBaseMagicShot {
 
 		for (int i = 0; i < 6; i++) {
 			float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
-			float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
+			float f2 = (float) (this.posY - 0.75F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 			float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
 			float x = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 			float y = (this.rand.nextFloat() + this.rand.nextFloat()) * 0.15F;
 			float z = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
-			Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z);
+			this.getParticle().addEffect(effect);
 		}
 	}
 

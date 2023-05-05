@@ -5,7 +5,6 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -22,7 +21,6 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.util.DamageSource;
@@ -30,15 +28,14 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import sweetmagic.init.ItemInit;
+import sweetmagic.config.SMConfig;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBlazeCyclone;
 
@@ -46,10 +43,10 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
     private float heightOffset = 0.5F;
     private int heightOffsetUpdateTime;
-    public int tickTime = 0;
-    public int randTime = 0;
-    public int fixedTime = 800;
-    public boolean tempest = false;
+    private int tickTime = 0;
+    private int randTime = 0;
+    private int fixedTime = 800;
+    private boolean tempest = false;
 
 	public EntityBlazeTempest(World world) {
 		super(world);
@@ -127,7 +124,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
 			this.tickTime = 0;
 
-			if (this.isDayElapse(this.world, 5)) { return; }
+			if (!this.isDayElapse(this.world, 10) && this.getStrength() != 0) { return; }
 			this.randTime = this.rand.nextInt(this.fixedTime);
 
 			// 暴風攻撃
@@ -148,12 +145,13 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 		float dame = 3F;
 		if (this.isTempest()) { dame *= 1.5F; }
 
-		List<Entity> list = this.world.getEntitiesWithinAABB(Entity.class, this.getEntityBoundingBox().grow(10D, 6D, 10D));
 		Vec3d p = new Vec3d(this.posX, this.posY, this.posZ);
+		List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, this, 7.5D, 4.5D, 7.5D);
 
-		for (Entity entity : list ) {
+		for (EntityLivingBase entity : list) {
 
-			if (entity instanceof ISMMob || entity instanceof EntityBlazeCyclone) { continue; }
+			// 吹き飛ばし耐性が付いていたら飛ばさない
+			if (entity instanceof ISMMob || entity.isPotionActive(PotionInit.resistance_blow)) { continue; }
 
 			Vec3d t = new Vec3d(entity.posX, entity.posY, entity.posZ);
 			Vec3d r = new Vec3d(t.x - p.x, t.y - p.y, t.z - p.z);
@@ -162,12 +160,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			entity.motionY += r.y ;
 			entity.motionZ += r.z ;
 
-			if (!(entity instanceof IMob) && entity instanceof EntityLivingBase) {
-
-				// 吹き飛ばし耐性が付いていたら飛ばさない
-				if (((EntityLivingBase) entity).isPotionActive(PotionInit.resistance_blow)) {
-					continue;
-				}
+			if (!(entity instanceof IMob)) {
 
 				entity.attackEntityFrom(DamageSource.MAGIC, dame);
 				entity.hurtResistantTime = 0;
@@ -188,7 +181,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			world.spawnParticle(EnumParticleTypes.SWEEP_ATTACK,
 				entity.posX + (rand.nextDouble() - 0.5D) * entity.width,
 				entity.posY + rand.nextDouble() * entity.height,
-				entity.posZ + (rand.nextDouble() - 0.5D) * entity.width, 0.0D, 0.0D, 0.0D);
+				entity.posZ + (rand.nextDouble() - 0.5D) * entity.width, 0D, 0D, 0D);
 		}
 	}
 
@@ -196,12 +189,10 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
     	return this.getMaxHealth() >= 30F;
     }
 
-	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.tiny_feather, this.rand.nextInt(2) + 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-		}
+
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.BLAZETEMPEST;
 	}
 
 	protected void updateAITasks() {
@@ -210,13 +201,12 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
 		if (this.heightOffsetUpdateTime <= 0) {
 			this.heightOffsetUpdateTime = 100;
-			this.heightOffset = 0.5F + (float) this.rand.nextGaussian() * 3.0F;
+			this.heightOffset = 0.5F + (float) this.rand.nextGaussian() * 3F;
 		}
 
 		EntityLivingBase entity = this.getAttackTarget();
 
-		if (entity != null && entity.posY + (double) entity.getEyeHeight() > this.posY
-				+ (double) this.getEyeHeight() + (double) this.heightOffset) {
+		if (entity != null && entity.posY + (double) entity.getEyeHeight() > this.posY + (double) this.getEyeHeight() + (double) this.heightOffset) {
 			this.motionY += (0.30000001192092896D - this.motionY) * 0.30000001192092896D;
 			this.isAirBorne = true;
 		}
@@ -226,26 +216,17 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
     public boolean attackEntityFrom(DamageSource src, float amount) {
 
-    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) {
-    		return false;
-		}
+    	if (this.isAtterckerSMMob(src) && !this.isMindControl(this)) { return false; }
 
 		// ダメージ倍処理
 		amount = this.getDamageAmount(this.world , src, amount);
-
 		return super.attackEntityFrom(src, amount);
 	}
 
-	public void fall(float distance, float damageMultiplier) {
-	}
+	public void fall(float dis, float damage) { }
 
 	public boolean isBurning() {
 		return this.isCharged();
-	}
-
-	@Nullable
-	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_BLAZE;
 	}
 
 	public boolean isCharged() {
@@ -255,7 +236,7 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 	// モブスポーン条件
 	@Override
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.canSpawn(this.world, this, 3);
+		return super.getCanSpawnHere() && this.canSpawn(this.world, this, SMConfig.spawnDay);
 	}
 
 	public void writeEntityToNBT(NBTTagCompound tags) {
@@ -270,14 +251,14 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 
 	public class AIFireballAttack extends EntityAIBase {
 
-		public final EntityBlazeTempest blaze;
-		public int attackStep;
-		public int attackTime;
-		public World world;
-		public Random rand;
+		private final EntityBlazeTempest blaze;
+		private int attackStep;
+		private int attackTime;
+		private World world;
+		private Random rand;
 
-		public AIFireballAttack(EntityBlazeTempest blazeIn) {
-			this.blaze = blazeIn;
+		public AIFireballAttack(EntityBlazeTempest blaze) {
+			this.blaze = blaze;
 			this.world = this.blaze.world;
 			this.rand = this.world.rand;
 			this.setMutexBits(3);
@@ -300,51 +281,60 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 			EntityLivingBase entity = this.blaze.getAttackTarget();
 			double d0 = this.blaze.getDistanceSq(entity);
 
-			if (d0 < 4.0D) {
+			if (d0 < 4D) {
 				if (this.attackTime <= 0) {
 					this.attackTime = 16;
 					this.blaze.attackEntityAsMob(entity);
 				}
 
-				this.blaze.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, 1.0D);
-			} else if (d0 < this.getFollowDistance() * this.getFollowDistance()) {
+				this.blaze.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, 1D);
+			}
+
+			else if (d0 < this.getFollowDistance() * this.getFollowDistance()) {
+
 				double d1 = entity.posX - this.blaze.posX;
-				double d2 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2.0F)
-						- (this.blaze.posY + (double) (this.blaze.height / 2.0F));
+				double d2 = entity.getEntityBoundingBox().minY + (double) (entity.height / 2F) - (this.blaze.posY + (double) (this.blaze.height / 2F));
 				double d3 = entity.posZ - this.blaze.posZ;
 
 				if (this.attackTime <= 0) {
+
 					++this.attackStep;
 
 					if (this.attackStep == 1) {
 						this.attackTime = 40;
-					} else if (this.attackStep <= 5) {
+					}
+
+					else if (this.attackStep <= 5) {
 						this.attackTime = 6;
-					} else {
+					}
+
+					else {
 						this.attackTime = 70;
 						this.attackStep = 0;
 					}
 
 					if (this.attackStep > 1) {
+
 						float f = MathHelper.sqrt(MathHelper.sqrt(d0)) * 0.5F;
-						this.blaze.world.playEvent((EntityPlayer) null, 1018,
-								new BlockPos((int) this.blaze.posX, (int) this.blaze.posY, (int) this.blaze.posZ), 0);
+						this.world.playEvent(null, 1018, this.blaze.getPosition(), 0);
 
 						if (this.blaze.isTempest() ) {
 
 							EntityBlazeCyclone fireball[] = new EntityBlazeCyclone[4];
                             for (int i = 0; i < fireball.length; ++i) {
 
-                				d1 *= rand.nextFloat() * 1.15;
-                				d2 *= rand.nextFloat() * 1.15;
-                				d3 *= rand.nextFloat() * 1.15;
-                            	fireball[i] = new EntityBlazeCyclone(this.world, this.blaze, d1 + this.blaze.getRNG().nextGaussian() * (double)f, d2, d3 + this.blaze.getRNG().nextGaussian() * (double)f);
+                				d1 *= this.rand.nextFloat() * 1.15F;
+                				d2 *= this.rand.nextFloat() * 1.15F;
+                				d3 *= this.rand.nextFloat() * 1.15F;
+                            	fireball[i] = new EntityBlazeCyclone(this.world, this.blaze, d1 + this.blaze.getRNG().nextGaussian() * (double)f, d2, d3 + this.blaze.getRNG().nextGaussian() * (double) f);
                             	fireball[i].posY = this.blaze.posY + (double)(this.blaze.height / 2.0F) + 0.5D;
                                 this.blaze.world.spawnEntity(fireball[i]);
                             }
-						} else {
+						}
+
+						else {
 							for (int i = 0; i < 1; ++i) {
-								EntityBlazeCyclone cyclone = new EntityBlazeCyclone(this.world, this.blaze, d1 + this.blaze.getRNG().nextGaussian() * (double)f, d2, d3 + this.blaze.getRNG().nextGaussian() * (double)f);
+								EntityBlazeCyclone cyclone = new EntityBlazeCyclone(this.world, this.blaze, d1 + this.blaze.getRNG().nextGaussian() * (double)f, d2, d3 + this.blaze.getRNG().nextGaussian() * (double) f);
 	                            cyclone.posY = this.blaze.posY + (double)(this.blaze.height / 2.0F) + 0.5D;
 	                            this.world.spawnEntity(cyclone);
 							}
@@ -353,7 +343,9 @@ public class EntityBlazeTempest extends EntityMob implements ISMMob {
 				}
 
 				this.blaze.getLookHelper().setLookPositionWithEntity(entity, 10.0F, 10.0F);
-			} else {
+			}
+
+			else {
 				this.blaze.getNavigator().clearPath();
 				this.blaze.getMoveHelper().setMoveTo(entity.posX, entity.posY, entity.posZ, 1.0D);
 			}

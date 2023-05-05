@@ -1,6 +1,7 @@
 package sweetmagic.init.entity.projectile;
 
-import com.google.common.collect.Lists;
+import java.util.ArrayList;
+import java.util.List;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -8,7 +9,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
@@ -17,15 +18,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
-import sweetmagic.api.iitem.IWand;
 import sweetmagic.client.particle.ParticleMagicDig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.util.EventUtil;
-import sweetmagic.util.PlayerHelper;
+import sweetmagic.util.WorldHelper;
 
 public class EntityDigMagic extends EntityBaseMagicShot {
+
+	private static final IBlockState AIR = Blocks.AIR.getDefaultState();
 
 	public EntityDigMagic(World world) {
 		super(world);
@@ -52,7 +53,12 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	@Override
 	protected void inGround(RayTraceResult result) {
 
-		if (this.world.isRemote || !PlayerHelper.isPlayer(this.thrower) || this.getThrower().isPotionActive(PotionInit.breakblock)) { return; }
+		if (this.world.isRemote) { return; }
+
+		if (this.getThrower() == null || !this.isPlayerThrower || this.getThrower().isPotionActive(PotionInit.breakblock)) {
+			this.setEntityDead();
+			return;
+		}
 
 		try {
 
@@ -62,14 +68,20 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 			BlockPos pos = result.getBlockPos();
 			IBlockState state = this.world.getBlockState(pos);
 			Material material = state.getMaterial();
-			boolean nearDrop = IWand.getWand(this.stack).getLevel(this.stack) >= 3;
+			EntityPlayer player = (EntityPlayer) this.getThrower();
+			int luck = player.isPotionActive(MobEffects.LUCK) ? 3 : 0;
+
+			//リストの作成（めっちゃ大事）
+			List<ItemStack> drop = new ArrayList<>();
 
 			// 1ブロック破壊
 			if (this.data == 0) {
 
 				// 破壊可能なブロックかどうか
 				if (this.canBreakBlock(state.getBlock(), material)) { return; }
-				this.breakBlock(pos, nearDrop);
+
+				drop.addAll(WorldHelper.getBlockDrops(this.world, player, state, state.getBlock(), pos, false, luck));
+				this.breakBlock(pos);
 			}
 
 			// 範囲破壊
@@ -99,10 +111,13 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	            }
 
 				for (BlockPos p : BlockPos.getAllInBox(pos.add(-area + xa, -area + ya, -area + za), pos.add(area + xa, area + ya, area + za))) {
+
 					IBlockState target = world.getBlockState(p);
 					Material mate2 = state.getMaterial();
 					if (this.canBreakBlock(target.getBlock(), mate2)) { continue; }
-					this.breakBlock(p, nearDrop);
+
+					drop.addAll(WorldHelper.getBlockDrops(this.world, player, target, target.getBlock(), p, false, luck));
+					this.breakBlock(p);
 				}
 			}
 
@@ -164,15 +179,22 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 
 					Material mate2 = state.getMaterial();
 					if (this.canBreakBlock(target.getBlock(), mate2)) { continue; }
-					this.breakBlock(p, nearDrop);
-				}
 
+					drop.addAll(WorldHelper.getBlockDrops(this.world, player, target, target.getBlock(), p, false, luck));
+					this.breakBlock(p);
+				}
 			}
 
 			// 経験値追加処理
 			this.addExp();
 
-		} catch (Throwable e) {
+			// リストに入れたアイテムをドロップさせる
+			if (!this.world.isRemote) {
+				WorldHelper.createLootDrop(drop, world, player.posX, player.posY, player.posZ);
+			}
+		}
+
+		catch (Throwable e) {
 			this.setEntityDead();
 			return;
 		}
@@ -189,8 +211,8 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	// パーティクルスポーン
 	@Override
 	protected void spawnParticle() {
-		Particle effect = new ParticleMagicDig.Factory().createParticle(0,this. world, this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
-		FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+		Particle effect = ParticleMagicDig.create(this. world, this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ);
+		this.getParticle().addEffect(effect);
 	}
 
 	// えんちちーに当たった時の処理
@@ -220,27 +242,12 @@ public class EntityDigMagic extends EntityBaseMagicShot {
 	}
 
 	// ブロック破壊処理
-	public boolean breakBlock(BlockPos pos, boolean nearDrop) {
+	public void breakBlock(BlockPos pos) {
 
         IBlockState state = this.world.getBlockState(pos);
-        Block block = state.getBlock();
-		if (block == Blocks.AIR) { return false; }
+		if (state.getBlock() == Blocks.AIR) { return; }
 
 		this.world.playEvent(2001, pos, Block.getStateId(state));
-		BlockPos pos2 = nearDrop ? new BlockPos(this.thrower) : pos;
-
-		if (this.data == 2) {
-			if (!this.world.isRemote) {
-				for (ItemStack stack : Lists.newArrayList(new ItemStack(block, 1, block.getMetaFromState(state)))) {
-					this.world.spawnEntity(new EntityItem(this.world, pos2.getX(), pos2.getY(), pos2.getZ(), stack));
-				}
-			}
-		}
-
-		else {
-	        block.dropBlockAsItem(this.world, pos2, state, this.data);
-		}
-
-        return this.world.setBlockState(pos, Blocks.AIR.getDefaultState(), 3);
+        this.world.setBlockState(pos, AIR, 3);
     }
 }

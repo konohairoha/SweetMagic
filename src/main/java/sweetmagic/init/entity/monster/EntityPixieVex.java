@@ -1,6 +1,7 @@
 package sweetmagic.init.entity.monster;
 
 import java.util.List;
+import java.util.Random;
 
 import javax.annotation.Nullable;
 
@@ -28,6 +29,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -36,32 +38,30 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.client.particle.ParticleMagicFrost;
 import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.handlers.PacketHandler;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.item.sm.eitem.SMElement;
 import sweetmagic.packet.PlayerSoundPKT;
-import sweetmagic.packet.RemovePotion;
 import sweetmagic.util.PlayerHelper;
 import sweetmagic.util.SoundHelper;
 
 public class EntityPixieVex extends EntityMob  implements ISMMob {
 
-	public static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.<Byte> createKey(EntityPixieVex.class, DataSerializers.BYTE);
-    public static final DataParameter<Integer> DATA = EntityDataManager.<Integer>createKey(EntityPixieVex.class, DataSerializers.VARINT);
+	private static final DataParameter<Byte> VEX_FLAGS = EntityDataManager.<Byte> createKey(EntityPixieVex.class, DataSerializers.BYTE);
+	private static final DataParameter<Integer> DATA = EntityDataManager.<Integer>createKey(EntityPixieVex.class, DataSerializers.VARINT);
 	@Nullable
-	public BlockPos boundOrigin;
+	private BlockPos boundOrigin;
 	public EntityLivingBase targetEntity;
-	public SMElement ele;
-	public int tickTime = 0;
-	public int taskTIme = 0;
-	public boolean isVex = true;
+	private SMElement ele;
+	private int tickTime = 0;
+	private int taskTIme = 0;
+	private boolean isVex = true;
 
 	public EntityPixieVex(World world) {
 		super(world);
@@ -69,6 +69,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		this.moveHelper = new EntityPixieVex.AIMoveControl(this);
 		this.setSize(0.4F, 0.8F);
 		this.experienceValue = 100;
+		this.setNoGravity(true);
 	}
 
 	public void move(MoverType type, double x, double y, double z) {
@@ -86,7 +87,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
-		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(30.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(20.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(1.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 	}
@@ -104,7 +105,6 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 	public void onUpdate() {
 
 		super.onUpdate();
-		this.setNoGravity(true);
 
 		if (!this.isVex || !this.isRender()) { return; }
 
@@ -118,15 +118,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		}
 
 		EntityLivingBase entity = this.getAttackTarget();
-
-		if (entity != null) {
-			this.targetEntity = entity;
-		}
-
-		else {
-			this.targetEntity = null;
-		}
-
+		this.targetEntity = entity != null ? entity : null;
 		if (entity != null && this.ticksExisted % 300 != 0) { return; }
 
 		List<EntityPlayer> entityList = this.world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(24D, 6D, 24D));
@@ -161,15 +153,28 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		if (this.taskTIme % 160 != 0) { return; }
 
 		// リフレッシュエフェクトが付いてるなら剥がす
-		if (entity.isPotionActive(PotionInit.refresh_effect) && entity instanceof EntityPlayer &&
-				entity.getActivePotionEffect(PotionInit.refresh_effect).getAmplifier() == 0) {
+		if (entity.isPotionActive(PotionInit.refresh_effect) && entity instanceof EntityPlayer) {
 
-			entity.removeActivePotionEffect(PotionInit.refresh_effect);
-			PacketHandler.sendToClient(new RemovePotion(3));
+			PotionEffect effect = entity.getActivePotionEffect(PotionInit.refresh_effect);
+			int level = effect.getAmplifier();
+			int time = effect.getDuration();
 
-			// クライアント（プレイヤー）へ送りつける
-			if (entity instanceof EntityPlayerMP) {
-				PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_REMOVE, 1F, 0.33F), (EntityPlayerMP) entity);
+			// 30秒削る
+			time -= 600;
+			entity.removePotionEffect(PotionInit.refresh_effect);
+
+			// 時間が切れたら
+			if (time <= 0) {
+
+				// クライアント（プレイヤー）へ送りつける
+				if (entity instanceof EntityPlayerMP) {
+					PacketHandler.sendToPlayer(new PlayerSoundPKT(SoundHelper.S_BREAK, 1F, 1F), (EntityPlayerMP) entity);
+				}
+			}
+
+			// 時間が残ってるなら
+			else {
+				PlayerHelper.addPotion(entity, PotionInit.refresh_effect, time, level, false);
 			}
 		}
 
@@ -199,30 +204,31 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		float x = (float) (-this.motionX / 80);
 		float y = (float) (-this.motionY / 80);
 		float z = (float) (-this.motionZ / 80);
-
 		int data = 0;
 
 		try {
 			data = this.getData();
-		} catch (Throwable e) { }
+		}
+
+		catch (Throwable e) { }
 
 		switch (data) {
 		case 0:
 			for (int i = 0; i < 3; i++) {
-				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
-				float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
-				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-				Particle effect = new ParticleMagicFrost.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4F);
+				float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4F);
+				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4F);
+				Particle effect = ParticleMagicFrost.create(this.world, f1, f2, f3, x, y, z);
+				this.getParticle().addEffect(effect);
 			}
 			break;
 		case 1:
 			for (int i = 0; i < 3; i++) {
-				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
-				float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
-				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-				Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4F);
+				float f2 = (float) (this.posY + 0.5F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4F);
+				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4F);
+				Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z);
+				this.getParticle().addEffect(effect);
 			}
 			break;
 		case 2:
@@ -231,19 +237,21 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 				float f1 = (float) (this.posX - 0.5F + this.rand.nextFloat() + this.motionX * i / 4.0F);
 				float f2 = (float) (this.posY - 0.25F + this.rand.nextFloat() * 0.5 + this.motionY * i / 4.0D);
 				float f3 = (float) (this.posZ - 0.5F + this.rand.nextFloat() + this.motionZ * i / 4.0D);
-				Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z, 48);
-				FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+				Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z, 48);
+				this.getParticle().addEffect(effect);
 			}
 			break;
 		}
 	}
 
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.PIXIEVEX;
+	}
+
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
 		if (!this.world.isRemote) {
-			this.entityDropItem(new ItemStack(ItemInit.prizmium, this.rand.nextInt(2) + 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(5)), 0F);
-
 			if (this.rand.nextFloat() <= 0.01F) {
 				this.entityDropItem(new ItemStack(ItemInit.varrier_pendant, 1), 0F);
 			}
@@ -297,6 +305,11 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		}
 	}
 
+	// エーテルバリアーなどのエフェクトを表示するかどうか
+	public boolean isRenderEffect () {
+		return false;
+	}
+
 	public void writeEntityToNBT(NBTTagCompound tags) {
 		super.writeEntityToNBT(tags);
 
@@ -314,8 +327,8 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		return this.boundOrigin;
 	}
 
-	public void setBoundOrigin(@Nullable BlockPos boundOriginIn) {
-		this.boundOrigin = boundOriginIn;
+	public void setBoundOrigin(@Nullable BlockPos boundOrigin) {
+		this.boundOrigin = boundOrigin;
 	}
 
 	private boolean getVexFlag(int mask) {
@@ -324,7 +337,6 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 	}
 
 	private void setVexFlag(int mask, boolean value) {
-
 		int i = ((Byte) this.dataManager.get(VEX_FLAGS)).byteValue();
 		i = value ? (i | mask) : (i & ~mask);
 		this.dataManager.set(VEX_FLAGS, Byte.valueOf((byte) (i & 255)));
@@ -342,13 +354,8 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		return SoundEvents.ENTITY_VEX_DEATH;
 	}
 
-	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
+	protected SoundEvent getHurtSound(DamageSource src) {
 		return SoundEvents.ENTITY_VEX_HURT;
-	}
-
-	@Nullable
-	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_VEX;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -364,7 +371,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 		return 80;
 	}
 
-	protected void setEquipmentBasedOnDifficulty(DifficultyInstance difficulty) {
+	protected void setEquipmentBasedOnDifficulty(DifficultyInstance dif) {
 		this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Items.IRON_SWORD));
 		this.setDropChance(EntityEquipmentSlot.MAINHAND, 0.0F);
 	}
@@ -420,8 +427,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 				this.vex.motionZ += d2 / d3 * 0.05D * this.speed;
 
 				if (this.vex.getAttackTarget() == null) {
-					this.vex.rotationYaw = -((float) MathHelper.atan2(this.vex.motionX,
-							this.vex.motionZ)) * (180F / (float) Math.PI);
+					this.vex.rotationYaw = -((float) MathHelper.atan2(this.vex.motionX, this.vex.motionZ)) * (180F / (float) Math.PI);
 					this.vex.renderYawOffset = this.vex.rotationYaw;
 				}
 
@@ -437,7 +443,7 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 	public class AIMoveRandom extends EntityAIBase {
 
-		public EntityPixieVex vex = EntityPixieVex.this;
+		private final EntityPixieVex vex = EntityPixieVex.this;
 
 		public AIMoveRandom() {
 			this.setMutexBits(1);
@@ -461,17 +467,17 @@ public class EntityPixieVex extends EntityMob  implements ISMMob {
 
 			for (int i = 0; i < 3; ++i) {
 
-				BlockPos pos1 = pos.add(this.vex.rand.nextInt(15) - 7, this.vex.rand.nextInt(11) - 5, this.vex.rand.nextInt(15) - 7);
+				Random rand = this.vex.rand;
+				BlockPos pos1 = pos.add(rand.nextInt(15) - 7, rand.nextInt(11) - 5, rand.nextInt(15) - 7);
+				if (!this.vex.world.isAirBlock(pos1)) { continue; }
 
-				if (this.vex.world.isAirBlock(pos1)) {
-					this.vex.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
+				this.vex.moveHelper.setMoveTo((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 0.25D);
 
-					if (this.vex.getAttackTarget() == null) {
-						this.vex.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180.0F, 20.0F);
-					}
-
-					break;
+				if (this.vex.getAttackTarget() == null) {
+					this.vex.getLookHelper().setLookPosition((double) pos1.getX() + 0.5D, (double) pos1.getY() + 0.5D, (double) pos1.getZ() + 0.5D, 180F, 20F);
 				}
+
+				break;
 			}
 		}
 	}

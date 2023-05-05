@@ -5,14 +5,15 @@ import java.util.Random;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.IMob;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
-import sweetmagic.util.PlayerHelper;
 
 public class EntityCyclonMagic extends EntityBaseMagicShot {
 
@@ -27,21 +28,27 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 
 	public EntityCyclonMagic(World world, EntityLivingBase thrower, ItemStack stack) {
 		super(world, thrower, stack);
+
+		if (thrower instanceof EntityPlayer) {
+			this.isRange = this.hasAcce((EntityPlayer) thrower, ItemInit.extension_ring);
+		}
 	}
 
 	// 地面についたときの処理
 	@Override
 	protected void inGround(RayTraceResult result) {
 
-		List<EntityLivingBase> list = this.getEntityList(4D, 2.5D, 4D);
-		float dame = 0.5F + 0.5F * this.getWandLevel();
+		double range = this.isRange ? 6.25D : 4D;
 
 		// 風攻撃
-		this.cycloneAttack(list, dame);
+		List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
+		this.cycloneAttack(list, 0.5F + 0.5F * this.getWandLevel());
 		this.setEntityDead();
 
 		// 経験値追加処理
-		this.addExp();
+		if (this.isPlayerThrower) {
+			this.addExp();
+		}
 	}
 
 	// パーティクルスポーン
@@ -64,22 +71,22 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 	@Override
 	protected void entityHit(EntityLivingBase living) {
 
-		List<EntityLivingBase> list = this.getEntityList(5.75D, 3.5D, 5.75D);
-		float dame = 1.5F + 0.75F * this.getWandLevel();
+		double range = this.isRange ? 8.5D : 5.75D;
 
 		// 風攻撃
-		this.cycloneAttack(list, dame - 1F);
+		List<EntityLivingBase> list = this.getEntityList(EntityLivingBase.class, range, range, range);
+		this.cycloneAttack(list, 0.5F + (this.isRange ? 1F : 0.75F) * this.getWandLevel());
 
 		// 経験値追加処理
-		this.addExp();
+		if (this.isPlayerThrower) {
+			this.addExp();
+		}
 	}
 
 	// 風攻撃
 	public void cycloneAttack (List<EntityLivingBase> list, float dame) {
 
 		for (EntityLivingBase entity : list ) {
-
-//			if (!this.checkThrower(entity)) { continue; }
 
 			if (( !(this.getThrower() instanceof IMob) && this.getThrower() == entity ) ||
 			entity.isPotionActive(PotionInit.resistance_blow)) { continue; }
@@ -90,14 +97,20 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 
 			if (this.isHit) {
 				entity.motionX += r.x / 12;
-				entity.motionY += 1.75;
 				entity.motionZ += r.z / 12;
+
+				if (entity.isNonBoss()) {
+					entity.motionY += 1.75D;
+				}
 			}
 
 			else {
-				entity.motionX += r.x * 0.67;
-				entity.motionY += r.y * 0.67;
-				entity.motionZ += r.z * 0.67;
+				entity.motionX += r.x * 0.67D;
+				entity.motionZ += r.z * 0.67D;
+
+				if (entity.isNonBoss()) {
+					entity.motionY += r.y * 0.67D;
+				}
 			}
 
 			// 毒状態なら
@@ -113,7 +126,7 @@ public class EntityCyclonMagic extends EntityBaseMagicShot {
 			}
 
 			// 射撃者がプレイヤーなら
-			if (PlayerHelper.isPlayer(this.getThrower())) {
+			if (this.isPlayerThrower) {
 				this.attackDamage(entity, dame);
 				entity.hurtResistantTime = 0;
 				this.checkShadow(entity);

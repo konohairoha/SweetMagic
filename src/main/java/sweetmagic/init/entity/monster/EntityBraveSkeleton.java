@@ -36,11 +36,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.datafix.DataFixer;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -55,21 +57,23 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.event.entity.living.EnderTeleportEvent;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.ai.BraveBaseAI;
+import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityFlameNova;
 import sweetmagic.util.ParticleHelper;
 import sweetmagic.util.SMDamage;
-import sweetmagic.util.WorldHelper;
 
 public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob {
 
-	public int deathTicks = 0;
+	private int deathTicks = 0;
     public int spellTicks = 0;
-    protected int teleportDelay = 0;
+    private int teleportDelay = 0;
 	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), this.getColor(), BossInfo.Overlay.NOTCHED_10);
-	public boolean isCharge = false;
+	private static final DataParameter<Boolean> ISSPECIAL = EntityDataManager.<Boolean>createKey(EntityBraveSkeleton.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ISPOWERD = EntityDataManager.<Boolean>createKey(EntityBraveSkeleton.class, DataSerializers.BOOLEAN);
 	public int pX = (int) this.posX;
 	public int pY = (int) this.posY;
 	public int pZ = (int) this.posZ;
@@ -86,8 +90,30 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		return new TextComponentTranslation("entity.braveskeleton.name", new Object[0]);
 	}
 
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(ISSPECIAL, Boolean.valueOf(false));
+		this.dataManager.register(ISPOWERD, Boolean.valueOf(false));
+	}
+
 	public static void registerFixesWitherSkeleton(DataFixer fixer) {
 		EntityLiving.registerFixesMob(fixer, EntityBraveSkeleton.class);
+	}
+
+	public boolean getSpecial() {
+		return this.dataManager.get(ISSPECIAL);
+	}
+
+	public void setSpecial (boolean isSpecial) {
+		this.dataManager.set(ISSPECIAL, isSpecial);
+	}
+
+	public boolean getPowed() {
+		return this.dataManager.get(ISPOWERD);
+	}
+
+	public void setPowerd (boolean isSpecial) {
+		this.dataManager.set(ISPOWERD, isSpecial);
 	}
 
 	// えーあいの登録
@@ -129,6 +155,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
     public IEntityLivingData onInitialSpawn(DifficultyInstance dif, @Nullable IEntityLivingData living) {
 
 		living = super.onInitialSpawn(dif, living);
+		if (this.getPowed()) { return living; }
 
 		// 馬に乗せる
 		EntitySkeletonHorse horse = new EntitySkeletonHorse(this.world);
@@ -150,7 +177,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		this.setHardHealth(this);
 		this.addPotionEffect(new PotionEffect(PotionInit.resistance_blow, 99999, 0));
 
-    	return super.onInitialSpawn(dif, living);
+    	return living;
 	}
 
 	@Override
@@ -169,9 +196,6 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 			// ターゲットの取得していないなら終了
 			EntityLivingBase entity = this.getAttackTarget();
 			if (entity == null) { return; }
-
-			// 覇気
-			this.heroAttack();
 
 			// ブロック破壊
 			this.breakBlock();
@@ -224,8 +248,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	public void heroAttack() {
 
 		Vec3d p = new Vec3d(this.posX, this.posY, this.posZ);
-		AxisAlignedBB aabb = this.getEntityBoundingBox().grow(8F);
-		List<Entity> toAttack = this.world.getEntitiesWithinAABBExcludingEntity(this, aabb);
+		List<Entity> toAttack = this.getEntityList(Entity.class, this, 8D, 8D, 8D);
 
 		for (Entity target : toAttack) {
 
@@ -244,7 +267,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
         int y = MathHelper.floor(this.posY);
         int z = MathHelper.floor(this.posZ);
 
-		for (int y2 = 0; y2 <= 3; ++y2) {
+		for (int y2 = 1; y2 <= 3; ++y2) {
 			for (int z2 = -2; z2 <= 2; ++z2) {
 				for (int x2 = -2; x2 <= 2; ++x2) {
 
@@ -280,20 +303,18 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	}
 
 	public boolean teleportRandomly(Random rand) {
-		double x = this.pX + (rand.nextDouble() - 0.5) * 16;
-		double y = this.pY + (double) (rand.nextInt(12) - 4);
-		double z = this.pZ + (rand.nextDouble() - 0.5) * 16;
+		double x = this.pX + (rand.nextDouble() - 0.5) * 4;
+		double y = this.pY;
+		double z = this.pZ + (rand.nextDouble() - 0.5) * 4;
 		this.spawnParticle();
 		return this.teleportTo(x, y, z);
 	}
 
 	// エンティティに対してテレポート
 	public boolean teleportToEntity (Entity entity ) {
-		Vec3d vec3d = new Vec3d(this.posX - entity.posX, getEntityBoundingBox().minY + this.height / 2.0F - entity.posY + entity.getEyeHeight( ), this.posZ - entity.posZ);
-		vec3d = vec3d.normalize();
-		double targetX = this.posX + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.x * 16.0;
-		double targetY = this.posY + (this.rand.nextInt(8) + 2) - vec3d.y * 16.0;
-		double targetZ = this.posZ + (this.rand.nextDouble() - 0.5) * 8.0 - vec3d.z * 16.0;
+		double targetX = this.posX + (this.rand.nextDouble() - 0.5D) * 4D;
+		double targetY = this.posY;
+		double targetZ = this.posZ + (this.rand.nextDouble() - 0.5D) * 4D;
 		this.spawnParticle();
 		return this.teleportTo(targetX, targetY, targetZ);
 	}
@@ -301,7 +322,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	// テレポート実施
 	public boolean teleportTo(double x, double y, double z) {
 
-		if (this.isCharge) { return false; }
+		if (this.getSpecial()) { return false; }
 
 		EnderTeleportEvent event = new EnderTeleportEvent(this, x, y, z, 0);
 		if (MinecraftForge.EVENT_BUS.post(event)) { return false; }
@@ -317,7 +338,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	public void spawnParticle() {
 		for (int i = 0; i < 16; i++) {
 			float f1 = (float) this.posX - 0.5F + this.rand.nextFloat();
-			float f2 = (float) ((float) this.posY + 0.25F + this.rand.nextFloat() * 1.5);
+			float f2 = (float) this.posY + 0.25F + this.rand.nextFloat() * 1.5F;
 			float f3 = (float) this.posZ - 0.5F + this.rand.nextFloat();
 			this.world.spawnParticle(EnumParticleTypes.FLAME, f1, f2, f3, 0, 0, 0);
 		}
@@ -326,19 +347,41 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	// 射撃攻撃時
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distance) {
 
-		EntityArrow arrow = this.getArrow(distance);
-		if (this.getMainHand() instanceof ItemBow) {
-			arrow = ((ItemBow) this.getMainHand()) .customizeArrow(arrow);
-		}
+		boolean isPowerd = this.getPowed();
 
-		double d0 = target.posX - this.posX;
-		double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3.0F) - arrow.posY;
-		double d2 = target.posZ - this.posZ;
-		double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
-		arrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 0);
-		arrow.setDamage(10);
-		this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1.0F, 1.0F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
-		this.world.spawnEntity(arrow);
+		for (int i = 0; i < 8; i++) {
+
+			if (isPowerd) {
+
+				EntityBaseMagicShot entity = new EntityFlameNova(this.world, this, ItemStack.EMPTY);
+		        double x = target.posX - this.posX;
+		        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY + 1D;
+		        double z = target.posZ - this.posZ;
+		        double xz = (double)MathHelper.sqrt(x * x + z * z);
+				entity.shoot(x, y - xz * 0.015D, z,3F, 20);	// 射撃速度
+
+				entity.setDamage(entity.getDamage() + 12);
+				this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
+		        this.world.spawnEntity(entity);
+			}
+
+			else {
+
+				EntityArrow arrow = this.getArrow(distance);
+				if (this.getMainHand() instanceof ItemBow) {
+					arrow = ((ItemBow) this.getMainHand()) .customizeArrow(arrow);
+				}
+
+				double d0 = target.posX - this.posX;
+				double d1 = target.getEntityBoundingBox().minY + (double) (target.height / 3F) - arrow.posY;
+				double d2 = target.posZ - this.posZ;
+				double d3 = (double) MathHelper.sqrt(d0 * d0 + d2 * d2);
+				arrow.shoot(d0, d1 + d3 * 0.20000000298023224D, d2, 1.6F, 20);
+				arrow.setDamage(10);
+				this.playSound(SoundEvents.ENTITY_SKELETON_SHOOT, 1F, 1F / (this.getRNG().nextFloat() * 0.4F + 0.8F));
+				this.world.spawnEntity(arrow);
+			}
+		}
 	}
 
 	// 矢の能力設定
@@ -359,8 +402,12 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	@Override
 	public void onDeath(DamageSource cause) {
 		super.onDeath(cause);
-		this.deathTicks++;
-		if (!this.world.isRemote) {
+
+		if (this.isDethCancel(this)) {
+			this.deathTicks++;
+		}
+
+		if (!this.world.isRemote && !this.isDethCancel(this)) {
 
 			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(24) + 24), 0F);
 			this.dropItem(this.world, this, ItemInit.divine_crystal, this.rand.nextInt(8) + 6);
@@ -369,9 +416,15 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 			this.dropItem(this.world, this, ItemInit.mf_bottle, this.rand.nextInt(18) + 6);
 			this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, 16);
 			this.dropItem(this.world, this, ItemInit.mf_magiabottle, this.rand.nextInt(3) + 1);
+			this.dropItem(this.world, this, new ItemStack(BlockInit.figurine_bs));
+			this.dropItem(this.world, this, ItemInit.magic_deus_force, this.rand.nextInt(4) + 1);
+			this.dropItem(this.world, this, ItemInit.warrior_bracelet, 1);
 
-			if (this.rand.nextFloat() <= 0.5F) {
-				this.dropItem(this.world, this, ItemInit.warrior_bracelet, 1);
+			if (this.getPowed()) {
+				this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, this.rand.nextInt(16) + 8);
+				this.dropItem(this.world, this, ItemInit.deus_crystal, 1);
+				this.dropItem(this.world, this, ItemInit.magic_deus_force, this.rand.nextInt(8) + 4);
+				this.dropItem(this.world, this, ItemInit.magic_cosmic_force, this.rand.nextInt(4) + 2);
 			}
 		}
     }
@@ -397,12 +450,14 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getDisplayName());
 		}
+		this.setPowerd(tags.getBoolean("isPowerd"));
 	}
 
 	@Override
 	public void writeEntityToNBT(NBTTagCompound tags) {
 		super.writeEntityToNBT(tags);
 		tags.setInteger("SpellTicks", this.spellTicks);
+		tags.setBoolean("isPowerd", this.getPowed());
 	}
 
 	@Override
@@ -441,7 +496,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		// 離れすぎてたら近づく
 		if (d3 > 128D) {
 			double speed = this.isRiding() ? 2D : 3.5D;
-			Vec3d vec = this.findChargePoint(this, entity, 2.1);
+			Vec3d vec = this.findChargePoint(this, entity, 2.1D);
 			this.limbSwingAmount += 1.5;
 			double x = vec.x, y = vec.y, z = vec.z;
 			this.getLookHelper().setLookPosition(x, y - 1, z, 10.0F, this.getVerticalFaceSpeed());
@@ -459,7 +514,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 	}
 
 	public void travel(float strafe, float vertical, float forward) {
-		if (!this.isCharge) {
+		if (!this.getSpecial()) {
 			super.travel(strafe, vertical, forward);
 		}
 	}
@@ -472,8 +527,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
 			Vec3d p = new Vec3d(this.posX, this.posY, this.posZ);
 			DamageSource src = SMDamage.MagicDamage(this, this);
-			AxisAlignedBB aabb = this.getEntityBoundingBox().grow(7.5F);
-			List<Entity> toAttack = this.world.getEntitiesWithinAABBExcludingEntity(this, aabb);
+			List<Entity> toAttack = this.getEntityList(Entity.class, this, 7.5D, 7.5D, 7.5D);
 
 			for (Entity target : toAttack) {
 
@@ -512,8 +566,7 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
     	if (this.isHalfHelth()) {
 
-    		amount *= 0.75;
-        	amount = Math.min(amount, 15);
+        	amount = Math.min(amount * 0.75F, 17.5F);
 
     		if (this.rand.nextBoolean()) {
 				this.teleportRandomly(this.rand);
@@ -522,6 +575,10 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 
     	else {
         	amount = Math.min(amount, 20);
+    	}
+
+    	if (this.getPowed()) {
+    		amount = Math.min(amount, this.isHalfHelth() ? 10F : 15F);
     	}
 
 		return super.attackEntityFrom(src, amount);
@@ -659,11 +716,11 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 			if (this.spellWarmup % 4 == 0) {
 
 				BlockPos pos = new BlockPos(this.brave);
-				ParticleHelper.spawnBoneMeal(this.world, pos.up(), EnumParticleTypes.VILLAGER_ANGRY);
+				ParticleHelper.spawnParticle(this.world, pos.up(), EnumParticleTypes.VILLAGER_ANGRY);
 				Random rand = this.world.rand;
 				float chance = this.brave.isRender() ? 0.083F : 0.03F;
 
-				for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 0, -8), pos.add(8, 5, 8))) {
+				for (BlockPos p : BlockPos.getAllInBox(pos.add(-8, 1, -8), pos.add(8, 4, 8))) {
 					if (rand.nextFloat() > chance) { continue; }
 
 					ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.FLAME, 1, 0.075D);
@@ -674,15 +731,6 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 				}
 			}
 
-			if (this.spellWarmup < 40) {
-
-				double x = this.brave.posX;
-				double y = this.brave.posY;
-				double z = this.brave.posZ;
-
-				WorldHelper.suctionPlayer(this.world, this.brave.getEntityBoundingBox().grow(16), x, y, z, this.brave, 0.85D);
-			}
-
 			if (this.spellWarmup == 0) {
 				this.castSpell();
 				this.setCharge(false);
@@ -690,12 +738,20 @@ public class EntityBraveSkeleton  extends EntityWitherSkeleton implements ISMMob
 		}
 
 		protected void castSpell() {
-			this.world.createExplosion(this.brave, this.brave.posX, this.brave.posY, this.brave.posZ, 8F, false);
+
+			this.world.createExplosion(this.brave, this.brave.posX, this.brave.posY, this.brave.posZ, 7F, false);
 			BlockPos pos = new BlockPos(this.brave);
 
-			for (BlockPos p : BlockPos.getAllInBox(pos.add(-7, 0, -7), pos.add(7, 0, 7))) {
-				if (this.world.rand.nextInt(32) != 0) { continue; }
+			for (BlockPos p : BlockPos.getAllInBox(pos.add(-6D, 0, -6D), pos.add(6D, 0, 6D))) {
+				if (this.world.rand.nextFloat() >= 0.25F) { continue; }
 				ParticleHelper.spawnParticle(this.world, p, EnumParticleTypes.EXPLOSION_HUGE, 1, 0.075D);
+			}
+
+			List<EntityArrow> arrowList = this.brave.getEntityList(EntityArrow.class, this.brave, 32D, 32D, 32);
+
+			for (EntityArrow arrow : arrowList) {
+				this.world.createExplosion(this.brave, arrow.posX, arrow.posY, arrow.posZ, 1F, false);
+				arrow.setDead();
 			}
 		}
 	}

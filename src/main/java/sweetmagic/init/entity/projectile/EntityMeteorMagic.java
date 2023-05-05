@@ -5,7 +5,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.monster.IMob;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -15,7 +14,6 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import sweetmagic.init.PotionInit;
-import sweetmagic.util.PlayerHelper;
 
 public class EntityMeteorMagic extends EntityFireMagic {
 
@@ -50,8 +48,12 @@ public class EntityMeteorMagic extends EntityFireMagic {
 
 		super.entityHit(living);
 		this.playSound(living, SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 1F);
-		double range = 16D;
+		double range = 7.5D + this.getWandLevel() * 0.5D;
 		float dame = (float) this.getDamage() * 1.5F;
+
+		this.attackDamage(living, (float) this.getDamage() * 2F);
+		this.checkShadow(living);
+		living.hurtResistantTime = 0;
 
 		// 範囲攻撃
 		this.rangeAttack(range, dame);
@@ -63,7 +65,7 @@ public class EntityMeteorMagic extends EntityFireMagic {
 
 		this.world.playEvent(2001, this.getPosition(), MAGMA);
 		this.playSound(this, SoundEvents.ENTITY_GENERIC_EXPLODE, 3F, 1F);
-		double range = 10D;
+		double range = 4D + this.getWandLevel() * 0.35D;
 		float dame = (float) this.getDamage() * 1.125F;
 
 		// 範囲攻撃
@@ -110,17 +112,20 @@ public class EntityMeteorMagic extends EntityFireMagic {
 	// 範囲攻撃
 	public void rangeAttack (double range, float dame) {
 
+		range = this.isPlayerThrower ? range : range * 0.75D;
+
 		// 範囲内のえんちちーを取得
-		List<EntityLivingBase> entityList = this.getEntityList(range, range, range);
+		List<EntityLivingBase> entityList = this.getEntityList(EntityLivingBase.class, range, range, range);
 
 		for (EntityLivingBase entity : entityList) {
 
-			if (!(entity instanceof IMob)) { continue; }
+			if (!this.checkThrower(entity)) { continue; }
 
 			// プレイヤーが攻撃した時
-			if (PlayerHelper.isPlayer(this.getThrower())) {
+			if (this.isPlayerThrower) {
 				this.attackDamage(entity, dame);
 				this.checkShadow(entity);
+				entity.hurtResistantTime = 0;
 			}
 
 			// プレイヤー以外が攻撃したとき

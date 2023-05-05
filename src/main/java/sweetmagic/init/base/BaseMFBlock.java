@@ -90,12 +90,15 @@ public class BaseMFBlock extends BlockContainer {
 		// 受け取り側かどうか
 		if (mfBlock.getReceive()) {
 
+
 			// NBTがnull以外なら
 			BlockPos tilePos = new BlockPos(tags.getInteger("X"), tags.getInteger("Y"), tags.getInteger("Z"));
+			if (tilePos.getX() == pos.getX() && tilePos.getY() == pos.getY() && tilePos.getZ() == pos.getZ()) { return false;}
+
 			mfBlock.addPosList(tilePos);
 
 			if (!world.isRemote) {
-				player.sendMessage(new TextComponentTranslation("tip.posregi.name", new Object[0]));
+				player.sendMessage(new TextComponentTranslation("tip.posregi.name"));
 			}
 
 			else {
@@ -134,9 +137,10 @@ public class BaseMFBlock extends BlockContainer {
 		tags.setInteger("Z", pos.getZ());
 
 		player.playSound(SoundEvents.ENTITY_ENDERMEN_TELEPORT, 1, 1);
-		String tip = new TextComponentTranslation("tip.pos.name", new Object[0]).getFormattedText();
-		player.sendStatusMessage(new TextComponentTranslation(TextFormatting.GREEN + tip + " : " + " " +
-				tags.getInteger("X") + ", " + tags.getInteger("Y") + ", " + tags.getInteger("Z")), true);
+		String text = " : " + " " + tags.getInteger("X") + ", " + tags.getInteger("Y") + ", " + tags.getInteger("Z");
+		TextComponentTranslation tip = new TextComponentTranslation("tip.pos.name");
+
+		player.sendStatusMessage(tip.appendText(text), true);
 
 		return true;
 	}
@@ -158,18 +162,21 @@ public class BaseMFBlock extends BlockContainer {
 
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		TileMFBase tile = (TileMFBase) world.getTileEntity(pos);
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
-		NBTTagCompound tags = new NBTTagCompound();
+		ItemStack stack = this.setTagStack(tile, new ItemStack(this), new NBTTagCompound());
+		spawnAsEntity(world, pos, stack);
+		world.updateComparatorOutputLevel(pos, state.getBlock());
+        super.breakBlock(world, pos, state);
+    }
+
+	public ItemStack setTagStack (TileMFBase tile, ItemStack stack, NBTTagCompound tags) {
 		NBTTagCompound tileTags = tile.writeToNBT(new NBTTagCompound());
 		if (tileTags.hasKey(tile.POST)) { tileTags.removeTag(tile.POST); }
 		tags.setTag("BlockEntityTag", tileTags);
 		this.saveStackList(tags, tile.getList(), "ItemList");
 		stack.setTagCompound(tags);
 		stack.getTagCompound().setInteger("mf", tile.getMF());
-		spawnAsEntity(world, pos, stack);
-		world.updateComparatorOutputLevel(pos, state.getBlock());
-        super.breakBlock(world, pos, state);
-    }
+		return stack;
+	}
 
     // 向き変更対応
 	public boolean rotateBlock(World world, BlockPos pos, EnumFacing face) {
@@ -184,7 +191,6 @@ public class BaseMFBlock extends BlockContainer {
 
 		return flag;
 	}
-
 
 	// List<ItemStack>をnbt保存
 	public NBTTagCompound saveStackList (NBTTagCompound tag, List<ItemStack> stackList, String name) {
@@ -317,16 +323,21 @@ public class BaseMFBlock extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.tier.name") + " : " + this.getTier() ));
+		tooltip.add(I18n.format(TextFormatting.GREEN + ( this.getTip("tip.maxmf.name") + ": " + String.format("%,d", this.getMaxMF()) ) ));
+
 		NBTTagCompound tags = stack.getTagCompound();
 
 		if (tags != null) {
 			String mf = String.format("%,d", tags.getInteger("mf"));
-			tooltip.add(I18n.format(TextFormatting.GREEN + mf + "MF"));
+			tooltip.add(I18n.format(TextFormatting.WHITE + mf + TextFormatting.GREEN + "MF"));
 		}
 
 		else {
-			tooltip.add(I18n.format(TextFormatting.GREEN + "0MF"));
+			tooltip.add(I18n.format(TextFormatting.WHITE + "0" + TextFormatting.GREEN + "MF"));
 		}
+
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.enchantpower.name") + " : " + 1.0F ));
 	}
 
     @Override
@@ -355,5 +366,13 @@ public class BaseMFBlock extends BlockContainer {
 
 	public void openGui (World world, EntityPlayer player, BlockPos pos, int guiId) {
 		player.openGui(SweetMagicCore.INSTANCE, guiId, world, pos.getX(), pos.getY(), pos.getZ());
+	}
+
+	public int getMaxMF() {
+		return 10000;
+	}
+
+	public int getTier() {
+		return 1;
 	}
 }

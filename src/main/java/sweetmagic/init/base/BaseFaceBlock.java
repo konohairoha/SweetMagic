@@ -46,6 +46,7 @@ public class BaseFaceBlock extends BaseModelBlock {
 		return new BlockStateContainer(this, new IProperty[] { FACING });
 	}
 
+	// 向き変更対応
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
 	}

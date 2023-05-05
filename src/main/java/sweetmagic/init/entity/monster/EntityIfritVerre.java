@@ -1,5 +1,6 @@
 package sweetmagic.init.entity.monster;
 
+import java.util.Calendar;
 import java.util.Random;
 
 import javax.annotation.Nullable;
@@ -22,10 +23,15 @@ import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
@@ -40,9 +46,10 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import sweetmagic.event.SMSoundEvent;
+import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityExplosionMagic;
@@ -61,11 +68,15 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	private int coolTime = 0;
 	private int damageCoolTime = 0;
 	private int tickTime = 0;
+	private static final DataParameter<Boolean> ISSPECIAL = EntityDataManager.<Boolean>createKey(EntityIfritVerre.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> ISALLY = EntityDataManager.<Boolean>createKey(EntityIfritVerre.class, DataSerializers.BOOLEAN);
 	private final BossInfoServer bossInfo = new BossInfoServer(this.getBossName(), BossInfo.Color.RED, BossInfo.Overlay.NOTCHED_6);
+	private static final ItemStack WAND = new ItemStack(ItemInit.deuscrystal_wand_r);
 
 	public EntityIfritVerre(World world) {
 		super(world);
 		this.experienceValue = 120;
+		this.isImmuneToFire = true;
 		this.setSize(0.6F, 1.75F);
 	}
 
@@ -73,9 +84,37 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		EntityLiving.registerFixesMob(fixer, EntityIfritVerre.class);
 	}
 
+	protected void entityInit() {
+		super.entityInit();
+		this.dataManager.register(ISSPECIAL, Boolean.valueOf(false));
+		this.dataManager.register(ISALLY, Boolean.valueOf(false));
+	}
+
+	public void travel(float strafe, float vertical, float forward) {
+		if (!this.dataManager.get(this.ISSPECIAL)) {
+			super.travel(strafe, vertical, forward);
+		}
+	}
+
+	public boolean getSpecial () {
+		return this.dataManager.get(ISSPECIAL);
+	}
+
+	public void setSpecial (boolean isSpecial) {
+		this.dataManager.set(ISSPECIAL, isSpecial);
+	}
+
+	public boolean getAlly () {
+		return this.dataManager.get(ISALLY);
+	}
+
+	public void setAlly (boolean isAlly) {
+		this.dataManager.set(ISALLY, isAlly);
+	}
+
 	protected void initEntityAI() {
 		this.tasks.addTask(1, new EntityAISwimming(this));
-		this.tasks.addTask(2, new EntityAIAttackRanged(this, 1.0D, 60, 10.0F));
+		this.tasks.addTask(2, new EntityAIAttackRanged(this, 1.0D, 60, this.isUnique() ? 7.5F : 10F));
 		this.tasks.addTask(3, new EntityAIWanderAvoidWater(this, 1.0D));
 		this.tasks.addTask(4, new EntityAIMeteoRain(this, true));
 		this.tasks.addTask(5, new EntityAIWatchClosest(this, EntityPlayer.class, 8.0F));
@@ -114,7 +153,19 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	@Nullable
 	@Override
 	public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+
 		this.setHardHealth(this);
+
+		if (this.getItemStackFromSlot(EntityEquipmentSlot.HEAD).isEmpty()) {
+			Calendar calendar = this.world.getCurrentDate();
+
+			if (calendar.get(2) + 1 == 10 && calendar.get(5) == 31) {
+				this.setItemStackToSlot(EntityEquipmentSlot.HEAD,
+						new ItemStack(this.rand.nextFloat() < 0.1F ? Blocks.LIT_PUMPKIN : Blocks.PUMPKIN));
+				this.inventoryArmorDropChances[EntityEquipmentSlot.HEAD.getIndex()] = 0.0F;
+			}
+		}
+
 		return livingdata;
 	}
 
@@ -230,7 +281,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	protected void updateAITasks() {
 
 		super.updateAITasks();
-		if (!this.isUnique()) { return; }
+		if (!this.isUnique() || this.getAlly()) { return; }
 
 		this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
 	}
@@ -241,24 +292,42 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
     		return false;
 		}
 
-    	// ダメージソースチェック
-    	if (this.isUnique() && this.checkDamageSrc(src)) {
-    		this.heal(amount / 5);
-			ParticleHelper.spawnHeal(this, EnumParticleTypes.VILLAGER_HAPPY, 16, 1, 4);
+    	Entity srcEntity = src.getImmediateSource();
+
+    	if (this.getAlly() && srcEntity instanceof EntityPlayer) {
     		return false;
     	}
 
+    	boolean isUnique = this.isUnique() && !this.getAlly();
+
+    	// ボスかつ魔法ダメージ以外なら反射
+		if (isUnique && !this.isSMDamage(src) && srcEntity instanceof EntityLivingBase) {
+			EntityLivingBase entity = (EntityLivingBase) srcEntity;
+			entity.attackEntityFrom(DamageSource.MAGIC, amount * 1.5F);
+			this.addPotionEffect(new PotionEffect(PotionInit.wind_relief, 30, 0));
+			return false;
+		}
+
 		// ダメージ倍処理
-    	if (!this.isUnique()) {
+    	if (!isUnique) {
     		amount = this.getDamageAmount(this.world , src, amount);
+
+    		if (!this.isSMDamage(src)) {
+    			amount *= 0.75F;
+    		}
     	}
 
     	// ボス
     	else {
 
+			float health = this.getHealth();
+			float maxHealth = this.getMaxHealth();
+	    	boolean isRefresh = this.isPotionActive(PotionInit.refresh_effect);
+    		amount =  Math.min(amount, 15);
+
         	// 風魔法チェック
         	if (this.checkMagicCyclone(src)) {
-        		amount *= 0.1F;
+        		amount *= 0.05F;
         	}
 
         	// 光魔法チェック
@@ -266,18 +335,21 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
         		amount *= 0.5F;
         	}
 
-    		amount =  Math.min(amount, 15);
-    	}
+        	// 体力50%以上かつリフレッシュエフェクト中なら
+        	if (health >= (maxHealth * 0.5F) && isRefresh) {
+    			amount *= 0.85F;
+        	}
 
-    	// ダメージを跳ね返す
-    	if (src.getImmediateSource() instanceof EntityLivingBase) {
-    		EntityLivingBase entity = (EntityLivingBase) src.getImmediateSource();
-			entity.attackEntityFrom(DamageSource.MAGIC, amount / 2);
-    	}
+        	// 体力50%未満かつリフレッシュエフェクト中なら
+        	else if (isRefresh) {
+    			amount *= 0.67F;
+        	}
 
-		if (!this.isSMDamage(src)) {
-			amount *= this.isUnique() ? 0.25 : 0.75;
-		}
+        	// リフレッシュエフェクトが付いていないなら
+        	else {
+    			amount *= 0.5F;
+        	}
+    	}
 
 		this.damageCoolTime = 400;
 
@@ -295,55 +367,50 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
     	return entity instanceof EntityFireMagic || entity instanceof EntityExplosionMagic;
     }
 
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.WITCHMADAMEVERRE;
+	}
+
     // 死亡時
 	public void onDeath(DamageSource cause) {
 
 		if (!this.world.isRemote && !this.isDethCancel(this)) {
 
-			this.entityDropItem(new ItemStack(ItemInit.mysterious_page, this.rand.nextInt(2) + 1), 0.0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal, this.rand.nextInt(7) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.aether_crystal_shard, this.rand.nextInt(16)), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.blank_magic, this.rand.nextInt(2)), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.blank_page, this.rand.nextInt(4) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.witch_tears, this.rand.nextInt(2) + 1), 0F);
-			this.entityDropItem(new ItemStack(ItemInit.b_mf_bottle, this.rand.nextInt(2) + 1), 0F);
-
-			if (this.isUnique()) {
+			if (this.isUnique() && !this.getAlly()) {
 				this.dropItem(this.world, this, ItemInit.cosmic_crystal_shard, this.rand.nextInt(8) + 4);
 				this.dropItem(this.world, this, ItemInit.mf_magiabottle, 1);
 				this.dropItem(this.world, this, ItemInit.b_mf_magiabottle, this.rand.nextInt(8) + 1);
-
-				if (this.rand.nextBoolean()) {
-					this.dropItem(this.world, this, ItemInit.scorching_jewel, 1);
-				}
+				this.dropItem(this.world, this, new ItemStack(BlockInit.figurine_if));
+				this.dropItem(this.world, this, ItemInit.scorching_jewel, 1);
+				this.dropItem(this.world, this, ItemInit.magic_pure_force, this.rand.nextInt(4) + 1);
+				this.entityDropItem(new ItemStack(ItemInit.witch_cake, 1), 0F);
 			}
 
 			else if (this.rand.nextFloat() <= 0.01F) {
 				this.entityDropItem(new ItemStack(ItemInit.scorching_jewel, 1), 0F);
+			}
+
+			else if (this.rand.nextFloat() <= 0.05F) {
+				this.entityDropItem(new ItemStack(ItemInit.witch_cake, 1), 0F);
 			}
 		}
 
 		super.onDeath(cause);
 	}
 
-	@Nullable
-	protected ResourceLocation getLootTable() {
-		return LootTableList.ENTITIES_WITCH;
-	}
-
-	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
+	public void attackEntityWithRangedAttack(EntityLivingBase target, float dis) {
 
 		EntityBaseMagicShot entity = this.getShot();
 		if (entity == null) { return; }
 
         double x = target.posX - this.posX;
-        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY;
+        double y = target.getEntityBoundingBox().minY - target.height / 2  - this.posY + 1D;
         double z = target.posZ - this.posZ;
         double xz = (double)MathHelper.sqrt(x * x + z * z);
 		entity.shoot(x, y - xz * 0.015D, z, this.isUnique() ? 3F : 2F, 0);	// 射撃速度
 
-		int dame = this.isUnique() ? 8 : 4;
-		entity.setDamage(entity.getDamage() + dame);
+		entity.setDamage(entity.getDamage() + this.getDamage());
 		this.playSound(SoundEvents.ENTITY_BLAZE_SHOOT, 0.5F, 0.67F);
         this.world.spawnEntity(entity);
 	}
@@ -351,7 +418,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	public EntityBaseMagicShot getShot () {
 
 		EntityBaseMagicShot entity = null;
-		int rand = this.rand.nextInt(this.isUnique() ? 5 : 4);
+		int rand = this.rand.nextInt(this.isUnique() && !this.getAlly() ? 5 : 4);
 
 		switch (rand) {
 		case 0:
@@ -371,7 +438,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		case 4:
 			EntityBlaze blaze = new EntityBlaze(this.world);
 			blaze.setHealth(40F);
-			blaze.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 400, 3, true, false));
+			blaze.addPotionEffect(new PotionEffect(PotionInit.aether_barrier, 600, 3, true, false));
 
 			double xRand = this.posX + (this.rand.nextDouble() - this.rand.nextDouble() - 0.5D) * 8D;
 			double zRand = this.posZ + (this.rand.nextDouble() - this.rand.nextDouble() - 0.5D) * 8D;
@@ -385,6 +452,33 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		}
 
 		return entity;
+	}
+
+	public float getDamage () {
+
+		float health = this.getHealth();
+		float maxHealth = this.getMaxHealth();
+    	boolean isRefresh = this.isPotionActive(PotionInit.refresh_effect);
+
+    	// ボス以外なら
+		if (!this.isUnique()) {
+			return 4;
+		}
+
+    	// 体力50%以上かつリフレッシュエフェクト中なら
+		else if ((health >= maxHealth * 0.5F) && isRefresh) {
+			return 8;
+		}
+
+    	// 体力50%未満かつリフレッシュエフェクト中なら
+		else if (isRefresh) {
+			return 12;
+		}
+
+    	// リフレッシュエフェクトが付いていないなら
+		else {
+			return 16;
+		}
 	}
 
 	public float getEyeHeight() {
@@ -401,6 +495,16 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		return this.getHealth() < this.getMaxHealth() / 2;
 	}
 
+	// 杖を返す
+	public ItemStack getWandHand () {
+		return WAND;
+	}
+
+	// 腕の状態を返す
+	public ArmMode getArm () {
+		return this.dataManager.get(this.ISSPECIAL) ? ArmMode.SPECIAL_MAGIC : ArmMode.NONE;
+	}
+
 	@Override
 	protected boolean canDespawn() {
 		return !this.isUnique();
@@ -414,12 +518,12 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		return !this.isUnique();
 	}
 
-	public void setSwingingArms(boolean swingingArms) { }
+	public void setSwingingArms(boolean swing) { }
 
 	@Override
 	public void addTrackingPlayer(EntityPlayerMP player) {
 		super.addTrackingPlayer(player);
-		if (this.isUnique()) {
+		if (this.isUnique() && !this.getAlly()) {
 			this.bossInfo.addPlayer(player);
 		}
 	}
@@ -427,7 +531,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 	@Override
 	public void removeTrackingPlayer(EntityPlayerMP player) {
 		super.removeTrackingPlayer(player);
-		if (this.isUnique()) {
+		if (this.isUnique() && !this.getAlly()) {
 			this.bossInfo.removePlayer(player);
 		}
 	}
@@ -444,6 +548,14 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 		if (this.hasCustomName()) {
 			this.bossInfo.setName(this.getBossName());
 		}
+
+		this.setAlly(tags.getBoolean("isAlly"));
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound tags) {
+		super.writeEntityToNBT(tags);
+		tags.setBoolean("isAlly", this.getAlly());
 	}
 
 	public ITextComponent getBossName () {
@@ -452,11 +564,11 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 	public class EntityAIMeteoRain extends EntityAIBase {
 
-		protected int spellWarmup;
-		protected int spellCooldown;
-		public World world;
-		public EntityIfritVerre ifrite;
-		public final boolean isStop;
+		private int spellWarmup;
+		private int spellCooldown;
+		private World world;
+		private EntityIfritVerre ifrite;
+		private final boolean isStop;
 
 		public EntityAIMeteoRain (EntityIfritVerre entity, boolean isStop) {
 			this.ifrite = entity;
@@ -466,11 +578,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 
 		// AIを実行できるか
 		public boolean shouldExecute() {
-			if (this.getTarget() == null) {
-				return false;
-			} else {
-				return this.ifrite.ticksExisted >= this.spellCooldown && this.ifrite.isHalfHelth() && this.ifrite.isUnique();
-			}
+			return this.getTarget() != null && this.ifrite.ticksExisted >= this.spellCooldown && this.ifrite.isHalfHelth() && this.ifrite.isUnique() && !this.ifrite.getAlly();
 		}
 
 		// 実行できるか
@@ -483,6 +591,7 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 			this.ifrite.spellTicks = this.getCastingTime();
 			this.spellCooldown = this.ifrite.ticksExisted + this.getCastingInterval();
 			this.setCharge(true);
+			this.ifrite.dataManager.set(ISSPECIAL, Boolean.valueOf(true));
 		}
 
 		// タスク処理
@@ -514,12 +623,12 @@ public class EntityIfritVerre extends EntityMob implements IRangedAttackMob, ISM
 			if (this.spellWarmup == 0) {
 				this.castSpell();
 				this.setCharge(false);
+				this.ifrite.dataManager.set(ISSPECIAL, Boolean.valueOf(false));
 			}
 		}
 
 		// 特殊行動開始
-		protected void castSpell() {
-		}
+		protected void castSpell() { }
 
 		// ウォームアップタイム
 		protected int getCastWarmupTime() {

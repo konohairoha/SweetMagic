@@ -21,11 +21,7 @@ public class BraveBaseAI extends EntityAIBase {
 
 	// AIを実行できるか
 	public boolean shouldExecute() {
-		if (this.getTarget() == null) {
-			return false;
-		} else {
-			return this.brave.ticksExisted >= this.spellCooldown;
-		}
+		return this.getTarget() == null ? false : this.brave.ticksExisted >= this.spellCooldown;
 	}
 
 	// 実行できるか
@@ -52,8 +48,7 @@ public class BraveBaseAI extends EntityAIBase {
 	}
 
 	// 特殊行動開始
-	protected void castSpell() {
-	}
+	protected void castSpell() { }
 
 	// ウォームアップタイム
 	protected int getCastWarmupTime() {
@@ -78,7 +73,7 @@ public class BraveBaseAI extends EntityAIBase {
 	// チャージの設定
 	public void setCharge (boolean charge) {
 		if (this.isStop) {
-			this.brave.isCharge = charge;
+			this.brave.setSpecial(charge);
 		}
 	}
 }

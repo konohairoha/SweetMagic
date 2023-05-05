@@ -7,14 +7,14 @@ import net.minecraft.util.math.MathHelper;
 
 public class EntityAIAnger extends EntityAIBase {
 
-    public final EntityLiving myself;
+	private final EntityLiving myself;
     private int tickMax = 300;
     private int tick = tickMax;
     private EntityLivingBase target;
 
-    public EntityAIAnger(EntityLiving myselfIn, EntityLivingBase targetIn) {
-        this.myself = myselfIn;
-        this.target = targetIn;
+    public EntityAIAnger(EntityLiving myself, EntityLivingBase target) {
+        this.myself = myself;
+        this.target = target;
         setMutexBits(1);
     }
 
@@ -43,9 +43,9 @@ public class EntityAIAnger extends EntityAIBase {
     	this.myself.setAttackTarget(this.target);
     }
 
-	public void setTarget(EntityLivingBase targetIn) {
+	public void setTarget(EntityLivingBase target) {
 		if (this.tick == 0) {
-			this.target = targetIn;
+			this.target = target;
 			this.tick = tickMax;
 		}
 	}

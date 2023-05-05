@@ -3,7 +3,6 @@ package sweetmagic.init.entity.projectile;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
 
 public class EntityNomal extends EntityBaseMagicShot {
@@ -25,7 +24,7 @@ public class EntityNomal extends EntityBaseMagicShot {
 	// パーティクルスポーン
 	@Override
 	protected void spawnParticle() {
-		Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, this.posX, this.posY, this.posZ, 0, 0, 0);
-		FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+		Particle effect = ParticleNomal.create(this.world, this.posX, this.posY, this.posZ, 0, 0, 0);
+		this.getParticle().addEffect(effect);
 	}
 }

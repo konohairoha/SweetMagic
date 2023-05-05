@@ -24,25 +24,24 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNodeType;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.client.FMLClientHandler;
 import sweetmagic.client.particle.ParticleNomal;
-import sweetmagic.init.DimensionInit;
 import sweetmagic.init.ItemInit;
+import sweetmagic.init.LootTableInit;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 import sweetmagic.init.entity.projectile.EntityRockBlast;
 
 public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
-	public int tickTime = 0;
-	public int aiTickTime = 0;
-	public int randTime = 0;
+	private int tickTime = 0;
+	private int aiTickTime = 0;
+	private int randTime = 0;
 
 	public EntityPhantomZombie(World worldIn) {
 		super(worldIn);
@@ -67,7 +66,6 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 	public void onLivingUpdate() {
 
 		super.onLivingUpdate();
-
 		if (!this.world.isRemote || !this.isRender()) { return; }
 
 		this.tickTime++;
@@ -89,8 +87,8 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 			float y = (this.rand.nextFloat() + this.rand.nextFloat()) * 0.0825F;
 			float z = (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F;
 
-			Particle effect = new ParticleNomal.Factory().createParticle(0, this.world, f1, f2, f3, x, y, z, 48);
-			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+			Particle effect = ParticleNomal.create(this.world, f1, f2, f3, x, y, z, 48);
+			this.getParticle().addEffect(effect);
 		}
 	}
 
@@ -129,10 +127,10 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 		// 一定距離なら適当に動く
 		else {
 			Random rand = this.getRNG();
-			double d4 = this.posX + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-			double d5 = this.posY + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-			double d6 = this.posZ + (double) ((rand.nextFloat() * 2.0F - 1.0F) * 16.0F);
-			this.getMoveHelper().setMoveTo(d4, d5, d6, 1.0D);
+			double d4 = this.posX + (rand.nextDouble() * 2D - 1D) * 16D;
+			double d5 = this.posY + (rand.nextDouble() * 2D - 1D) * 16D;
+			double d6 = this.posZ + (rand.nextDouble() * 2D - 1D) * 16D;
+			this.getMoveHelper().setMoveTo(d4, d5, d6, 1D);
 		}
 
 		// 自分の向きを調整
@@ -156,18 +154,17 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 		if (this.aiTickTime >= this.randTime + 150) {
 
 			this.aiTickTime = 0;
-
 			int coolTime = this.isUnique() ? 35 : 50;
 			this.randTime = this.rand.nextInt(coolTime);
 
-			EntityBaseMagicShot magic = new EntityRockBlast(this.world, this, ItemStack.EMPTY, 2);
+			EntityBaseMagicShot magic = new EntityRockBlast(this.world, this, ItemStack.EMPTY, 0);
 	        double x = entity.posX - this.posX;
 	        double y = entity.getEntityBoundingBox().minY - entity.height / 2  - this.posY;
 	        double z = entity.posZ - this.posZ;
 	        double xz = (double)MathHelper.sqrt(x * x + z * z);
 	        magic.shoot(x, y - xz * 0.015D, z, 1.75F, 0);	// 射撃速度
 	        magic.setDamage(magic.getDamage() + 6);
-			this.world.playSound(null, new BlockPos(this), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
+			this.world.playSound(null, this.getPosition(), SoundEvents.ENTITY_BLAZE_SHOOT, SoundCategory.NEUTRAL, 0.5F, 0.67F);
 	        this.world.spawnEntity(magic);
 		}
 	}
@@ -191,7 +188,7 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
 	// モブスポーン条件
 	public boolean getCanSpawnHere() {
-		return super.getCanSpawnHere() && this.world.provider.getDimension() == DimensionInit.dimID;
+		return super.getCanSpawnHere() && this.isSMDimension(this.world);
 	}
 
 	// 二つ名かどうか
@@ -201,6 +198,11 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
 	@Override
 	public void setInWeb() {}
+
+	@Nullable
+	protected ResourceLocation getLootTable() {
+		return LootTableInit.PHANTOMZOMBIE;
+	}
 
 	@Override
 	public void onDeath(DamageSource cause) {
@@ -245,12 +247,12 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 
 	public class PhantomMoveHelper extends EntityMoveHelper {
 
-		public final EntityPhantomZombie entity;
-		public int changeCoolTime;
+		private final EntityPhantomZombie entity;
+		private int changeCoolTime;
 
-		public PhantomMoveHelper(EntityPhantomZombie ghast) {
-			super(ghast);
-			this.entity = ghast;
+		public PhantomMoveHelper(EntityPhantomZombie zombie) {
+			super(zombie);
+			this.entity = zombie;
 		}
 
 		public void onUpdateMoveHelper() {
@@ -270,7 +272,9 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 						this.entity.motionX += d0 / d3 * 0.1D;
 						this.entity.motionY += d1 / d3 * 0.1D;
 						this.entity.motionZ += d2 / d3 * 0.1D;
-					} else {
+					}
+
+					else {
 						this.action = EntityMoveHelper.Action.WAIT;
 					}
 				}
@@ -287,10 +291,7 @@ public class EntityPhantomZombie extends EntityZombie implements ISMMob {
 			for (int i = 1; (double) i < par1; ++i) {
 
 				aabb = aabb.offset(d0, d1, d2);
-
-				if (!this.entity.world.getCollisionBoxes(this.entity, aabb).isEmpty()) {
-					return false;
-				}
+				if (!this.entity.world.getCollisionBoxes(this.entity, aabb).isEmpty()) { return false; }
 			}
 
 			return true;

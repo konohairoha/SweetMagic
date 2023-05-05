@@ -47,10 +47,8 @@ public class BaseStructureTemplate extends StructureComponentTemplate {
         return super.addComponentParts(world, random, box);
     }
 
-
     @Override
-    protected void handleDataMarker(String function, BlockPos pos, World world, Random rand, StructureBoundingBox box) {
-    }
+    protected void handleDataMarker(String function, BlockPos pos, World world, Random rand, StructureBoundingBox box) { }
 
     @Override
     public void writeStructureToNBT(NBTTagCompound tags) {
