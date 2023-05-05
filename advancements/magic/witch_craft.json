@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:prompt_feather"
+        },
+        "title": {
+            "translate": "smadbent.witch_craft.title"
+        },
+        "description": {
+            "translate": "smadbent.witch_craft.text"
+        }
+    },
+    "parent": "sweetmagic:magic/pedestal_creat",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:witch_craft"
+		}
+	},
+   "rewards": {
+ 		"loot": ["sweetmagic:mf_sbottle"]
+	}
+}

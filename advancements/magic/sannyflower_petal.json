@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:sannyflower_petal"
+        },
+        "title": {
+            "translate": "smadbent.sannyflower_petal.title"
+        },
+        "description": {
+            "translate": "smadbent.sannyflower_petal.text"
+        }
+    },
+    "parent": "sweetmagic:magic/aether_crystal",
+    "criteria": {
+        "sannyflower_petal": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:sannyflower_petal"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 12
+	}
+}

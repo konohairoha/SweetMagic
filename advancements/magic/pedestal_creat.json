@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:pedestal_creat"
+        },
+        "title": {
+            "translate": "smadbent.pedestal_creat.title"
+        },
+        "description": {
+            "translate": "smadbent.pedestal_creat.text"
+        }
+    },
+    "parent": "sweetmagic:magic/astral_craft",
+    "criteria": {
+        "pedestal_creat": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:pedestal_creat"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 100
+	}
+}

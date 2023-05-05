@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:magic_book_cosmic"
+        },
+        "title": {
+            "translate": "smadbent.magic_book_cosmic.title"
+        },
+        "description": {
+            "translate": "smadbent.magic_book_cosmic.text"
+        }
+    },
+    "parent": "sweetmagic:magic/magic_book",
+    "criteria": {
+        "magic_book_cosmic": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:magic_book_cosmic"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 100
+	}
+}

@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:purecrystal_wand"
+        },
+        "title": {
+            "translate": "smadbent.purecrystal_wand.title"
+        },
+        "description": {
+            "translate": "smadbent.purecrystal_wand.text"
+        }
+    },
+    "parent": "sweetmagic:magic/pure_crystal",
+    "criteria": {
+        "purecrystal_wand": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:purecrystal_wand"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 120
+	}
+}

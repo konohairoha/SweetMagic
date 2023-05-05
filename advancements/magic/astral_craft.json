@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:magicmeal"
+        },
+        "title": {
+            "translate": "smadbent.astral_craft.title"
+        },
+        "description": {
+            "translate": "smadbent.astral_craft.text"
+        }
+    },
+    "parent": "sweetmagic:magic/twilight_alstroemeria",
+    "criteria": {
+        "criteria_0": {
+            "trigger": "sweetmagic:astral_craft"
+		}
+	},
+   "rewards": {
+ 		"experience": 50
+	}
+}

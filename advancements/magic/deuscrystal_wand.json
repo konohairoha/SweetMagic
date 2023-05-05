@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:deuscrystal_wand"
+        },
+        "title": {
+            "translate": "smadbent.deuscrystal_wand.title"
+        },
+        "description": {
+            "translate": "smadbent.deuscrystal_wand.text"
+        }
+    },
+    "parent": "sweetmagic:magic/deus_crystal",
+    "criteria": {
+        "deuscrystal_wand": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:deuscrystal_wand"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 220
+	}
+}

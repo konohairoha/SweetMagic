@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:magiaflux_stuff"
+        },
+        "title": {
+            "translate": "smadbent.magiaflux_stuff.title"
+        },
+        "description": {
+            "translate": "smadbent.magiaflux_stuff.text"
+        }
+    },
+    "parent": "sweetmagic:magic/mftable",
+    "criteria": {
+        "magiaflux_stuff": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:magiaflux_stuff"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 30
+	}
+}

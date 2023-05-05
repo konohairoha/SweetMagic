@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:divine_wand_y"
+        },
+        "title": {
+            "translate": "smadbent.apprentice_magician.title"
+        },
+        "description": {
+            "translate": "smadbent.apprentice_magician.text"
+        }
+    },
+    "parent": "sweetmagic:magic/biginer_magician",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:apprentice_magician"
+		}
+	},
+   "rewards": {
+ 		"experience": 500
+	}
+}

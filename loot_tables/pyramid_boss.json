@@ -1,0 +1,110 @@
+{
+  "pools": [
+    {
+      "name": "prm",
+      "rolls": 4,
+      "entries": [
+        {
+          "type": "item", "weight": 4,
+          "name": "sweetmagic:aether_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 24 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:divine_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:pure_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 3 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:deus_crystal",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:cosmic_crystal_shard",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:mf_sbottle",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 12 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:mf_bottle",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 6 } } ]
+        },
+        {
+          "type": "item", "weight": 5,
+          "name": "sweetmagic:aether_crystal_shard",
+          "functions": [ { "function": "set_count", "count": { "min": 4, "max": 24 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:twilightalstroemeria_pot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:mfpot",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "sweetmagic:alternative_ingot",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 3,
+          "name": "minecraft:diamond",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "minecraft:emerald",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 8 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:witch_scroll",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:accebag",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:gravity_pendant",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:scorching_jewel",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:mermaid_veil",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:magic_pure_force",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:magic_deus_force",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        }
+      ]
+    }
+  ]
+}

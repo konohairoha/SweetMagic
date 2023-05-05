@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:aether_crystal"
+        },
+        "title": {
+            "translate": "smadbent.aether_crystal.title"
+        },
+        "description": {
+            "translate": "smadbent.aether_crystal.text"
+        }
+    },
+    "parent": "sweetmagic:magic/sugarbell",
+    "criteria": {
+        "aether_crystal": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:aether_crystal"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"loot": ["sweetmagic:mf_sbottle"]
+	}
+}

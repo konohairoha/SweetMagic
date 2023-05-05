@@ -1,0 +1,22 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:deuscrystal_wand_y"
+        },
+        "title": {
+            "translate": "smadbent.advanced_magician.title"
+        },
+        "description": {
+            "translate": "smadbent.advanced_magician.text"
+        }
+    },
+    "parent": "sweetmagic:magic/intermediate_magician",
+    "criteria": {
+        "magic_book": {
+            "trigger": "sweetmagic:advanced_magician"
+		}
+	},
+   "rewards": {
+ 		"experience": 150
+	}
+}

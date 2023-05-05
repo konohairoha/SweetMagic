@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:aether_wand"
+        },
+        "title": {
+            "translate": "smadbent.aether_wand.title"
+        },
+        "description": {
+            "translate": "smadbent.aether_wand.text"
+        }
+    },
+    "parent": "sweetmagic:magic/alt_table_bottom",
+    "criteria": {
+        "aether_wand": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:aether_wand"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 40
+	}
+}

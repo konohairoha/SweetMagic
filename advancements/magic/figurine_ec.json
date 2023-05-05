@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:figurine_ec"
+        },
+        "title": {
+            "translate": "smadbent.figurine_ec.title"
+        },
+        "description": {
+            "translate": "smadbent.figurine_ec.text"
+        }
+    },
+    "parent": "sweetmagic:magic/figurine_rk",
+    "criteria": {
+        "figurine_ec": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:figurine_ec"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 300
+	}
+}

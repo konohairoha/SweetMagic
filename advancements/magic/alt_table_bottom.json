@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:alt_table_bottom"
+        },
+        "title": {
+            "translate": "smadbent.alt_table_bottom.title"
+        },
+        "description": {
+            "translate": "smadbent.alt_table_bottom.text"
+        }
+    },
+    "parent": "sweetmagic:magic/magic_book",
+    "criteria": {
+        "alt_table_bottom": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:alt_table_bottom"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 40
+	}
+}

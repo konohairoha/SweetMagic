@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:figurine_wd"
+        },
+        "title": {
+            "translate": "smadbent.figurine_wd.title"
+        },
+        "description": {
+            "translate": "smadbent.figurine_wd.text"
+        }
+    },
+    "parent": "sweetmagic:magic/figurine_bs",
+    "criteria": {
+        "figurine_wd": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:figurine_wd"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 100
+	}
+}

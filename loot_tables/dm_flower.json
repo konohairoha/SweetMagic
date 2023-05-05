@@ -1,0 +1,14 @@
+{
+  "pools": [
+    {
+      "name": "dm_flower",
+      "rolls": 1,
+      "entries": [
+			{
+				"type": "item", "weight": 100, "name": "sweetmagic:drizzly_mysotis_flower",
+				"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
+			}
+      ]
+    }
+  ]
+}

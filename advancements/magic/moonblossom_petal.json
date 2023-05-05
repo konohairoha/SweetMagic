@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:moonblossom_petal"
+        },
+        "title": {
+            "translate": "smadbent.moonblossom_petal.title"
+        },
+        "description": {
+            "translate": "smadbent.moonblossom_petal.text"
+        }
+    },
+    "parent": "sweetmagic:magic/sannyflower_petal",
+    "criteria": {
+        "moonblossom_petal": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:moonblossom_petal"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 12
+	}
+}

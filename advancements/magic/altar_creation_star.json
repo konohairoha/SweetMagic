@@ -1,0 +1,29 @@
+{
+    "display": {
+        "icon": {
+            "item": "sweetmagic:altar_creation_star"
+        },
+        "title": {
+            "translate": "smadbent.altar_creation_star.title"
+        },
+        "description": {
+            "translate": "smadbent.altar_creation_star.text"
+        }
+    },
+    "parent": "sweetmagic:magic/altar_creat",
+    "criteria": {
+        "altar_creation_star": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "sweetmagic:altar_creation_star"
+                    }
+                ]
+            }
+        }
+    },
+   "rewards": {
+ 		"experience": 400
+	}
+}

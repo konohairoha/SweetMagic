@@ -1,0 +1,88 @@
+{
+    "display": {
+		"icon": {
+		    "item": "sweetmagic:cornflower"
+		},
+		"title": {
+		    "translate": "smadbent.all_flower.title"
+		},
+		"description": {
+		    "translate": "smadbent.all_flower.text"
+		}
+    },
+    "parent": "sweetmagic:magic/twilight_alstroemeria",
+    "criteria": {
+			"cornflower": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:cornflower" } ] }
+		},
+			"lily_valley": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:lily_valley" } ] }
+		},
+			"cosmos": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:cosmos" } ] }
+		},
+			"blackrose": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:blackrose" } ] }
+		},
+			"white_clover": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:white_clover" } ] }
+		},
+			"foxtail_grass": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:foxtail_grass" } ] }
+		},
+			"snowdrop": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:snowdrop" } ] }
+		},
+			"turkey_balloonflower": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:turkey_balloonflower" } ] }
+		},
+			"iberis_umbellata": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:iberis_umbellata" } ] }
+		},
+			"ultramarine_rose": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:ultramarine_rose" } ] }
+		},
+			"solid_star": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:solid_star" } ] }
+		},
+			"zinnia": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:zinnia" } ] }
+		},
+			"campanula": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:campanula" } ] }
+		},
+			"primula_polyansa": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:primula_polyansa" } ] }
+		},
+			"hydrangea": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:hydrangea" } ] }
+		},
+			"carnation_crayola": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:carnation_crayola" } ] }
+		},
+			"christmas_rose": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:christmas_rose" } ] }
+		},
+			"portulaca": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:portulaca" } ] }
+		},
+			"surfinia": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:surfinia" } ] }
+		},
+			"pansy_blue": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:pansy_blue" } ] }
+		},
+			"pansy_yellowmazenta": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:pansy_yellowmazenta" } ] }
+		},
+			"marigold": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:marigold" } ] }
+		},
+			"christmarose_ericsmithii": { "trigger": "minecraft:inventory_changed",
+			"conditions": { "items": [ { "item": "sweetmagic:christmarose_ericsmithii" } ] }
+		}
+    },
+   "rewards": {
+ 		"experience": 200
+	}
+}
