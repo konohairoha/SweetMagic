@@ -47,7 +47,10 @@ public class SpawnStone extends BaseModelBlock {
 		if (this.data == 1 && player.isCreative()) {
 			TileSMSpaner tile = (TileSMSpaner) world.getTileEntity(pos);
 			int data = tile.data + 1;
-			tile.data = data > 6 ? 0 : data;
+			tile.data = data > 8 ? 0 : data;
+			tile.setRenderEntity();
+			tile.markDirty();
+			world.notifyBlockUpdate(pos, state, state, 3);
 			return true;
 		}
 

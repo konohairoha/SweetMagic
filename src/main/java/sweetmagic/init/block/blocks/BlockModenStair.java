@@ -20,12 +20,12 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
-import sweetmagic.util.Bounds;
+import sweetmagic.util.FaceAABB;
 
 public class BlockModenStair extends BaseFaceBlock {
 
-    private static final AxisAlignedBB[] BOTTOM = new Bounds(0, 0, 0, 16, 8, 16).getRotatedBounds();
-    private static final AxisAlignedBB[] TOP = new Bounds(8, 0, 0, 16, 16, 16).getRotatedBounds();
+    private static final AxisAlignedBB[] BOTTOM = new FaceAABB(0, 0, 0, 16, 8, 16).getRotatedBounds();
+    private static final AxisAlignedBB[] TOP = new FaceAABB(8, 0, 0, 16, 16, 16).getRotatedBounds();
 
 	public BlockModenStair(String name) {
 		super(Material.WOOD, name);
@@ -36,10 +36,10 @@ public class BlockModenStair extends BaseFaceBlock {
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, @Nullable Entity entity, boolean isActualState) {
-		EnumFacing facing = state.getValue(FACING);
-		Block.addCollisionBoxToList(pos, aabb, aabbList, BOTTOM[facing.getHorizontalIndex()]);
-		Block.addCollisionBoxToList(pos, aabb, aabbList, TOP[facing.getHorizontalIndex()]);
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, @Nullable Entity entity, boolean flag) {
+		EnumFacing face = state.getValue(FACING);
+		Block.addCollisionBoxToList(pos, aabb, aabbList, BOTTOM[face.getHorizontalIndex()]);
+		Block.addCollisionBoxToList(pos, aabb, aabbList, TOP[face.getHorizontalIndex()]);
 	}
 
 	protected List<AxisAlignedBB> getCollisionBoxList(IBlockState state, World world, BlockPos pos) {

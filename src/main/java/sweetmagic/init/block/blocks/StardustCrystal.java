@@ -58,6 +58,9 @@ public class StardustCrystal extends BaseModelBlock {
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		world.setBlockState(pos.up(), BlockInit.sturdust_crystal_top.getDefaultState(), 2);
+
+		TileStardustCrystal tile = (TileStardustCrystal) world.getTileEntity(pos);
+		tile.checkRangePlayer();
 	}
 
 	// ブロックをこわしたとき(下のブロックを指定)
@@ -186,5 +189,6 @@ public class StardustCrystal extends BaseModelBlock {
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sturdust_crystal.name")));
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.enchantpower.name") + " : " + 2.5F ));
 	}
 }

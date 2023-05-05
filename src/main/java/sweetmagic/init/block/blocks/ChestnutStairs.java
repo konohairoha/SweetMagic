@@ -6,7 +6,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import sweetmagic.init.BlockInit;
 
-public class ChestnutStairs extends BlockStairs{
+public class ChestnutStairs extends BlockStairs {
 
 	public ChestnutStairs(String name, IBlockState state) {
 		super(state);

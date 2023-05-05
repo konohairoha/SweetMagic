@@ -52,7 +52,7 @@ public class WarpBlock extends BaseModelBlock {
 	}
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess worldIn, BlockPos pos) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 		return AABB;
 	}
 
@@ -74,7 +74,7 @@ public class WarpBlock extends BaseModelBlock {
 
 		// NBTを取得
 		NBTTagCompound tags = stack.getTagCompound();
-		if (tags == null || !tags.hasKey("posX") || tags.getInteger("dim") != player.dimension) { return false; }
+		if (tags == null || (!tags.hasKey("posX") && !tags.hasKey("x")) || tags.getInteger("dim") != player.dimension) { return false; }
 
 		if (world.isRemote) {
 			this.spawnParticl(world, pos, world.rand);
@@ -84,9 +84,10 @@ public class WarpBlock extends BaseModelBlock {
 		else {
 
 			TileWarpBlock tile = (TileWarpBlock) world.getTileEntity(pos);
-			tile.posX = tags.getInteger("posX");
-			tile.posY = tags.getInteger("posY");
-			tile.posZ = tags.getInteger("posZ");
+			boolean isTamagotti = tags.hasKey("x");
+			tile.posX = isTamagotti ? tags.getInteger("x") : tags.getInteger("posX");
+			tile.posY = isTamagotti ? tags.getInteger("y") : tags.getInteger("posY");
+			tile.posZ = isTamagotti ? tags.getInteger("z") : tags.getInteger("posZ");
 
 			world.setBlockState(pos, BlockInit.warp_block_on.getDefaultState(), 2);
 	        tile.validate();

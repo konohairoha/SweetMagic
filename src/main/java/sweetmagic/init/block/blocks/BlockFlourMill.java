@@ -5,53 +5,58 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.enumblock.EnumCook;
 import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
 import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.flourmill.FlourMillRecipeInfo;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.base.BaseCookBlock;
 import sweetmagic.init.tile.cook.TileFlourMill;
 
-public class BlockFlourMill extends BaseFaceBlock {
+public class BlockFlourMill extends BaseCookBlock {
 
-	public static boolean keepInventory = false;
+	private static boolean keepInventory = false;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.25D, 0D, 0.25D, 0.75D, 0.937D, 0.75D);
 	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
+	private final int data;
 
-	public BlockFlourMill(String name) {
-		super(Material.IRON, name);
-		setHardness(0.2F);
-		setResistance(1024F);
-		setSoundType(SoundType.STONE);
-		setDefaultState(this.blockState.getBaseState()
-				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
-		disableStats();
-		BlockInit.furniList.add(this);
+	public BlockFlourMill(String name, int data, boolean isRegister) {
+		super(name);
+		this.data = data;
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
+
+		if (isRegister) {
+			BlockInit.millList.add(this);
+		}
 	}
 
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return this.data == 1 ? AABB : FULL_BLOCK_AABB;
 	}
 
 	@Nonnull
 	@Override
-	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileFlourMill();
 	}
 
@@ -62,9 +67,7 @@ public class BlockFlourMill extends BaseFaceBlock {
 		Random rand = world.rand;
 
 		for (int i = 0; i < amt; i++) {
-			if (rand.nextInt(3) == 0) {
-				ret++;
-			}
+			ret += rand.nextInt(3) == 0 ? 1 : 0;
 		}
 
 		return ret;
@@ -97,10 +100,13 @@ public class BlockFlourMill extends BaseFaceBlock {
 			// 減らすべき個数を計算
 			int handamt = stack.getCount() % recipeItem.getCount();
 			int amt = stack.getCount() / recipeItem.getCount();
+
 			// 減らすアイテムを作成
 			ItemStack send = new ItemStack(handitem.getItem(), stack.getCount() - handamt, handitem.getMetadata());
+
 			// レシピリストに減らしたアイテムをぶち込む
 			inputs.add(send);
+
 			// 手に持っているアイテムから計算された個数を減らす
 			stack.shrink(send.getCount());
 
@@ -108,6 +114,7 @@ public class BlockFlourMill extends BaseFaceBlock {
 			for (int i = 0; i < outs.size(); i++) {
 
 				ItemStack output = outs.get(i);
+
 				//完成品
 				if (i == 0) {
 
@@ -155,7 +162,6 @@ public class BlockFlourMill extends BaseFaceBlock {
 
 			//TileEntityの完成品リストからアイテムをスポーンさせる
 			this.spawnItem(world, player, tile.outPutList);
-
 			this.setState(world, pos);
 
 			// ハンドアイテムとかの初期化
@@ -190,14 +196,6 @@ public class BlockFlourMill extends BaseFaceBlock {
 		spawnAsEntity(world, pos, stack);
 	}
 
-    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-        return ItemStack.EMPTY;
-    }
-
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
-    }
-
 	public EnumCook getCook (IBlockState state) {
 		return state.getValue(COOK);
 	}
@@ -216,5 +214,14 @@ public class BlockFlourMill extends BaseFaceBlock {
 	public IBlockState getStateFromMeta(int meta) {
 		FaceCookMeta fcMeta = EnumCook.getMeta(meta);
 		return this.getDefaultState().withProperty(FACING, EnumFacing.getHorizontal(fcMeta.getMeta())).withProperty(COOK, fcMeta.getCook());
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+
+		if (this.data == 0) { return; }
+
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.sm_mixer.name")));
+		super.addInformation(stack, world, tooltip, advanced);
 	}
 }

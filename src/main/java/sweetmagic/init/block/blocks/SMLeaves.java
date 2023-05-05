@@ -46,6 +46,7 @@ public class SMLeaves extends BlockLeaves {
 	 * 1 = ココナッツ
 	 * 2 = プリズミウム
 	 * 3 = バナナ
+	 * 4 = マギアウッド
 	 */
 
 	@Override
@@ -84,6 +85,7 @@ public class SMLeaves extends BlockLeaves {
 		case 1: return BlockInit.coconut_sapling;
 		case 2: return BlockInit.prism_sapling;
 		case 3: return BlockInit.banana_sapling;
+		case 4: return BlockInit.magiawood_sapling;
 		}
 		return null;
 	}
@@ -93,7 +95,7 @@ public class SMLeaves extends BlockLeaves {
 
 	@Override
 	public ItemStack getSilkTouchDrop(IBlockState state) {
-		return new ItemStack(this, 1);
+		return new ItemStack(this);
 	}
 
 	@Override
@@ -103,7 +105,13 @@ public class SMLeaves extends BlockLeaves {
 
 	@Override
 	public int getSaplingDropChance(IBlockState state) {
-		return (this.data == 1 || this.data == 3) ? 7 : 20;
+		switch (this.data) {
+		case 0: return 30;
+		case 1: return 45;
+		case 2: return 25;
+		case 3: return 45;
+		}
+		return 20;
 	}
 
 	@Override

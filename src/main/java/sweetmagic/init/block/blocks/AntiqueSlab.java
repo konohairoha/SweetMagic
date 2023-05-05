@@ -1,5 +1,6 @@
 package sweetmagic.init.block.blocks;
 
+import java.util.List;
 import java.util.Random;
 
 import net.minecraft.block.Block;
@@ -13,6 +14,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.IStringSerializable;
@@ -21,13 +23,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import sweetmagic.api.iblock.ISlabItemBlock;
 import sweetmagic.init.BlockInit;
 
-public class AntiqueSlab extends Block {
+public class AntiqueSlab extends Block implements ISlabItemBlock {
 
-	private static final PropertyEnum<EnumBlockSlab> HALF = PropertyEnum.create("half", EnumBlockSlab.class);
-    private static final AxisAlignedBB AABB_BOTTOM_HALF = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.5D, 1.0D);
-    private static final AxisAlignedBB AABB_TOP_HALF = new AxisAlignedBB(0.0D, 0.5D, 0.0D, 1.0D, 1.0D, 1.0D);
+	public static final PropertyEnum<EnumBlockSlab> HALF = PropertyEnum.create("half", EnumBlockSlab.class);
+    private static final AxisAlignedBB BOT_HALF = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.5D, 1D);
+    private static final AxisAlignedBB TOP_HALF = new AxisAlignedBB(0D, 0.5D, 0D, 1D, 1D, 1D);
 
     public AntiqueSlab(String name) {
         super(Material.ROCK);
@@ -46,10 +49,23 @@ public class AntiqueSlab extends Block {
         setRegistryName(name);
         setUnlocalizedName(name);
 		setHardness(1F);
-		setResistance(16F);
+		setResistance(1024);
         this.setDefaultState(blockState.getBaseState().withProperty(HALF, EnumBlockSlab.BOTTOM));
         this.useNeighborBrightness = true;
 		BlockInit.blockList.add(this);
+    }
+
+    public AntiqueSlab(String name, List<Block> list) {
+        super(Material.WOOD);
+        setRegistryName(name);
+        setUnlocalizedName(name);
+		setHardness(1F);
+		setResistance(1024);
+		setSoundType(SoundType.WOOD);
+        this.setDefaultState(blockState.getBaseState().withProperty(HALF, EnumBlockSlab.BOTTOM));
+        this.useNeighborBrightness = true;
+		BlockInit.blockList.remove(this);
+		list.add(this);
     }
 
     @Override
@@ -79,7 +95,7 @@ public class AntiqueSlab extends Block {
     }
 
     @Override
-    public int quantityDropped(IBlockState state, int fortune, Random random) {
+    public int quantityDropped(IBlockState state, int fortune, Random rand) {
         return state.getValue(HALF).equals(EnumBlockSlab.FULL) ? 2 : 1;
     }
 
@@ -91,8 +107,8 @@ public class AntiqueSlab extends Block {
     @Override
     public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
         switch (state.getValue(HALF)) {
-            case TOP:    return AABB_TOP_HALF;
-            case BOTTOM: return AABB_BOTTOM_HALF;
+            case TOP:    return TOP_HALF;
+            case BOTTOM: return BOT_HALF;
             default:     return FULL_BLOCK_AABB;
         }
     }
@@ -119,23 +135,28 @@ public class AntiqueSlab extends Block {
     }
 
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
         ItemStack stack = player.getHeldItem(hand);
 
         if (!stack.isEmpty() && ((state.getValue(HALF).equals(EnumBlockSlab.TOP) && face.equals(EnumFacing.DOWN)) || (state.getValue(HALF).equals(EnumBlockSlab.BOTTOM) && face.equals(EnumFacing.UP)))) {
 
             if (stack.getItem() == Item.getItemFromBlock(this)) {
-
-                world.setBlockState(pos, state.withProperty(HALF, EnumBlockSlab.FULL));
-                if (!player.isCreative()) { stack.setCount(stack.getCount() - 1); }
-
-                SoundType sound = this.getSoundType(state, world, pos, player);
-                world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
+            	this.setSlabBlock(world, player, state, pos, stack);
                 return true;
             }
         }
-        return super.onBlockActivated(world, pos, state, player, hand, face, hitX, hitY, hitZ);
+        return super.onBlockActivated(world, pos, state, player, hand, face, x, y, z);
+    }
+
+    public EnumActionResult setSlabBlock (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
+
+        world.setBlockState(pos, state.withProperty(HALF, EnumBlockSlab.FULL));
+        if (!player.isCreative()) { stack.shrink(1); }
+
+        SoundType sound = this.getSoundType(state, world, pos, player);
+        world.playSound(player, pos, sound.getPlaceSound(), SoundCategory.BLOCKS, (sound.getVolume() + 1F) / 2F, sound.getPitch() * 0.8F);
+    	return EnumActionResult.SUCCESS;
     }
 
     @Override
@@ -148,11 +169,22 @@ public class AntiqueSlab extends Block {
         return state.getValue(HALF).ordinal();
     }
 
+	@Override
+	public EnumActionResult setBlock(World world, EntityPlayer player, BlockPos pos, ItemStack stack) {
+
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		if (block != this || block.isOpaqueCube(state)) { return EnumActionResult.PASS; }
+
+    	return this.setSlabBlock(world, player, state, pos, stack);
+	}
+
 	public enum EnumBlockSlab implements IStringSerializable {
 
 		TOP("top"),
 		BOTTOM("bottom"),
 		FULL("full");
+
 		private final String name;
 
 		EnumBlockSlab(String name) {
@@ -169,11 +201,8 @@ public class AntiqueSlab extends Block {
 			return this.name;
 		}
 
-		public static EnumBlockSlab byMetadata(int metadata) {
-			if (metadata < 0 || metadata >= values().length) {
-				metadata = 0;
-			}
-			return values()[metadata];
+		public static EnumBlockSlab byMetadata(int meta) {
+			return values()[(meta < 0 || meta >= values().length) ? 0 : meta];
 		}
 	}
 }

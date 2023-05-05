@@ -22,10 +22,12 @@ public class SMTable extends BaseModelBlock {
 	private static final PropertyBool FORWARD = PropertyBool.create("forward");
 	private static final PropertyBool LEFT = PropertyBool.create("left");
 	private static final PropertyBool RIGHT = PropertyBool.create("right");
+    private static final AxisAlignedBB AABB = new AxisAlignedBB(0D, 0.5D, 0D, 1D, 1D, 1D);
+	private final int data;
 
-	public SMTable(String name) {
+	public SMTable(String name, int data) {
 		super(Material.WOOD, name);
-		setSoundType(SoundType.WOOD);
+		setSoundType(data == 2 ? SoundType.METAL : SoundType.WOOD);
 		setHardness(0.5F);
         setResistance(1024F);
 		setDefaultState(this.blockState.getBaseState()
@@ -33,12 +35,15 @@ public class SMTable extends BaseModelBlock {
 				.withProperty(FORWARD, false)
 				.withProperty(LEFT, false)
 				.withProperty(RIGHT, false));
+		this.data = data;
 		BlockInit.furniList.add(this);
 	}
 
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return FULL_BLOCK_AABB;
-	}
+	/**
+	 * 0 = 通常
+	 * 1 = レース付き
+	 * 2 = ステンレス
+	 */
 
 	@Override
 	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos pos, EnumFacing side) {
@@ -47,15 +52,15 @@ public class SMTable extends BaseModelBlock {
 
 	@Override
 	public boolean isFullCube(IBlockState state) {
-		return true;
+		return this.data == 1;
 	}
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		boolean back = world.getBlockState(pos.south()).getBlock() == this;
-		boolean forward = world.getBlockState(pos.north()).getBlock() == this;
-		boolean left = world.getBlockState(pos.west()).getBlock() == this;
-		boolean right = world.getBlockState(pos.east()).getBlock() == this;
+		boolean back = this.getBlock(world, pos.south()) == this;
+		boolean forward = this.getBlock(world, pos.north()) == this;
+		boolean left = this.getBlock(world, pos.west()) == this;
+		boolean right = this.getBlock(world, pos.east()) == this;
 		return state.withProperty(BACK, back).withProperty(FORWARD, forward).withProperty(LEFT, left).withProperty(RIGHT, right);
 	}
 
@@ -79,4 +84,9 @@ public class SMTable extends BaseModelBlock {
 	public BlockRenderLayer getBlockLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
+
+    @Override
+    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+    	return AABB;
+    }
 }

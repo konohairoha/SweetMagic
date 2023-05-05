@@ -2,10 +2,12 @@ package sweetmagic.init.block.blocks;
 
 import java.util.Random;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -41,6 +43,7 @@ public class SMDoor extends BlockDoor {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER ? null : this.getItem();
     }
+
     @Override
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
         return new ItemStack(this.getItem());
@@ -101,9 +104,9 @@ public class SMDoor extends BlockDoor {
 			case SOUTH:
 				return flag ? T_SOUTH : (flag1 ? T_EAST : T_WEST);
 			case WEST:
-				return flag ? T_WEST : (flag1 ? T_SOUTH : NORTH_AABB);
+				return flag ? T_WEST : (flag1 ? T_SOUTH : T_NORTH);
 			case NORTH:
-				return flag ? NORTH_AABB : (flag1 ? T_WEST : T_EAST);
+				return flag ? T_NORTH : (flag1 ? T_WEST : T_EAST);
 			}
 		}
 
@@ -119,4 +122,62 @@ public class SMDoor extends BlockDoor {
     public boolean isTop (IBlockState state) {
     	return state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER;
     }
+
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
+
+		if (state.getValue(HALF) == BlockDoor.EnumDoorHalf.UPPER) {
+			BlockPos posDown = pos.down();
+			IBlockState downState = world.getBlockState(posDown);
+
+			if (downState.getBlock() != this) {
+				world.setBlockToAir(pos);
+			}
+
+			else if (block != this) {
+				downState.neighborChanged(world, posDown, block, fromPos);
+			}
+
+		}
+		else {
+
+			boolean flag1 = false;
+			BlockPos posUP = pos.up();
+			IBlockState upState = world.getBlockState(posUP);
+
+			if (upState.getBlock() != this) {
+				world.setBlockToAir(pos);
+				flag1 = true;
+			}
+
+			if (flag1) {
+				if (!world.isRemote) {
+					this.dropBlockAsItem(world, pos, state, 0);
+				}
+			}
+
+			else {
+
+				boolean flag = world.isBlockPowered(pos) || world.isBlockPowered(posUP);
+
+				if (block != this && (flag || block.getDefaultState().canProvidePower()) && flag != ((Boolean) upState.getValue(POWERED)).booleanValue()) {
+
+					world.setBlockState(posUP, upState.withProperty(POWERED, Boolean.valueOf(flag)), 2);
+
+					if (flag != ((Boolean) state.getValue(OPEN)).booleanValue()) {
+						world.setBlockState(pos, state.withProperty(OPEN, Boolean.valueOf(flag)), 2);
+						world.markBlockRangeForRenderUpdate(pos, pos);
+						world.playEvent((EntityPlayer) null, flag ? this.getOpenSound() : this.getCloseSound(), pos, 0);
+					}
+				}
+			}
+		}
+	}
+
+	private int getCloseSound() {
+		return this.blockMaterial == Material.IRON ? 1011 : 1012;
+	}
+
+	private int getOpenSound() {
+		return this.blockMaterial == Material.IRON ? 1005 : 1006;
+	}
 }

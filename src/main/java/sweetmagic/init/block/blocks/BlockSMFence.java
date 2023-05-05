@@ -44,7 +44,6 @@ public class BlockSMFence extends BaseModelBlock {
     public static final AxisAlignedBB NORTH_AABB = new AxisAlignedBB(0.375D, 0D, 0D, 0.625D, 1.5D, 0.375D);
     public static final AxisAlignedBB EAST_AABB = new AxisAlignedBB(0.625D, 0D, 0.375D, 1D, 1.5D, 0.625D);
 
-
     protected static final AxisAlignedBB[] AABB = new AxisAlignedBB[] {
     	new AxisAlignedBB(0.375D, 0D, 0.375D, 0.625D, 1D, 0.625D),
 		new AxisAlignedBB(0.375D, 0D, 0.375D, 0.625D, 1D, 1D),
@@ -65,10 +64,10 @@ public class BlockSMFence extends BaseModelBlock {
 	};
 
 	public BlockSMFence(String name, int data) {
-		super(Material.WOOD, name);
+		super(data == 0 ? Material.WOOD : Material.ROCK, name);
         setHardness(0.2F);
 		setResistance(1024F);
-		setSoundType(SoundType.WOOD);
+		setSoundType(data == 0 ? SoundType.WOOD : SoundType.STONE);
 		this.data = data;
 		setDefaultState(this.blockState.getBaseState()
 				.withProperty(BACK, false)
@@ -140,9 +139,12 @@ public class BlockSMFence extends BaseModelBlock {
 
 	public boolean canConnect(IBlockAccess world, BlockPos pos, EnumFacing face) {
 		IBlockState state = world.getBlockState(pos.offset(face));
-		return !(state.getBlock() instanceof BlockLeaves) &&
-				(state.getBlock().canBeConnectedTo(world, pos.offset(face), face.getOpposite())
-				|| this.canConnectBlock(state.getBlock()) || this.canBeConnectedTo(world, pos, face)
+		Block block = state.getBlock();
+		return !(block instanceof BlockLeaves) &&
+				!(block instanceof SMTableDot) &&
+				!(block instanceof SMTable) &&
+				(block.canBeConnectedTo(world, pos.offset(face), face.getOpposite())
+				|| this.canConnectBlock(block) || this.canBeConnectedTo(world, pos, face)
 				|| state.isSideSolid(world, pos.offset(face), face.getOpposite()));
 	}
 
@@ -154,10 +156,10 @@ public class BlockSMFence extends BaseModelBlock {
 	// 両サイドにブロックがあるかどうか
 	public int checkCenter (IBlockAccess world, BlockPos pos) {
 
-		Block north = world.getBlockState(pos.north()).getBlock();
-		Block south = world.getBlockState(pos.south()).getBlock();
-		Block west = world.getBlockState(pos.west()).getBlock();
-		Block east = world.getBlockState(pos.east()).getBlock();
+		Block north = this.getBlock(world, pos.north());
+		Block south = this.getBlock(world, pos.south());
+		Block west = this.getBlock(world, pos.west());
+		Block east = this.getBlock(world, pos.east());
 
 		boolean vartical = this.canConnectBlock(north) && this.canConnectBlock(south) && !this.canConnectBlock(west) && !this.canConnectBlock(east);
 		boolean beside = !this.canConnectBlock(north) && !this.canConnectBlock(south) && this.canConnectBlock(west) && this.canConnectBlock(east);
@@ -213,14 +215,7 @@ public class BlockSMFence extends BaseModelBlock {
 
 	@Override
 	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
-
-		if (!world.isRemote) {
-			return ItemLead.attachToFence(player, world, pos);
-		}
-
-		else {
-			return stack.getItem() == Items.LEAD;
-		}
+		return !world.isRemote ? ItemLead.attachToFence(player, world, pos) : stack.getItem() == Items.LEAD;
 	}
 
 	@Override

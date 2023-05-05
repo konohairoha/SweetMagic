@@ -9,7 +9,7 @@ import sweetmagic.init.BlockInit;
 
 public class SMLog extends BlockLog implements ISmeltItemBlock {
 
-	private static final PropertyEnum<EnumAxis> LOG_AXIS = PropertyEnum.create("axis", SMLog.EnumAxis.class);
+	public static final PropertyEnum<EnumAxis> LOG_AXIS = PropertyEnum.create("axis", SMLog.EnumAxis.class);
     private IBlockState sapling;
 
     public SMLog(String name) {

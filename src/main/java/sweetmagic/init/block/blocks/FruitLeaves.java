@@ -16,7 +16,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockRenderLayer;
@@ -24,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -35,6 +33,7 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.common.IShearable;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import sweetmagic.config.SMConfig;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.ItemInit;
 import sweetmagic.init.block.crop.icrop.ISMCrop;
@@ -101,7 +100,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	//---------------------------------------------------------------------------------
 
 	@Override	//当たり判定を1ブロックサイズへ変更
-    public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos){
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos){
         return FULL_BLOCK_AABB;
     }
 
@@ -114,7 +113,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		return new BlockStateContainer(this, new IProperty[] { SweetState.STAGE3 });
 	}
 
-	public static PropertyInteger getSweetState() {
+	public PropertyInteger getSweetState() {
 		return SweetState.STAGE3;
 	}
 
@@ -145,9 +144,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		int i = meta;
-		if(i > this.getMaxBlockState() || i < 0) {
-			i = 0;
-		}
+		if(i > this.getMaxBlockState() || i < 0) { i = 0; }
 		return this.getDefaultState().withProperty(this.getSweetState(), i);
 	}
 
@@ -158,8 +155,8 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	}
 
 	//現在の成長段階をintで取得するためのもの。
-	public static int getNowStateMeta(IBlockState state) {
-		return SweetState.getInt(state, getSweetState());
+	public int getNowStateMeta(IBlockState state) {
+		return SweetState.getInt(state, this.getSweetState());
 	}
 
 	// IPlantable
@@ -210,8 +207,8 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 	//超必須メソッド　これがないとStatic参照ができずうまくBlockStateをやりくりしにくい
 	//このメソッドが受け持つ役割は基本的に作物の成長段階を外からいじるときに使う。いじらなくてもよい
-	public static IBlockState withStage(World world, IBlockState state, int age) {
-		return state.getBlock().getDefaultState().withProperty(getSweetState(), age);
+	public IBlockState withStage(World world, IBlockState state, int age) {
+		return state.getBlock().getDefaultState().withProperty(this.getSweetState(), age);
 	}
 
 	//ドロップする種
@@ -238,7 +235,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 	}
 
 	//ドロップする作物
-	protected Item getCrop() {
+	public Item getCrop() {
 
 		switch (this.data) {
 		case 0:	return ItemInit.lemon;
@@ -258,11 +255,11 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
 		// 最大成長してるなら
 		if (age >= this.getMaxBlockState()) {
-	    	drops.add(new ItemStack(this.getCrop(), this.srand.nextInt(4) + 1));
+	    	drops.add(new ItemStack(this.getCrop(), this.srand.nextInt(3) + 1));
 		}
 
 	    float fl = this.srand.nextFloat();
-	    if(fl < 0.1F) { drops.add(new ItemStack(this.getSeed(), 1)); }
+	    if(fl < 0.0375F) { drops.add(new ItemStack(this.getSeed(), 1)); }
 	}
 
 	//右クリックの処理
@@ -279,6 +276,18 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		return true;
 	}
 
+	// 右クリック回収時に戻る成長段階
+	@Override
+	public int RCSetState () {
+		return 0;
+	}
+
+	// ドロップ数
+	@Override
+	public int getDropValue (Random rand, int fortune) {
+		return Math.max(1, rand.nextInt(3) + 1 + SMConfig.glowthValue);
+	}
+
 	// 右クリック
 	public void onRicghtClick (World world, EntityPlayer player, IBlockState state, BlockPos pos, ItemStack stack) {
 
@@ -286,10 +295,9 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
         if(age >= this.getMaxBlockState()) {
     		Random rand = new Random();
-            EntityItem drop = new EntityItem(world, player.posX,player.posY, player.posZ, new ItemStack(this.getCrop(), rand.nextInt(3) + 1));
+            EntityItem drop = this.getDropItem(world, player, stack, this.getCrop(), this.getDropValue(rand, 0));
             world.spawnEntity(drop);
-            world.setBlockState(pos, this.withStage(world, state, 0), 2);        //作物の成長段階を2下げる
-            world.playSound((EntityPlayer)null, pos,SoundEvents.BLOCK_GRASS_PLACE, SoundCategory.PLAYERS, 0.5F, 1.0F / (rand.nextFloat() * 0.4F + 1.2F) + 1 * 0.5F);
+            world.setBlockState(pos, this.withStage(world, state, this.RCSetState()), 2);        //作物の成長段階を2下げる
 			this.playCropSound(world, rand, pos);
         }
 
@@ -297,7 +305,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 
             ItemStack stackB = new ItemStack(Items.DYE,1,15);
             if(ItemStack.areItemsEqual(stack, stackB)) {
-            	ParticleHelper.spawnBoneMeal(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
+            	ParticleHelper.spawnParticle(world, pos, EnumParticleTypes.VILLAGER_HAPPY);
             	if (!player.isCreative()) { stack.shrink(1); }
                 world.setBlockState(pos, this.withStage(world, state, getNowStateMeta(state) + 1), 2);
             }
@@ -325,7 +333,7 @@ public class FruitLeaves extends BlockBush implements IGrowable, IShearable, ISM
 		return 1;
 	}
 
-	public boolean canGrow(World worldIn, BlockPos pos, IBlockState state, boolean isClient) {
+	public boolean canGrow(World world, BlockPos pos, IBlockState state, boolean isClient) {
 		return !this.isMaxAge(state);
 	}
 

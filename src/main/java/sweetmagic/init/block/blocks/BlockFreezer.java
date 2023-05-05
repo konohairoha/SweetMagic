@@ -1,19 +1,16 @@
 package sweetmagic.init.block.blocks;
 
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -28,31 +25,27 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
 import sweetmagic.handlers.SMGuiHandler;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.base.BaseCookBlock;
 import sweetmagic.init.tile.cook.TileFreezer;
 
-public class BlockFreezer extends BaseFaceBlock {
+public class BlockFreezer extends BaseCookBlock {
 
 	public final boolean isTop;
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 1D);
 
 	public BlockFreezer(String name, boolean isTop, List<Block> list) {
-		super(Material.IRON, name);
+		super(name);
         setHardness(0.1F);
         setResistance(99999F);
 		this.setSoundType(SoundType.METAL);
 		this.isTop = isTop;
+		BlockInit.furniList.remove(this);
 		list.add(this);
-	}
-
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
 	}
 
 	@Nonnull
 	@Override
-	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileFreezer();
 	}
 
@@ -144,16 +137,6 @@ public class BlockFreezer extends BaseFaceBlock {
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
 	}
-
-	// アイテムをドロップ
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return ItemStack.EMPTY.getItem();
-	}
-
-    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-        return ItemStack.EMPTY;
-    }
 
 	@Override
 	public ItemStack getPickBlock(IBlockState state, RayTraceResult target, World world, BlockPos pos, EntityPlayer player) {

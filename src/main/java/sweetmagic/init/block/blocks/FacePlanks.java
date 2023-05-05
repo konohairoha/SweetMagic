@@ -29,8 +29,7 @@ public class FacePlanks extends Block {
 
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing face, float x, float y, float z, int meta, EntityLivingBase placer) {
-		IBlockState state = super.getStateForPlacement(world, pos, face, x, y, z, meta, placer);
-		return state.withProperty(FACING, face);
+		return super.getStateForPlacement(world, pos, face, x, y, z, meta, placer).withProperty(FACING, face);
 	}
 
 	@Override

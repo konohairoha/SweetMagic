@@ -120,6 +120,9 @@ public class BlockParallelInterfere extends BaseFaceBlock {
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.parallelinterfere_title.name")));
 		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.parallelinterfere_text.name")));
+
+		float power = this.data == 0 ? 15.0F : 30.0F;
+		tooltip.add(I18n.format(TextFormatting.GREEN + this.getTip("tip.enchantpower.name") + " : " + power ));
 	}
 
     public ItemStack getItem(World world, BlockPos pos, IBlockState state) {

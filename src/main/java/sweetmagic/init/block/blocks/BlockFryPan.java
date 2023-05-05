@@ -2,18 +2,14 @@ package sweetmagic.init.block.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -30,42 +26,41 @@ import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
 import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.pan.PanRecipeInfo;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.base.BaseCookBlock;
 import sweetmagic.init.tile.cook.TilePot;
 import sweetmagic.init.tile.cook.TileStove;
+import sweetmagic.util.FaceAABB;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
 
-public class BlockFryPan extends BaseFaceBlock {
+public class BlockFryPan extends BaseCookBlock {
 
-	public static boolean keepInventory = false;
-	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.2D, 0.1D, 0.8D, 0D, 0.8D);
+	private static boolean keepInventory = false;
+	private final int data;
+	private final static AxisAlignedBB[] COLOR = new FaceAABB(0.24D, 0.13D, 0.3D, 0.76D, 0D, 0.925D).getRotatedBounds();
+	private final static AxisAlignedBB[] FRYPAN = new FaceAABB(0.2D, 0.13D, 0.28D, 0.8D, 0D, 0.85D).getRotatedBounds();
 	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
 
-	public BlockFryPan(String name) {
-		super(Material.IRON, name);
+	public BlockFryPan(String name, int data, boolean isRegister) {
+		super(name);
 		setHardness(0.1F);
-		setResistance(1024F);
-		setSoundType(SoundType.STONE);
-		setDefaultState(this.blockState.getBaseState()
-				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
-		disableStats();
-		BlockInit.furniList.add(this);
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
+
+		if (isRegister) {
+			BlockInit.frypanList.add(this);
+		}
+		this.data = data;
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
-	}
-
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
+		AxisAlignedBB[] aabb = this.data == 0 ? FRYPAN : COLOR;
+		return aabb[state.getValue(FACING).rotateYCCW().getHorizontalIndex()];
 	}
 
 	@Nonnull
 	@Override
-	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-		return new TilePot();//TileEntityは処理自体ほぼ同じなため製粉機を指定
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TilePot();
 	}
 
 	// 右クリックの処理
@@ -130,6 +125,7 @@ public class BlockFryPan extends BaseFaceBlock {
 			pot.handItem = copy;
 			pot.inPutList = inputs;
 			pot.outPutList = results;
+			pot.hasFork = this.hasFork(player);
 
 			//ブロックをON用に置き換え　※起動処理
 			this.setState(world, pos);
@@ -138,6 +134,7 @@ public class BlockFryPan extends BaseFaceBlock {
 		// 完成後
 		else if (this.getCook(state).isFIN()) {
 
+			this.spawnXp(player, pot.outPutList, pot.hasFork);
 			this.spawnItem(world, player, pot.outPutList);
 			this.setState(world, pos);
 
@@ -158,7 +155,6 @@ public class BlockFryPan extends BaseFaceBlock {
             world.setTileEntity(pos, tile);
         }
     }
-
 
 	public EnumCook getCook (IBlockState state) {
 		return state.getValue(COOK);
@@ -185,13 +181,6 @@ public class BlockFryPan extends BaseFaceBlock {
 		}
 	}
 
-    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-        return ItemStack.EMPTY;
-    }
-
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
-    }
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[] { FACING, COOK });

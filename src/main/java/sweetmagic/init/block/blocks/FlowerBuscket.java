@@ -1,12 +1,10 @@
 package sweetmagic.init.block.blocks;
 
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -37,36 +35,18 @@ public class FlowerBuscket extends BaseModelBlock {
 
 	//右クリックの処理
     @Override
-    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing face, float x, float y, float z) {
 
         ItemStack stack = player.getHeldItem(hand);
+		if (!this.checkBlock(stack)) { return false; }
 
-		if (this.checkBlock(stack)) {
-
-			for (int i = 1; i < 4; i++) {
-
-				if (!world.isAirBlock(pos.down(i))) { continue; }
-
-	        	world.setBlockState(pos.down(i), this.getDefaultState(), 3);
-	            if (!player.isCreative()) { stack.setCount(stack.getCount() - 1); }
-
-	            SoundType sound = this.getSoundType(state, world, pos.down(i), player);
-	            this.playerSound(world, pos.down(i), sound.getPlaceSound(),(sound.getVolume() + 1.0F) / 2.0F, sound.getPitch() * 0.8F);
-	        	return true;
-			}
-		}
-
-    	return false;
-    }
-
-    public boolean checkBlock (ItemStack stack) {
-    	return stack.getItem() == Item.getItemFromBlock(this);
+    	return this.setBlockSound(world, state, pos, player, stack, 10, true);
     }
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		boolean top = world.getBlockState(pos.down()).getBlock() == this;
-		boolean bot = world.getBlockState(pos.up()).getBlock() == this;
+		boolean top = this.getBlock(world, pos.down()) == this;
+		boolean bot = this.getBlock(world, pos.up()) == this;
 		return state.withProperty(LOCAL, EnumLocal.getLocal(top, bot));
 	}
 

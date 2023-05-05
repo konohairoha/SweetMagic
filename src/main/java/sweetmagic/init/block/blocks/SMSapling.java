@@ -21,6 +21,7 @@ import sweetmagic.worldgen.gen.WorldGenCoconutTree;
 import sweetmagic.worldgen.gen.WorldGenEstor;
 import sweetmagic.worldgen.gen.WorldGenFruitTree;
 import sweetmagic.worldgen.gen.WorldGenPrsmTree;
+import sweetmagic.worldgen.gen.WorldGenSMMagiaTree;
 
 public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 
@@ -50,6 +51,7 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 	 * 5 = バナナ
 	 * 6 = エストール
 	 * 7 = 桃
+	 * 8 = マギアウッド
 	 */
 
 	@Override
@@ -61,14 +63,8 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 
 		// オレンジ
 		case 0:
-			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
-			break;
-
 		// レモン
 		case 1:
-			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
-			break;
-
 		// 栗
 		case 2:
 			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
@@ -98,6 +94,11 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 		case 7:
 			gen = new WorldGenFruitTree(true, this.getLog(), this.getLeave());
 			break;
+
+		// マギアウッド
+		case 8:
+			gen = new WorldGenSMMagiaTree(this.getLog(), this.getLeave());
+			break;
 		}
 
 		if (gen != null) {
@@ -109,14 +110,15 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 	public Block getLog () {
 
 		switch (this.data) {
-		case 0: return BlockInit.orange_log;	// オレンジ
-		case 1: return BlockInit.lemon_log;	// レモン
+		case 0: return BlockInit.orange_log;		// オレンジ
+		case 1: return BlockInit.lemon_log;		// レモン
 		case 2: return BlockInit.chestnut_log;	// 栗
-		case 3: return BlockInit.coconut_log;	// ヤシ
-		case 4: return BlockInit.prism_log;	// プリズム
-		case 5: return Blocks.LOG;				// バナナ
-		case 6: return BlockInit.estor_log;	// エストール
-		case 7: return BlockInit.peach_log;	// 桃
+		case 3: return BlockInit.coconut_log;		// ヤシ
+		case 4: return BlockInit.prism_log;		// プリズム
+		case 5: return Blocks.LOG;					// バナナ
+		case 6: return BlockInit.estor_log;		// エストール
+		case 7: return BlockInit.peach_log;		// 桃
+		case 8: return BlockInit.magiawood_log;	// マギアウッド
 		}
 
 		return BlockInit.orange_log;
@@ -126,14 +128,15 @@ public class SMSapling extends BlockBush implements IGrowable, ISmeltItemBlock {
 	public Block getLeave () {
 
 		switch (this.data) {
-		case 0: return BlockInit.orange_leaves;	// オレンジ
+		case 0: return BlockInit.orange_leaves;		// オレンジ
 		case 1: return BlockInit.lemon_leaves;		// レモン
 		case 2: return BlockInit.chestnut_leaves;	// 栗
-		case 3: return BlockInit.coconut_leaves;	// ヤシ
+		case 3: return BlockInit.coconut_leaves;		// ヤシ
 		case 4: return BlockInit.prism_leaves;		// プリズム
-		case 5: return BlockInit.banana_leaves;	// バナナ
+		case 5: return BlockInit.banana_leaves;		// バナナ
 		case 6: return BlockInit.estor_leaves;		// エストール
 		case 7: return BlockInit.peach_leaves;		// 桃
+		case 8: return BlockInit.magiawood_leaves;	// マギアウッド
 		}
 
 		return BlockInit.orange_leaves;

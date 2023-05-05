@@ -12,6 +12,9 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -71,18 +74,27 @@ public class BlockAwningTent extends BlockCounterTable {
 	}
 
 	public boolean isAwning (IBlockState... stateArray) {
+
+		int awningValue = 0;
+		int fullValue = 0;
+
 		for (IBlockState state : stateArray) {
-			if (!this.isAwning(state)) { return false; }
+			if (state.getBlock() == Blocks.AIR) { return false; }
+			else if (state.getBlock().isFullBlock(state)) { fullValue++; }
+			else if (this.isAwning(state)) { awningValue++; }
+
 		}
-		return true;
+		return awningValue >= 3 && fullValue <= 1;
 	}
 
 	public boolean isCenter (IBlockState... stateArray) {
-		int count = 0;
+		int awningValue = 0;
+		int fullValue = 0;
 		for (IBlockState state : stateArray) {
-			if (this.isAwning(state)) { count++; }
+			if (state.getBlock().isFullBlock(state)) { fullValue++; }
+			else if (this.isAwning(state)) { awningValue++; }
 		}
-		return count >= 3;
+		return awningValue == 3 || ( awningValue >= 2 && fullValue == 1 );
 	}
 
 	@Override
@@ -104,6 +116,21 @@ public class BlockAwningTent extends BlockCounterTable {
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
+	}
+
+	public void onLanded(World world, Entity entity) {
+
+		entity.fallDistance = 0;
+
+		if (entity.isSneaking() || entity.motionY >= 0D) {
+			super.onLanded(world, entity);
+		}
+
+		entity.motionY = -entity.motionY;
+
+		if (!(entity instanceof EntityLivingBase)) {
+			entity.motionY *= 0.3D;
+		}
 	}
 
 	@Override

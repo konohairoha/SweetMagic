@@ -41,8 +41,7 @@ public class GoldCrest extends BaseModelBlock {
 	//土、草、耕地に置いても壊れないようにする
 	@Override
 	public boolean canPlaceBlockAt(World world, BlockPos pos) {
-		Block block = world.getBlockState(pos.down()).getBlock();
-		return block != Blocks.AIR;
+		return this.getBlock(world, pos.down()) != Blocks.AIR;
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {

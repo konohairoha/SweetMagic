@@ -9,7 +9,7 @@ public class BlockPlant extends BaseModelBlock {
 
     public BlockPlant(String name) {
         super(Material.PLANTS, name);
-        setHardness(1.0F);
+        setHardness(0.01F);
         setResistance(1024F);
         setSoundType(SoundType.PLANT);
 		BlockInit.furniList.add(this);

@@ -26,13 +26,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.util.FaceAABB;
 
 public class BlockWallTowel extends BaseFaceBlock {
 
-	private final static AxisAlignedBB WALL_NORTH = new AxisAlignedBB(0D, 0.625D, 1D, 1D, 0.875D, 1D);
-	private final static AxisAlignedBB WALL_SOUTH = new AxisAlignedBB(0D, 0.625D, 0D, 1D, 0.875D, 0D);
-	private final static AxisAlignedBB WALL_EAST = new AxisAlignedBB(0D, 0.625D, 0D, 0D, 0.875D, 1D);
-	private final static AxisAlignedBB WALL_WEST = new AxisAlignedBB(1D, 0.625D, 0D, 1D, 0.875D, 1D);
+	private final static AxisAlignedBB[] WALL = new FaceAABB(0D, 0.625D, 1D, 1D, 0.875D, 1D).getRotatedBounds();
 	private final int data;
 
 	public BlockWallTowel(String name, int data, List<Block> list) {
@@ -47,15 +45,7 @@ public class BlockWallTowel extends BaseFaceBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-
-		switch (state.getValue(FACING)) {
-		case NORTH: return WALL_NORTH;
-		case SOUTH: return WALL_SOUTH;
-		case EAST:  return WALL_EAST;
-		case WEST:  return WALL_WEST;
-		}
-
-		return WALL_NORTH;
+		return WALL[state.getValue(FACING).rotateYCCW().getHorizontalIndex()];
 	}
 
 	// ブロックでのアクション

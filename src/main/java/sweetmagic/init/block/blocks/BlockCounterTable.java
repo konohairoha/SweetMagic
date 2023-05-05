@@ -1,5 +1,6 @@
 package sweetmagic.init.block.blocks;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -7,7 +8,6 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import sweetmagic.init.BlockInit;
@@ -16,11 +16,10 @@ import sweetmagic.init.base.BaseFaceBlock;
 public class BlockCounterTable extends BaseFaceBlock {
 
 	protected final int data;
-	private static final PropertyInteger CENTER = PropertyInteger.create("center", 0, 4);
-	private static final AxisAlignedBB AWNINGTENT = new AxisAlignedBB(0D, 0D, 0D, 1D, 0.5D, 1D);
+	protected static final PropertyInteger CENTER = PropertyInteger.create("center", 0, 4);
 
 	public BlockCounterTable (String name, int data) {
-		super(data == 0 ? Material.ROCK : Material.WOOD, name);
+		super(Material.WOOD, name);
         setSoundType(data == 0 ? SoundType.STONE : SoundType.CLOTH);
         setHardness(0.25F);
         setResistance(1024F);
@@ -91,7 +90,12 @@ public class BlockCounterTable extends BaseFaceBlock {
 
 	// 繋がるかのチェック
 	public boolean canConnectBlock(IBlockState state, EnumFacing face) {
-		return state.getBlock() instanceof BlockCounterTable && face == state.getValue(FACING);
+		return this.isConnectBlock(state.getBlock()) && face == state.getValue(FACING);
+	}
+
+	public boolean isConnectBlock (Block block) {
+		return block instanceof BlockCounterTable || block instanceof BlockStove || block instanceof BlockSink
+				|| block instanceof BlockOven || block instanceof BlockWoodChest;
 	}
 
 	@Override

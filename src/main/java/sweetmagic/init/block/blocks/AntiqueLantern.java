@@ -4,6 +4,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
@@ -11,6 +12,8 @@ import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseModelBlock;
 
 public class AntiqueLantern extends BaseModelBlock {
+
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.2D, 0.7D, 0.2D, 0.8D, 0D, 0.8D);
 
     public AntiqueLantern(String name) {
     	super(Material.GLASS, name);
@@ -20,6 +23,10 @@ public class AntiqueLantern extends BaseModelBlock {
         setLightLevel(1F);
 		BlockInit.furniList.add(this);
     }
+
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB;
+	}
 
 	@Deprecated
 	public Vec3d getOffset(IBlockState state, IBlockAccess world, BlockPos pos) {

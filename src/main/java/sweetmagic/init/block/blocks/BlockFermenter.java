@@ -2,17 +2,13 @@ package sweetmagic.init.block.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import javax.annotation.Nonnull;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
@@ -22,22 +18,17 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import sweetmagic.api.SweetMagicAPI;
 import sweetmagic.api.recipe.fermenter.FermenterRecipeInfo;
-import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.base.BaseCookBlock;
 import sweetmagic.init.tile.cook.TileFermenter;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
 
-public class BlockFermenter extends BaseFaceBlock {
+public class BlockFermenter extends BaseCookBlock {
 
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.8D, 0.8D, 0.8D, 0.2D, 0D, 0.2D);
 
-	public BlockFermenter(String name, List<Block> list) {
-		super(Material.GLASS, name);
-		setHardness(0.33F);
-		setResistance(1024F);
-		setSoundType(SoundType.GLASS);
-		disableStats();
-		list.add(this);
+	public BlockFermenter(String name) {
+		super(name, Material.GLASS);
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
@@ -65,7 +56,6 @@ public class BlockFermenter extends BaseFaceBlock {
 			List<ItemStack> inputs = new ArrayList<ItemStack>();
 			List<ItemStack> results = new ArrayList<ItemStack>();
 
-
 			// クラフト処理
 			RecipeUtil recipeUtil = RecipeHelper.recipeAllCraft(recipeInfo, player, stack);
 			handitem = recipeUtil.getHand();
@@ -75,6 +65,7 @@ public class BlockFermenter extends BaseFaceBlock {
 			tile.handItem = handitem;
 			tile.inPutList = inputs;
 			tile.outPutList = results;
+			tile.hasFork = this.hasFork(player);
 			tile.isWorking = true;
 			tile.tickTime = 0;
 			this.playerSound(world, pos, SoundEvents.ENTITY_ITEM_PICKUP, 0.5F, 1F);
@@ -88,6 +79,7 @@ public class BlockFermenter extends BaseFaceBlock {
 
 			// 結果アイテムのドロップ
 			if (!world.isRemote) {
+				this.spawnXp(player, tile.outPutList, tile.hasFork);
 				this.spawnItem(world, player, tile.outPutList);
 			}
 
@@ -100,14 +92,9 @@ public class BlockFermenter extends BaseFaceBlock {
 		return true;
 	}
 
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
-	}
-
 	@Nonnull
 	@Override
-	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
 		return new TileFermenter();
 	}
 
@@ -120,12 +107,4 @@ public class BlockFermenter extends BaseFaceBlock {
 		this.spawnItem(world, pos, tile.inPutList);
 		spawnAsEntity(world, pos, new ItemStack(this));
 	}
-
-    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-        return ItemStack.EMPTY;
-    }
-
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
-    }
 }

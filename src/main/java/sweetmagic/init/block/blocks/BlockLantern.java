@@ -13,17 +13,21 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.util.FaceAABB;
 
 public class BlockLantern extends BaseFaceBlock {
 
 	private final int data;
+	private final static AxisAlignedBB[] AABB = new FaceAABB(0.25D, 0.05D, 0.2D, 0.75D, 0.875D, 1D).getRotatedBounds();
 
 	public BlockLantern(String name, int data, List<Block> list) {
 		super(Material.GLASS, name);
@@ -45,6 +49,10 @@ public class BlockLantern extends BaseFaceBlock {
 		}
 
 		return true;
+	}
+
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return AABB[state.getValue(FACING).rotateYCCW().getHorizontalIndex()];
 	}
 
 	//ツールチップの表示

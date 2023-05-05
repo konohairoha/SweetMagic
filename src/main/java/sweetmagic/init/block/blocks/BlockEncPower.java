@@ -27,7 +27,6 @@ public class BlockEncPower extends BaseModelBlock {
         setHarvestLevel("pickaxe", harvestLevel);
         setSoundType(sType);
         setLightLevel(light);
-//		BlockInit.blockList.add(this);
 		this.enchantPower = encPower;
     }
 

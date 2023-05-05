@@ -18,14 +18,11 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import sweetmagic.init.BlockInit;
 import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.util.FaceAABB;
 
 public class BlockKanban extends BaseFaceBlock {
 
-	private final static AxisAlignedBB NORTH = new AxisAlignedBB(0D, 0D, 0.9375D, 1D, 1D, 1D);
-	private final static AxisAlignedBB SOUTH = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 0.0625D);
-	private final static AxisAlignedBB EAST = new AxisAlignedBB(0D, 0D, 0D, 0.0625D, 1D, 1D);
-	private final static AxisAlignedBB WEST = new AxisAlignedBB(1D, 0D, 0D, 0.9375D, 1D, 1D);
-	private final static AxisAlignedBB AABB = new AxisAlignedBB(0D, 0D, 0D, 1D, 1D, 0.0625D);
+	private final static AxisAlignedBB[] KANBAN = new FaceAABB(0D, 0D, 0.9375D, 1D, 1D, 1D).getRotatedBounds();
 
 	public BlockKanban(String name, List<Block> list) {
 		super(Material.WOOD, name);
@@ -55,15 +52,7 @@ public class BlockKanban extends BaseFaceBlock {
 
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-
-		switch (state.getValue(FACING)) {
-		case NORTH: return NORTH;
-		case SOUTH: return SOUTH;
-		case EAST:  return EAST;
-		case WEST:  return WEST;
-		}
-
-		return AABB;
+		return KANBAN[state.getValue(FACING).rotateYCCW().getHorizontalIndex()];
 	}
 
 	// アイテムをドロップ

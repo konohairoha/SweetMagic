@@ -6,8 +6,7 @@ import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -72,8 +71,7 @@ public class SMChair extends BaseFaceBlock {
 	}
 
 	// 以下が座れるようにするための処理
-	@Override
-	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+	public boolean actionBlock (World world, IBlockState state, BlockPos pos, EntityPlayer player, ItemStack stack) {
 
 		if (!world.isRemote) {
 
@@ -94,6 +92,9 @@ public class SMChair extends BaseFaceBlock {
 				break;
 			case 4:
 				y = this.isUnderHalf(world, pos) ? -0.125D : 0.175D;
+				break;
+			case 5:
+				y = -0.035D;
 				break;
 			}
 

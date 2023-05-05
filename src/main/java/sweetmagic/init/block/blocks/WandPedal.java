@@ -37,18 +37,15 @@ import sweetmagic.init.block.crop.BlockCornFlower;
 import sweetmagic.init.item.sm.seed.SMSeed;
 import sweetmagic.init.tile.chest.TileWandPedal;
 import sweetmagic.packet.PlayerSoundPKT;
+import sweetmagic.util.FaceAABB;
 import sweetmagic.util.SoundHelper;
 
 public class WandPedal extends BaseFaceBlock {
 
 	public final int data;
 	private final static AxisAlignedBB PEDAL = new AxisAlignedBB(0.1D, 0D, 0.1D, 0.9D, 0.6D, 0.9D);
-	private final static AxisAlignedBB WALL_NORTH = new AxisAlignedBB(0.0625D, 0.0625D, 0.9375D, 0.9375D, 0.9375D, 1D);
-	private final static AxisAlignedBB WALL_SOUTH = new AxisAlignedBB(0.0625D, 0.0625D, 0D, 0.9375D, 0.9375D, 0.0625D);
-	private final static AxisAlignedBB WALL_EAST = new AxisAlignedBB(0D, 0.085D, 0.0625D, 0.0625D, 0.9375D, 0.9375D);
-	private final static AxisAlignedBB WALL_WEST = new AxisAlignedBB(0.9375D, 0.0625D, 0.0625D, 1D, 0.9375D, 0.9375D);
-	private final static AxisAlignedBB BOAD_NOSO = new AxisAlignedBB(0.435D, 0D, 0D, 0.56D, 1D, 1D);
-	private final static AxisAlignedBB BOAD_EAWE = new AxisAlignedBB(0D, 0D, 0.435D, 1D, 1D, 0.56D);
+	private final static AxisAlignedBB[] WALL = new FaceAABB(0.0625D, 0.0625D, 0.9375D, 0.9375D, 0.9375D, 1D).getRotatedBounds();
+	private final static AxisAlignedBB[] BOAD = new FaceAABB(0.435D, 0D, 0D, 0.56D, 1D, 1D).getRotatedBounds();
 	private final static AxisAlignedBB POT = new AxisAlignedBB(0.375D, 0D, 0.375D, 0.625D, 0.5D, 0.625D);
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.1D, 0D, 0.1D, 0.9D, 0.6D, 0.9D);
 
@@ -90,26 +87,10 @@ public class WandPedal extends BaseFaceBlock {
 
 		// ウォールボード
 		case 1:
-
-			switch (face) {
-			case NORTH: return WALL_NORTH;
-			case SOUTH: return WALL_SOUTH;
-			case EAST:  return WALL_EAST;
-			case WEST:  return WALL_WEST;
-			}
-
+			return WALL[face.rotateYCCW().getHorizontalIndex()];
 		// 看板
 		case 2:
-
-			switch (face) {
-			case NORTH:
-			case SOUTH:
-				return BOAD_NOSO;
-			case EAST:
-			case WEST:
-				return BOAD_EAWE;
-			}
-
+			return BOAD[face.rotateYCCW().getHorizontalIndex()];
 		// 花瓶
 		case 3:
 			return POT;
@@ -196,7 +177,6 @@ public class WandPedal extends BaseFaceBlock {
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return null;
     }
-
 
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {

@@ -39,7 +39,7 @@ public class BlockCafeKitchen extends BlockWoodChest {
 
 	@Override
 	public IBlockState getActualState(IBlockState state, IBlockAccess world, BlockPos pos) {
-		Block block = world.getBlockState(pos.up()).getBlock();
+		Block block = this.getBlock(world, pos.up());
 		return state.withProperty(TOP, block == this || block == BlockInit.cafe_kitchen_sink);
 	}
 

@@ -23,15 +23,18 @@ import sweetmagic.init.base.BaseModelBlock;
 public class BlockTableLanp extends BaseModelBlock {
 
 	private final boolean isChange;
+	private final int data;
 	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.3D, 0.8D, 0.3D, 0.7D, 0D, 0.7D);
+	private final static AxisAlignedBB SPOT = new AxisAlignedBB(0D, 0.25D, 0.46875D, 1D, 1D, 0.53125D);
 
-	public BlockTableLanp (String name, float lightLevel, boolean isChange, List<Block> list) {
+	public BlockTableLanp (String name, float lightLevel, int data, boolean isChange, List<Block> list) {
 		super(Material.GLASS, name);
 		setSoundType(SoundType.GLASS);
 		setHardness(0.5F);
         setResistance(1024F);
 		setLightLevel(lightLevel);
 		this.isChange = isChange;
+		this.data = data;
 		list.add(this);
 	}
 
@@ -67,9 +70,13 @@ public class BlockTableLanp extends BaseModelBlock {
     }
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-		return AABB;
+		return this.data == 1 ? SPOT : AABB;
 	}
 
 	@Override
-	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) { }
+	public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB aabb, List<AxisAlignedBB> aabbList, Entity entity, boolean flag) {
+		if (this.data == 1) {
+			super.addCollisionBoxToList(state, world, pos, aabb, aabbList, entity, flag);
+		}
+	}
 }

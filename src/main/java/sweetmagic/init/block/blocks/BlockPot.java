@@ -5,15 +5,15 @@ import java.util.List;
 import java.util.Random;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -21,6 +21,7 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
@@ -31,42 +32,38 @@ import sweetmagic.api.enumblock.EnumCook.FaceCookMeta;
 import sweetmagic.api.enumblock.EnumCook.PropertyCook;
 import sweetmagic.api.recipe.pot.PotRecipeInfo;
 import sweetmagic.init.BlockInit;
-import sweetmagic.init.base.BaseFaceBlock;
+import sweetmagic.init.base.BaseCookBlock;
 import sweetmagic.init.tile.cook.TilePot;
 import sweetmagic.init.tile.cook.TileStove;
 import sweetmagic.util.RecipeHelper;
 import sweetmagic.util.RecipeUtil;
 
-public class BlockPot extends BaseFaceBlock {
+public class BlockPot extends BaseCookBlock {
 
-	public static boolean keepInventory = false;
-	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.19D, 0.38D, 0.19D, 0.81D, 0.0D, 0.81D);
+	private static boolean keepInventory = false;
+	private final int data;
+	private final static AxisAlignedBB AABB = new AxisAlignedBB(0.16D, 0.38D, 0.16D, 0.84D, 0D, 0.84D);
 	public static final PropertyCook COOK = new PropertyCook("cook", EnumCook.getCookList());
 
-	public BlockPot(String name) {
-		super(Material.IRON, name);
+	public BlockPot(String name, int data, boolean isRegister) {
+		super(name);
 		setHardness(0.1F);
-        setResistance(1024F);
-		setSoundType(SoundType.STONE);
-		disableStats();
-		setDefaultState(this.blockState.getBaseState()
-				.withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
-		BlockInit.furniList.add(this);
+		this.data = data;
+		setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(COOK, EnumCook.OFF));
+
+		if (isRegister) {
+			BlockInit.potList.add(this);
+		}
 	}
 
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		return AABB;
 	}
 
-	@Override
-	public boolean hasTileEntity(IBlockState state) {
-		return true;
-	}
-
 	@Nonnull
 	@Override
-	public TileEntity createTileEntity(@Nonnull World world, @Nonnull IBlockState state) {
-		return new TilePot();//TileEntityは処理自体ほぼ同じなため製粉機を指定
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		return new TilePot();
 	}
 
 	//右クリックの処理
@@ -74,9 +71,8 @@ public class BlockPot extends BaseFaceBlock {
 
 		if (world.isRemote) { return true; }
 
+        // 下のブロックがコンロではないなら終了
         if (!this.getCook(state).isFIN()) {
-
-            // 下のブロックがコンロではないなら終了
             Block uBlock = world.getBlockState(pos.down()).getBlock();
             if (!(uBlock instanceof BlockStove)) { return false;}
         }
@@ -111,12 +107,14 @@ public class BlockPot extends BaseFaceBlock {
 				copy = recipeUtil.getHand();
 				inputs.addAll(recipeUtil.getInput());
 				results.addAll(recipeUtil.getResult());
+
 			}
 
 			pot.startFlag = true;
 			pot.handItem = copy;
 			pot.inPutList = inputs;
 			pot.outPutList = results;
+			pot.hasFork = this.hasFork(player);
 
 			//ブロックをON用に置き換え　※起動処理
 			this.setState(world, pos);
@@ -125,6 +123,7 @@ public class BlockPot extends BaseFaceBlock {
 		//完成後
 		else if (this.getCook(state).isFIN()) {
 
+			this.spawnXp(player, pot.outPutList, pot.hasFork);
 			this.spawnItem(world, player, pot.outPutList);
 			this.setState(world, pos);
 
@@ -167,14 +166,6 @@ public class BlockPot extends BaseFaceBlock {
 		}
 	}
 
-    public ItemStack getItem(World world, BlockPos pos, IBlockState state) {
-        return ItemStack.EMPTY;
-    }
-
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        return null;
-    }
-
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
@@ -214,9 +205,16 @@ public class BlockPot extends BaseFaceBlock {
 
 		for (int i = 0; i < count; i++) {
 			float f1 = x + rand.nextFloat() * 0.8F;
-			float f2 = y + rand.nextFloat() * 6.0F / 16.0F;
+			float f2 = y + rand.nextFloat() * 6F / 16F;
 			float f3 = z + rand.nextFloat() * 0.8F;
-			world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f1, f2, f3, 0.0D, 0.0D, 0.0D);
+			world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, f1, f2, f3, 0D, 0D, 0D);
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> tooltip, ITooltipFlag advanced) {
+		if (this.data == 0) { return; }
+		tooltip.add(I18n.format(TextFormatting.GOLD + this.getTip("tip.smpot.name")));
 	}
 }
