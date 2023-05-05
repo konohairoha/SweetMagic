@@ -1,9 +1,0 @@
-{
-	"pools": [{
-		"name": "guide_book", "rolls": 1, "entries": [{
-			"type": "item", "weight": 100,
-			"name": "sweetmagic:magicianbeginner_book",
-			"functions": [ { "function": "set_count", "count": { "min": 1, "max": 1 } } ]
-		}]
-	}]
-}
