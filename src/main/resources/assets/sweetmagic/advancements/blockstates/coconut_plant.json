@@ -3,8 +3,10 @@
   "defaults": {
     "model": "cross",
     "textures": {
-      "cross": "sweetmagic:block/coconut_stage2"
-    }
+      "cross": "sweetmagic:block/coconut_stage2",
+      "layer0": "#cross"
+    },
+    "transform": "forge:default-item"
   },
   "variants": {
     "stage": {
@@ -12,6 +14,6 @@
       "1": { "model": "cross", "textures": { "cross": "sweetmagic:block/coconut_stage1" }},
       "2": { "model": "cross", "textures": { "cross": "sweetmagic:block/coconut_stage2" }}
     },
-     "inventory": [{}]
+     "inventory": [{ "model": "builtin/generated" }]
   }
 }

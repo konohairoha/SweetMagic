@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:counter_table_sink",
+    "textures": {
+		"0": "sweetmagic:block/prism_log_side",
+		"1": "sweetmagic:block/orange_planks_w"
+    }
+  },
+  "variants": {
+    	"facing": {
+			"north": {  },
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+    	"water": {
+			"false": { },
+			"true": { "model": "sweetmagic:counter_table_sink", "textures": { "4": "minecraft:blocks/water_still" } }
+		},
+    "inventory": [{}]
+  }
+}

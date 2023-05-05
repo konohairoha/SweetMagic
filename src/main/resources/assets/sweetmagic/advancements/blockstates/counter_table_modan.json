@@ -2,10 +2,10 @@
   "forge_marker": 1,
   "defaults": {
     "model": "sweetmagic:counter_table",
-		"textures": {
-			"0": "sweetmagic:block/white",
-			"1": "sweetmagic:block/wood_black"
-		}
+	"textures": {
+		"0": "sweetmagic:block/white",
+		"1": "sweetmagic:block/wood_black"
+	}
   },
   "variants": {
 

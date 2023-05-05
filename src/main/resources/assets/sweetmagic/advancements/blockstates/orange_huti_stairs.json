@@ -3,7 +3,7 @@
   "defaults": {
     "textures": {
       "top": "sweetmagic:block/orange_planks",
-      "bottom": "sweetmagic:block/orange_planks_huti4",
+      "bottom": "#top",
       "side": "sweetmagic:block/orange_planks_huti3"
     }
   },

@@ -1,0 +1,15 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:walllamp"
+    },
+	"variants": {
+		"local": {
+			"normal": { },
+			"top": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_top" } },
+			"center": { "model": "cross", "textures": { "cross": "sweetmagic:block/modernlamp_middle" } },
+			"bottom": { "model": "sweetmagic:walllamp", "textures": { "cross": "sweetmagic:block/modernlamp_down" } }
+		},
+		"inventory": [{ }]
+    }
+}

@@ -1,15 +1,19 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:moden_stair"
-  },
-  "variants": {
-    "facing": {
-      "north": {},
-      "south": { "y": 180 },
-      "west": { "y": 270 },
-      "east": { "y": 90 }
-    },
-    "inventory": [{}]
-  }
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:moden_stair",
+		"textures": {
+			"0": "sweetmagic:block/prism_log_side",
+			"1": "sweetmagic:block/black_moderndoor_up"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+		"inventory": [{}]
+	}
 }

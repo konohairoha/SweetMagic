@@ -15,7 +15,6 @@
 			"center": { "model": "cross", "textures": { "cross": "sweetmagic:block/basket_chain_middle" } },
 			"bottom": { "model": "cross", "textures": { "cross": "sweetmagic:block/christmas_rose_basket_chain" } }
 		},
-
     	 "inventory": [{ "model": "builtin/generated" }]
     }
 }

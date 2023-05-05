@@ -1,11 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "sweetmagic:flourmill_on",
-    "textures": {
-      "6": "sweetmagic:block/empty",
-      "8": "sweetmagic:block/empty"
-    }
+    "model": "sweetmagic:flourmill_on"
   },
   "variants": {
     	"facing": {

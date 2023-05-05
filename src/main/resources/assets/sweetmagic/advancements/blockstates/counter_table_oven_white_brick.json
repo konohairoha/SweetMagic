@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:counter_table_oven",
+		"textures": {
+			"0": "sweetmagic:block/tamagotti_wood",
+			"1": "sweetmagic:block/whiteline_brick",
+			"2": "sweetmagic:block/oven_stage0"
+		}
+  },
+  "variants": {
+    	"facing": {
+			"north": {  },
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+    	"cook": {
+			"off": { },
+			"on": { "model": "sweetmagic:counter_table_oven", "textures": { "2": "sweetmagic:block/oven_stage1" } },
+			"fin": { "model": "sweetmagic:counter_table_oven", "textures": { "2": "sweetmagic:block/oven_stage2" } }
+		},
+        "inventory": [{ }]
+  	}
+}

@@ -3,7 +3,8 @@
     "defaults": {
         "model": "sweetmagic:plantpot_alt",
     	"textures": {
-      		"0": "sweetmagic:block/orange_planks_huti1"
+      		"0": "sweetmagic:block/orange_planks_huti1",
+      		"2": "sweetmagic:block/orange_planks"
     	}
     },
 "variants": {

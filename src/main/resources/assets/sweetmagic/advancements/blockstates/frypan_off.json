@@ -13,8 +13,8 @@
     	"cook": {
 			"off": { },
 			"on": { },
-			"fin": {  }
+			"fin": { }
 		},
-    "inventory": [{}]
+    "inventory": [{ "y": 270 }]
   }
 }

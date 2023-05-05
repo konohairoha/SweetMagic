@@ -1,8 +1,13 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "sweetmagic:frypan_red"
-  },
+	"forge_marker": 1,
+	"defaults": {
+    	"model": "sweetmagic:frypan_red",
+		"textures": {
+			"1": "sweetmagic:block/red",
+			"4": "sweetmagic:block/black_moderndoor_down",
+			"5": "sweetmagic:block/black_moderndoor_down"
+		}
+  	},
 	"variants": {
     	"facing": {
 			"north": {  },
@@ -13,8 +18,8 @@
     	"cook": {
 			"off": { },
 			"on": { },
-			"fin": {  }
+			"fin": { }
 		},
-    "inventory": [{}]
-  }
+		"inventory": [{ "y": 270 }]
+	}
 }
