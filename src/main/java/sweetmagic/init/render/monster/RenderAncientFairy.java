@@ -10,7 +10,7 @@ import sweetmagic.init.entity.monster.EntityAncientFairy;
 
 public class RenderAncientFairy extends RenderLiving<EntityAncientFairy> {
 
-    private static final ResourceLocation VEX_TEXTURE = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/ancientfairy.png");
+    private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/ancientfairy.png");
     private int modelVersion;
 
 	public RenderAncientFairy(RenderManager render) {
@@ -19,7 +19,7 @@ public class RenderAncientFairy extends RenderLiving<EntityAncientFairy> {
 	}
 
 	protected ResourceLocation getEntityTexture(EntityAncientFairy entity) {
-		return VEX_TEXTURE;
+		return TEX;
 	}
 
 	protected void preRenderCallback(EntityAncientFairy entity, float parTick) {

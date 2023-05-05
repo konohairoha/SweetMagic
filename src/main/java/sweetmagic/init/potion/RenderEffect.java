@@ -4,6 +4,7 @@ import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
 
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.RenderLivingBase;
@@ -12,6 +13,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.init.Blocks;
 import sweetmagic.init.BlockInit;
+import sweetmagic.init.PotionInit;
 
 public enum RenderEffect {
 
@@ -51,7 +53,7 @@ public enum RenderEffect {
 				GlStateManager.rotate(randFloat, 1.0F, 0.0F, 0.0F);
 				GlStateManager.rotate(randFloat, 0.0F, 1.0F, 0.0F);
 				GlStateManager.rotate(randFloat, 0.0F, 0.0F, 1.0F);
-				Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(Blocks.PACKED_ICE.getDefaultState(), 1);
+				Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(PACKED_ICE, 1);
 				GlStateManager.popMatrix();
 			}
 			GlStateManager.disableBlend();
@@ -62,7 +64,7 @@ public enum RenderEffect {
 
 		@Override
 		public boolean shouldRender(EntityLivingBase entity, boolean firstPerson) {
-			return !firstPerson && entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getModifier(PotionSM.PID) != null;
+			return !firstPerson && entity.isPotionActive(PotionInit.babule) /*entity.getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).getModifier(PotionSM.PID) != null*/;
 		}
 
 		@Override
@@ -73,18 +75,20 @@ public enum RenderEffect {
 			Minecraft.getMinecraft().renderEngine.bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 
 			GlStateManager.pushMatrix();
-			float dx = (float) (x - entity.width ) - 0.5F;
+			float dx = (float) (x - entity.width) - 0.5F;
 			float dz = (float) (z + entity.width) + 0.5F;
 			GlStateManager.translate(dx, y + entity.height * 0.01D, dz);
 			float size = entity.height * 1.25F;
 			GlStateManager.scale(size, size, size);
 
-			Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(BlockInit.magic_circle.getDefaultState(), 1);
+			Minecraft.getMinecraft().getBlockRendererDispatcher().renderBlockBrightness(MAGIC_CIRCLE, 1);
 			GlStateManager.popMatrix();
 			GlStateManager.disableBlend();
 		}
 	};
 
+	private static final IBlockState PACKED_ICE = Blocks.PACKED_ICE.getDefaultState();
+	private static final IBlockState MAGIC_CIRCLE = BlockInit.magic_circle.getDefaultState();
 	public static final RenderEffect[] VALUES = values();
 	public final Random rand = new Random();
 

@@ -8,7 +8,7 @@ import sweetmagic.SweetMagicCore;
 
 public class PotionCyclone extends PotionBase {
 
-	public static final UUID MODIFIER_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-1222-F7F1EE4915A9");
+	private static final UUID MODIFIER_UUID = UUID.fromString("CE9DBC2A-EE3F-43F5-1222-F7F1EE4915A9");
 
 	public PotionCyclone (boolean effect, int color, String name, String dir) {
 		super(effect, color, name, dir);

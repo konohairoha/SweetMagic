@@ -1,8 +1,10 @@
 package sweetmagic.init.potion;
 
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
+import net.minecraft.client.particle.Particle;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,8 +25,10 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import sweetmagic.SweetMagicCore;
+import sweetmagic.client.particle.ParticleNomal;
 import sweetmagic.event.SMSoundEvent;
 import sweetmagic.init.PotionInit;
 import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
@@ -35,15 +39,32 @@ import sweetmagic.util.WorldHelper;
 
 public class PotionSM extends PotionBase {
 
+	private float lastRotYaw = 0;
 	public final boolean isActive;
-	public static final UUID PID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE491222");
+	public static final UUID SPPEDID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE491222");
+	public static final UUID ARMORID = UUID.fromString("CE9DBC2A-EE3F-43F5-9DF7-F7F1EE730213");
 
 	public PotionSM (boolean effect, int color, String name, String dir, boolean isActive) {
 		super(effect, color, name, dir);
 
 		if (name.equals("babule")) {
 			ForgeRegistries.POTIONS.register(this.setRegistryName(SweetMagicCore.MODID, name)
-					.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, PID.toString(), -0.025D, 2));
+					.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, SPPEDID.toString(), -0.025D, 2));
+		}
+
+		else if (name.equals("range_glove")) {
+			ForgeRegistries.POTIONS.register(this.setRegistryName(SweetMagicCore.MODID, name)
+					.registerPotionAttributeModifier(EntityPlayer.REACH_DISTANCE, SMUtil.TOOL_REACH.toString(), 12D, 0));
+		}
+
+		else if (name.equals("prompt_feather")) {
+			ForgeRegistries.POTIONS.register(this.setRegistryName(SweetMagicCore.MODID, name)
+					.registerPotionAttributeModifier(SharedMonsterAttributes.MOVEMENT_SPEED, SPPEDID.toString(), 0.5676D, 2));
+		}
+
+		else if (name.equals("armor_break")) {
+			ForgeRegistries.POTIONS.register(this.setRegistryName(SweetMagicCore.MODID, name)
+					.registerPotionAttributeModifier(SharedMonsterAttributes.ARMOR, ARMORID.toString(), -4D, 0));
 		}
 
 		else {
@@ -57,9 +78,7 @@ public class PotionSM extends PotionBase {
 	public void performEffect(EntityLivingBase entity, int amplifier) {
 
 		// クリエなら終了
-		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) {
-			return;
-		}
+		if (entity instanceof EntityPlayer && ((EntityPlayer) entity).isCreative()) { return; }
 
 		World world = entity.world;
 
@@ -90,8 +109,17 @@ public class PotionSM extends PotionBase {
 		}
 
 		// 重力
-		else if (this == PotionInit.gravity && !entity.onGround ) {
-			entity.motionY -= 0.1F + amplifier * 0.1F;
+		else if (this == PotionInit.gravity) {
+
+			if (!entity.onGround) {
+				entity.motionY -= 0.1F + amplifier * 0.1F;
+			}
+
+			if(entity.getActivePotionEffect(PotionInit.gravity).getAmplifier() >= amplifier) {
+				entity.motionX *= 0.75F;
+				entity.motionZ *= 0.75F;
+			}
+
 		}
 
 		// マインドコントロール
@@ -145,7 +173,7 @@ public class PotionSM extends PotionBase {
 
 			if (entity.getHealth() > 1F) {
 				entity.setHealth(entity.getHealth() - 1);
-				entity.world.playSound(null, new BlockPos(entity), SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.NEUTRAL, 1F, 1F);
+				world.playSound(null, new BlockPos(entity), SoundEvents.ENTITY_PLAYER_HURT, SoundCategory.NEUTRAL, 1F, 1F);
 			}
 
 			if (!(entity instanceof EntityPlayer)) { return; }
@@ -161,9 +189,31 @@ public class PotionSM extends PotionBase {
 			entity.hurtResistantTime = 0;
 		}
 
+		// エーテルシールド
 		else if (this == PotionInit.aether_shield && entity.getHealth() < entity.getMaxHealth()) {
 			entity.setHealth(entity.getHealth() + 1.5F);
 		}
+
+		// 魔法陣なら
+		else if (this == PotionInit.magic_array && world.isRemote && entity.ticksExisted <= 60) {
+
+			Random rand = world.rand;
+			if (rand.nextFloat() > 0.8F) { return; }
+
+			float f1 = (float) (entity.posX - 0.5F + entity.motionX * 0.25F + this.getRandFloat(rand, 1.5F));
+			float f2 = (float) (entity.posY - 0.25F + rand.nextFloat() * 0.5 + entity.motionY * 0.25F);
+			float f3 = (float) (entity.posZ - 0.5F + entity.motionZ * 0.25F + this.getRandFloat(rand, 1.5F));
+			float x = this.getRandFloat(rand, 0.2F);
+			float y = (rand.nextFloat() + rand.nextFloat()) * 0.0825F;
+			float z = this.getRandFloat(rand, 0.2F);
+
+			Particle effect = ParticleNomal.create(world, f1, f2, f3, x, y, z);
+			FMLClientHandler.instance().getClient().effectRenderer.addEffect(effect);
+		}
+	}
+
+	public float getRandFloat (Random rand, float rate) {
+		return (rand.nextFloat() - rand.nextFloat()) * rate;
 	}
 
 	public boolean isReady(int duration, int amplifier) {

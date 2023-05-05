@@ -8,7 +8,7 @@ import sweetmagic.SweetMagicCore;
 
 public class PotionResitanceBlow extends PotionBase {
 
-	public static final UUID MODIFIER_UUID = UUID.fromString("BD6D692F-B923-4221-B2A8-3500022D2A9C");
+	private static final UUID MODIFIER_UUID = UUID.fromString("BD6D692F-B923-4221-B2A8-3500022D2A9C");
 
 	public PotionResitanceBlow (boolean effect, int color, String name, String dir) {
 		super(effect, color, name, dir);

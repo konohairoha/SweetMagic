@@ -21,6 +21,7 @@ public class EnchantInit {
 	public static Enchantment maxMFUP;
 	public static Enchantment mfRecover;
 	public static Enchantment aetherCharm;
+	public static Enchantment elementBonus;
 
 	public static List<Enchantment> enchantList = new ArrayList<>();
 
@@ -30,7 +31,8 @@ public class EnchantInit {
 		maxMFUP = new EnchantWand(Enchantment.Rarity.UNCOMMON, "maxmfup", 5);
 		wandAddPower = new EnchantWand(Enchantment.Rarity.RARE, "wandaddpower", 5);
 		mfRecover = new EnchantWand(Enchantment.Rarity.UNCOMMON, "mfrecover", 3);
-		aetherCharm = new EnchantWand(Enchantment.Rarity.UNCOMMON, "aetherCharm", 1);
+		aetherCharm = new EnchantWand(Enchantment.Rarity.UNCOMMON, "aethercharm", 1);
+		elementBonus = new EnchantWand(Enchantment.Rarity.VERY_RARE, "elementbonus", 5);
 	}
 
 	public static void register(IForgeRegistry<Enchantment> register) {

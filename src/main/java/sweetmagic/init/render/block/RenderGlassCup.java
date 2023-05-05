@@ -19,29 +19,30 @@ import sweetmagic.init.tile.magic.TilePedalCreate.RGB;
 
 public class RenderGlassCup extends TileEntitySpecialRenderer<TileGlassCup> {
 
-	//マナテクスチャ
-	private TextureAtlasSprite sprite = null;
+	// 水のテクスチャ
+	private TextureAtlasSprite tex = null;
 
 	@Override
 	public void render(TileGlassCup te, double x, double y, double z, float parTick, int stage, float alpha) {
-		GlStateManager.pushMatrix();
-		GlStateManager.translate((float) x, (float) y, (float) z);
-        this.renderFluid(te, x, y, z);
-        GlStateManager.popMatrix();
-	}
-
-	// 液体描画
-	protected void renderFluid(TileGlassCup te, double x, double y, double z) {
 
 		//MFがない場合は描画しない
 		ItemStack stack = te.getChestItem(0);
 		if (stack.isEmpty()) { return; }
 
+		GlStateManager.pushMatrix();
+		GlStateManager.translate((float) x, (float) y, (float) z);
+        this.renderFluid(te, x, y, z, stack);
+        GlStateManager.popMatrix();
+	}
+
+	// 液体描画
+	protected void renderFluid(TileGlassCup te, double x, double y, double z, ItemStack stack) {
+
 		List<Integer> color = this.getRGB(new Random(Item.getIdFromItem(stack.getItem())));
 		GlStateManager.color(color.get(0) / 255F, color.get(1) / 255F, color.get(2) / 255F);
 
-		if (this.sprite == null) {
-			this.sprite = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/water_still");
+		if (this.tex == null) {
+			this.tex = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("sweetmagic:block/water_still");
 		}
 
         // テクスチャバインド
@@ -68,10 +69,10 @@ public class RenderGlassCup extends TileEntitySpecialRenderer<TileGlassCup> {
 		);
 
         // スプライトからUVを取得
-        float minU = this.sprite.getMinU();
-        float maxU = this.sprite.getMaxU();
-        float minV = this.sprite.getMinV();
-        float maxV = this.sprite.getMaxV();
+        float minU = this.tex.getMinU();
+        float maxU = this.tex.getMaxU();
+        float minV = this.tex.getMinV();
+        float maxV = this.tex.getMaxV();
 
         // 基準の高さ
         double vertX = 3D / 16D;

@@ -20,22 +20,61 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
 	private static final float size = 0.4F;
 
 	@Override
-	public void render(TileWandPedal te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-        this.renderItem(te, x, y - 0.5, z, partialTicks);
-        GlStateManager.popMatrix();
-	}
+	public void render(TileWandPedal te, double x, double y, double z, float parTick, int stege, float alpha) {
 
-	protected void renderItem(TileWandPedal te, double x, double y, double z, float partialTicks) {
+		if ( !te.findPlayer && te.renderTime >= 30) { return; }
 
     	ItemStack stack = te.getChestItem();
     	if (stack.isEmpty()) { return; }
 
-		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-        GlStateManager.translate(0, 0, 0);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
+        this.renderItem(te, stack);
+        GlStateManager.popMatrix();
+	}
 
-        switch (te.getData()) {
+	protected void renderItem(TileWandPedal te, ItemStack stack) {
+
+		int data = te.getData();
+		float size = 1F;
+		RenderItem render = Minecraft.getMinecraft().getRenderItem();
+
+		switch (data) {
+		case 0:
+			size = 1.125F;
+			break;
+		case 1:
+			size = 0.8F;
+			break;
+		case 2:
+			size = 0.45F;
+			break;
+		}
+
+        GlStateManager.scale(size, size, size);
+        float rot = 0;
+
+        // ブロックの向きでアイテムの向きも変える
+        switch (te.getFace()) {
+        case NORTH:
+        	rot = 180F;
+        	break;
+        case SOUTH:
+        	rot = 0F;
+        	break;
+        case EAST:
+        	rot = 90F;
+        	break;
+        case WEST:
+        	rot = 270F;
+        	break;
+		default:
+			break;
+        }
+
+        GlStateManager.rotate(rot, 0F, 1F, 0F);
+
+        switch (data) {
         case 0:
         	this.renderWandPedal(te, render, stack);
         	break;
@@ -53,111 +92,39 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
 
 	public void renderWandPedal (TileWandPedal te, RenderItem render, ItemStack stack) {
 
-        float rot = 0;
-        GlStateManager.scale(1.125F, 1.125F, 1.125F);
-
-        // ブロックの向きでアイテムの向きも変える
-        switch (te.getFace()) {
-        case NORTH:
-        	rot = 0F;
-        	break;
-        case SOUTH:
-        	rot = 180F;
-        	break;
-        case EAST:
-        	rot = 270F;
-        	break;
-        case WEST:
-        	rot = 90F;
-        	break;
-		default:
-			break;
-        }
-
-        GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
-
         Item item = stack.getItem();
 
     	if (item instanceof IWand || item == ItemInit.mf_stuff) {
-            GlStateManager.rotate(45, 0F, 0.0F, 1.0F);
+            GlStateManager.rotate(45, 0F, 0F, 1F);
             RenderUtils.renderItem(render, stack, 0.375F, 0.375F, 0F, 0, 1, 0, 0);
     	}
 
-    	else if (item instanceof ItemSword){
-            GlStateManager.rotate(-135, 0F, 0.0F, 1.0F);
+		else if (item instanceof ItemSword) {
+            GlStateManager.rotate(-135, 0F, 0F, 1F);
             RenderUtils.renderItem(render, stack, -0.55F, -0.55F, 0F, 0, 1, 0, 0);
     	}
 
         else {
-            RenderUtils.renderItem(render, stack, 0F, 0.65F, 0F, 0, 1, 0, 0);
+            RenderUtils.renderItem(render, stack, 0F, 0.65F, 0F, 0, 1, 0, 0, false);
         }
 	}
 
 	public void renderCorkBoard (TileWandPedal te, RenderItem render, ItemStack stack) {
 
-        float rot = 0;
-        float posZ = -0.5325F;
-        GlStateManager.scale(0.8F, 0.8F, 0.8F);
-
-        // ブロックの向きでアイテムの向きも変える
-        switch (te.getFace()) {
-        case NORTH:
-        	rot = 180F;
-        	break;
-        case SOUTH:
-        	rot = 0F;
-        	break;
-        case EAST:
-        	rot = 90F;
-        	break;
-        case WEST:
-        	rot = 270F;
-        	break;
-		default:
-			break;
-        }
+        float posZ = -0.575F;
 
     	// 3DアイテムならY座標を低く
         if (render.shouldRenderItemIn3D(stack)) {
-        	rot += 180F;
         	posZ *= -1;
+            GlStateManager.rotate(180, 0F, 1F, 0F);
         }
 
-        GlStateManager.rotate(rot, 0.0F, 1.0F, 0.0F);
-        RenderUtils.renderItem(render, stack, 0F, 0.6F, posZ, 0, 1, 0, 0);
+        RenderUtils.renderItem(render, stack, 0F, 0.625F, posZ, 0, 1, 0, 0);
 	}
 
 	public void renderShopBoard (TileWandPedal te, RenderItem render, ItemStack stack) {
-
-        float rot = 0;
-        float posZ = 0F;
-        GlStateManager.scale(0.45F, 0.45F, 0.45F);
-
-        // ブロックの向きでアイテムの向きも変える
-        switch (te.getFace()) {
-        case NORTH:
-        	rot = 180F;
-        	break;
-        case SOUTH:
-        	rot = 0F;
-        	break;
-        case EAST:
-        	rot = 90F;
-        	break;
-        case WEST:
-        	rot = 270F;
-        	break;
-		default:
-			break;
-        }
-
-    	// 3DアイテムならY座標を低く
-        if (render.shouldRenderItemIn3D(stack)) {
-        	rot += 180F;
-        }
-
-        GlStateManager.rotate(rot - 90F, 0.0F, 1.0F, 0.0F);
-        RenderUtils.renderItem(render, stack, 0F, 0.9F, posZ, 0, 1, 0, 0);
+        GlStateManager.rotate(90, 0F, 1F, 0F);
+        RenderUtils.renderItem(render, stack, 0F, 0.9F, 0F, 0, 1, 0, 0);
 	}
 
 	public void renderFlowerVase (TileWandPedal te, RenderItem render, ItemStack stack) {
@@ -173,25 +140,25 @@ public class RenderWandPedal extends TileEntitySpecialRenderer<TileWandPedal> {
         }
 
         GlStateManager.rotate(45, 0F, 1F, 0F);
-        this.renderItem(render, stack, 0F, posY, 0, 0, 0, 0, 0);
+        this.renderItem(render, stack, 0F, posY, 0);
 
         if (!render.shouldRenderItemIn3D(stack)) {
             for (int i = 0; i < 3; i++) {
                 GlStateManager.rotate(90, 0F, 1F, 0F);
-                this.renderItem(render, stack, 0F, posY, 0, 0, 0, 0, 0);
+                this.renderItem(render, stack, 0F, posY, 0);
             }
         }
 	}
 
-    public static void renderItem(RenderItem renderer, ItemStack stack, float x, float y, float z, float angle, float xr, float yr, float zr) {
+    public static void renderItem(RenderItem renderer, ItemStack stack, float x, float y, float z) {
         GlStateManager.pushMatrix();
         GlStateManager.translate(x, y, z);
-        GlStateManager.rotate(angle, xr, yr, zr);
-        GlStateManager.pushAttrib();
+//        GlStateManager.rotate(angle, xr, yr, zr);
+//        GlStateManager.pushAttrib();
         RenderHelper.enableStandardItemLighting();
         renderer.renderItem(stack, ItemCameraTransforms.TransformType.GUI);
         RenderHelper.disableStandardItemLighting();
-        GlStateManager.popAttrib();
+//        GlStateManager.popAttrib();
         GlStateManager.popMatrix();
     }
 }

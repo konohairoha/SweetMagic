@@ -23,7 +23,7 @@ public class RenderBraveSkeleton extends RenderSkeleton {
 		return TEX;
 	}
 
-	protected void preRenderCallback(AbstractSkeleton entitylivingbaseIn, float partialTickTime) {
+	protected void preRenderCallback(AbstractSkeleton entity, float parTick) {
 		GlStateManager.scale(1.25F, 1.25F, 1.25F);
 	}
 }

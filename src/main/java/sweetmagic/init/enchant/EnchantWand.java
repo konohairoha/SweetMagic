@@ -1,5 +1,8 @@
 package sweetmagic.init.enchant;
 
+import java.util.Arrays;
+import java.util.List;
+
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.enchantment.EnumEnchantmentType;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -14,12 +17,17 @@ import sweetmagic.api.iitem.IRobe;
 import sweetmagic.api.iitem.ISMArmor;
 import sweetmagic.api.iitem.IWand;
 import sweetmagic.init.EnchantInit;
+import sweetmagic.init.item.sm.magic.AetherHammer;
+import sweetmagic.init.item.sm.magic.StarLightWand;
 
 public class EnchantWand extends Enchantment {
 
-	public final String name;
-	public final int maxLevel;
+	private final String name;
+	private final int maxLevel;
 	public final static EnumEnchantmentType type = EnumHelper.addEnchantmentType("wandEncha", s -> s instanceof IWand);
+	private final List<Enchantment> wandEnchaList = Arrays.<Enchantment> asList(
+		EnchantInit.aetherCharm, EnchantInit.maxMFUP, EnchantInit.mfRecover, EnchantInit.mfCostDown
+	);
 
 	public EnchantWand(Enchantment.Rarity rarity, String name, int level) {
 		super(rarity, type, new EntityEquipmentSlot[] { EntityEquipmentSlot.MAINHAND });
@@ -46,13 +54,23 @@ public class EnchantWand extends Enchantment {
 			else if (item instanceof IHarness) {
 				return this == EnchantInit.mfRecover || this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP;
 			}
-
-//			else if (item instanceof IChoker) {
-//				return this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP;
-//			}
 		}
 
-		return item instanceof IWand;
+		else if (item instanceof IWand) {
+
+			if (this != EnchantInit.elementBonus) {
+				return true;
+			}
+
+			IWand wand = (IWand) item;
+			return wand.getTier() >= 5 || wand.isCreativeWand();
+		}
+
+		else if (item instanceof StarLightWand || item instanceof AetherHammer) {
+			return this == EnchantInit.aetherCharm || this == EnchantInit.maxMFUP || this == EnchantInit.mfRecover || this == EnchantInit.mfCostDown;
+		}
+
+		return false;
 	}
 
 	@Override

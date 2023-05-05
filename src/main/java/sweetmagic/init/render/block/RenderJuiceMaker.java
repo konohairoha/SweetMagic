@@ -12,11 +12,15 @@ import sweetmagic.init.tile.cook.TileJuiceMaker;
 
 public class RenderJuiceMaker extends TileEntitySpecialRenderer<TileJuiceMaker> {
 
-	//マナテクスチャ
-	protected TextureAtlasSprite spriteMana = null;
+	// 水のテクスチャ
+	private TextureAtlasSprite tex = null;
 
 	@Override
-	public void render(TileJuiceMaker te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileJuiceMaker te, double x, double y, double z, float parTick, int state, float alpha) {
+
+		//MFがない場合は描画しない
+		if (te.getWaterValue() == 0) { return; }
+
         GlStateManager.pushMatrix();
         GlStateManager.translate((float)x, (float)y, (float)z);
         this.renderFluid(te, x, y, z);
@@ -26,12 +30,9 @@ public class RenderJuiceMaker extends TileEntitySpecialRenderer<TileJuiceMaker> 
 	// 液体描画
 	protected void renderFluid(TileJuiceMaker te, double x, double y, double z) {
 
-		if (this.spriteMana == null) {
-			this.spriteMana = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("minecraft:blocks/water_still");
+		if (this.tex == null) {
+			this.tex = Minecraft.getMinecraft().getTextureMapBlocks().getTextureExtry("minecraft:blocks/water_still");
 		}
-
-		//MFがない場合は描画しない
-		if (te.getWaterValue() == 0) { return; }
 
         //基準の高さ
         double vertX = 5.5 / 16.0;
@@ -77,10 +78,10 @@ public class RenderJuiceMaker extends TileEntitySpecialRenderer<TileJuiceMaker> 
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 
         //スプライトからUVを取得
-        float minU = this.spriteMana.getMinU();
-        float maxU = this.spriteMana.getMaxU();
-        float minV = this.spriteMana.getMinV();
-        float maxV = this.spriteMana.getMaxV();
+        float minU = this.tex.getMinU();
+        float maxU = this.tex.getMaxU();
+        float minV = this.tex.getMinV();
+        float maxV = this.tex.getMaxV();
 
         //高さはさらに計算が必要
         double manaCap = (double)te.getWaterValue() / (double)te.getWaterMaxValue();

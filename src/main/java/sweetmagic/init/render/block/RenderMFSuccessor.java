@@ -20,7 +20,7 @@ public class RenderMFSuccessor extends TileEntitySpecialRenderer<TileMFSuccessor
 	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/entity/magia_successor.png");
 	private static final ModelBase model = new ModelEnderCrystal(0.0F, false);
 	private static final float size = 0.45F;
-	public Long worldTime;
+	private Long worldTime;
 
 	@Override
 	public void render(TileMFSuccessor te, double x, double y, double z, float parTick, int stage, float alpha) {

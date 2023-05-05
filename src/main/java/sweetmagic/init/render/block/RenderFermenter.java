@@ -14,17 +14,18 @@ public class RenderFermenter extends TileEntitySpecialRenderer<TileFermenter> {
 	private static final float size = 0.5F;
 
 	@Override
-	public void render(TileFermenter te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
-        this.renderItem(te, x, y - 0.5, z, partialTicks);
-        GlStateManager.popMatrix();
-	}
-
-	protected void renderItem(TileFermenter te, double x, double y, double z, float partialTicks) {
+	public void render(TileFermenter te, double x, double y, double z, float parTick, int stage, float alpha) {
 
 		// 料理中以外かつ完了以外なら終了
         if (!te.isWorking && !te.isFinish) { return; }
+
+        GlStateManager.pushMatrix();
+        GlStateManager.translate((float) x + 0.5F, (float) y, (float) z + 0.5F);
+        this.renderItem(te, x, y - 0.5, z, parTick);
+        GlStateManager.popMatrix();
+	}
+
+	protected void renderItem(TileFermenter te, double x, double y, double z, float parTick) {
 
         ItemStack stack = ItemStack.EMPTY;
 
@@ -44,7 +45,7 @@ public class RenderFermenter extends TileEntitySpecialRenderer<TileFermenter> {
 		Long worldTime = te.getWorld().getTotalWorldTime();
         float rot = worldTime % 720;
 		RenderItem render = Minecraft.getMinecraft().getRenderItem();
-        GlStateManager.translate(0, MathHelper.sin((worldTime + partialTicks) / 16F) * 0.075F + 0.1F, 0);
+        GlStateManager.translate(0, MathHelper.sin((worldTime + parTick) / 16F) * 0.075F + 0.1F, 0);
         GlStateManager.scale(this.size, this.size, this.size);
         GlStateManager.rotate(rot, 0.0F, 1F, 0.0F);
         RenderUtils.renderItem(render, stack, 0, 0.55F, 0, 0, 1, 0, 0F);

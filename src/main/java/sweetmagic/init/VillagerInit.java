@@ -72,7 +72,7 @@ public class VillagerInit {
 		VillagerCareer magicList = new VillagerCareer(magic_researcher, "magic_researcher");
 
 		magicList.addTrade(1, new ITradeList[] {
-			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC1, new PriceInfo(1, 1)),
+			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC0, new PriceInfo(1, 1)),
 			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC1, new PriceInfo(1, 1))
 		});
 
@@ -92,13 +92,13 @@ public class VillagerInit {
 		});
 
 		magicList.addTrade(5, new ITradeList[] {
-			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 2)),
-			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 2))
+			SMTradeRecipes.INSTANCE.new MagicRareTrade(SMTradeInit.MAGIC4, new PriceInfo(1, 1)),
+			SMTradeRecipes.INSTANCE.new MagicRareTrade(SMTradeInit.MAGIC4, new PriceInfo(1, 2))
 		});
 
 		magicList.addTrade(6, new ITradeList[] {
-			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 3)),
-			SMTradeRecipes.INSTANCE.new MagicTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 3))
+			SMTradeRecipes.INSTANCE.new MagicRareTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 2)),
+			SMTradeRecipes.INSTANCE.new MagicRareTrade(SMTradeInit.MAGIC4, new PriceInfo(2, 3))
 		});
 	}
 }

@@ -30,6 +30,13 @@ public class PotionInit {
 	public static Potion magic_array;
 	public static Potion holly_charm;
 	public static Potion wind_relief;
+	public static Potion causality_prediction;
+	public static Potion glider;
+	public static Potion increased_cool_time;
+	public static Potion range_glove;
+	public static Potion prompt_feather;
+	public static Potion armor_break;
+	public static Potion drop_increase;
 
 	public static List<Potion> buffList = new ArrayList<>();		// バフリスト
 	public static List<Potion> deBuffList = new ArrayList<>();		// デバフリスト
@@ -59,6 +66,13 @@ public class PotionInit {
 		magic_array = new PotionSM(false, 0, "magic_array", "textures/block/mahoujin.png", false);
 		holly_charm = new PotionSM(false, 0, "holly_charm", "textures/items/holly_charm.png", false);
 		wind_relief = new PotionSM(false, 0, "wind_relief", "textures/items/wind_relief.png", false);
+		causality_prediction = new PotionSM(false, 0, "causality_prediction", "textures/items/magician_quillpen.png", false);
+		glider = new PotionSM(false, 0, "glider", "textures/entity/angel_wing.png", true);
+		increased_cool_time = new PotionSM(false, 0, "increased_cool_time", "textures/items/pendulum_necklace.png", false);
+		range_glove = new PotionSM(false, 0, "range_glove", "textures/items/range_glove.png", false);
+		prompt_feather = new PotionSM(false, 0, "prompt_feather", "textures/items/prompt_feather.png", false);
+		armor_break = new PotionSM(false, 0, "armor_break", "textures/items/magicians_robe.png", false);
+		drop_increase = new PotionSM(false, 0, "drop_increase", "textures/items/accebag.png", false);
 	}
 
 	// リストを設定
@@ -78,6 +92,11 @@ public class PotionInit {
 		buffList.add(magic_array);
 		buffList.add(holly_charm);
 		buffList.add(wind_relief);
+		buffList.add(causality_prediction);
+		buffList.add(glider);
+		buffList.add(range_glove);
+		buffList.add(prompt_feather);
+		buffList.add(drop_increase);
 		buffList.add(MobEffects.SPEED);
 		buffList.add(MobEffects.STRENGTH);
 		buffList.add(MobEffects.INSTANT_HEALTH);
@@ -102,6 +121,7 @@ public class PotionInit {
 		deBuffList.add(timestop);
 		deBuffList.add(babule);
 		deBuffList.add(mind_control);
+		deBuffList.add(armor_break);
 		deBuffList.add(MobEffects.HUNGER);
 		deBuffList.add(MobEffects.POISON);
 		deBuffList.add(MobEffects.WITHER);

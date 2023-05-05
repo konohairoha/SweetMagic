@@ -17,9 +17,10 @@ public class RenderToolRepair extends TileEntitySpecialRenderer<TileToolRepair> 
 
 	@Override
 	public void render(TileToolRepair te, double x, double y, double z, float parTick, int stage, float alpha) {
-		if (!te.isMfEmpty()) {
-			this.rebderEffect(te, x, y, z, parTick);
-		}
+
+		if (te.isMfEmpty() || !te.findPlayer) { return; }
+
+		this.rebderEffect(te, x, y, z, parTick);
 	}
 
 	public void rebderEffect (TileToolRepair te, double x, double y, double z, float parTick) {

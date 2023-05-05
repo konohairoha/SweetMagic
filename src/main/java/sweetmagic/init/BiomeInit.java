@@ -30,7 +30,7 @@ public class BiomeInit {
 
     public static Biome FLOWERGARDEN = new BiomeFlowerGarden();
     public static Biome FLOWERVALLEY = new BiomeFlowerGarden("FlowerValley",
-    		new BiomeProperties("FlowerValley").setTemperature(1F).setBaseHeight(0.0F).setHeightVariation(0.9F).setRainfall(0.6F).setSnowEnabled());
+    		new BiomeProperties("FlowerValley").setTemperature(1F).setBaseHeight(-0.25F).setHeightVariation(1.5F).setRainfall(0.6F).setSnowEnabled());
 
     public static Biome ESTORFOREST = new BiomeFlowerGarden("EstorForest");
 

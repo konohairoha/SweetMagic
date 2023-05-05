@@ -15,7 +15,7 @@ import sweetmagic.init.entity.projectile.EntityBaseMagicShot;
 @SideOnly(Side.CLIENT)
 public class RenderElectricMagic  extends RenderLightMagic {
 
-	public static final ResourceLocation TEX = new ResourceLocation("textures/entity/beacon_beam.png");
+	private static final ResourceLocation TEX = new ResourceLocation("textures/entity/beacon_beam.png");
 
 	public RenderElectricMagic(RenderManager render) {
 		super(render);
@@ -35,8 +35,7 @@ public class RenderElectricMagic  extends RenderLightMagic {
         GlStateManager.popMatrix();
 	}
 
-	public void renderBeamSegment(double x, double y, double z, float parTick, double scale,
-			float time, int yOffset, int height, float[] colors, double beamRadius, double glowRadius) {
+	public void renderBeamSegment(double x, double y, double z, float parTick, double scale, float time, int yOffset, int height, float[] colors, double beamRadius, double glowRadius) {
 
 		int i = yOffset + height;
 		GlStateManager.glTexParameteri(3553, 10242, 10497);

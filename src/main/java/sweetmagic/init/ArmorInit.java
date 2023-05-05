@@ -15,14 +15,23 @@ public class ArmorInit {
 	public static ArmorMaterial feary_robe = EnumHelper
 			.addArmorMaterial("feary_robe", "sweetmagic:feary_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
 
+	public static ArmorMaterial kitt_robe = EnumHelper
+			.addArmorMaterial("kitt_robe", "sweetmagic:kitt_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
+
+	public static ArmorMaterial witchmadame_robe = EnumHelper
+			.addArmorMaterial("witchmadame_robe", "sweetmagic:witchmadame_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
+
 	public static ArmorMaterial windine_robe = EnumHelper
 			.addArmorMaterial("windine_robe", "sweetmagic:windine_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
 
 	public static ArmorMaterial ifrite_robe = EnumHelper
 			.addArmorMaterial("ifrite_robe", "sweetmagic:ifrite_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
 
+	public static ArmorMaterial curious_robe = EnumHelper
+			.addArmorMaterial("curious_robe", "sweetmagic:curious_robe", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
+
 	public static ArmorMaterial sandryon_robe = EnumHelper
-			.addArmorMaterial("sandryon_robe", "sweetmagic:angel_harness", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
+			.addArmorMaterial("sandryon_robe", "sweetmagic:empty", 40, new int[] { 3, 8, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
 
 	public static ArmorMaterial magicians_pouch = EnumHelper
 			.addArmorMaterial("magicians_pouch", "sweetmagic:magicians_pouch", 40, new int[] { 3, 6, 10, 3 }, 35, SMSoundEvent.ROBE, 1);
@@ -31,16 +40,23 @@ public class ArmorInit {
 			.addArmorMaterial("master_magia_pouch", "sweetmagic:magicians_pouch", 40, new int[] { 3, 6, 12, 3 }, 35, SMSoundEvent.ROBE, 2);
 
 	public static ArmorMaterial angel_harness = EnumHelper
-			.addArmorMaterial("angel_harness", "sweetmagic:angel_harness", 40, new int[] { 3, 6, 10, 3 }, 35, SMSoundEvent.ROBE, 1);
+			.addArmorMaterial("angel_harness", "sweetmagic:empty", 40, new int[] { 3, 6, 10, 3 }, 35, SMSoundEvent.ROBE, 1);
 
 	public static ArmorMaterial aether_choker = EnumHelper
-			.addArmorMaterial("aether_choker", "sweetmagic:angel_harness", 40, new int[] { 3, 6, 10, 3 }, 35, SMSoundEvent.ROBE, 1);
+			.addArmorMaterial("aether_choker", "sweetmagic:empty", 40, new int[] { 3, 6, 10, 3 }, 35, SMSoundEvent.ROBE, 1);
 
 	public static ArmorMaterial pure_choker = EnumHelper
-			.addArmorMaterial("pure_choker", "sweetmagic:angel_harness", 40, new int[] { 4, 6, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
+			.addArmorMaterial("pure_choker", "sweetmagic:empty", 40, new int[] { 4, 6, 8, 3 }, 35, SMSoundEvent.ROBE, 2);
 
 	public static ArmorMaterial deus_choker = EnumHelper
-			.addArmorMaterial("deus_choker", "sweetmagic:angel_harness", 40, new int[] { 5, 6, 8, 3 }, 35, SMSoundEvent.ROBE, 3);
+			.addArmorMaterial("deus_choker", "sweetmagic:empty", 40, new int[] { 5, 6, 8, 3 }, 35, SMSoundEvent.ROBE, 3);
+
+	public static ArmorMaterial shop_uniform = EnumHelper
+			.addArmorMaterial("shop_uniform", "sweetmagic:shop_uniform", 40, new int[] { 1, 4, 4, 1 }, 20, SMSoundEvent.ROBE, 1);
+
+	public static ArmorMaterial farm_apron = EnumHelper
+			.addArmorMaterial("farm_apron", "sweetmagic:farm_apron", 40, new int[] { 1, 4, 4, 1 }, 20, SMSoundEvent.ROBE, 1);
+
 
 	/**
 	 *  .addArmorMaterial(name, textureName, durability, reductionAmounts, enchantability, soundOnEquip, toughness)

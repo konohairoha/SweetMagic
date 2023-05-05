@@ -23,7 +23,10 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 	private static final ResourceLocation RUNE_TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/block/hexagram_pastelcolor.png");
 	private static final ModelBook model = new ModelBook();
 
-	public void render(TileParallelInterfere te, double x, double y, double z, float parTick, int destroyStage, float alpha) {
+	public void render(TileParallelInterfere te, double x, double y, double z, float parTick, int stege, float alpha) {
+
+		if(!te.findPlayer && te.renderTick >= 30) { return; }
+
 		GlStateManager.pushMatrix();
 		this.renderBook(te, x, y, z, parTick);
 		GlStateManager.popMatrix();
@@ -32,7 +35,7 @@ public class RenderParallelInterfere extends TileEntitySpecialRenderer<TileParal
 	public void renderBook (TileParallelInterfere te, double x, double y, double z, float parTick) {
 
 		GlStateManager.translate((float) x + 0.5F, (float) y + 0.75F, (float) z + 0.5F);
-		float f = (float) te.tickTime + parTick;
+		float f = (float) te.renderTick + parTick;
 		GlStateManager.translate(0.0F, 0.1F + MathHelper.sin(f * 0.1F) * 0.01F + 0.25, 0.0F);
 		float f1;
 
