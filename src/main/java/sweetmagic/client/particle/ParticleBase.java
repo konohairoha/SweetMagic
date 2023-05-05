@@ -1,52 +1,83 @@
 package sweetmagic.client.particle;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.IParticleFactory;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.vertex.VertexFormat;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import sweetmagic.SweetMagicCore;
-import sweetmagic.event.HasItemEvent;
 
 @SideOnly(Side.CLIENT)
-public class ParticleMagicLight extends ParticleBase {
+public class ParticleBase extends Particle {
 
-	private static final ResourceLocation TEX =  new ResourceLocation(SweetMagicCore.MODID, "textures/particle/magic_light.png");
+	private static final ResourceLocation TEX = new ResourceLocation(SweetMagicCore.MODID, "textures/particle/magic_light.png");
+	protected static final VertexFormat VERTEX_FORMAT = (new VertexFormat()).addElement(DefaultVertexFormats.POSITION_3F)
+			.addElement(DefaultVertexFormats.TEX_2F).addElement(DefaultVertexFormats.COLOR_4UB)
+			.addElement(DefaultVertexFormats.TEX_2S).addElement(DefaultVertexFormats.NORMAL_3B)
+			.addElement(DefaultVertexFormats.PADDING_1B);
 
-	public ParticleMagicLight(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+	protected TextureManager textureManager;
+
+	public ParticleBase(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
 		super(world, x, y, z, xSpeed, ySpeed, zSpeed);
-		this.motionX = (world.rand.nextDouble() - 0.5) / 2;
-		this.motionY = (world.rand.nextDouble() - 0.5) / 2;
-		this.motionZ = (world.rand.nextDouble() - 0.5) / 2;
-		this.posX += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
-		this.posY += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
-		this.posZ += (double) ((this.rand.nextFloat() - this.rand.nextFloat()) * 0.05F);
-		this.particleRed = this.particleGreen = this.particleBlue = 1.0F;
-		this.particleAlpha = 1.0F;
-		this.particleScale = 0.2F;
-		this.particleGravity = 0.0F;
-		this.particleMaxAge = (int) (3.0D / (Math.random() * 4.0D + 0.2D)) + 64;
+		this.textureManager = Minecraft.getMinecraft().getTextureManager();
 	}
 
 	public static Particle create(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... array) {
 		return new Factory().createParticle(0, world, x, y, z, xSpeed, ySpeed, zSpeed, array);
 	}
 
+	protected void setColor(int color) {
+		int[] colors = this.getColor(color);
+		this.particleRed = colors[0] / 255.0F;
+		this.particleGreen = colors[1] / 255.0F;
+		this.particleBlue = colors[2] / 255.0F;
+	}
+
+	public void setColor(float red, float green, float blue) {
+		this.particleRed = red;
+		this.particleGreen = green;
+		this.particleBlue = blue;
+	}
+
+	protected void setColor(int color[]) {
+		this.particleRed = color[0] / 255.0F;
+		this.particleGreen = color[1] / 255.0F;
+		this.particleBlue = color[2] / 255.0F;
+	}
+
+	public int[] getColor(int color) {
+		int r = (color >> 16) & 255;
+		int g = (color >> 8) & 255;
+		int b = color & 255;
+		return new int[] { r, g, b };
+	}
+
+	@Override
+	public void move(double x, double y, double z) {
+		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
+		this.resetPositionToBB();
+	}
+
+	//
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entity, float parTick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ) {
-
-		if (!HasItemEvent.hasThisItem) { return; }
 
 		int i = (int) (((this.particleAge + parTick) * 32.0F / this.particleMaxAge) % 32);
 
 		if (i <= 32) {
-			this.textureManager.bindTexture(TEX);
+			this.textureManager.bindTexture(this.getTEX());
 			float fu = 0.0F;
 			float fU = 1.0F;
 			float fv = i / 32.0F;
@@ -85,11 +116,46 @@ public class ParticleMagicLight extends ParticleBase {
 		}
 	}
 
+	//
+	@Override
+	public int getBrightnessForRender(float p_189214_1_) {
+		float f = (this.particleAge + p_189214_1_) / this.particleMaxAge;
+		f = MathHelper.clamp(f, 0.0F, 1.0F);
+		int i = super.getBrightnessForRender(p_189214_1_);
+		int j = i & 255;
+		int k = i >> 16 & 255;
+		j = j + (int) (f * 15.0F * 16.0F);
+		if (j > 240) { j = 240;  }
+
+		return j | k << 16;
+	}
+
+	@Override
+	public void onUpdate() {
+
+		this.prevPosX = this.posX;
+		this.prevPosY = this.posY;
+		this.prevPosZ = this.posZ;
+
+		if (this.particleAge++ >= this.particleMaxAge) {
+			this.setExpired();
+		}
+	}
+
+	@Override //基本的に自作パーティクルは3を渡すっぽい
+	public int getFXLayer() {
+		return 3;
+	}
+
+	public ResourceLocation getTEX () {
+		return TEX;
+	}
+
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
 		@Override
 		public Particle createParticle(int particleID, World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... array) {
-			return new ParticleMagicLight(world, x, y, z, xSpeed, ySpeed, zSpeed);
+			return new ParticleBase(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 }

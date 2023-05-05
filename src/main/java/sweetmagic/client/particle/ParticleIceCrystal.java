@@ -30,6 +30,10 @@ public class ParticleIceCrystal extends Particle {
 		this.setParticleTexture(Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(ORB_TEX));
 	}
 
+	public static Particle create(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... array) {
+		return new Factory().createParticle(0, world, x, y, z, xSpeed, ySpeed, zSpeed, array);
+	}
+
 	@Override
 	public void move(double x, double y, double z) {
 		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
@@ -37,18 +41,15 @@ public class ParticleIceCrystal extends Particle {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float f = (this.particleAge + partialTicks) / this.particleMaxAge;
+	public void renderParticle(BufferBuilder buf, Entity entity, float parTick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ) {
+
+		float f = (this.particleAge + parTick) / this.particleMaxAge;
 		this.particleScale = this.flameScale * (1.0F - f * f * 0.5F);
 		GlStateManager.enableBlend();
-		GlStateManager
-				.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-						GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+			GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-		super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
-				rotationXZ);
+		super.renderParticle(buf, entity, parTick, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		GlStateManager.disableBlend();
 	}
 
@@ -70,6 +71,7 @@ public class ParticleIceCrystal extends Particle {
 
 	@Override
 	public void onUpdate() {
+
 		this.prevPosX = this.posX;
 		this.prevPosY = this.posY;
 		this.prevPosZ = this.posZ;
@@ -87,10 +89,10 @@ public class ParticleIceCrystal extends Particle {
 
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
+
 		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
-				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
-			return new ParticleIceCrystal(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+		public Particle createParticle(int id, World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... array) {
+			return new ParticleIceCrystal(world, x, y, z, xSpeed, ySpeed, zSpeed);
 		}
 	}
 

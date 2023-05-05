@@ -11,9 +11,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+@SideOnly(Side.CLIENT)
 public class ParticleBabule extends Particle {
 
-@SideOnly(Side.CLIENT)
 	public static final String BABULE_TEX = new String("sweetmagic:particle/magic_bubble");
 	private float flameScale;
 
@@ -33,6 +33,10 @@ public class ParticleBabule extends Particle {
 		this.setParticleTexture(Minecraft.getMinecraft().getTextureMapBlocks().getAtlasSprite(BABULE_TEX));
 	}
 
+	public static Particle create(World world, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed, int... array) {
+		return new Factory().createParticle(0, world, x, y, z, xSpeed, ySpeed, zSpeed, array);
+	}
+
 	@Override
 	public void move(double x, double y, double z) {
 		this.setBoundingBox(this.getBoundingBox().offset(x, y, z));
@@ -40,18 +44,14 @@ public class ParticleBabule extends Particle {
 	}
 
 	@Override
-	public void renderParticle(BufferBuilder worldRendererIn, Entity entityIn, float partialTicks, float rotationX,
-			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		float f = (this.particleAge + partialTicks) / this.particleMaxAge;
+	public void renderParticle(BufferBuilder buf, Entity entity, float parTick, float rotX, float rotZ, float rotYZ, float rotXY, float rotXZ) {
+		float f = (this.particleAge + parTick) / this.particleMaxAge;
 		this.particleScale = this.flameScale * (1.0F - f * f * 0.5F);
 		GlStateManager.enableBlend();
-		GlStateManager
-				.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
-						GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE,
-						GlStateManager.DestFactor.ZERO);
+		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA,
+			GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 0.5F);
-		super.renderParticle(worldRendererIn, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY,
-				rotationXZ);
+		super.renderParticle(buf, entity, parTick, rotX, rotZ, rotYZ, rotXY, rotXZ);
 		GlStateManager.disableBlend();
 	}
 
@@ -91,9 +91,8 @@ public class ParticleBabule extends Particle {
 	@SideOnly(Side.CLIENT)
 	public static class Factory implements IParticleFactory {
 		@Override
-		public Particle createParticle(int particleID, World worldIn, double xCoordIn, double yCoordIn, double zCoordIn,
-				double xSpeedIn, double ySpeedIn, double zSpeedIn, int... p_178902_15_) {
-			return new ParticleBabule(worldIn, xCoordIn, yCoordIn, zCoordIn, xSpeedIn, ySpeedIn, zSpeedIn);
+		public Particle createParticle(int id, World world, double x, double y, double z, double xSpeedIn, double ySpeed, double zSpeed, int... array) {
+			return new ParticleBabule(world, x, y, z, xSpeedIn, ySpeed, zSpeed);
 		}
 	}
 
