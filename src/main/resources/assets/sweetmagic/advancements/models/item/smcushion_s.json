@@ -1,0 +1,6 @@
+{
+    "parent":"sweetmagic:block/smcushion",
+    "textures":{
+        "0": "sweetmagic:block/smcushion_s"
+    }
+}

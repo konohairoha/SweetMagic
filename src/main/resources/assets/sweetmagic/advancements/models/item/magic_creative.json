@@ -1,0 +1,8 @@
+{
+    "parent": "sweetmagic:item/basemagic",
+    "textures":{
+        "2":"sweetmagic:items/creative_wand",
+        "1":"sweetmagic:items/flame_4_old",
+        "0":"sweetmagic:items/icon_brank_magic"
+    }
+}
