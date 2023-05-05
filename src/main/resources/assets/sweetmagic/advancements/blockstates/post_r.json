@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:post",
+    "textures": {
+      "0": "sweetmagic:block/vase_red",
+      "3": "sweetmagic:block/vase_red2"
+    }
+  },
+  "variants": {
+    	"facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+    "inventory": [{ }]
+  }
+}

@@ -3,7 +3,7 @@
 	"defaults": {
 		"model": "sweetmagic:pot_on",
 		"textures": {
-			"1": "sweetmagic:block/vase_white"
+			"1": "sweetmagic:block/vase_yellow"
 		}
 	},
 	"variants": {
@@ -15,7 +15,7 @@
 		},
     	"cook": {
 			"off": { },
-			"on": { "model": "sweetmagic:pot_on", "textures": { "3": "sweetmagic:block/vase_white", "5": "sweetmagic:block/pole" } },
+			"on": { "model": "sweetmagic:pot_on", "textures": { "3": "sweetmagic:block/vase_yellow", "5": "sweetmagic:block/pole" } },
 			"fin": { "model": "sweetmagic:pot_on", "textures": { "6": "minecraft:blocks/water_still" } }
 		},
 		"inventory": [{ "y": 90 }]

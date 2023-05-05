@@ -3,7 +3,7 @@
   "defaults": {
     "model": "sweetmagic:counter_table",
 		"textures": {
-			"0": "sweetmagic:block/smstone_down",
+			"0": "sweetmagic:block/magiawood_planks",
 			"1": "sweetmagic:block/whiteline_brick_y"
 		}
   },

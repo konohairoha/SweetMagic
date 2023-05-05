@@ -1,0 +1,19 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "sweetmagic:brick_pillar",
+    	"textures": {
+      		"0": "sweetmagic:block/whiteline_brick",
+      		"1": "sweetmagic:block/smstone"
+    	}
+    },
+	"variants": {
+		"local": {
+			"normal": { },
+			"top": { "model": "sweetmagic:brick_pillar_top" },
+			"center": { "model": "sweetmagic:brick_pillar_mid" },
+			"bottom": { "model": "sweetmagic:brick_pillar_bot" }
+		},
+		"inventory": [{ }]
+	}
+}

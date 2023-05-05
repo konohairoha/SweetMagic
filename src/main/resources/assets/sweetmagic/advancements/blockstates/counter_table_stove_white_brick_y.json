@@ -1,0 +1,23 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:counter_table_stove",
+    "textures": {
+		"0": "sweetmagic:block/magiawood_planks",
+		"1": "sweetmagic:block/whiteline_brick_y"
+    }
+  },
+  "variants": {
+    	"facing": {
+			"north": {  },
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+    	"cook": {
+			"off": { },
+			"on": { "model": "sweetmagic:counter_table_stove", "textures": { "2": "sweetmagic:block/stove_top_on", "3": "sweetmagic:block/stove_side1_on" } }
+		},
+    "inventory": [{}]
+  }
+}

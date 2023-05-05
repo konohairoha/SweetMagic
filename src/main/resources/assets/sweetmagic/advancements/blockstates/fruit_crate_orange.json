@@ -1,0 +1,18 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:fruit_crate",
+		"textures": {
+			"0": "sweetmagic:block/orange_planks_w"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": {  },
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+		"inventory": [{ "y": 270 }]
+	}
+}

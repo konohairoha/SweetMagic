@@ -1,0 +1,19 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "sweetmagic:shoe_box",
+    "textures": {
+      "0": "sweetmagic:block/vase_lime3",
+      "1": "sweetmagic:block/vase_lime2"
+    }
+  },
+  "variants": {
+    "facing": {
+      "north": { "y": 90 },
+      "south": { "y": 270 },
+      "west": { "y": 0 },
+      "east": { "y": 180 }
+    },
+        "inventory": [{}]
+  }
+}

@@ -1,0 +1,19 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"model": "sweetmagic:moden_stair",
+		"textures": {
+			"0": "sweetmagic:block/coconut_planks",
+			"1": "sweetmagic:block/sara"
+		}
+	},
+	"variants": {
+		"facing": {
+			"north": {},
+			"south": { "y": 180 },
+			"west": { "y": 270 },
+			"east": { "y": 90 }
+		},
+		"inventory": [{}]
+	}
+}
