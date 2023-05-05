@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-        "name": "smbounus",
+      "name": "smbounus",
       "rolls": 4,
       "entries": [
         {
@@ -83,6 +83,11 @@
           "type": "item", "weight": 1,
           "name": "sweetmagic:zinnia_pot",
           "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:magic_pure_force",
+          "functions": [ { "function": "set_count", "count": { "min": 2, "max": 4 } } ]
         }
       ]
     }

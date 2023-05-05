@@ -1,0 +1,14 @@
+{
+  "pools": [
+    {
+      "name": "mf_sbottle",
+      "rolls": 4,
+      "entries": [
+			{
+				"type": "item", "weight": 100, "name": "sweetmagic:mf_sbottle",
+				"functions": [ { "function": "set_count", "count": { "min": 2, "max": 8 } } ]
+			}
+      ]
+    }
+  ]
+}

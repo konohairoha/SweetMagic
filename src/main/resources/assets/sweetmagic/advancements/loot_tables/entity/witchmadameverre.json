@@ -1,0 +1,64 @@
+{
+    "pools": [ {
+		"name":  "witchmadameverre_drops_0", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:b_mf_bottle", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 0, "max": 2 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_1", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:mysterious_page", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 1, "max": 2 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_2", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:blank_magic", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 0, "max": 2 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_3", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:blank_page", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 0, "max": 1 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_4", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:aether_crystal", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 0, "max": 6 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_5", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:aether_crystal_shard", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 0, "max": 16 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	},
+
+	{
+ 		"name":  "witchmadameverre_drops_6", "rolls": 1, "entries": [ {
+			"type": "item", "name": "sweetmagic:witch_tears", "weight": 1, "functions": [
+				{ "function": "set_count", "count": { "min": 1, "max": 2 } },
+				{ "function": "looting_enchant", "count": { "min": 0, "max": 1 } }
+			]
+		} ]
+	}
+] }

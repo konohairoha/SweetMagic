@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-        "name": "foode",
+      "name": "foode",
       "rolls": 4,
       "entries": [
         {

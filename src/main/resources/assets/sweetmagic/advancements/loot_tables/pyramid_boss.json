@@ -1,7 +1,7 @@
 {
   "pools": [
     {
-        "name": "prm",
+      "name": "prm",
       "rolls": 4,
       "entries": [
         {
@@ -92,6 +92,16 @@
         {
           "type": "item", "weight": 1,
           "name": "sweetmagic:mermaid_veil",
+          "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
+        },
+        {
+          "type": "item", "weight": 2,
+          "name": "sweetmagic:magic_pure_force",
+          "functions": [ { "function": "set_count", "count": { "min": 1, "max": 4 } } ]
+        },
+        {
+          "type": "item", "weight": 1,
+          "name": "sweetmagic:magic_deus_force",
           "functions": [ { "function": "set_count", "count": { "min": 0, "max": 1 } } ]
         }
       ]
