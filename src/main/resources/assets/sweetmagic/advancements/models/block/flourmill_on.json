@@ -4,9 +4,9 @@
 		"1": "sweetmagic:block/sokumen",
 		"2": "sweetmagic:block/t_hydra_iron1",
 		"5": "sweetmagic:block/hukusanbutu",
-		"6": "#6",
+		"6": "sweetmagic:block/empty",
 		"7": "sweetmagic:block/oven_side2",
-		"8": "#8",
+		"8": "sweetmagic:block/empty",
 		"particle": "sweetmagic:block/soko"
 	},
 	"elements": [
@@ -26,12 +26,12 @@
 			"from": [7, 13.5, 7],
 			"to": [15, 13.6, 15],
 			"faces": {
-				"north": {"uv": [0, 0, 8, 1.5], "texture": "#missing"},
-				"east": {"uv": [0, 0, 8, 1.5], "texture": "#missing"},
-				"south": {"uv": [0, 0, 8, 1.5], "texture": "#missing"},
-				"west": {"uv": [0, 0, 8, 1.5], "texture": "#missing"},
+				"north": {"uv": [0, 0, 8, 1.5], "texture": "#6"},
+				"east": {"uv": [0, 0, 8, 1.5], "texture": "#6"},
+				"south": {"uv": [0, 0, 8, 1.5], "texture": "#6"},
+				"west": {"uv": [0, 0, 8, 1.5], "texture": "#6"},
 				"up": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#6"},
-				"down": {"uv": [0, 0, 8, 8], "rotation": 180, "texture": "#missing"}
+				"down": {"uv": [0, 0, 8, 8], "rotation": 180, "texture": "#6"}
 			}
 		},
 		{
@@ -170,12 +170,12 @@
 			"from": [5, 1.5, 1],
 			"to": [15, 1.5, 6],
 			"faces": {
-				"north": {"uv": [0, 0, 10, 0], "texture": "#missing"},
-				"east": {"uv": [0, 0, 5, 0], "texture": "#missing"},
-				"south": {"uv": [0, 0, 10, 0], "texture": "#missing"},
-				"west": {"uv": [0, 0, 5, 0], "texture": "#missing"},
+				"north": {"uv": [0, 0, 10, 0], "texture": "#8"},
+				"east": {"uv": [0, 0, 5, 0], "texture": "#8"},
+				"south": {"uv": [0, 0, 10, 0], "texture": "#8"},
+				"west": {"uv": [0, 0, 5, 0], "texture": "#8"},
 				"up": {"uv": [0, 0, 16, 8], "texture": "#8"},
-				"down": {"uv": [0, 0, 10, 5], "texture": "#missing"}
+				"down": {"uv": [0, 0, 10, 5], "texture": "#8"}
 			}
 		}
 	]

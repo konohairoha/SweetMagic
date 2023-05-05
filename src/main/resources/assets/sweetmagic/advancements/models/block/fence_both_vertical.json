@@ -1,4 +1,5 @@
 {
+	"ambientocclusion": false,
 	"textures": {
 		"2": "#2",
 		"particle": "#2"

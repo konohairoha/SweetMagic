@@ -1,21 +1,21 @@
 {
+	"parent": "block/thin_block",
 	"textures": {
-		"0": "sweetmagic:block/table_side1",
-		"1": "sweetmagic:block/table_top",
-		"particle": "sweetmagic:block/table_top"
+		"0": "#0",
+		"particle": "#0"
 	},
 	"elements": [
 		{
-			"from": [0, 13.95, 0],
-			"to": [16, 15.95, 16],
+			"from": [0, 14.5, 0],
+			"to": [16, 16, 16],
 			"rotation": {"angle": 0, "axis": "y", "origin": [8, 16, 8]},
 			"faces": {
-				"north": {"uv": [0, 0, 16, 2], "texture": "#0"},
-				"east": {"uv": [0, 0, 16, 2], "texture": "#0"},
-				"south": {"uv": [0, 0, 16, 2], "texture": "#0"},
-				"west": {"uv": [0, 0, 16, 2], "texture": "#0"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#1"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#1"}
+				"north": {"uv": [0.5, 1, 15.5, 3], "texture": "#0"},
+				"east": {"uv": [0.5, 13.5, 15.5, 15.5], "texture": "#0"},
+				"south": {"uv": [0.5, 13.5, 15.5, 15.5], "texture": "#0"},
+				"west": {"uv": [0.5, 13.5, 15.5, 15.5], "texture": "#0"},
+				"up": {"uv": [0.5, 0.5, 15.5, 15.5], "texture": "#0"},
+				"down": {"uv": [0.5, 0.5, 15.5, 15.5], "texture": "#0"}
 			}
 		}
 	]

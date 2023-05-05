@@ -1,9 +1,9 @@
 {
 	"parent": "block/block",
 	"textures": {
-		"0": "#0",
+		"0": "#1",
 		"2": "sweetmagic:block/pole",
-		"particle": "#0"
+		"particle": "#1"
 	},
 	"elements": [
 		{
@@ -15,7 +15,7 @@
 				"east": {"uv": [0, 0, 16, 16], "texture": "#0"},
 				"south": {"uv": [0, 0, 16, 16], "texture": "#0"},
 				"west": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"up": {"uv": [2, 16, 16, 2], "rotation": 180, "texture": "#0"},
+				"up": {"uv": [0, 16, 16, 0], "rotation": 180, "texture": "#0"},
 				"down": {"uv": [0, 0, 16, 16], "rotation": 180, "texture": "#0"}
 			}
 		},

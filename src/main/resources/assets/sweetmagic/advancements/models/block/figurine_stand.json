@@ -1,0 +1,20 @@
+{
+	"textures": {
+		"0": "sweetmagic:block/cosmos_light_block",
+		"particle": "sweetmagic:block/cosmos_light_block"
+	},
+	"elements": [
+		{
+			"from": [3, 0, 3],
+			"to": [13, 1, 13],
+			"faces": {
+				"north": {"uv": [16, 0, 0, 0.5], "texture": "#0"},
+				"east": {"uv": [15.5, 0, 16, 16], "texture": "#0"},
+				"south": {"uv": [0, 15.5, 16, 16], "texture": "#0"},
+				"west": {"uv": [0, 16, 0.5, 0], "rotation": 90, "texture": "#0"},
+				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
+				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
+			}
+		}
+	]
+}

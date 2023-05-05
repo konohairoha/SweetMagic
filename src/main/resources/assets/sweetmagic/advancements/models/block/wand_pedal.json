@@ -101,12 +101,5 @@
 				"down": {"uv": [0.5, 0.5, 2.5, 2.5], "rotation": 90, "texture": "#0"}
 			}
 		}
-	],
-	"groups": [
-		{
-			"name": "group",
-			"origin": [0, 0, 0],
-			"children": [0, 1, 2, 3, 4, 5, 6, 7]
-		}
 	]
 }
